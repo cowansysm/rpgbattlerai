@@ -6,7 +6,7 @@ extends RefCounted
 
 enum Key { SPD, ATK, RNG, DEF, HP }
 
-const KEYS: Array[Key] = [Key.SPD, Key.ATK, Key.RNG, Key.DEF, Key.HP]
+const KEYS := [Key.SPD, Key.ATK, Key.RNG, Key.DEF, Key.HP]
 
 const _STRINGS: Dictionary = {
 	Key.SPD: "spd",
@@ -17,14 +17,14 @@ const _STRINGS: Dictionary = {
 }
 
 
-static func to_string_key(k: Key) -> String:
+static func to_string_key(k: int) -> String:
 	return _STRINGS[k]
 
 
-static func from_string(s: String) -> Key:
+static func from_string(s: String) -> int:
 	for k in _STRINGS.keys():
 		if _STRINGS[k] == s:
-			return k as Key
+			return k
 	push_error("StatKey: unknown key '%s'" % s)
 	return Key.SPD
 

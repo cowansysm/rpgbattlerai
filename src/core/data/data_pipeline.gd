@@ -65,7 +65,7 @@ func _derive_all() -> void:
 func get_race(id: String) -> RaceData:
 	return races.get_entry(id)
 
-func get_class(id: String) -> ClassData:
+func get_job_class(id: String) -> ClassData:
 	return classes.get_entry(id)
 
 func get_ability(id: String) -> AbilityData:

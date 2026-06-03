@@ -28,7 +28,7 @@ res://
 ├── src/
 │   ├── core/hex/        # hex coordinate & math module
 │   ├── core/data/       # loader, validator, Resource definitions, pipeline
-│   ├── autoload/        # singletons (Logger, Constants, GameData)
+│   ├── autoload/        # singletons (Log, Constants, GameData)
 │   └── debug/           # debug harness
 ├── scenes/main/         # entry point scene
 └── tests/               # GUT test scripts (mirrors src/ layout)
@@ -82,7 +82,7 @@ The `.gutconfig.json` at the project root configures test directories and exit b
 
 ## Autoloads (load order)
 
-1. **Logger** — `src/autoload/logger.gd` — log levels DEBUG/INFO/WARN/ERROR
+1. **Log** — `src/autoload/logger.gd` — log levels DEBUG/INFO/WARN/ERROR
 2. **Constants** — `src/autoload/constants.gd` — loads `data/constants.json`
 3. **GameData** — `src/autoload/game_data.gd` — facade delegating to `DataPipeline`
 

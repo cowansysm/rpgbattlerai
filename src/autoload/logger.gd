@@ -1,5 +1,5 @@
 extends Node
-## Lightweight logging with levels. Registered as autoload "Logger".
+## Lightweight logging with levels. Registered as autoload "Log".
 
 enum Level { DEBUG, INFO, WARN, ERROR }
 

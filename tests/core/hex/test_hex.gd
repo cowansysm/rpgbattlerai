@@ -66,8 +66,8 @@ func test_distance_known_value() -> void:
 
 func test_range_cardinality() -> void:
 	for n in [0, 1, 2, 3, 5]:
-		var expected := 3 * n * (n + 1) + 1
-		var actual := Hex.hexes_in_range(Vector2i(0, 0), n).size()
+		var expected: int = 3 * n * (n + 1) + 1
+		var actual: int = Hex.hexes_in_range(Vector2i(0, 0), n).size()
 		assert_eq(actual, expected,
 			"range %d: expected %d hexes, got %d" % [n, expected, actual])
 

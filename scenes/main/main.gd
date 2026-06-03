@@ -2,14 +2,14 @@ extends Node
 ## Minimal entry point. Boots, logs GameData summary, renders nothing.
 
 func _ready() -> void:
-	Logger.info("Main", "Boot OK")
+	Log.info("Main", "Boot OK")
 	# Demonstrate accessor usage with a sample character
 	var archer := GameData.get_character("human_archer")
 	if archer:
 		var stats := GameData.get_final_stats("human_archer")
-		Logger.info("Main", "Sample: %s (BP %d, final HP %d, Move %d)" % [
+		Log.info("Main", "Sample: %s (BP %d, final HP %d, Move %d)" % [
 			archer.display_name, archer.bp,
 			stats.effective("hp") if stats else -1,
 			stats.effective_move() if stats else -1])
 	else:
-		Logger.warn("Main", "Sample character 'human_archer' not found")
+		Log.warn("Main", "Sample character 'human_archer' not found")

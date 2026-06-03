@@ -29,3 +29,5 @@ func test_load_bad_files_reports_errors() -> void:
 		Validator.validate_character, DataFactory.make_character)
 	assert_eq(result["entries"].size(), 0, "no valid entries from bad files")
 	assert_true(result["errors"].size() > 0, "bad files should produce errors")
+	# Engine emits internal errors when parsing malformed JSON; tell GUT that's expected
+	assert_engine_error_count(1)

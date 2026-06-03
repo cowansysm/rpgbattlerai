@@ -10,9 +10,9 @@ func _ready() -> void:
 	if not errors.is_empty():
 		for err in errors:
 			push_error("GameData: %s" % err)
-		Logger.error("GameData", "Data pipeline failed with %d error(s)" % errors.size())
+		Log.error("GameData", "Data pipeline failed with %d error(s)" % errors.size())
 		return
-	Logger.info("GameData", "Loaded %d race(s), %d class(es), %d ability(ies), %d item(s), %d character(s), %d map(s)" % [
+	Log.info("GameData", "Loaded %d race(s), %d class(es), %d ability(ies), %d item(s), %d character(s), %d map(s)" % [
 		_pipeline.races.size(), _pipeline.classes.size(),
 		_pipeline.abilities.size(), _pipeline.items.size(),
 		_pipeline.characters.size(), _pipeline.maps.size()])
@@ -23,8 +23,8 @@ func _ready() -> void:
 func get_race(id: String) -> RaceData:
 	return _pipeline.get_race(id)
 
-func get_class(id: String) -> ClassData:
-	return _pipeline.get_class(id)
+func get_job_class(id: String) -> ClassData:
+	return _pipeline.get_job_class(id)
 
 func get_ability(id: String) -> AbilityData:
 	return _pipeline.get_ability(id)

@@ -23,7 +23,7 @@ func test_accessor_returns_correct_type() -> void:
 	var human := _pipeline.get_race("human")
 	assert_not_null(human)
 	assert_eq(human.id, "human")
-	var archer := _pipeline.get_class("archer")
+	var archer := _pipeline.get_job_class("archer")
 	assert_not_null(archer)
 	assert_eq(archer.id, "archer")
 	var bow := _pipeline.get_item("bow")
@@ -39,7 +39,7 @@ func test_reference_resolution() -> void:
 	assert_not_null(c)
 	assert_not_null(_pipeline.get_race(c.race), "race ref resolves")
 	for cls_id in c.classes:
-		assert_not_null(_pipeline.get_class(cls_id), "class ref '%s' resolves" % cls_id)
+		assert_not_null(_pipeline.get_job_class(cls_id), "class ref '%s' resolves" % cls_id)
 	for item_id in c.equipment:
 		assert_not_null(_pipeline.get_item(item_id), "item ref '%s' resolves" % item_id)
 
