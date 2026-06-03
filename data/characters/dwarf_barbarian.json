@@ -1,0 +1,11 @@
+{
+  "id": "dwarf_barbarian",
+  "display_name": "Dwarf Barbarian",
+  "race": "dwarf",
+  "classes": ["barbarian"],
+  "level": 3,
+  "bp": 20,
+  "base_stats": { "spd": 3, "atk": 4, "rng": 1, "def": 2, "hp": 18 },
+  "equipment": ["greataxe", "light_armor"],
+  "abilities": []
+}

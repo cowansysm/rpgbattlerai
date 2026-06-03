@@ -1,0 +1,10 @@
+{
+  "id": "fire_1",
+  "display_name": "Fire 1",
+  "type": "spell",
+  "ap_cost": 1,
+  "range": 3,
+  "area": {},
+  "effect": { "effect_type": "damage", "value": 4, "element": "fire" },
+  "source": "class"
+}

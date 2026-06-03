@@ -1,0 +1,10 @@
+{
+  "id": "test_ability",
+  "display_name": "Test Ability",
+  "type": "skill",
+  "ap_cost": 1,
+  "range": 1,
+  "area": {},
+  "effect": { "effect_type": "damage", "value": 3 },
+  "source": "class"
+}

@@ -1,0 +1,11 @@
+{
+  "id": "elf_red_mage",
+  "display_name": "Elf Red Mage",
+  "race": "elf",
+  "classes": ["red_mage"],
+  "level": 4,
+  "bp": 26,
+  "base_stats": { "spd": 3, "atk": 2, "rng": 1, "def": 1, "hp": 13 },
+  "equipment": ["rapier", "light_armor"],
+  "abilities": []
+}

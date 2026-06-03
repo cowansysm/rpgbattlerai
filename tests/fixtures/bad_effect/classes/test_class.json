@@ -1,0 +1,9 @@
+{
+  "id": "test_class",
+  "display_name": "Test Class",
+  "abbr": "TST",
+  "stat_modifiers": {},
+  "derived_bonuses": {},
+  "equipment_access": ["test_item"],
+  "granted_abilities": ["bad_ability"]
+}

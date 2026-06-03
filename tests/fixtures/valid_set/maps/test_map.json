@@ -1,0 +1,15 @@
+{
+  "id": "test_map",
+  "tier": "skirmish",
+  "tiles": [
+    { "q": 0, "r": 0, "elevation": 0, "terrain": "grass" },
+    { "q": 1, "r": 0, "elevation": 0, "terrain": "grass" },
+    { "q": 0, "r": 1, "elevation": 0, "terrain": "grass" },
+    { "q": 1, "r": 1, "elevation": 1, "terrain": "brush" },
+    { "q": 2, "r": 0, "elevation": 0, "terrain": "grass" }
+  ],
+  "deployment_zones": {
+    "playerA": ["0,0", "0,1"],
+    "playerB": ["2,0", "1,1"]
+  }
+}

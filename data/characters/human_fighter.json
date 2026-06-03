@@ -1,0 +1,11 @@
+{
+  "id": "human_fighter",
+  "display_name": "Human Fighter",
+  "race": "human",
+  "classes": ["fighter"],
+  "level": 3,
+  "bp": 18,
+  "base_stats": { "spd": 3, "atk": 3, "rng": 1, "def": 3, "hp": 16 },
+  "equipment": ["sword", "medium_armor", "shield"],
+  "abilities": []
+}

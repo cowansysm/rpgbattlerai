@@ -1,0 +1,6 @@
+{
+  "id": "dwarf",
+  "display_name": "Dwarf",
+  "stat_modifiers": { "def": 1, "hp": 2, "spd": -1 },
+  "flavor": "Stout and enduring, dwarves are hard to move and harder to kill."
+}

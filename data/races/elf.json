@@ -1,0 +1,6 @@
+{
+  "id": "elf",
+  "display_name": "Elf",
+  "stat_modifiers": { "spd": 1, "hp": -1 },
+  "flavor": "Nimble and long-lived, elves trade resilience for grace and speed."
+}

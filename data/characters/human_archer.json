@@ -1,0 +1,11 @@
+{
+  "id": "human_archer",
+  "display_name": "Human Archer",
+  "race": "human",
+  "classes": ["archer"],
+  "level": 2,
+  "bp": 13,
+  "base_stats": { "spd": 3, "atk": 2, "rng": 2, "def": 1, "hp": 10 },
+  "equipment": ["bow", "bracer_of_accuracy", "light_armor"],
+  "abilities": []
+}

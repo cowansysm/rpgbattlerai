@@ -1,0 +1,17 @@
+class_name CharacterData
+extends Resource
+## Authored character data loaded from JSON.
+## Stats stored as Dictionary validated against StatKey.
+## Spec reference: rpg-specs.md §9.1
+
+@export var id: String = ""
+@export var display_name: String = ""
+@export var race: String = ""
+@export var classes: Array[String] = []
+@export var level: int = 0
+@export var bp: int = 0
+@export var base_stats: Dictionary = {}
+@export var equipment: Array[String] = []
+@export var abilities: Array[String] = []
+
+var final_stats: StatBlock = null

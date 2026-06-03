@@ -1,0 +1,9 @@
+{
+  "id": "black_mage",
+  "display_name": "Black Mage",
+  "abbr": "BLM",
+  "stat_modifiers": {},
+  "derived_bonuses": {},
+  "equipment_access": ["staff"],
+  "granted_abilities": ["fire_1", "fire_2", "ice_1", "thunder_1"]
+}

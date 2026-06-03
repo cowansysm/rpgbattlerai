@@ -1,0 +1,10 @@
+{
+  "id": "bad_ability",
+  "display_name": "Bad Ability",
+  "type": "skill",
+  "ap_cost": 1,
+  "range": 1,
+  "area": {},
+  "effect": { "value": 5 },
+  "source": "class"
+}

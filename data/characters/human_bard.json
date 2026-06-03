@@ -1,0 +1,11 @@
+{
+  "id": "human_bard",
+  "display_name": "Human Bard",
+  "race": "human",
+  "classes": ["bard"],
+  "level": 3,
+  "bp": 17,
+  "base_stats": { "spd": 3, "atk": 1, "rng": 2, "def": 1, "hp": 12 },
+  "equipment": ["sling", "light_armor"],
+  "abilities": []
+}

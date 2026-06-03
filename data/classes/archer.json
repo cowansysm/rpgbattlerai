@@ -1,0 +1,9 @@
+{
+  "id": "archer",
+  "display_name": "Archer",
+  "abbr": "Arc",
+  "stat_modifiers": { "rng": 1 },
+  "derived_bonuses": {},
+  "equipment_access": ["bow", "light_armor", "bracer_of_accuracy"],
+  "granted_abilities": []
+}

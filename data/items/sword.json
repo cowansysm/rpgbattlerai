@@ -1,0 +1,10 @@
+{
+  "id": "sword",
+  "display_name": "Sword",
+  "slot": "weapon",
+  "bp_value": 2,
+  "passive": {},
+  "granted_abilities": [],
+  "weapon_power": 3,
+  "weapon_range": 1
+}

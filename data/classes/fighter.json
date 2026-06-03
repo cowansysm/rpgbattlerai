@@ -1,0 +1,9 @@
+{
+  "id": "fighter",
+  "display_name": "Fighter",
+  "abbr": "FGT",
+  "stat_modifiers": { "def": 1, "atk": 1 },
+  "derived_bonuses": {},
+  "equipment_access": ["sword", "medium_armor", "shield"],
+  "granted_abilities": ["power_strike"]
+}

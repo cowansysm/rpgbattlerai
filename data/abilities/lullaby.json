@@ -1,0 +1,10 @@
+{
+  "id": "lullaby",
+  "display_name": "Lullaby",
+  "type": "skill",
+  "ap_cost": 1,
+  "range": 3,
+  "area": {},
+  "effect": { "effect_type": "status", "status_id": "sleep", "duration": 2 },
+  "source": "class"
+}

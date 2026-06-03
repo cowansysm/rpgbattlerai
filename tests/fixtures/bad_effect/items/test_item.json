@@ -1,0 +1,10 @@
+{
+  "id": "test_item",
+  "display_name": "Test Item",
+  "slot": "weapon",
+  "bp_value": 1,
+  "passive": {},
+  "granted_abilities": [],
+  "weapon_power": 2,
+  "weapon_range": 1
+}

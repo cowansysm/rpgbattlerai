@@ -1,0 +1,10 @@
+{
+  "id": "staff",
+  "display_name": "Staff",
+  "slot": "weapon",
+  "bp_value": 1,
+  "passive": {},
+  "granted_abilities": [],
+  "weapon_power": 1,
+  "weapon_range": 1
+}

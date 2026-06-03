@@ -1,0 +1,18 @@
+# Godot 4+
+.godot/
+/android/
+
+# Builds
+/build/
+*.exe
+*.pck
+*.zip
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Claude Code
+.claude/

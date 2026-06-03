@@ -1,0 +1,10 @@
+{
+  "id": "bracer_of_accuracy",
+  "display_name": "Bracer of Accuracy",
+  "slot": "accessory",
+  "bp_value": 2,
+  "passive": { "accuracy": 1 },
+  "granted_abilities": [],
+  "weapon_power": 0,
+  "weapon_range": 0
+}

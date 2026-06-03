@@ -1,0 +1,10 @@
+{
+  "id": "power_strike",
+  "display_name": "Power Strike",
+  "type": "skill",
+  "ap_cost": 1,
+  "range": 1,
+  "area": {},
+  "effect": { "effect_type": "damage", "value": 4 },
+  "source": "class"
+}

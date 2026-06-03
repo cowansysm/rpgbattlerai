@@ -1,0 +1,10 @@
+{
+  "id": "light_armor",
+  "display_name": "Light Armor",
+  "slot": "armor",
+  "bp_value": 1,
+  "passive": { "def": 1 },
+  "granted_abilities": [],
+  "weapon_power": 0,
+  "weapon_range": 0
+}
