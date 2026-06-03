@@ -25,6 +25,11 @@ func _ready() -> void:
 	picker.setup(rig.get_camera())
 	add_child(picker)
 
+	# Phase 3 demo: movement/target overlays.
+	var demo := Phase3Demo.new()
+	demo.setup(builder, map_data)
+	add_child(demo)
+
 	# Basic directional light.
 	var light := DirectionalLight3D.new()
 	light.rotation_degrees = Vector3(-45.0, -30.0, 0.0)

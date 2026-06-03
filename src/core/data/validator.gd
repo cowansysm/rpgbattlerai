@@ -185,6 +185,13 @@ static func validate_references(registries: Dictionary) -> Array[String]:
 		for ab in it.granted_abilities:
 			if not registries["abilities"].has(ab):
 				e.append("item '%s' references unknown ability '%s'" % [it.id, ab])
-	# Map deployment zone references (already validated structurally per-map;
-	# this is here for completeness if needed later)
+	# Map tile terrain references — verify every terrain used by maps exists
+	# in the terrain registry (if present). Structural validation via
+	# const TERRAINS catches typos early; this cross-checks against loaded data.
+	if registries.has("terrains"):
+		for m in registries["maps"].all():
+			for t in m.tiles:
+				if not registries["terrains"].has(t.terrain):
+					e.append("map '%s' tile (%d,%d) uses terrain '%s' not in terrain registry" % [
+						m.id, t.q, t.r, t.terrain])
 	return e

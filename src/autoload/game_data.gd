@@ -12,10 +12,11 @@ func _ready() -> void:
 			push_error("GameData: %s" % err)
 		Log.error("GameData", "Data pipeline failed with %d error(s)" % errors.size())
 		return
-	Log.info("GameData", "Loaded %d race(s), %d class(es), %d ability(ies), %d item(s), %d character(s), %d map(s)" % [
+	Log.info("GameData", "Loaded %d race(s), %d class(es), %d ability(ies), %d item(s), %d character(s), %d map(s), %d terrain(s)" % [
 		_pipeline.races.size(), _pipeline.classes.size(),
 		_pipeline.abilities.size(), _pipeline.items.size(),
-		_pipeline.characters.size(), _pipeline.maps.size()])
+		_pipeline.characters.size(), _pipeline.maps.size(),
+		_pipeline.terrains.size()])
 
 
 # --- Public accessors (delegate to pipeline) ---
@@ -37,6 +38,9 @@ func get_character(id: String) -> CharacterData:
 
 func get_map(id: String) -> MapData:
 	return _pipeline.get_map(id)
+
+func get_terrain(id: String) -> TerrainProps:
+	return _pipeline.get_terrain(id)
 
 func get_final_stats(id: String) -> StatBlock:
 	return _pipeline.get_final_stats(id)

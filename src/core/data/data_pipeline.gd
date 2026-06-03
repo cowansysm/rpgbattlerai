@@ -10,6 +10,7 @@ var abilities := EntityRegistry.new()
 var items := EntityRegistry.new()
 var characters := EntityRegistry.new()
 var maps := EntityRegistry.new()
+var terrains := TerrainRegistry.new()
 
 
 ## Runs the full pipeline. Returns Array[String] of errors (empty == success).
@@ -39,6 +40,7 @@ func _load_all(base_path: String) -> Array[String]:
 		base_path.path_join("characters"), Validator.validate_character, DataFactory.make_character))
 	errors.append_array(maps.load_validated(
 		base_path.path_join("maps"), Validator.validate_map, DataFactory.make_map))
+	errors.append_array(terrains.load_from(base_path.path_join("terrain.json")))
 	return errors
 
 
@@ -47,6 +49,7 @@ func _validate_references() -> Array[String]:
 	return Validator.validate_references({
 		"races": races, "classes": classes, "abilities": abilities,
 		"items": items, "characters": characters, "maps": maps,
+		"terrains": terrains,
 	})
 
 
@@ -79,6 +82,9 @@ func get_character(id: String) -> CharacterData:
 
 func get_map(id: String) -> MapData:
 	return maps.get_entry(id)
+
+func get_terrain(id: String) -> TerrainProps:
+	return terrains.get_entry(id)
 
 func get_final_stats(id: String) -> StatBlock:
 	var c := get_character(id)
