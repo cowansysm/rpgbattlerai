@@ -2,6 +2,8 @@ class_name TilePicker
 extends Node
 ## Picks hex tiles via physics raycast from camera through cursor.
 
+signal tile_selected(coord: Vector2i)
+
 var _camera: Camera3D
 var _selected: HexTile = null
 
@@ -47,6 +49,7 @@ func _select(tile: HexTile) -> void:
 	_deselect()
 	_selected = tile
 	_selected.set_highlighted(true)
+	tile_selected.emit(tile.coord())
 	DebugReadout.show_tile(tile)
 
 

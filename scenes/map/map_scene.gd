@@ -25,10 +25,14 @@ func _ready() -> void:
 	picker.setup(rig.get_camera())
 	add_child(picker)
 
-	# Phase 3 demo: movement/target overlays.
-	var demo := Phase3Demo.new()
+	# Phase 4 demo: combat activation & action economy.
+	var demo := Phase4Demo.new()
 	demo.setup(builder, map_data)
 	add_child(demo)
+
+	# Wire tile picker to demo for selected-tile tracking.
+	picker.tile_selected.connect(func(coord: Vector2i) -> void:
+		demo.set_selected_tile(coord))
 
 	# Basic directional light.
 	var light := DirectionalLight3D.new()
