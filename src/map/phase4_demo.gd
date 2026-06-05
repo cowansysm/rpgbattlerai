@@ -1,10 +1,11 @@
 class_name Phase4Demo
 extends Node
-## Phase 4 demo controller. Deploys two small parties and runs
+## Phase 4/5 demo controller. Deploys two small parties and runs
 ## the alternating activation round loop with keyboard controls.
 ## N=next unit, M=move to selected tile, F=attack selected tile,
 ## G=defend, X=wait, R=start new round.
-## Spec reference: phase4-spec.md, phase4-implementation-plan.md Group F
+## Phase 5: attacks/abilities now resolve damage, healing, buffs, statuses.
+## Spec reference: phase4-spec.md, phase5-spec.md
 
 var _state: MatchState
 var _builder: MapBuilder
@@ -29,6 +30,9 @@ func setup(builder: MapBuilder, map_data: MapData) -> void:
 	var resolver := AbilityResolver.new(
 		GameData.get_ability, GameData.get_job_class, GameData.get_item)
 	_state.ability_provider = resolver.resolve
+
+	# Wire item provider for weapon power lookup
+	_state.item_provider = GameData.get_item
 
 	# Deploy
 	var errors := Deployment.auto_deploy(_state, map_data.deployment_zones)
@@ -94,14 +98,35 @@ func _activate_next() -> void:
 		return
 
 	var unit: BattleUnit = available[0]
+
+	# Sleep skip: sleeping units auto-wait
+	if RoundManager.is_sleeping(unit):
+		Log.info("Phase4Demo", "%s is asleep — skipping activation" % unit.character.id)
+		var err := RoundManager.activate_unit(_state, unit)
+		if not err.is_empty():
+			Log.error("Phase4Demo", err)
+			return
+		TurnActions.execute_wait(_state)
+		RoundManager.end_activation(_state)
+		_log_state()
+		return
+
 	var err := RoundManager.activate_unit(_state, unit)
 	if not err.is_empty():
 		Log.error("Phase4Demo", err)
 		return
 
-	Log.info("Phase4Demo", "Activated %s (%s) at (%d,%d) — AP=%d" % [
+	Log.info("Phase4Demo", "Activated %s (%s) at (%d,%d) — HP=%d AP=%d" % [
 		unit.character.id, unit.team,
-		unit.position.x, unit.position.y, unit.ap_remaining])
+		unit.position.x, unit.position.y,
+		unit.current_hp, unit.ap_remaining])
+
+	# Show status effects
+	if not unit.status_effects.is_empty():
+		var statuses: Array = []
+		for s in unit.status_effects:
+			statuses.append("%s(%d)" % [s["id"], s["duration"]])
+		Log.info("Phase4Demo", "  Statuses: %s" % ", ".join(statuses))
 
 	# Show movement overlay for the activated unit
 	if _overlay:
@@ -157,9 +182,18 @@ func _do_attack() -> void:
 		Log.error("Phase4Demo", "Attack failed: %s" % str(result["error"]))
 		return
 
-	Log.info("Phase4Demo", "Attack: %s -> %s (would hit) — AP=%d" % [
-		str(result["actor"]), str(result["target"]),
-		_state.current_unit.ap_remaining])
+	if result.get("missed", false):
+		Log.info("Phase4Demo", "Attack: %s -> %s MISSED (%s) — AP=%d" % [
+			str(result["actor"]), str(result["target"]),
+			str(result.get("reason", "")),
+			_state.current_unit.ap_remaining])
+	else:
+		Log.info("Phase4Demo", "Attack: %s -> %s | dmg=%d HP=%d%s — AP=%d" % [
+			str(result["actor"]), str(result["target"]),
+			int(result.get("damage", 0)),
+			int(result.get("target_hp_after", 0)),
+			" DOWNED!" if result.get("is_downed", false) else "",
+			_state.current_unit.ap_remaining])
 
 	_check_end_activation()
 
@@ -223,10 +257,19 @@ func _log_state() -> void:
 		Log.info("Phase4Demo", "Waiting for %s to activate (%d available)" % [
 			team, available.size()])
 
-	# Log all unit positions
+	# Log all unit positions with HP
 	for team in _state.parties.keys():
 		for u: BattleUnit in _state.parties[team]:
-			Log.info("Phase4Demo", "  %s [%s] at (%d,%d) HP=%d activated=%s" % [
+			var status_str := ""
+			if u.current_hp <= 0:
+				status_str = " [DOWNED]"
+			elif not u.status_effects.is_empty():
+				var parts: Array = []
+				for s in u.status_effects:
+					parts.append("%s(%d)" % [s["id"], s["duration"]])
+				status_str = " [%s]" % ", ".join(parts)
+			Log.info("Phase4Demo", "  %s [%s] at (%d,%d) HP=%d/%d%s activated=%s" % [
 				u.character.id, u.team,
 				u.position.x, u.position.y,
-				u.current_hp, str(u.is_activated)])
+				u.current_hp, u.stats.effective("hp"),
+				status_str, str(u.is_activated)])

@@ -12,6 +12,7 @@ var current_hp: int = 0
 var ap_remaining: int = 2
 var is_activated: bool = false
 var team: String = ""
+var status_effects: Array = []			## [{id: String, duration: int, source: String}, ...]
 
 
 static func from_character(c: CharacterData, final_stats: StatBlock) -> BattleUnit:
@@ -20,3 +21,15 @@ static func from_character(c: CharacterData, final_stats: StatBlock) -> BattleUn
 	u.stats = final_stats.duplicate()
 	u.current_hp = u.stats.effective(StatKey.to_string_key(StatKey.Key.HP))
 	return u
+
+
+func has_status(status_id: String) -> bool:
+	for s in status_effects:
+		if s["id"] == status_id:
+			return true
+	return false
+
+
+func remove_status(status_id: String) -> void:
+	status_effects = status_effects.filter(
+		func(s: Dictionary) -> bool: return s["id"] != status_id)

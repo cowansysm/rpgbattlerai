@@ -3,17 +3,41 @@ extends RefCounted
 ## Manages the alternating activation round loop.
 ## Starts rounds, builds interleaved activation queues, advances through
 ## activations, and flips initiative at round end.
-## Spec reference: phase4-spec.md §3.3, §4
+## Round-start cleanup order: defend → buffs → statuses → unit reset.
+## Spec reference: phase4-spec.md §3.3, §4; phase5-spec.md §5.3
 
 static func start_round(state: MatchState) -> void:
 	state.round_number += 1
 
-	# Reset all living units for the new round
+	# 1. Remove defend modifiers
+	for team in state.parties.keys():
+		for u: BattleUnit in state.living_units(team):
+			u.stats.remove_modifiers_by_source("defend")
+
+	# 2. Expire buff durations
+	var expired_buffs: Array = []
+	for entry in state.buff_durations:
+		entry["remaining"] -= 1
+		if entry["remaining"] <= 0:
+			var u: BattleUnit = entry["unit"]
+			u.stats.remove_modifiers_by_source(str(entry["source_tag"]))
+			expired_buffs.append(entry)
+	for e in expired_buffs:
+		state.buff_durations.erase(e)
+
+	# 3. Expire status durations
+	for team in state.parties.keys():
+		for u: BattleUnit in state.living_units(team):
+			for s in u.status_effects:
+				s["duration"] -= 1
+			u.status_effects = u.status_effects.filter(
+				func(s: Dictionary) -> bool: return s["duration"] > 0)
+
+	# 4. Reset all living units for the new round
 	for team in state.parties.keys():
 		for u: BattleUnit in state.living_units(team):
 			u.is_activated = false
 			u.ap_remaining = 2
-			u.stats.remove_modifiers_by_source("defend")
 
 	state.activation_queue = _build_queue(state)
 	state.current_index = 0
@@ -86,3 +110,8 @@ static func _end_round(state: MatchState) -> void:
 
 static func is_round_over(state: MatchState) -> bool:
 	return state.current_index >= state.activation_queue.size()
+
+
+static func is_sleeping(unit: BattleUnit) -> bool:
+	## Check if a unit is sleeping (for activation skip logic).
+	return unit.has_status("sleep")

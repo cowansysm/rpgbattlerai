@@ -19,6 +19,8 @@ var match_log: Array = []				# All action records across all rounds
 var graph: HexGraph = null
 var occupancy: Dictionary = {}			# Vector2i -> BattleUnit
 var ability_provider: Callable = Callable()	# (BattleUnit, String) -> AbilityData or null
+var item_provider: Callable = Callable()	# (String) -> ItemData or null
+var buff_durations: Array = []				# [{source_tag, unit, remaining}, ...]
 
 
 func living_units(team: String) -> Array:
