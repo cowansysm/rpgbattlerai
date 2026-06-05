@@ -37,7 +37,7 @@ func _apply_transform() -> void:
 		cos(yaw_rad) * cos(pitch_rad) * dist
 	)
 	_camera.position = offset
-	_camera.look_at(Vector3.ZERO, Vector3.UP)
+	_camera.look_at(global_position, Vector3.UP)
 	_camera.size = zoom_val
 
 
@@ -58,17 +58,17 @@ func _tween_to_current_yaw() -> void:
 		sin(pitch_rad) * dist,
 		cos(yaw_rad) * cos(pitch_rad) * dist
 	)
+	var pivot: Vector3 = global_position
 	var tw := create_tween()
 	tw.tween_property(_camera, "position", target_offset, TWEEN_DURATION)\
 		.set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	# Keep camera looking at pivot during the position tween.
+	tw.parallel().tween_method(func(_t: float) -> void:
+		_camera.look_at(pivot, Vector3.UP)
+	, 0.0, 1.0, TWEEN_DURATION)
 	tw.tween_callback(func() -> void:
-		_camera.look_at(Vector3.ZERO, Vector3.UP)
 		_tweening = false
 	)
-	# Keep camera looking at pivot during tween.
-	tw.parallel().tween_method(func(_t: float) -> void:
-		_camera.look_at(Vector3.ZERO, Vector3.UP)
-	, 0.0, 1.0, TWEEN_DURATION)
 
 
 func zoom_by(delta: float) -> void:
