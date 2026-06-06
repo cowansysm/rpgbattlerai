@@ -16,7 +16,7 @@ func test_entity_counts() -> void:
 	assert_eq(_pipeline.abilities.size(), 14, "14 abilities expected")
 	assert_eq(_pipeline.items.size(), 12, "12 items expected")
 	assert_eq(_pipeline.characters.size(), 8, "8 characters expected")
-	assert_eq(_pipeline.maps.size(), 3, "3 maps expected")
+	assert_eq(_pipeline.maps.size(), 6, "6 maps expected")
 
 
 func test_accessor_returns_correct_type() -> void:

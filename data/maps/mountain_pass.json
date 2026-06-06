@@ -7,7 +7,7 @@
     { "q": 2, "r": -3, "elevation": 3, "terrain": "rocks" },
 
     { "q": -1, "r": -2, "elevation": 5, "terrain": "cliff" },
-    { "q": 0, "r": -2, "elevation": 3, "terrain": "rocks" },
+    { "q": 0, "r": -2, "elevation": 1, "terrain": "grass" },
     { "q": 1, "r": -2, "elevation": 1, "terrain": "grass" },
     { "q": 2, "r": -2, "elevation": 2, "terrain": "brush" },
     { "q": 3, "r": -2, "elevation": 4, "terrain": "cliff" },
@@ -32,17 +32,17 @@
     { "q": 2, "r": 1, "elevation": 3, "terrain": "rocks" },
 
     { "q": -2, "r": 2, "elevation": 6, "terrain": "cliff" },
-    { "q": -1, "r": 2, "elevation": 4, "terrain": "rocks" },
+    { "q": -1, "r": 2, "elevation": 2, "terrain": "brush" },
     { "q": 0, "r": 2, "elevation": 2, "terrain": "brush" },
     { "q": 1, "r": 2, "elevation": 1, "terrain": "grass" },
     { "q": 2, "r": 2, "elevation": 4, "terrain": "cliff" },
 
     { "q": -2, "r": 3, "elevation": 5, "terrain": "cliff" },
-    { "q": -1, "r": 3, "elevation": 3, "terrain": "rocks" },
+    { "q": -1, "r": 3, "elevation": 2, "terrain": "grass" },
     { "q": 0, "r": 3, "elevation": 2, "terrain": "brush" }
   ],
   "deployment_zones": {
-    "playerA": ["1,-3", "1,-2", "2,-3", "2,-2", "0,-2"],
-    "playerB": ["-1,3", "-2,3", "0,3", "-1,2", "0,2"]
+    "playerA": ["0,-2", "1,-2", "2,-2", "1,-1", "2,-1"],
+    "playerB": ["-1,3", "0,3", "-1,2", "0,2", "1,2"]
   }
 }
