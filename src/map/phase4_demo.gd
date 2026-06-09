@@ -41,15 +41,26 @@ func setup(builder: MapBuilder, map_data: MapData) -> void:
 			Log.error("Phase4Demo", e)
 		return
 
+	_init_overlay(builder)
+	RoundManager.start_round(_state)
+	_log_state()
+
+
+## Setup from a pre-built MatchState (used by Phase 7 draft flow).
+## The state must already be deployed with round 1 started.
+func setup_from_state(builder: MapBuilder, state: MatchState) -> void:
+	_builder = builder
+	_state = state
+	_init_overlay(builder)
+	_log_state()
+
+
+func _init_overlay(builder: MapBuilder) -> void:
 	# Overlay controller for movement preview
 	_overlay = OverlayController.new()
 	_overlay.graph = _state.graph
 	_overlay.builder = builder
 	add_child(_overlay)
-
-	# Start first round
-	RoundManager.start_round(_state)
-	_log_state()
 
 
 func _make_unit(char_id: String) -> BattleUnit:

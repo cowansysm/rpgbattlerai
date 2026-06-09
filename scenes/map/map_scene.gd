@@ -1,13 +1,19 @@
 extends Node3D
 ## Main map scene. Loads a MapData, builds the 3D hex map, wires camera and picker.
+## Supports two modes: (1) standalone with hardcoded Phase4Demo parties, or
+## (2) receiving a pre-built MatchState from MatchData autoload (Phase 7 flow).
 
 @export var map_id: String = "forest_clearing"
 
 
 func _ready() -> void:
-	var map_data: MapData = GameData.get_map(map_id)
+	# Check for a pre-built match from the draft scene
+	var has_match := MatchData.has_match()
+	var active_map_id := MatchData.map_id if has_match else map_id
+
+	var map_data: MapData = GameData.get_map(active_map_id)
 	if not map_data:
-		Log.error("MapScene", "Map '%s' not found in GameData" % map_id)
+		Log.error("MapScene", "Map '%s' not found in GameData" % active_map_id)
 		return
 
 	# Build hex tiles.
@@ -25,9 +31,14 @@ func _ready() -> void:
 	picker.setup(rig.get_camera())
 	add_child(picker)
 
-	# Phase 4 demo: combat activation & action economy.
+	# Combat controller: use pre-built state or fall back to Phase4Demo.
 	var demo := Phase4Demo.new()
-	demo.setup(builder, map_data)
+	if has_match:
+		demo.setup_from_state(builder, MatchData.match_state)
+		MatchData.clear()
+		Log.info("MapScene", "Loaded match from draft (map: %s)" % active_map_id)
+	else:
+		demo.setup(builder, map_data)
 	add_child(demo)
 
 	# Wire tile picker to demo for selected-tile tracking.
@@ -52,4 +63,4 @@ func _ready() -> void:
 	world_env.environment = env
 	add_child(world_env)
 
-	Log.info("MapScene", "Map '%s' ready (%d tiles)" % [map_id, builder.tiles.size()])
+	Log.info("MapScene", "Map '%s' ready (%d tiles)" % [active_map_id, builder.tiles.size()])

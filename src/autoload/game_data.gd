@@ -47,3 +47,6 @@ func get_final_stats(id: String) -> StatBlock:
 
 func all_characters() -> Array:
 	return _pipeline.characters.all()
+
+func all_maps() -> Array:
+	return _pipeline.maps.all()
