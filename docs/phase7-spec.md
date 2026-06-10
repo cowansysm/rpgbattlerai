@@ -32,9 +32,9 @@ This is the first phase with a real Godot UI scene. The logic layer (draft valid
 - Manual map selection or map veto (random selection only for MVP).
 - AI-controlled drafting or auto-party generation.
 - Network/multiplayer drafting (shared screen only).
-- Visual polish, animations, or transitions (Phase 10).
-- Victory conditions and match-end flow (Phase 8).
-- BP rebalancing (Phase 9).
+- Visual polish, animations, or transitions (Phase 11).
+- Victory conditions and match-end flow (Phase 9).
+- BP rebalancing (Phase 10).
 
 ### Exit criteria
 
@@ -57,11 +57,11 @@ Phase 7 is complete when:
 |------|----------|--------------------------|
 | **Draft model** | Independent drafting. Both players see the full 8-character pool. Mirror picks allowed. No exclusion across parties. | Simplest MVP model. Matches spec §5.3 ("each player privately drafts"). Exclusion drafts add strategic depth but require alternating-turn UI — deferred. |
 | **Player flow** | Shared screen, sequential. Player A drafts and confirms, then Player B drafts and confirms. Player B does not see Player A's picks until both are done. | Supports two-player local play without networking. Player A's draft is hidden during Player B's turn to preserve the "privately drafts" spec intent. |
-| **Map selection** | Random from all maps matching the selected tier. No player choice or veto. | Saves time on map selection UI. The 2 maps per tier from Phase 6 provide variety. Manual selection can be added as Phase 10 polish. |
+| **Map selection** | Random from all maps matching the selected tier. No player choice or veto. | Saves time on map selection UI. The 2 maps per tier from Phase 6 provide variety. Manual selection can be added as Phase 11 polish. |
 | **Duplicate characters** | A single player cannot draft the same character twice. Across players, duplicates (mirror picks) are allowed. | Spec §5.1 says "the same character may be available to both players (mirror picks allowed unless a tier rules otherwise)." No tier currently restricts mirrors. |
 | **Validation timing** | Validation is continuous: the UI disables adding characters that would violate BP cap or max count. The confirm button is disabled until the party meets min count. | Prevents invalid states entirely rather than validating at submission. Better UX. |
 | **Logic/UI separation** | `PartyDraft` and `MatchBuilder` are pure logic classes (RefCounted, no Node dependency). The UI scene instantiates and queries them. | Testable headlessly. UI can be replaced or redesigned without touching validation logic. Consistent with Phase 4/5 pattern (e.g., TurnActions is pure logic). |
-| **File organization** | Logic in `src/core/combat/` (alongside match_setup.gd, deployment.gd). UI in `src/ui/` (new directory). Scene in `scenes/draft/`. | `src/core/combat/` is the natural home for match-adjacent logic. `src/ui/` establishes a convention for future UI scenes (Phase 8 result screen, Phase 10 polish). |
+| **File organization** | Logic in `src/core/combat/` (alongside match_setup.gd, deployment.gd). UI in `src/ui/` (new directory). Scene in `scenes/draft/`. | `src/core/combat/` is the natural home for match-adjacent logic. `src/ui/` establishes a convention for future UI scenes (Phase 9 result screen, Phase 11 polish). |
 | **Tier config source** | Read from `Constants.get_value("tiers")` at runtime. No hardcoded tier values in logic classes. | Tier definitions already exist in `data/constants.json`. Single source of truth. |
 | **Match handoff** | After deployment, the system transitions to the Phase 4 combat loop. Phase 7 does not modify combat logic — it constructs the inputs that MatchSetup and Deployment consume. | Clean phase boundary. Phase 7's output is a deployed MatchState; Phases 4/5 take over from there. |
 | **No auto-draft / AI** | Both players are human. No AI opponent drafting logic. Both sides must be manually drafted. | AI drafting is a distinct feature with its own heuristics. Out of scope for the match setup phase. |
@@ -382,13 +382,13 @@ MatchState ──> Combat scene (Phase 4/5 loop)
 
 ## 10. Risks & Notes
 
-- **First UI scene.** Phases 0--6 were headless logic and demo scripts. Phase 7 introduces Control nodes, scene files, and input handling for the first time. Keep the UI minimal — functional buttons and labels, no visual polish. Phase 10 handles presentation.
+- **First UI scene.** Phases 0--6 were headless logic and demo scripts. Phase 7 introduces Control nodes, scene files, and input handling for the first time. Keep the UI minimal — functional buttons and labels, no visual polish. Phase 11 handles presentation.
 - **Scene transition pattern.** No established pattern exists for scene transitions in this project. Phase 7 establishes the convention. Keep it simple: direct scene change or autoload-based state passing.
 - **GameData.all_maps() accessor.** The existing `GameData` autoload may not expose a method to list all maps. If not, one must be added (thin wrapper over DataPipeline). This is a minor extension, not a redesign.
 - **RNG seeding.** Random map selection uses Godot's built-in `randi()`. For reproducible testing, tests should use seeded RNG or mock the selection. The production code does not need deterministic seeding.
 - **Shared screen privacy.** Player A's draft is hidden during Player B's turn by UI state management (clearing the selected list, resetting the panel). There is no encryption or true privacy — this is honor-system for local play.
 - **Character card layout.** The roster grid with 8 cards needs to be readable on various screen sizes. A 4×2 grid is a reasonable default. Exact layout is an implementation detail.
-- **No undo after confirm.** Once a player confirms their draft, it is locked. There is no back button to re-draft. This is intentional for simplicity. A "Back" button could be added as Phase 10 polish.
+- **No undo after confirm.** Once a player confirms their draft, it is locked. There is no back button to re-draft. This is intentional for simplicity. A "Back" button could be added as Phase 11 polish.
 - **AbilityResolver integration.** The MatchBuilder must wire `AbilityResolver.resolve` as the `ability_provider` on MatchState, matching the pattern from the Phase 4 demo. This is a wiring detail, not new logic.
 
 ---

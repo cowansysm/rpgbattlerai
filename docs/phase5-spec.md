@@ -30,11 +30,11 @@ Phase 5 is validated by running the same 2v2 demo from Phase 4 and observing cor
 
 ### Out of scope
 
-- Victory conditions, rout detection, match-end logic (Phase 8).
+- Victory conditions, rout detection, match-end logic (Phase 9).
 - Accuracy/hit rolls (MVP is auto-hit for melee; cover reduces damage, not hit chance).
 - Elemental resistances and weaknesses (deferred; element is recorded but has no mechanical effect yet).
 - Reaction/overwatch triggers (deferred).
-- Visual feedback, hit/heal animations (Phase 10).
+- Visual feedback, hit/heal animations (Phase 11).
 - AI decision-making (later phases).
 
 ### Exit criteria

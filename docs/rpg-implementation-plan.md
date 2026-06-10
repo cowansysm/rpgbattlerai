@@ -73,7 +73,15 @@ Implement tier selection (Skirmish / Standard / Large), the shared premade pool,
 
 ---
 
-## Phase 8 — Victory Conditions & Match Flow
+## Phase 8 — Combat UI & Unit Visuals
+
+**Goal:** Players can see their units on the map and control all combat actions through a visual interface.
+
+Add 3D pawn meshes representing deployed characters on the hex map, with team coloring, active-unit highlighting, and smooth movement animation (§7.7). Build a full combat HUD: action panel with buttons for all six action types (including ability and item browsers), unit info display, combat log, turn order tracker, and team roster sidebar. Replace the keyboard-only Phase4Demo controller with a BattleController that wires the HUD to the existing TurnActions backend. Keep keyboard shortcuts as alternatives. Exit when a complete match can be played using the visual UI with all actions accessible, pawns visible and animated, and combat state readable at a glance.
+
+---
+
+## Phase 9 — Victory Conditions & Match Flow
 
 **Goal:** Matches reach a defined end.
 
@@ -81,7 +89,7 @@ Implement the rout/last-party-standing logic (§8): elimination, the rout thresh
 
 ---
 
-## Phase 9 — Balancing & Tuning
+## Phase 10 — Balancing & Tuning
 
 **Goal:** BP values and constants feel fair.
 
@@ -89,7 +97,7 @@ Validate the BP derivation heuristic (§7.6) against playtests, expose the tunab
 
 ---
 
-## Phase 10 — Polish & Future Hooks
+## Phase 11 — Polish & Future Hooks
 
 **Goal:** First playable feels finished and is extensible.
 
@@ -100,9 +108,9 @@ Add UI polish, basic feedback (hit/heal/move cues), and quality-of-life (undo wi
 ## Dependency Summary
 
 ```
-P0 → P1 → P2 → P3 → P4 → P5 → P8 → P9 → P10
-            P1 → P6 (parallel, feeds P5–P8)
+P0 → P1 → P2 → P3 → P4 → P5 → P8 → P9 → P10 → P11
+            P1 → P6 (parallel, feeds P5–P9)
             P3 + P5 → P7 (party building needs combat to be meaningful)
 ```
 
-The critical path runs through the combat systems (P3–P5, P8). Content authoring (P6) is the main parallel track. Party building (P7) and balancing (P9) layer on once combat resolves correctly.
+The critical path runs through the combat and presentation systems (P3–P5, P8–P9). Content authoring (P6) is the main parallel track. Party building (P7) and balancing (P10) layer on once combat resolves correctly.

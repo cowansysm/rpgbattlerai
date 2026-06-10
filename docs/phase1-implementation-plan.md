@@ -29,7 +29,7 @@ These decisions were finalized during Phase 1 preparation and apply throughout t
 | **`magic_affinity`** | **Dropped.** Not added to `StatKey`. The Elf race example in `phase1-spec.md` §3.1 is illustrative only. | §4.3 defers magic stats for MVP: "folded into per-ability values and DEF." |
 | **Item `passive` validation** | **Free-form keys.** `passive` dictionaries are not validated against `StatKey`. Only value types are checked (numeric). | Passives include non-stat effects (e.g., `"accuracy": 1`). Combat code (Phase 5) interprets them. |
 | **`ability_range` naming** | **Keep `ability_range`.** Phase 0's decision preserved. JSON `"range"` maps to `ability_range` in `DataFactory`. | Avoids shadowing GDScript's `range()` builtin. |
-| **Content seed values** | **Inferred from spec flavor.** Race/class modifiers, ability stats, item values derived from §6 roster and flavor text. | Phase 9 handles balancing; Phase 1 only requires load + validate + derive correctly. |
+| **Content seed values** | **Inferred from spec flavor.** Race/class modifiers, ability stats, item values derived from §6 roster and flavor text. | Phase 10 handles balancing; Phase 1 only requires load + validate + derive correctly. |
 
 ---
 
@@ -616,7 +616,7 @@ func get_final_stats(id: String) -> StatBlock:
 
 ## Group F — Content Authoring & Test Fixtures
 
-*Depends on A (schemas). Runs in parallel with B–E. Values are seeds; balancing is Phase 9.*
+*Depends on A (schemas). Runs in parallel with B–E. Values are seeds; balancing is Phase 10.*
 
 ### F1. Races
 - Author Human, Elf, Halfling, Dwarf under `data/races/`.

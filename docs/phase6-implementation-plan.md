@@ -404,15 +404,15 @@ Final stats are computed as: base + race modifiers + class modifiers.
 
 4. **Negative DEF penalty underweighted**: the White Mage's DEF of -1 means it takes MORE damage from every physical attack. The formula treats this as -1 to the stat score, but the actual combat impact is much larger (fragility compounds with low HP pool).
 
-**Recommendations for Phase 9:**
+**Recommendations for Phase 10:**
 
 - Revise weights to reduce stat contribution and increase ability contribution, especially for DEF-bypassing spells.
 - Add a "survivability" composite factor (HP * DEF interaction) rather than treating them independently.
 - Add a "versatility multiplier" for characters with abilities spanning multiple effect types.
 - Consider separate "offensive threat" and "support utility" pricing tracks.
-- Playtest with the full match loop (Phase 8) before adjusting any BP values — real match data is more informative than formula estimates.
+- Playtest with the full match loop (Phase 9) before adjusting any BP values — real match data is more informative than formula estimates.
 
-> **This audit is informational input to Phase 9. No BP values are changed in Phase 6.**
+> **This audit is informational input to Phase 10. No BP values are changed in Phase 6.**
 
 ---
 

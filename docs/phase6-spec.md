@@ -20,7 +20,7 @@ The master plan notes Phase 6 runs "in parallel with P4--P5 as soon as the schem
 - **Deployment zone expansion**: existing maps have 5-tile deployment zones, which is insufficient for Standard tier (up to 8 characters) and Large tier (up to 12). Zones must be expanded to accommodate maximum party sizes.
 - **Additional maps**: the spec calls for 2--3 maps per tier. Currently there is 1 per tier. Author at least 1 additional map per tier (target: 2 per tier, 6 total).
 - **Content validation**: all new and existing content passes structural and referential validation at boot.
-- **Balance review**: a first-pass audit of BP values against the heuristic formula from §7.6 of the spec. No rebalancing — just document discrepancies for Phase 9.
+- **Balance review**: a first-pass audit of BP values against the heuristic formula from §7.6 of the spec. No rebalancing — just document discrepancies for Phase 10.
 
 ### Out of scope
 
@@ -29,8 +29,8 @@ The master plan notes Phase 6 runs "in parallel with P4--P5 as soon as the schem
 - New terrain types beyond the 8 already defined.
 - New races or classes beyond the current 4 races and 8 classes.
 - Party building UI or drafting flow (Phase 7).
-- BP rebalancing or tuning (Phase 9).
-- Visual polish, animations, or presentation improvements (Phase 10).
+- BP rebalancing or tuning (Phase 10).
+- Visual polish, animations, or presentation improvements (Phase 11).
 
 ### Exit criteria
 
@@ -40,7 +40,7 @@ Phase 6 is complete when:
 2. Deployment zones on all maps support the **maximum party size** for their tier: Skirmish ≤ 5, Standard ≤ 8, Large ≤ 12 tiles per side.
 3. At least **2 maps per tier** exist (6 total minimum), each with correct terrain, elevation, and deployment zones.
 4. All content passes structural and referential validation (boot completes with 0 errors).
-5. A BP audit document records each character's computed BP against the heuristic and flags discrepancies for Phase 9.
+5. A BP audit document records each character's computed BP against the heuristic and flags discrepancies for Phase 10.
 6. GUT tests confirm all 8 characters can be instantiated as `BattleUnit`s with correct derived stats.
 7. Git tag `phase-6-complete`.
 
@@ -53,9 +53,9 @@ Phase 6 is complete when:
 | **Deployment zone sizing** | Each map's deployment zones must have at least `tier.max` tiles per side (5 for skirmish, 8 for standard, 12 for large). Zones use edge hexes that are spread along the map boundary for tactical variety. | Current 5-tile zones work for skirmish but block standard (8-char) and large (12-char) parties. Expanding zones is a data-only change. |
 | **Map variety** | New maps per tier emphasize different tactical challenges: chokepoints, elevation extremes, open fields, asymmetric terrain. Maps within a tier share the same approximate size range but differ in layout. | Variety ensures the game isn't solved by a single party composition; different maps reward different strategies. |
 | **Map size ranges** | Skirmish: 30--50 tiles, elevation 0--6. Standard: 50--80 tiles, elevation 0--4. Large: 80--120 tiles, elevation 0--3. These are guidelines, not hard limits. | Smaller maps have more dramatic elevation to create tactical complexity with fewer tiles. Larger maps use gentler terrain to keep movement meaningful at scale. |
-| **No new characters** | Phase 6 does not add characters beyond the spec's 8. Roster expansion is future content work. The 8 characters cover all 8 classes and 4 races, which is sufficient for varied matches. | Keeps scope bounded. Phase 9 balancing needs a stable roster. |
-| **No new abilities/items** | Existing 14 abilities and 12 items cover all effect types (damage, heal, buff, status) and all delivery mechanisms (spell, skill, item). No gaps in mechanical coverage. | Adding content without gameplay need risks bloat. New abilities should come with new classes or as balance levers in Phase 9+. |
-| **BP audit only** | Phase 6 documents BP discrepancies but does not change values. Actual rebalancing is Phase 9's job, after the full match loop (Phase 8) provides real playtest data. | Premature rebalancing without victory conditions and full match flow would be speculative. |
+| **No new characters** | Phase 6 does not add characters beyond the spec's 8. Roster expansion is future content work. The 8 characters cover all 8 classes and 4 races, which is sufficient for varied matches. | Keeps scope bounded. Phase 10 balancing needs a stable roster. |
+| **No new abilities/items** | Existing 14 abilities and 12 items cover all effect types (damage, heal, buff, status) and all delivery mechanisms (spell, skill, item). No gaps in mechanical coverage. | Adding content without gameplay need risks bloat. New abilities should come with new classes or as balance levers in Phase 10+. |
+| **BP audit only** | Phase 6 documents BP discrepancies but does not change values. Actual rebalancing is Phase 10's job, after the full match loop (Phase 9) provides real playtest data. | Premature rebalancing without victory conditions and full match flow would be speculative. |
 | **Terrain reuse** | New maps use the same 8 terrain types already defined. No new terrain types are needed for variety — combining existing terrains with different elevation profiles provides sufficient differentiation. | Avoids engine changes. The 8 terrains cover the spec's §3.2 requirements. |
 
 ---
@@ -208,7 +208,7 @@ BP ~ w1*HP + w2*ATK + w3*DEF + w4*SPD + w5*(RNG value)
 
 ### 6.2 Audit approach
 
-For each character, compute an **estimated BP** using the heuristic with reasonable weights, then compare to the authored BP. Flag any character where the discrepancy exceeds 15% as a Phase 9 review candidate.
+For each character, compute an **estimated BP** using the heuristic with reasonable weights, then compare to the authored BP. Flag any character where the discrepancy exceeds 15% as a Phase 10 review candidate.
 
 This audit is **documentation only** — no BP values are changed in Phase 6. The audit output is recorded in the implementation plan's verification section.
 
@@ -224,7 +224,7 @@ This audit is **documentation only** — no BP values are changed in Phase 6. Th
 | ability_value | per ability | Estimated from effect magnitude and versatility. |
 | equipment_value | from item BP | Sum of `ItemData.bp_value`. |
 
-These weights are starting points for the audit. They will be refined during Phase 9 playtesting.
+These weights are starting points for the audit. They will be refined during Phase 10 playtesting.
 
 ---
 
@@ -251,7 +251,7 @@ These weights are starting points for the audit. They will be refined during Pha
 - 6 validated, playable maps (2 per tier) with correctly sized deployment zones.
 - 8 characters confirmed end-to-end playable.
 - BP audit document (in implementation plan).
-- Content ready for Phase 7 (party building) and Phase 8 (victory conditions / full match loop).
+- Content ready for Phase 7 (party building) and Phase 9 (victory conditions / full match loop).
 
 ---
 

@@ -279,7 +279,7 @@ Phase 1 authors enough content to load the full §6 roster and everything it ref
 - **Maps:** at least one valid `MapData` fixture per tier (geometry unused until Phase 2).
 - **Constants:** finalized `constants.json`.
 
-> Values are seeds from the spec; balancing them is Phase 9, not Phase 1. Phase 1 only requires that they load, validate, and derive correctly.
+> Values are seeds from the spec; balancing them is Phase 10, not Phase 1. Phase 1 only requires that they load, validate, and derive correctly.
 
 ---
 

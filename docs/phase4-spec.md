@@ -29,7 +29,7 @@ Phase 4 is validated by two manually controlled parties alternating activations 
 
 - Damage formulas, accuracy rolls, healing, HP reduction, downing (Phase 5).
 - Status effects, elemental interactions, area-of-effect resolution (Phase 5).
-- Victory conditions, rout detection, match-end logic (Phase 8).
+- Victory conditions, rout detection, match-end logic (Phase 9).
 - Party building UI, drafting flow (Phase 7).
 - AI decision-making, animations, combat log presentation (later phases).
 
@@ -78,7 +78,7 @@ The match progresses through a linear sequence of phases:
 | `ROUND_START` | New round begins: increment round counter, reset all units' `is_activated`, build activation queue. | `AWAITING_ACTIVATION` |
 | `AWAITING_ACTIVATION` | Waiting for the current player to choose which of their un-activated characters to activate. | `UNIT_TURN` |
 | `UNIT_TURN` | The chosen character spends AP on actions. | `AWAITING_ACTIVATION` (if more units remain) or `ROUND_START` (if all spent) |
-| `MATCH_OVER` | Terminal state (Phase 8 adds victory logic). | — |
+| `MATCH_OVER` | Terminal state (Phase 9 adds victory logic). | — |
 
 ### 3.2 `MatchState` data
 

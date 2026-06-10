@@ -30,7 +30,7 @@ No movement, range, line of sight, units, or combat — Phase 2 draws the board 
 
 - Pathfinding, reachable-tile overlays, range, and line of sight (Phase 3).
 - Characters/units, deployment, combat, UI beyond debug readouts (Phases 4+).
-- Animated terrain, water shaders, lighting polish, final art (Phase 10 polish).
+- Animated terrain, water shaders, lighting polish, final art (Phase 11 polish).
 - Map editing/authoring tools (content is authored as JSON per Phase 1).
 
 ### Exit criteria
@@ -122,7 +122,7 @@ The tile node stores its axial coordinates, elevation, and terrain type as metad
 
 ### 4.3 Terrain material palette
 
-Each terrain type from `rpg-specs.md` §3.2 maps to a distinct material (flat colors are sufficient for the MVP; textures/shaders are Phase 10):
+Each terrain type from `rpg-specs.md` §3.2 maps to a distinct material (flat colors are sufficient for the MVP; textures/shaders are Phase 11):
 
 | Terrain | Visual treatment (MVP) |
 |---------|------------------------|
@@ -144,7 +144,7 @@ Decoration meshes (tree, boulder) are placeholders; impassability/cover semantic
 Per the chosen approach, a tile at elevation `e` is a **single flat tile placed at world Y = `e × ELEV_UNIT`** — there is no extruded column drawn beneath it.
 
 - Cliffs and plateaus are conveyed purely by the height difference between neighboring tiles.
-- **Known trade-off:** with nothing rendered below a raised tile, tall tiles can appear to float. This is accepted for the MVP. A later, optional **skirt/support** (a simple downward extrusion or a column mesh) can be added to ground raised tiles visually without changing `MapData` or the builder's placement logic. This is noted as a Risk (§10) and a candidate Phase 10 polish item.
+- **Known trade-off:** with nothing rendered below a raised tile, tall tiles can appear to float. This is accepted for the MVP. A later, optional **skirt/support** (a simple downward extrusion or a column mesh) can be added to ground raised tiles visually without changing `MapData` or the builder's placement logic. This is noted as a Risk (§10) and a candidate Phase 11 polish item.
 
 ---
 

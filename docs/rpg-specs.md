@@ -254,6 +254,33 @@ BP ≈ w1·HP + w2·ATK + w3·DEF + w4·SPD + w5·(RNG value)
 
 Weights are tuning constants. The roster table values in §6 are seeds; expect iteration. Item-bound and class abilities each carry their own point value so that two characters with identical base stats but different abilities cost differently.
 
+### 7.7 Combat presentation (MVP)
+
+The MVP provides functional visual feedback so players can read board state and issue commands without relying on console output.
+
+**Unit visuals.** Each deployed character is represented by a **token** — a cylindrical 3D game piece placed on its hex tile. Team A and Team B use distinct body colors (blue and red). The top face of each token displays a **NATO-style symbol** encoding the unit's race (frame shape) and class (interior icon) at a glance, inspired by the APP-6 layered symbology convention. The **active unit's** token receives a highlight (emissive glow) to indicate it is the current actor.
+
+- **Race → frame shape:** Human = rectangle, Elf = diamond, Halfling = circle, Dwarf = hexagon.
+- **Class → interior icon:** Fighter = ✕, Archer = ↑, Rogue = /, Barbarian = ‡, Black Mage = ⚡, White Mage = +, Red Mage = ✳, Bard = ∿.
+- When a unit **moves**, its token smoothly animates (tween) from the origin tile to the destination tile.
+- When a unit is **downed** (HP ≤ 0), its token is removed from the map.
+- Tokens do not block tile selection — the existing tile-picking system is sufficient to identify which unit occupies a tile via the occupancy map.
+
+**Combat HUD.** A 2D overlay during battle provides:
+
+| Element | Content |
+|---------|---------|
+| **Active unit info** | Name, class, team, HP bar (current / max), AP pips (filled / empty), active status effects with remaining duration. |
+| **Action panel** | Buttons for each action type: Move, Attack, Ability (expandable list), Item (expandable list), Defend, Wait. Disabled when AP insufficient. |
+| **Ability / item browser** | Expanding panel listing the active unit's available abilities or usable items, showing AP cost, range, and effect summary. Selecting one enters targeting mode. |
+| **Combat log** | Scrollable panel displaying action outcomes — damage dealt, healing received, buffs applied, status effects, downing events. |
+| **Turn order** | Display of which units have not yet activated this round, organized by team. |
+| **Team roster** | Sidebar listing all units from both teams with mini HP bars, activation status (pending / spent), and downed indicators. |
+
+**Target selection flow.** When a player selects a targeted action (Attack, Ability, or Item), the map overlay shows valid tiles (range + line of sight). The player clicks a tile to confirm the target and execute the action. Pressing Escape or clicking an invalid tile cancels the action.
+
+> **MVP scope.** Tokens use procedural geometry with symbology — no character-specific models or sprites. The HUD is functional but unstyled. Hit/heal floating numbers, particle effects, and audio feedback are deferred to Phase 11 (Polish).
+
 ---
 
 ## 8. Victory Conditions (MVP)
