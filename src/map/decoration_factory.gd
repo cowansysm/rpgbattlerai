@@ -6,8 +6,8 @@ extends RefCounted
 static func make_tree() -> Mesh:
 	var m := CylinderMesh.new()
 	m.top_radius = 0.0
-	m.bottom_radius = 0.25
-	m.height = 0.6
+	m.bottom_radius = 0.175
+	m.height = 0.42
 	m.radial_segments = 6
 	m.rings = 0
 	return m
@@ -15,8 +15,8 @@ static func make_tree() -> Mesh:
 
 static func make_boulder() -> Mesh:
 	var m := SphereMesh.new()
-	m.radius = 0.2
-	m.height = 0.3
+	m.radius = 0.14
+	m.height = 0.21
 	m.radial_segments = 6
 	m.rings = 3
 	return m

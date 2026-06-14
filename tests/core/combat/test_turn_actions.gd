@@ -143,6 +143,13 @@ func test_move_records_action() -> void:
 	assert_eq(state.turn_log[0]["to"], dest)
 
 
+func test_move_sets_has_moved() -> void:
+	var state := _adjacent_state()
+	assert_false(state.current_unit.has_moved, "has_moved should start false")
+	TurnActions.execute_move(state, Vector2i(0, 1))
+	assert_true(state.current_unit.has_moved, "has_moved should be true after move")
+
+
 func test_double_move() -> void:
 	var state := _adjacent_state()
 	# First move

@@ -1,7 +1,7 @@
 class_name MatchSetup
 extends RefCounted
 ## Creates and initializes a MatchState from two party arrays, a MapData,
-## and a terrain provider. Determines first activation by highest SPD.
+## and a terrain provider. Determines first activation by total team SPD.
 ## Spec reference: phase4-spec.md §4.2
 
 static func create(
@@ -26,14 +26,14 @@ static func create(
 
 
 static func _determine_initiative(a: Array, b: Array) -> String:
-	var max_a := 0
+	var sum_a := 0
 	for u: BattleUnit in a:
-		max_a = maxi(max_a, u.stats.effective_move())
-	var max_b := 0
+		sum_a += u.stats.effective_move()
+	var sum_b := 0
 	for u: BattleUnit in b:
-		max_b = maxi(max_b, u.stats.effective_move())
-	if max_a > max_b:
+		sum_b += u.stats.effective_move()
+	if sum_a > sum_b:
 		return "playerA"
-	if max_b > max_a:
+	if sum_b > sum_a:
 		return "playerB"
 	return "playerA" if randi() % 2 == 0 else "playerB"

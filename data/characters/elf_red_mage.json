@@ -5,7 +5,7 @@
   "classes": ["red_mage"],
   "level": 4,
   "bp": 26,
-  "base_stats": { "spd": 3, "atk": 2, "rng": 1, "def": 1, "hp": 13 },
+  "base_stats": { "spd": 3, "atk": 2, "rng": 1, "def": 1, "hp": 13, "jump": 2 },
   "equipment": ["rapier", "light_armor"],
   "abilities": []
 }

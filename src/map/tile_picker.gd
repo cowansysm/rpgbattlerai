@@ -1,15 +1,21 @@
 class_name TilePicker
 extends Node
 ## Picks hex tiles via physics raycast from camera through cursor.
+## Fires tile_selected on mouse RELEASE (not press) for drag compatibility.
 
 signal tile_selected(coord: Vector2i)
 
 var _camera: Camera3D
 var _selected: HexTile = null
+var _drag_handler: DragHandler = null
 
 
 func setup(camera: Camera3D) -> void:
 	_camera = camera
+
+
+func set_drag_handler(handler: DragHandler) -> void:
+	_drag_handler = handler
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -17,7 +23,10 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
-		if mb.pressed and mb.button_index == MOUSE_BUTTON_LEFT:
+		if mb.button_index == MOUSE_BUTTON_LEFT and not mb.pressed:
+			# Fire on release; skip if DragHandler consumed this as a drag
+			if _drag_handler and _drag_handler.is_dragging():
+				return
 			_pick(mb.position)
 
 
@@ -44,11 +53,10 @@ func _pick(screen_pos: Vector2) -> void:
 
 
 func _select(tile: HexTile) -> void:
-	if _selected == tile:
-		return
-	_deselect()
-	_selected = tile
-	_selected.set_highlighted(true)
+	if _selected != tile:
+		_deselect()
+		_selected = tile
+		_selected.set_highlighted(true)
 	tile_selected.emit(tile.coord())
 	DebugReadout.show_tile(tile)
 

@@ -172,8 +172,9 @@ func test_attack_downs_target() -> void:
 	var result := TurnActions.execute_attack(state, Vector2i(1, 0))
 	assert_true(result["is_downed"])
 	assert_eq(result["target_hp_after"], 0)
-	# Occupancy cleared
-	assert_false(state.is_occupied(Vector2i(1, 0)))
+	# Downed unit stays in occupancy (blocks hex) but is marked as downed
+	assert_true(state.is_occupied(Vector2i(1, 0)))
+	assert_true(state.parties["playerB"][0].is_downed)
 
 
 func test_attack_blind_misses() -> void:
@@ -398,12 +399,14 @@ func test_aoe_friendly_fire() -> void:
 func test_downed_unit_excluded_from_living() -> void:
 	var state := _setup_match()
 	state.parties["playerB"][0].current_hp = 0
+	state.parties["playerB"][0].is_downed = true
 	assert_eq(state.living_units("playerB").size(), 1)
 
 
 func test_downed_unit_excluded_from_activation_queue() -> void:
 	var state := _setup_match()
 	state.parties["playerB"][0].current_hp = 0
+	state.parties["playerB"][0].is_downed = true
 	RoundManager.start_round(state)
 	# Only 3 living units should be in queue
 	assert_eq(state.activation_queue.size(), 3)

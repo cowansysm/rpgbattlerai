@@ -35,7 +35,7 @@ func setup(builder: MapBuilder, map_data: MapData) -> void:
 
 	Log.info("Phase3Demo", "Marker placed at (%d, %d) — %s Move=%d Jump=%d" % [
 		start.x, start.y, c.display_name,
-		_unit.stats.effective_move(), _unit.stats.effective_jump_climb()])
+		_unit.stats.effective_move(), _unit.stats.effective("jump")])
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -51,7 +51,7 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _show_move() -> void:
 	var move: int = _unit.stats.effective_move()
-	var jump: int = _unit.stats.effective_jump_climb()
+	var jump: int = _unit.stats.effective("jump")
 	_overlay.show_movement(_unit.position, move, jump)
 	Log.info("Phase3Demo", "Movement overlay: Move=%d Jump=%d from (%d,%d)" % [
 		move, jump, _unit.position.x, _unit.position.y])

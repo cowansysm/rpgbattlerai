@@ -144,7 +144,7 @@ func _activate_next() -> void:
 		_overlay.show_movement(
 			unit.position,
 			unit.stats.effective_move(),
-			unit.stats.effective_jump_climb())
+			unit.stats.effective("jump"))
 
 
 func _do_move() -> void:
@@ -172,7 +172,7 @@ func _do_move() -> void:
 			_overlay.show_movement(
 				_state.current_unit.position,
 				_state.current_unit.stats.effective_move(),
-				_state.current_unit.stats.effective_jump_climb())
+				_state.current_unit.stats.effective("jump"))
 		else:
 			_overlay.clear()
 

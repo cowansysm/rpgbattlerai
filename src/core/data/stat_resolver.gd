@@ -12,9 +12,4 @@ static func resolve(c: CharacterData, race: RaceData, classes_list: Array) -> St
 		for cls in classes_list:
 			v += int(cls.stat_modifiers.get(k, 0))
 		sb.set_base(k, v)
-	# Derived bonuses (e.g., Rogue's jump_climb bonus)
-	var jump_bonus := 0
-	for cls in classes_list:
-		jump_bonus += int(cls.derived_bonuses.get("jump_climb", 0))
-	sb.set_jump_climb_bonus(jump_bonus)
 	return sb

@@ -4,9 +4,9 @@ extends RefCounted
 ## All stat-keyed dictionaries across the project validate against this enum.
 ## Single point of expansion when future stats are added.
 
-enum Key { SPD, ATK, RNG, DEF, HP }
+enum Key { SPD, ATK, RNG, DEF, HP, JUMP }
 
-const KEYS := [Key.SPD, Key.ATK, Key.RNG, Key.DEF, Key.HP]
+const KEYS := [Key.SPD, Key.ATK, Key.RNG, Key.DEF, Key.HP, Key.JUMP]
 
 const _STRINGS: Dictionary = {
 	Key.SPD: "spd",
@@ -14,6 +14,7 @@ const _STRINGS: Dictionary = {
 	Key.RNG: "rng",
 	Key.DEF: "def",
 	Key.HP: "hp",
+	Key.JUMP: "jump",
 }
 
 

@@ -9,10 +9,18 @@ var character: CharacterData        ## Immutable authored data (read-only refere
 var stats: StatBlock                ## Own copy for runtime modifiers; initialized from load-time derivation
 var position: Vector2i = Vector2i.ZERO
 var current_hp: int = 0
+var base_ap: int = 2					## Starting AP per activation (default 2)
 var ap_remaining: int = 2
 var is_activated: bool = false
+var has_moved: bool = false				## Whether unit has moved this activation
 var team: String = ""
 var status_effects: Array = []			## [{id: String, duration: int, source: String}, ...]
+var is_downed: bool = false				## True when HP <= 0 but not yet permanently removed
+var downed_round: int = -1				## Round number when unit was downed (-1 = never)
+
+
+func is_alive() -> bool:
+	return current_hp > 0 and not is_downed
 
 
 static func from_character(c: CharacterData, final_stats: StatBlock) -> BattleUnit:

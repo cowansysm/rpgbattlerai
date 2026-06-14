@@ -11,7 +11,7 @@ func build(map_data: MapData) -> void:
 	var highlight_mat := HighlightMaterial.make()
 
 	for tile_rec in map_data.tiles:
-		var mat := TerrainPalette.material_for(tile_rec.terrain)
+		var mat := TerrainPalette.material_for(tile_rec.terrain, tile_rec.elevation)
 		var hex_tile := HexTile.new()
 		hex_tile.setup(tile_rec.q, tile_rec.r, tile_rec.elevation,
 			tile_rec.terrain, mesh, mat, highlight_mat)

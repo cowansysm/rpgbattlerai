@@ -25,7 +25,7 @@ var buff_durations: Array = []				# [{source_tag, unit, remaining}, ...]
 
 func living_units(team: String) -> Array:
 	return parties.get(team, []).filter(
-		func(u: BattleUnit) -> bool: return u.current_hp > 0)
+		func(u: BattleUnit) -> bool: return u.current_hp > 0 and not u.is_downed)
 
 
 func unactivated_units(team: String) -> Array:
@@ -37,6 +37,18 @@ func all_living_units() -> Array:
 	var out: Array = []
 	for team in parties.keys():
 		out.append_array(living_units(team))
+	return out
+
+
+func downed_units(team: String) -> Array:
+	return parties.get(team, []).filter(
+		func(u: BattleUnit) -> bool: return u.is_downed)
+
+
+func all_downed_units() -> Array:
+	var out: Array = []
+	for team in parties.keys():
+		out.append_array(downed_units(team))
 	return out
 
 

@@ -1,7 +1,8 @@
 extends Node3D
 ## Main map scene. Loads a MapData, builds the 3D hex map, wires camera and picker.
-## Supports two modes: (1) standalone with hardcoded Phase4Demo parties, or
+## Supports two modes: (1) standalone with hardcoded demo parties, or
 ## (2) receiving a pre-built MatchState from MatchData autoload (Phase 7 flow).
+## Phase 8: uses BattleController with full HUD and unit pawns.
 
 @export var map_id: String = "forest_clearing"
 
@@ -31,19 +32,23 @@ func _ready() -> void:
 	picker.setup(rig.get_camera())
 	add_child(picker)
 
-	# Combat controller: use pre-built state or fall back to Phase4Demo.
-	var demo := Phase4Demo.new()
+	# Combat controller: BattleController with HUD and unit pawns (Phase 8).
+	var controller := BattleController.new()
 	if has_match:
-		demo.setup_from_state(builder, MatchData.match_state)
+		controller.setup_from_state(builder, MatchData.match_state)
 		MatchData.clear()
 		Log.info("MapScene", "Loaded match from draft (map: %s)" % active_map_id)
 	else:
-		demo.setup(builder, map_data)
-	add_child(demo)
+		controller.setup(builder, map_data)
+	add_child(controller)
 
-	# Wire tile picker to demo for selected-tile tracking.
+	# Wire tile picker to controller for tile selection.
 	picker.tile_selected.connect(func(coord: Vector2i) -> void:
-		demo.set_selected_tile(coord))
+		controller.on_tile_selected(coord))
+
+	# Drag-and-drop movement handler.
+	controller.setup_drag(rig.get_camera(), builder)
+	picker.set_drag_handler(controller.get_drag_handler())
 
 	# Basic directional light.
 	var light := DirectionalLight3D.new()

@@ -1,9 +1,9 @@
 extends GutTest
-## Tests for StatResolver: derivation, multiclass stacking, Rogue jump_climb bonus.
+## Tests for StatResolver: derivation, multiclass stacking, Rogue jump bonus.
 
 func test_base_only_no_modifiers() -> void:
 	var c := CharacterData.new()
-	c.base_stats = {"spd": 3, "atk": 2, "rng": 2, "def": 1, "hp": 10}
+	c.base_stats = {"spd": 3, "atk": 2, "rng": 2, "def": 1, "hp": 10, "jump": 2}
 	var race := RaceData.new()
 	race.stat_modifiers = {}
 	var cls := ClassData.new()
@@ -13,12 +13,12 @@ func test_base_only_no_modifiers() -> void:
 	assert_eq(sb.effective("spd"), 3)
 	assert_eq(sb.effective("hp"), 10)
 	assert_eq(sb.effective_move(), 3)
-	assert_eq(sb.effective_jump_climb(), 2)  # floor(3/2)+1
+	assert_eq(sb.effective("jump"), 2)
 
 
 func test_race_and_class_modifiers_applied() -> void:
 	var c := CharacterData.new()
-	c.base_stats = {"spd": 3, "atk": 2, "rng": 1, "def": 1, "hp": 10}
+	c.base_stats = {"spd": 3, "atk": 2, "rng": 1, "def": 1, "hp": 10, "jump": 2}
 	var race := RaceData.new()
 	race.stat_modifiers = {"spd": 1, "hp": -1}  # Elf
 	var cls := ClassData.new()
@@ -32,7 +32,7 @@ func test_race_and_class_modifiers_applied() -> void:
 
 func test_multiclass_additive_stacking() -> void:
 	var c := CharacterData.new()
-	c.base_stats = {"spd": 3, "atk": 2, "rng": 1, "def": 1, "hp": 10}
+	c.base_stats = {"spd": 3, "atk": 2, "rng": 1, "def": 1, "hp": 10, "jump": 2}
 	var race := RaceData.new()
 	race.stat_modifiers = {}
 	var cls_a := ClassData.new()
@@ -46,15 +46,14 @@ func test_multiclass_additive_stacking() -> void:
 	assert_eq(sb.effective("def"), 2)   # 1 + 0 + 1
 
 
-func test_rogue_jump_climb_bonus() -> void:
+func test_rogue_jump_bonus() -> void:
 	var c := CharacterData.new()
-	c.base_stats = {"spd": 4, "atk": 2, "rng": 1, "def": 1, "hp": 11}
+	c.base_stats = {"spd": 4, "atk": 2, "rng": 1, "def": 1, "hp": 11, "jump": 2}
 	var race := RaceData.new()
 	race.stat_modifiers = {}
 	var rogue := ClassData.new()
-	rogue.stat_modifiers = {"spd": 1, "atk": 1, "def": -1}
-	rogue.derived_bonuses = {"jump_climb": 1}
+	rogue.stat_modifiers = {"spd": 1, "atk": 1, "def": -1, "jump": 1}
+	rogue.derived_bonuses = {}
 	var sb := StatResolver.resolve(c, race, [rogue])
-	# spd = 4+1 = 5, jump_climb = floor(5/2)+1+1 = 2+1+1 = 4
-	assert_eq(sb.effective("spd"), 5)
-	assert_eq(sb.effective_jump_climb(), 4)
+	assert_eq(sb.effective("spd"), 5)   # 4 + 1
+	assert_eq(sb.effective("jump"), 3)  # 2 base + 1 rogue

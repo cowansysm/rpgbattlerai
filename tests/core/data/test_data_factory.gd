@@ -12,12 +12,12 @@ func test_make_race() -> void:
 
 func test_make_class() -> void:
 	var d := {"id": "rogue", "display_name": "Rogue", "abbr": "ROG",
-		"stat_modifiers": {"spd": 1}, "derived_bonuses": {"jump_climb": 1},
+		"stat_modifiers": {"spd": 1, "jump": 1}, "derived_bonuses": {},
 		"equipment_access": ["daggers"], "granted_abilities": ["backstab"]}
 	var c := DataFactory.make_class(d)
 	assert_eq(c.id, "rogue")
 	assert_eq(c.abbr, "ROG")
-	assert_eq(c.derived_bonuses["jump_climb"], 1)
+	assert_eq(c.stat_modifiers["jump"], 1)
 	assert_eq(c.granted_abilities[0], "backstab")
 
 

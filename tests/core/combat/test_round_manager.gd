@@ -81,9 +81,19 @@ func test_start_round_resets_units() -> void:
 	# Pre-activate a unit
 	state.parties["playerA"][0].is_activated = true
 	state.parties["playerA"][0].ap_remaining = 0
+	state.parties["playerA"][0].has_moved = true
 	RoundManager.start_round(state)
 	assert_false(state.parties["playerA"][0].is_activated)
 	assert_eq(state.parties["playerA"][0].ap_remaining, 2)
+	assert_false(state.parties["playerA"][0].has_moved, "has_moved should reset")
+
+
+func test_start_round_uses_base_ap() -> void:
+	var state := _deployed_state(1, 1)
+	state.parties["playerA"][0].base_ap = 3
+	RoundManager.start_round(state)
+	assert_eq(state.parties["playerA"][0].ap_remaining, 3,
+		"ap_remaining should use base_ap")
 
 
 func test_start_round_removes_defend_modifiers() -> void:
@@ -129,6 +139,16 @@ func test_activate_unit_sets_current() -> void:
 	assert_eq(err, "")
 	assert_eq(state.current_unit, unit)
 	assert_eq(state.phase, MatchState.Phase.UNIT_TURN)
+
+
+func test_activate_unit_resets_has_moved() -> void:
+	var state := _deployed_state(2, 2)
+	RoundManager.start_round(state)
+	var team := RoundManager.current_team(state)
+	var unit: BattleUnit = state.unactivated_units(team)[0]
+	unit.has_moved = true  # simulate leftover from previous activation
+	RoundManager.activate_unit(state, unit)
+	assert_false(unit.has_moved, "activate_unit should reset has_moved")
 
 
 func test_activate_wrong_team_fails() -> void:

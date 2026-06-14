@@ -15,10 +15,33 @@ const COLORS: Dictionary = {
 }
 
 
-static func material_for(terrain: String) -> StandardMaterial3D:
+static func material_for(terrain: String, elevation: int = 0) -> StandardMaterial3D:
 	var mat := StandardMaterial3D.new()
 	var col: Color = COLORS.get(terrain, Color.MAGENTA)
+	col = _elevation_tint(col, elevation)
 	mat.albedo_color = col
 	if col.a < 1.0:
 		mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 	return mat
+
+
+static func wall_material(terrain: String, elevation: int = 0) -> StandardMaterial3D:
+	## Darkened, opaque material for the vertical side face of a hex tile.
+	var mat := StandardMaterial3D.new()
+	var col: Color = COLORS.get(terrain, Color.MAGENTA)
+	col = _elevation_tint(col, elevation)
+	col = col.darkened(0.35)
+	col.a = 1.0
+	mat.albedo_color = col
+	return mat
+
+
+static func _elevation_tint(color: Color, elevation: int) -> Color:
+	## Darken low elevations, lighten high elevations for visual depth.
+	## Elev 0 is slightly dark; each step lightens by 6%.
+	var shift := -0.10 + elevation * 0.06
+	if shift > 0.0:
+		return color.lightened(minf(shift, 0.25))
+	elif shift < 0.0:
+		return color.darkened(minf(-shift, 0.25))
+	return color

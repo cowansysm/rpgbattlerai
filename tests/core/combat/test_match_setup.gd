@@ -68,26 +68,37 @@ func test_create_builds_graph() -> void:
 	assert_true(state.graph.has_tile(Vector2i(0, 0)))
 
 
-func test_higher_spd_gets_initiative() -> void:
+func test_higher_total_spd_gets_initiative() -> void:
+	# Team A: SPD 3 + SPD 3 = 6 total; Team B: SPD 5 = 5 total
+	var a: Array[BattleUnit] = [_make_unit("a1", 3), _make_unit("a2", 3)]
+	var b: Array[BattleUnit] = [_make_unit("b1", 5)]
+	var state := MatchSetup.create(a, b, _small_map(), _stub_terrain)
+	assert_eq(state.initiative, "playerA",
+		"party A with total SPD 6 should get initiative over party B with total SPD 5")
+
+
+func test_lower_total_spd_loses_initiative() -> void:
+	# Team A: SPD 2 = 2 total; Team B: SPD 2 + SPD 2 = 4 total
+	var a: Array[BattleUnit] = [_make_unit("a1", 2)]
+	var b: Array[BattleUnit] = [_make_unit("b1", 2), _make_unit("b2", 2)]
+	var state := MatchSetup.create(a, b, _small_map(), _stub_terrain)
+	assert_eq(state.initiative, "playerB",
+		"party B with total SPD 4 should get initiative over party A with total SPD 2")
+
+
+func test_tied_total_spd_assigns_initiative() -> void:
+	# Both parties have total SPD 6
+	var a: Array[BattleUnit] = [_make_unit("a1", 3), _make_unit("a2", 3)]
+	var b: Array[BattleUnit] = [_make_unit("b1", 3), _make_unit("b2", 3)]
+	var state := MatchSetup.create(a, b, _small_map(), _stub_terrain)
+	assert_true(state.initiative in ["playerA", "playerB"],
+		"tied total SPD should still assign initiative to one team")
+
+
+func test_single_unit_initiative() -> void:
+	# 1v1: higher SPD wins
 	var a: Array[BattleUnit] = [_make_unit("a1", 5)]
 	var b: Array[BattleUnit] = [_make_unit("b1", 3)]
 	var state := MatchSetup.create(a, b, _small_map(), _stub_terrain)
 	assert_eq(state.initiative, "playerA",
-		"party A with SPD 5 should get initiative over party B with SPD 3")
-
-
-func test_lower_spd_loses_initiative() -> void:
-	var a: Array[BattleUnit] = [_make_unit("a1", 2)]
-	var b: Array[BattleUnit] = [_make_unit("b1", 4)]
-	var state := MatchSetup.create(a, b, _small_map(), _stub_terrain)
-	assert_eq(state.initiative, "playerB",
-		"party B with SPD 4 should get initiative over party A with SPD 2")
-
-
-func test_tied_spd_assigns_initiative() -> void:
-	# Both parties have SPD 3 — initiative should be one of the two teams
-	var a: Array[BattleUnit] = [_make_unit("a1", 3)]
-	var b: Array[BattleUnit] = [_make_unit("b1", 3)]
-	var state := MatchSetup.create(a, b, _small_map(), _stub_terrain)
-	assert_true(state.initiative in ["playerA", "playerB"],
-		"tied SPD should still assign initiative to one team")
+		"single-unit team with SPD 5 should beat SPD 3")

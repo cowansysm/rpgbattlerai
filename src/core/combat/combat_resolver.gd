@@ -90,6 +90,24 @@ static func resolve_heal(
 	}
 
 
+## Resolve a revive effect. Clears downed state and restores HP.
+## Returns {healing, target_hp_after}.
+static func resolve_revive(
+	target: BattleUnit,
+	effect_value: int,
+) -> Dictionary:
+	target.is_downed = false
+	target.downed_round = -1
+	var max_hp: int = target.stats.effective("hp")
+	var healing: int = min(effect_value, max_hp)
+	target.current_hp = healing
+
+	return {
+		"healing": healing,
+		"target_hp_after": target.current_hp,
+	}
+
+
 ## Resolve a buff effect. Pushes a StatModifier with a tracked source tag.
 static func resolve_buff(
 	target: BattleUnit,

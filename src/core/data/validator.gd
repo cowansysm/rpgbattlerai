@@ -6,7 +6,7 @@ extends RefCounted
 const TERRAINS := ["grass", "road", "brush", "trees", "rocks", "shallow_water", "deep_water", "cliff"]
 const SLOTS := ["weapon", "armor", "shield", "accessory"]
 const ABILITY_TYPES := ["spell", "skill", "item", "passive"]
-const EFFECT_TYPES := ["damage", "heal", "status", "buff"]
+const EFFECT_TYPES := ["damage", "heal", "status", "buff", "revive"]
 
 
 # --- Shared helpers ---
@@ -83,6 +83,9 @@ static func validate_ability_effect(effect: Dictionary, ability_id: String) -> A
 					e.append("ability '%s' buff effect missing '%s'" % [ability_id, k])
 			if effect.has("stat") and not StatKey.is_valid_key(str(effect["stat"])):
 				e.append("ability '%s' buff targets unknown stat '%s'" % [ability_id, effect["stat"]])
+		"revive":
+			if not effect.has("value"):
+				e.append("ability '%s' revive effect missing 'value'" % ability_id)
 	return e
 
 

@@ -15,7 +15,7 @@ static func execute_move(state: MatchState, destination: Vector2i) -> Dictionary
 		return { "error": "Not enough AP" }
 
 	var move: int = unit.stats.effective_move()
-	var jump: int = unit.stats.effective_jump_climb()
+	var jump: int = unit.stats.effective("jump")
 	var reach := Movement.reachable(state.graph, unit.position, move, jump)
 
 	# Filter out tiles occupied by other units
@@ -31,6 +31,7 @@ static func execute_move(state: MatchState, destination: Vector2i) -> Dictionary
 	unit.position = destination
 	state.occupancy[destination] = unit
 	unit.ap_remaining -= 1
+	unit.has_moved = true
 
 	var record := {
 		"action": "move",
@@ -53,6 +54,8 @@ static func execute_attack(state: MatchState, target_pos: Vector2i) -> Dictionar
 	var target: BattleUnit = state.unit_at(target_pos)
 	if not target:
 		return { "error": "No target at position" }
+	if target.is_downed:
+		return { "error": "Cannot attack downed unit" }
 	if target.team == unit.team:
 		return { "error": "Cannot attack friendly unit" }
 
@@ -255,8 +258,9 @@ static func _resolve_ability(
 
 
 static func _handle_downing(state: MatchState, unit: BattleUnit) -> void:
-	## Remove a downed unit from occupancy.
-	state.occupancy.erase(unit.position)
+	## Mark a unit as downed. Unit stays in occupancy (blocks hex).
+	unit.is_downed = true
+	unit.downed_round = state.round_number
 
 
 static func _collect_affected_units(
@@ -296,6 +300,8 @@ static func _resolve_effect(
 
 	match effect_type:
 		"damage":
+			if target.is_downed:
+				return { "target": target.character.id, "skipped": true, "reason": "downed" }
 			var value: int = int(effect.get("value", 0))
 			var result := CombatResolver.resolve_damage(
 				caster, target, value, ability.type,
@@ -313,6 +319,8 @@ static func _resolve_effect(
 			return outcome
 
 		"heal":
+			if target.is_downed:
+				return { "target": target.character.id, "skipped": true, "reason": "downed" }
 			var value: int = int(effect.get("value", 0))
 			var result := CombatResolver.resolve_heal(target, value)
 			return {
@@ -322,6 +330,8 @@ static func _resolve_effect(
 			}
 
 		"buff":
+			if target.is_downed:
+				return { "target": target.character.id, "skipped": true, "reason": "downed" }
 			var stat: String = str(effect.get("stat", ""))
 			var value: int = int(effect.get("value", 0))
 			var duration: int = int(effect.get("duration", 1))
@@ -341,6 +351,8 @@ static func _resolve_effect(
 			}
 
 		"status":
+			if target.is_downed:
+				return { "target": target.character.id, "skipped": true, "reason": "downed" }
 			var status_id: String = str(effect.get("status_id", ""))
 			var duration: int = int(effect.get("duration", 1))
 			var result := CombatResolver.resolve_status(
@@ -350,6 +362,20 @@ static func _resolve_effect(
 				"status_id": result["status_id"],
 				"status_duration": result["status_duration"],
 				"refreshed": result["refreshed"],
+			}
+
+		"revive":
+			if not target.is_downed:
+				return { "target": target.character.id, "skipped": true, "reason": "not_downed" }
+			if target.team != caster.team:
+				return { "target": target.character.id, "skipped": true, "reason": "enemy" }
+			var value: int = int(effect.get("value", 1))
+			var result := CombatResolver.resolve_revive(target, value)
+			return {
+				"target": target.character.id,
+				"revived": true,
+				"healing": result["healing"],
+				"target_hp_after": result["target_hp_after"],
 			}
 
 	# Unknown effect type — return empty outcome

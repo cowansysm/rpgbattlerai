@@ -34,19 +34,17 @@ func test_effective_move() -> void:
 	assert_eq(sb.effective_move(), 4)
 
 
-func test_effective_jump_climb_default() -> void:
+func test_effective_jump() -> void:
 	var sb := StatBlock.new()
-	sb.set_base("spd", 3)
-	# floor(3/2) + 1 = 1 + 1 = 2
-	assert_eq(sb.effective_jump_climb(), 2)
+	sb.set_base("jump", 2)
+	assert_eq(sb.effective("jump"), 2)
 
 
-func test_effective_jump_climb_with_bonus() -> void:
+func test_effective_jump_with_modifier() -> void:
 	var sb := StatBlock.new()
-	sb.set_base("spd", 3)
-	sb.set_jump_climb_bonus(1)
-	# floor(3/2) + 1 + 1 = 3
-	assert_eq(sb.effective_jump_climb(), 3)
+	sb.set_base("jump", 2)
+	sb.push_modifier(StatModifier.new("jump", 1, "class"))
+	assert_eq(sb.effective("jump"), 3)
 
 
 func test_duplicate_is_independent() -> void:

@@ -3,8 +3,8 @@ extends RefCounted
 ## Flat-top hex → 3D world coordinate mapping.
 ## Consumes HexLayout.F0/F2/F3 constants from Phase 0.
 
-const HEX_SIZE := 1.0   # Center-to-corner radius in world units.
-const ELEV_UNIT := 0.5   # World Y per elevation step.
+const HEX_SIZE := 0.525   # Center-to-corner radius in world units.
+const ELEV_UNIT := 0.25   # World Y per elevation step.
 
 
 static func hex_to_world(q: int, r: int, elevation: int = 0) -> Vector3:

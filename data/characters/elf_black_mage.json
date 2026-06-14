@@ -5,7 +5,7 @@
   "classes": ["black_mage"],
   "level": 5,
   "bp": 30,
-  "base_stats": { "spd": 3, "atk": 0, "rng": 0, "def": 0, "hp": 12 },
+  "base_stats": { "spd": 3, "atk": 0, "rng": 0, "def": 0, "hp": 12, "jump": 2 },
   "equipment": ["staff"],
   "abilities": []
 }

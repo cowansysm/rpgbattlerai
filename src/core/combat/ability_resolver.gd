@@ -38,3 +38,42 @@ func resolve(unit: BattleUnit, ability_id: String) -> AbilityData:
 			return _ability_getter.call(ability_id)
 
 	return null
+
+
+func all_abilities(unit: BattleUnit) -> Array:
+	## Returns all abilities the unit has access to (deduplicated).
+	## Sources: character abilities, class-granted, equipment-granted.
+	var seen: Dictionary = {}
+	var result: Array = []
+
+	# Direct character abilities
+	for ability_id in unit.character.abilities:
+		if not seen.has(ability_id):
+			var a: AbilityData = _ability_getter.call(ability_id)
+			if a:
+				result.append(a)
+				seen[ability_id] = true
+
+	# Class-granted abilities
+	for cls_id in unit.character.classes:
+		var cls: ClassData = _class_getter.call(cls_id)
+		if cls:
+			for ability_id in cls.granted_abilities:
+				if not seen.has(ability_id):
+					var a: AbilityData = _ability_getter.call(ability_id)
+					if a:
+						result.append(a)
+						seen[ability_id] = true
+
+	# Equipment-granted abilities
+	for eq_id in unit.character.equipment:
+		var item: ItemData = _item_getter.call(eq_id)
+		if item:
+			for ability_id in item.granted_abilities:
+				if not seen.has(ability_id):
+					var a: AbilityData = _ability_getter.call(ability_id)
+					if a:
+						result.append(a)
+						seen[ability_id] = true
+
+	return result

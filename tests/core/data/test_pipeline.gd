@@ -25,7 +25,7 @@ func test_full_pipeline_on_valid_fixture() -> void:
 	assert_eq(sb.effective("atk"), 3, "atk: 2 base + 1 class")
 	assert_eq(sb.effective("hp"), 10, "hp: 10 base, no modifiers")
 	assert_eq(sb.effective_move(), 4)
-	assert_eq(sb.effective_jump_climb(), 3)  # floor(4/2)+1 = 3
+	assert_eq(sb.effective("jump"), 2)  # 2 base, no modifiers
 	# BattleUnit instantiation
 	var unit := BattleUnit.from_character(c, sb)
 	assert_eq(unit.current_hp, sb.effective("hp"))

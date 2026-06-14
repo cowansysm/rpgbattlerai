@@ -6,8 +6,17 @@ extends RefCounted
 ## Round-start cleanup order: defend → buffs → statuses → unit reset.
 ## Spec reference: phase4-spec.md §3.3, §4; phase5-spec.md §5.3
 
-static func start_round(state: MatchState) -> void:
+static func start_round(state: MatchState) -> Array:
 	state.round_number += 1
+
+	# 0. Permanently remove downed units past grace period
+	var permanently_removed: Array = []
+	for team in state.parties.keys():
+		for u: BattleUnit in state.parties[team]:
+			if u.is_downed and (state.round_number - u.downed_round) >= 2:
+				u.is_downed = false
+				state.occupancy.erase(u.position)
+				permanently_removed.append(u)
 
 	# 1. Remove defend modifiers
 	for team in state.parties.keys():
@@ -37,12 +46,15 @@ static func start_round(state: MatchState) -> void:
 	for team in state.parties.keys():
 		for u: BattleUnit in state.living_units(team):
 			u.is_activated = false
-			u.ap_remaining = 2
+			u.ap_remaining = u.base_ap
+			u.has_moved = false
 
 	state.activation_queue = _build_queue(state)
 	state.current_index = 0
 	state.current_unit = null
 	state.phase = MatchState.Phase.AWAITING_ACTIVATION
+
+	return permanently_removed
 
 
 static func _build_queue(state: MatchState) -> Array:
@@ -78,10 +90,11 @@ static func activate_unit(state: MatchState, unit: BattleUnit) -> String:
 		return "It is %s's turn to activate, not %s's" % [team, unit.team]
 	if unit.is_activated:
 		return "Unit '%s' is already activated this round" % unit.character.id
-	if unit.current_hp <= 0:
+	if unit.current_hp <= 0 or unit.is_downed:
 		return "Unit '%s' is downed" % unit.character.id
 
 	state.current_unit = unit
+	unit.has_moved = false
 	state.turn_log = []
 	state.phase = MatchState.Phase.UNIT_TURN
 	return ""

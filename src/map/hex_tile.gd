@@ -33,6 +33,18 @@ func setup(tq: int, tr: int, te: int, tt: String,
 	_base_mesh.material_override = mat
 	add_child(_base_mesh)
 
+	# Side wall — opaque vertical face extending from tile bottom to ground.
+	var wall_height: float = te * HexWorld.ELEV_UNIT
+	if wall_height > 0.001:
+		var wall_mesh := TileMesh.make_wall_mesh(wall_height)
+		var wall := MeshInstance3D.new()
+		wall.mesh = wall_mesh
+		# Top of wall cylinder at tile bottom (-TILE_HEIGHT/2)
+		wall.position.y = -TileMesh.TILE_HEIGHT * 0.5 - wall_height * 0.5
+		var wall_mat := TerrainPalette.wall_material(tt, te)
+		wall.material_override = wall_mat
+		add_child(wall)
+
 	# Overlay layer — hidden by default, Phase 3+ movement/range painting.
 	_overlay_mesh = MeshInstance3D.new()
 	_overlay_mesh.mesh = mesh
@@ -63,7 +75,7 @@ func setup(tq: int, tr: int, te: int, tt: String,
 	if deco_mesh:
 		var deco := MeshInstance3D.new()
 		deco.mesh = deco_mesh
-		deco.position.y = TileMesh.TILE_HEIGHT * 0.5 + 0.15
+		deco.position.y = TileMesh.TILE_HEIGHT * 0.5 + 0.105
 		var deco_mat := StandardMaterial3D.new()
 		if tt == "trees":
 			deco_mat.albedo_color = Color(0.15, 0.50, 0.15)
