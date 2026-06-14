@@ -6,6 +6,7 @@ extends Node
 ## Spec reference: phase8-spec.md §3.3
 
 var _pawns: Dictionary = {}   # BattleUnit -> UnitPawn
+var _markers: Dictionary = {}  # BattleUnit -> Array[StatusMarker]
 var _graph: HexGraph
 
 
@@ -81,6 +82,32 @@ func sync_pawn_position(unit: BattleUnit, coord: Vector2i) -> void:
 	var pawn: UnitPawn = _pawns.get(unit)
 	if pawn:
 		pawn.place(coord, _graph)
+
+
+func update_status_markers(unit: BattleUnit) -> void:
+	## Refresh status effect billboard markers above a unit's pawn.
+	## Called by the controller after any action that may change statuses.
+	_clear_markers(unit)
+	var pawn: UnitPawn = _pawns.get(unit)
+	if not pawn:
+		return
+	var markers: Array = []
+	for i in range(unit.status_effects.size()):
+		var s: Dictionary = unit.status_effects[i]
+		var marker := StatusMarker.create(s["id"])
+		marker.position = Vector3(float(i) * 0.18, 0.25, 0.0)
+		pawn.add_child(marker)
+		markers.append(marker)
+	if not markers.is_empty():
+		_markers[unit] = markers
+
+
+func _clear_markers(unit: BattleUnit) -> void:
+	if _markers.has(unit):
+		for marker in _markers[unit]:
+			if is_instance_valid(marker):
+				marker.queue_free()
+		_markers.erase(unit)
 
 
 func pawn_count() -> int:

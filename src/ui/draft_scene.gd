@@ -332,6 +332,11 @@ func _update_roster_grid() -> void:
 		if not c is CharacterData:
 			continue
 		var char_data: CharacterData = c
+
+		# Wrap each card in a VBoxContainer for button + icon rows
+		var card := VBoxContainer.new()
+		card.add_theme_constant_override("separation", 2)
+
 		var btn := Button.new()
 
 		# Show stats summary
@@ -355,11 +360,37 @@ func _update_roster_grid() -> void:
 
 		# Visual feedback for selected characters
 		if is_selected:
-			btn.modulate = Color(0.5, 1.0, 0.5)
+			card.modulate = Color(0.5, 1.0, 0.5)
 
 		var char_id := char_data.id
 		btn.pressed.connect(_on_character_clicked.bind(char_id))
-		_roster_grid.add_child(btn)
+		card.add_child(btn)
+
+		# Equipment icon row
+		if not char_data.equipment.is_empty():
+			var equip_row := HBoxContainer.new()
+			equip_row.add_theme_constant_override("separation", 2)
+			for eq_id in char_data.equipment:
+				var icon := TextureRect.new()
+				icon.texture = SymbolAtlas.get_icon(eq_id)
+				icon.custom_minimum_size = Vector2(16, 16)
+				icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				equip_row.add_child(icon)
+			card.add_child(equip_row)
+
+		# Ability icon row
+		if not char_data.abilities.is_empty():
+			var ability_row := HBoxContainer.new()
+			ability_row.add_theme_constant_override("separation", 2)
+			for ab_id in char_data.abilities:
+				var icon := TextureRect.new()
+				icon.texture = SymbolAtlas.get_icon(ab_id)
+				icon.custom_minimum_size = Vector2(16, 16)
+				icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				ability_row.add_child(icon)
+			card.add_child(ability_row)
+
+		_roster_grid.add_child(card)
 
 
 func _update_selected_list() -> void:

@@ -49,7 +49,7 @@ var _unit_name_label: Label
 var _hp_bar: ProgressBar
 var _ap_pip_1: Label
 var _ap_pip_2: Label
-var _status_label: Label
+var _status_container: HBoxContainer
 
 # Action panel
 var _action_panel: HBoxContainer
@@ -259,10 +259,9 @@ func _build_bottom_bar() -> void:
 	_ap_pip_2.add_theme_font_size_override("font_size", 14)
 	ap_box.add_child(_ap_pip_2)
 
-	_status_label = Label.new()
-	_status_label.add_theme_font_size_override("font_size", 12)
-	_status_label.add_theme_color_override("font_color", Color(1.0, 0.8, 0.3))
-	_unit_info_panel.add_child(_status_label)
+	_status_container = HBoxContainer.new()
+	_status_container.add_theme_constant_override("separation", 4)
+	_unit_info_panel.add_child(_status_container)
 
 	# Action buttons row
 	_action_panel = HBoxContainer.new()
@@ -270,19 +269,21 @@ func _build_bottom_bar() -> void:
 	_action_panel.visible = false
 	vbox.add_child(_action_panel)
 
-	_btn_attack = _make_action_btn("Attack [F]", ACTION_ATTACK)
+	_btn_attack = _make_action_btn("Attack [F]", ACTION_ATTACK, "action_attack")
 	_btn_abilities = Button.new()
 	_btn_abilities.text = "Abilities"
 	_btn_abilities.custom_minimum_size = Vector2(90, 36)
+	_btn_abilities.icon = SymbolAtlas.get_icon("action_ability")
 	_btn_abilities.pressed.connect(_toggle_ability_panel)
 	_action_panel.add_child(_btn_abilities)
 	_btn_items = Button.new()
 	_btn_items.text = "Items"
 	_btn_items.custom_minimum_size = Vector2(70, 36)
+	_btn_items.icon = SymbolAtlas.get_icon("action_item")
 	_btn_items.pressed.connect(_toggle_item_panel)
 	_action_panel.add_child(_btn_items)
-	_btn_defend = _make_action_btn("Defend [G]", ACTION_DEFEND)
-	_btn_wait = _make_action_btn("Wait [X]", ACTION_WAIT)
+	_btn_defend = _make_action_btn("Defend [G]", ACTION_DEFEND, "action_defend")
+	_btn_wait = _make_action_btn("Wait [X]", ACTION_WAIT, "action_wait")
 
 	# Finalize/Cancel movement buttons
 	_finalize_panel = HBoxContainer.new()
@@ -477,13 +478,30 @@ func show_awaiting_activation(team: String) -> void:
 	_round_label.text = "%s: Select a unit to activate" % team_display
 
 
-func append_log(text: String) -> void:
-	var lbl := Label.new()
-	lbl.text = text
-	lbl.add_theme_font_size_override("font_size", 12)
-	lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	lbl.custom_minimum_size.x = LOG_WIDTH - 20
-	_log_list.add_child(lbl)
+func append_log(text: String, icon_id: String = "") -> void:
+	if icon_id.is_empty():
+		var lbl := Label.new()
+		lbl.text = text
+		lbl.add_theme_font_size_override("font_size", 12)
+		lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		lbl.custom_minimum_size.x = LOG_WIDTH - 20
+		_log_list.add_child(lbl)
+	else:
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation", 4)
+		var icon := TextureRect.new()
+		icon.texture = SymbolAtlas.get_icon(icon_id)
+		icon.custom_minimum_size = Vector2(12, 12)
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		row.add_child(icon)
+		var lbl := Label.new()
+		lbl.text = text
+		lbl.add_theme_font_size_override("font_size", 12)
+		lbl.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+		lbl.custom_minimum_size.x = LOG_WIDTH - 36
+		lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(lbl)
+		_log_list.add_child(row)
 	_log_count += 1
 
 	# Trim old entries
@@ -504,10 +522,12 @@ func disable_actions_below_ap(ap: int) -> void:
 
 # --- Internal helpers ---
 
-func _make_action_btn(text: String, action_type: int) -> Button:
+func _make_action_btn(text: String, action_type: int, icon_id: String = "") -> Button:
 	var btn := Button.new()
 	btn.text = text
 	btn.custom_minimum_size = Vector2(90, 36)
+	if not icon_id.is_empty():
+		btn.icon = SymbolAtlas.get_icon(icon_id)
 	btn.pressed.connect(func() -> void: action_selected.emit(action_type))
 	_action_panel.add_child(btn)
 	return btn
@@ -551,6 +571,7 @@ func _populate_ability_panel(abilities: Array, current_ap: int,
 		var line2 := _format_effect_summary(ability.effect)
 		btn.text = line1 + ("\n  " + line2 if not line2.is_empty() else "")
 		btn.custom_minimum_size = Vector2(200, 40)
+		btn.icon = SymbolAtlas.get_icon(ability.id)
 
 		# Disable if not enough AP, or if movement reserve blocks non-exempt abilities
 		var blocked_by_reserve := must_reserve and current_ap <= 1 and ability.ap_cost < base_ap
@@ -574,6 +595,7 @@ func _populate_item_panel(items: Array, current_ap: int) -> void:
 		var btn := Button.new()
 		btn.text = "%s   1 AP" % item.display_name
 		btn.custom_minimum_size = Vector2(200, 36)
+		btn.icon = SymbolAtlas.get_icon(item.id)
 		btn.disabled = current_ap < 1
 
 		var iid := item.id
@@ -613,13 +635,21 @@ func _update_ap_pips(ap: int) -> void:
 
 
 func _update_status_display(unit: BattleUnit) -> void:
+	for child in _status_container.get_children():
+		child.queue_free()
 	if unit.status_effects.is_empty():
-		_status_label.text = ""
 		return
-	var parts: Array = []
 	for s in unit.status_effects:
-		parts.append("%s(%d)" % [s["id"], s["duration"]])
-	_status_label.text = " ".join(parts)
+		var icon := TextureRect.new()
+		icon.texture = SymbolAtlas.get_icon(s["id"])
+		icon.custom_minimum_size = Vector2(16, 16)
+		icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+		_status_container.add_child(icon)
+		var lbl := Label.new()
+		lbl.text = "%s(%d)" % [s["id"], s["duration"]]
+		lbl.add_theme_font_size_override("font_size", 12)
+		lbl.add_theme_color_override("font_color", Color(1.0, 0.8, 0.3))
+		_status_container.add_child(lbl)
 
 
 func _update_team_list(container: VBoxContainer, units: Array,
@@ -641,6 +671,15 @@ func _update_team_list(container: VBoxContainer, units: Array,
 		name_lbl.add_theme_font_size_override("font_size", 12)
 		name_lbl.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		name_row.add_child(name_lbl)
+
+		# Weapon icon beside unit name
+		if not unit.character.equipment.is_empty():
+			var weapon_id: String = unit.character.equipment[0]
+			var weapon_icon := TextureRect.new()
+			weapon_icon.texture = SymbolAtlas.get_icon(weapon_id)
+			weapon_icon.custom_minimum_size = Vector2(16, 16)
+			weapon_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+			name_row.add_child(weapon_icon)
 
 		var indicator := Label.new()
 		indicator.add_theme_font_size_override("font_size", 11)

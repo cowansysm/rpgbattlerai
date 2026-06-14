@@ -153,7 +153,7 @@ func _enter_awaiting_activation() -> void:
 			Log.error("BattleController", err)
 			return
 		TurnActions.execute_wait(_state)
-		_hud.append_log("%s is asleep -- skipped" % sleeping_unit.character.display_name)
+		_hud.append_log("%s is asleep -- skipped" % sleeping_unit.character.display_name, "sleep")
 		RoundManager.end_activation(_state)
 		_enter_awaiting_activation()
 		return
@@ -360,7 +360,9 @@ func _activate_chosen_unit(unit: BattleUnit) -> void:
 		Log.error("BattleController", err)
 		return
 
-	_hud.append_log("%s activated (%s)" % [unit.character.display_name, unit.team])
+	var race_class_id := "%s_%s" % [unit.character.race,
+		unit.character.classes[0] if not unit.character.classes.is_empty() else ""]
+	_hud.append_log("%s activated (%s)" % [unit.character.display_name, unit.team], race_class_id)
 	_enter_action_select()
 
 
@@ -416,7 +418,7 @@ func _do_move(destination: Vector2i) -> void:
 
 	var unit: BattleUnit = _state.current_unit
 	_hud.append_log("%s moves to (%d,%d)" % [
-		unit.character.display_name, destination.x, destination.y])
+		unit.character.display_name, destination.x, destination.y], "action_move")
 
 	# Animate pawn movement
 	_enter_animating()
@@ -446,6 +448,13 @@ func _do_attack(target_pos: Vector2i) -> void:
 	if result.get("is_downed", false) and target_unit_pre:
 		_pawn_manager.down_pawn(target_unit_pre)
 
+	# Update status markers for attacker and target
+	if target_unit_pre:
+		_pawn_manager.update_status_markers(target_unit_pre)
+	var attacker: BattleUnit = _state.current_unit
+	if attacker:
+		_pawn_manager.update_status_markers(attacker)
+
 	_overlay.clear()
 	_check_end_activation_or_continue()
 
@@ -454,12 +463,13 @@ func _do_ability(target_pos: Vector2i) -> void:
 	# Snapshot units at affected positions before execute (for pawn removal)
 	var units_before := _snapshot_affected_units(target_pos)
 
-	var result := TurnActions.execute_ability(_state, _pending_ability_id, target_pos)
+	var ability_id := _pending_ability_id
+	var result := TurnActions.execute_ability(_state, ability_id, target_pos)
 	if result.has("error"):
 		_hud.append_log("Ability failed: %s" % str(result["error"]))
 		return
 
-	_log_ability_result(result)
+	_log_ability_result(result, ability_id)
 
 	# Handle downing and revive from ability outcomes
 	var outcomes: Array = result.get("outcomes", [])
@@ -473,6 +483,14 @@ func _do_ability(target_pos: Vector2i) -> void:
 			if revived_unit:
 				_pawn_manager.revive_pawn(revived_unit)
 
+	# Update status markers for caster and all affected units
+	var caster: BattleUnit = _state.current_unit
+	if caster:
+		_pawn_manager.update_status_markers(caster)
+	for key in units_before:
+		var u: BattleUnit = units_before[key]
+		_pawn_manager.update_status_markers(u)
+
 	_overlay.clear()
 	_check_end_activation_or_continue()
 
@@ -480,14 +498,15 @@ func _do_ability(target_pos: Vector2i) -> void:
 func _do_use_item(target_pos: Vector2i) -> void:
 	var units_before := _snapshot_affected_units(target_pos)
 
-	var result := TurnActions.execute_use_item(_state, _pending_item_id, target_pos)
+	var item_id := _pending_item_id
+	var result := TurnActions.execute_use_item(_state, item_id, target_pos)
 	if result.has("error"):
 		_hud.append_log("Item failed: %s" % str(result["error"]))
 		return
 
 	_hud.append_log("%s uses %s" % [
 		str(result.get("actor", "")),
-		str(result.get("item", ""))])
+		str(result.get("item", ""))], item_id)
 
 	var outcomes: Array = result.get("outcomes", [])
 	for outcome in outcomes:
@@ -500,6 +519,14 @@ func _do_use_item(target_pos: Vector2i) -> void:
 			if revived_unit:
 				_pawn_manager.revive_pawn(revived_unit)
 
+	# Update status markers for user and affected units
+	var user: BattleUnit = _state.current_unit
+	if user:
+		_pawn_manager.update_status_markers(user)
+	for key in units_before:
+		var u: BattleUnit = units_before[key]
+		_pawn_manager.update_status_markers(u)
+
 	_overlay.clear()
 	_check_end_activation_or_continue()
 
@@ -511,7 +538,9 @@ func _do_defend() -> void:
 		return
 
 	var unit: BattleUnit = _state.current_unit
-	_hud.append_log("%s defends (+2 DEF)" % unit.character.display_name)
+	_hud.append_log("%s defends (+2 DEF)" % unit.character.display_name, "action_defend")
+	if unit:
+		_pawn_manager.update_status_markers(unit)
 	_overlay.clear()
 	_check_end_activation_or_continue()
 
@@ -522,7 +551,7 @@ func _do_wait() -> void:
 		return
 
 	var result := TurnActions.execute_wait(_state)
-	_hud.append_log("%s waits" % unit.character.display_name)
+	_hud.append_log("%s waits" % unit.character.display_name, "action_wait")
 	_overlay.clear()
 	RoundManager.end_activation(_state)
 	_enter_awaiting_activation()
@@ -540,6 +569,11 @@ func _start_new_round() -> void:
 	for u: BattleUnit in removed:
 		_pawn_manager.remove_pawn(u)
 		_hud.append_log("%s has been permanently removed" % u.character.display_name)
+	# Refresh status markers for all surviving units (durations may have expired)
+	for team in _state.parties.keys():
+		for unit: BattleUnit in _state.parties[team]:
+			if unit.current_hp > 0 or unit.is_downed:
+				_pawn_manager.update_status_markers(unit)
 	_hud.append_log("--- Round %d begins ---" % _state.round_number)
 	_enter_awaiting_activation()
 
@@ -563,16 +597,16 @@ func _log_attack_result(result: Dictionary) -> void:
 
 	if result.get("missed", false):
 		_hud.append_log("%s attacks %s -- MISSED (%s)" % [
-			actor, target, str(result.get("reason", ""))])
+			actor, target, str(result.get("reason", ""))], "action_attack")
 	else:
 		var dmg: int = int(result.get("damage", 0))
 		var hp_after: int = int(result.get("target_hp_after", 0))
 		var downed: String = " DOWNED!" if result.get("is_downed", false) else ""
 		_hud.append_log("%s attacks %s for %d damage (%d HP)%s" % [
-			actor, target, dmg, hp_after, downed])
+			actor, target, dmg, hp_after, downed], "action_attack")
 
 
-func _log_ability_result(result: Dictionary) -> void:
+func _log_ability_result(result: Dictionary, ability_id: String = "") -> void:
 	var actor: String = str(result.get("actor", ""))
 	var ability_name: String = str(result.get("ability", ""))
 
@@ -585,27 +619,27 @@ func _log_ability_result(result: Dictionary) -> void:
 			var element: String = str(outcome.get("element", ""))
 			var elem_str := " %s" % element if not element.is_empty() else ""
 			_hud.append_log("%s casts %s on %s -- %d%s damage (%d HP)%s" % [
-				actor, ability_name, target_name, dmg, elem_str, hp_after, downed])
+				actor, ability_name, target_name, dmg, elem_str, hp_after, downed], ability_id)
 		elif outcome.has("healing"):
 			var heal: int = int(outcome.get("healing", 0))
 			var hp_after: int = int(outcome.get("target_hp_after", 0))
 			_hud.append_log("%s casts %s on %s -- heals %d HP (%d HP)" % [
-				actor, ability_name, target_name, heal, hp_after])
+				actor, ability_name, target_name, heal, hp_after], ability_id)
 		elif outcome.has("buff_stat"):
 			var stat: String = str(outcome.get("buff_stat", ""))
 			var val: int = int(outcome.get("buff_value", 0))
 			var dur: int = int(outcome.get("buff_duration", 1))
 			_hud.append_log("%s casts %s on %s -- +%d %s for %d rounds" % [
-				actor, ability_name, target_name, val, stat.to_upper(), dur])
+				actor, ability_name, target_name, val, stat.to_upper(), dur], ability_id)
 		elif outcome.get("revived", false):
 			var hp_after: int = int(outcome.get("target_hp_after", 0))
 			_hud.append_log("%s casts %s on %s -- REVIVED! (%d HP)" % [
-				actor, ability_name, target_name, hp_after])
+				actor, ability_name, target_name, hp_after], ability_id)
 		elif outcome.has("status_id"):
 			var status_id: String = str(outcome.get("status_id", ""))
 			var dur: int = int(outcome.get("status_duration", 1))
 			_hud.append_log("%s casts %s on %s -- %s for %d rounds" % [
-				actor, ability_name, target_name, status_id, dur])
+				actor, ability_name, target_name, status_id, dur], ability_id)
 
 
 # --- Helpers ---
@@ -708,7 +742,7 @@ func _on_finalize_move() -> void:
 		return
 
 	_hud.append_log("%s moves to (%d,%d)" % [
-		unit.character.display_name, destination.x, destination.y])
+		unit.character.display_name, destination.x, destination.y], "action_move")
 
 	if _drag_handler:
 		_drag_handler.confirm_preview()

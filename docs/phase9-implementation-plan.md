@@ -10,9 +10,9 @@
 
 ## How to use this plan
 
-Eight **work groups** (A–H). Group A (atlas generator) is the foundation — it produces the PNG that all other groups consume. Group B (SymbolAtlas lookup) depends on A. Groups C, D, E, and F depend on B and can be done in parallel. Group G (tests) trails the logic. Group H is manual verification.
+Nine **work groups** (A–I). Group A (atlas generator) is the foundation — it produces the PNG that all other groups consume. Group B (SymbolAtlas lookup) depends on A. Group B2 (PawnFactory refactor) depends on B. Groups C, D, E, and F depend on B and can be done in parallel. Group G (tests) trails the logic. Group H is manual verification.
 
-Phase 9 spans three layers: **asset generation** (A — procedural atlas PNG), **data lookup** (B — SymbolAtlas class), and **UI integration** (C–F — HUD, Draft UI, 3D map, combat log).
+Phase 9 spans four layers: **asset generation** (A — procedural atlas PNG with dual-geometry category frames and race+class identity sprites), **data lookup** (B — SymbolAtlas class with 3D material support), **PawnFactory refactor** (B2 — delegate race+class symbols to atlas), and **UI integration** (C–F — HUD, Draft UI, 3D map, combat log).
 
 > **Carry-over:** consumes `PawnFactory` drawing primitives from Phase 8; `BattleHUD` UI panels and `append_log()` from Phase 8; `PawnManager` pawn tracking from Phase 8; `BattleController` action flow from Phase 8; `DraftScene._build_character_card()` from Phase 7; `AbilityData`, `ItemData`, `BattleUnit.status_effects` from Phase 1; `HexWorld.hex_to_world()` from Phase 2.
 
@@ -45,12 +45,21 @@ const ATLAS_SIZE := 512
 static func generate() -> Image
 static func save(path: String) -> void
 
-# 5 category frame functions
-static func _draw_starburst_frame(img: Image, ox: int, oy: int, fill: Color, outline: Color) -> void
-static func _draw_pentagon_frame(img: Image, ox: int, oy: int, fill: Color, outline: Color) -> void
-static func _draw_kite_frame(img: Image, ox: int, oy: int, fill: Color, outline: Color) -> void
-static func _draw_rounded_rect_frame(img: Image, ox: int, oy: int, fill: Color, outline: Color) -> void
-static func _draw_inverted_triangle_frame(img: Image, ox: int, oy: int, fill: Color, outline: Color) -> void
+# 5 dual-overlapping-geometry category frame functions
+static func _draw_spell_frame(img: Image, ox: int, oy: int, fill: Color, outline: Color) -> void
+    # Upward triangle + circle overlap
+static func _draw_skill_frame(img: Image, ox: int, oy: int, fill: Color, outline: Color) -> void
+    # Pentagon + inverted pentagon overlap
+static func _draw_weapon_frame(img: Image, ox: int, oy: int, fill: Color, outline: Color) -> void
+    # Hexagon + 90°-rotated square (diamond) overlap
+static func _draw_equipment_frame(img: Image, ox: int, oy: int, fill: Color, outline: Color) -> void
+    # Hexagon + circle overlap
+static func _draw_status_frame(img: Image, ox: int, oy: int, fill: Color, outline: Color) -> void
+    # Inverted triangle + square overlap
+
+# Race+class identity (single-shape frames, reusing PawnFactory patterns)
+static func _draw_race_class_cell(img: Image, ox: int, oy: int, race: String, job_class: String) -> void
+    # Draws race frame + class icon at 64×64 scale (adapted from PawnFactory's 128×128)
 
 # Interior icon functions (~28)
 static func _draw_icon_flame(img: Image, ox: int, oy: int, color: Color, large: bool) -> void
@@ -91,18 +100,22 @@ static func _draw_icon_question(img: Image, ox: int, oy: int, color: Color) -> v
 
 Each frame function draws within a 64×64 cell at offset `(ox, oy)`. The center of the cell is `(ox + 32, oy + 32)`. Frame radius/size is approximately 26px (leaving 6px margin on each side). Outline is 2px stroke.
 
-- **Starburst (spells):** 8-pointed star polygon. Compute 16 vertices alternating between outer radius (26) and inner radius (14), connect with Bresenham lines, scanline fill the interior.
-- **Pentagon (skills):** 5 vertices at 72° intervals starting from top center. Polygon fill + outline.
-- **Kite shield (weapons):** 4-vertex polygon: top-center, left-center, right-center, and pointed bottom. Wider at the top, narrows to a point below center.
-- **Rounded rectangle (equipment):** Rectangle with corner radius ~6px. Fill the interior, then outline. Corner rounding achieved by drawing quarter-circles at each corner.
-- **Inverted triangle (status):** 3 vertices: top-left, top-right, bottom-center. Polygon fill + outline.
+Non-character categories use **dual-overlapping-geometry** frames — two geometric shapes drawn sequentially with the same fill color. The overlap region is naturally filled. Outlines are drawn last for both shapes.
+
+- **Spell (triangle + circle):** Upward-pointing equilateral triangle (radius ~26px, vertices at top-center, bottom-left, bottom-right). Then filled circle (radius ~16px) centered on the triangle. Outline both shapes.
+- **Skill (pentagon + inverted pentagon):** Regular pentagon point-up (radius ~24px). Then inverted pentagon point-down (radius ~18px) overlapping, creating a roughly decagonal composite. Outline both.
+- **Weapon (hexagon + diamond):** Regular flat-top hexagon (radius ~22px). Then square rotated 45° (diamond, side ~20px) centered on the hexagon. Outline both.
+- **Equipment (hexagon + circle):** Regular flat-top hexagon (radius ~22px). Then filled circle (radius ~18px) centered. Outline both.
+- **Status (inverted triangle + square):** Inverted triangle point-down (radius ~24px). Then filled square (~20px side) centered. Outline both.
+
+**Race+class cells (Row 6):** `_draw_race_class_cell()` reuses PawnFactory's `_draw_race_frame()` and `_draw_class_icon()` logic, adapted from 128×128 to 64×64 coordinate space (all coordinates halved). Drawn with neutral grey fill `Color(0.6, 0.6, 0.6, 0.8)` and white outline + white interior icon. Team coloring is applied at runtime via material `albedo_color`.
 
 **`generate()` flow:**
 1. Create `Image.create(512, 512, false, Image.FORMAT_RGBA8)`.
 2. Fill with transparent (`Color(0, 0, 0, 0)`).
 3. For each entry in the icon map (see spec §4.3), compute `ox = col * 64`, `oy = row * 64`.
-4. Draw the appropriate category frame with category fill color (element-tinted for spells).
-5. Draw the interior icon in white.
+4. For rows 0–5 (entity categories): draw the appropriate dual-geometry category frame with category fill color (element-tinted for spells), then draw the interior icon in white.
+5. For row 6 (race+class identity): call `_draw_race_class_cell()` with the race and class extracted from the ID (e.g., `"human_fighter"` → race `"human"`, class `"fighter"`).
 6. Return the `Image`.
 
 **`save()` flow:**
@@ -132,6 +145,7 @@ static var _atlas: Texture2D = null
 static var _cache: Dictionary = {}
 
 static func get_icon(id: String) -> AtlasTexture
+static func make_3d_material(id: String, tint: Color = Color.WHITE) -> StandardMaterial3D
 static func _ensure_loaded() -> void
 static func _make_region(col: int, row: int) -> AtlasTexture
 ```
@@ -143,6 +157,50 @@ static func _make_region(col: int, row: int) -> AtlasTexture
 - `_ensure_loaded()`: Checks `_atlas != null`. If null, loads via `load(ATLAS_PATH)` or `Image.load_from_file()` + `ImageTexture.create_from_image()`. The latter works in headless tests; `load()` requires the resource system.
 - `get_icon(id)`: If `id` not in `ICON_MAP`, recurse with `"_fallback"`. If in `_cache`, return cached. Otherwise, get `Vector2i(col, row)` from `ICON_MAP`, call `_make_region(col, row)`, cache, return.
 - `_make_region(col, row)`: Creates an `AtlasTexture`, sets `atlas = _atlas`, sets `region = Rect2(col * CELL_SIZE, row * CELL_SIZE, CELL_SIZE, CELL_SIZE)`, returns it.
+- `make_3d_material(id, tint)`: Calls `get_icon(id)`, creates a `StandardMaterial3D` with `albedo_texture` set to the icon, `albedo_color` set to `tint`, `transparency = TRANSPARENCY_ALPHA_SCISSOR`, `alpha_scissor_threshold = 0.1`, `shading_mode = SHADING_MODE_UNSHADED`. Returns a new material instance (not cached — materials are typically unique per mesh instance).
+
+**ICON_MAP** includes all entries from spec §4.3, including the 8 race+class identity entries at row 6.
+
+---
+
+## Group B2 — PawnFactory Refactor
+
+*Depends on: Group B (SymbolAtlas must be available for delegation).*
+
+### B2-1. Refactor `PawnFactory.symbol_material()` to use SymbolAtlas
+
+Replace procedural race+class generation with atlas delegation.
+
+**Modified file:** `src/map/pawn_factory.gd`
+
+**Changes:**
+1. Add `_RACE_CLASS_TO_ID` lookup dictionary mapping `"race:class"` keys to atlas IDs.
+2. Replace `symbol_material()` body to call `SymbolAtlas.make_3d_material(char_id, tint)`.
+3. `make_symbol_texture()` and `_symbol_cache` can be removed or deprecated — all symbol textures now come from the atlas.
+4. Drawing primitives (`_draw_race_frame`, `_draw_class_icon`, `_safe_pixel`, etc.) remain for use by `IconAtlasGenerator`.
+
+```gdscript
+const _RACE_CLASS_TO_ID := {
+    "human:fighter": "human_fighter",
+    "human:archer": "human_archer",
+    "human:rogue": "human_rogue",
+    "human:bard": "human_bard",
+    "elf:black_mage": "elf_black_mage",
+    "elf:red_mage": "elf_red_mage",
+    "halfling:white_mage": "halfling_white_mage",
+    "dwarf:barbarian": "dwarf_barbarian",
+}
+
+static func symbol_material(race: String, job_class: String, team: String) -> StandardMaterial3D:
+    var char_id: String = _RACE_CLASS_TO_ID.get(
+        "%s:%s" % [race, job_class], "_fallback")
+    var team_color: Color = TEAM_COLORS.get(team, Color(0.5, 0.5, 0.5))
+    var tint := team_color.lightened(0.3)
+    tint.a = 0.8
+    return SymbolAtlas.make_3d_material(char_id, tint)
+```
+
+**Impact on UnitPawn:** Zero code changes. `UnitPawn.setup()` calls `PawnFactory.symbol_material()` which returns the same `StandardMaterial3D` type with the same visual properties.
 
 ---
 
@@ -445,9 +503,39 @@ _hud.append_log("--- Round %d begins ---" % [...])  # No icon for round markers
 
 - test_all_item_ids_have_icons
     # For each item in data/items/*.json, SymbolAtlas.get_icon(id) returns non-fallback
+
+- test_get_icon_returns_atlas_texture_for_race_class
+    # SymbolAtlas.get_icon("human_fighter") is AtlasTexture, region matches (0*64, 6*64, 64, 64)
+    # Repeat for all 8 race+class IDs
+
+- test_make_3d_material_returns_standard_material
+    # SymbolAtlas.make_3d_material("sword") returns StandardMaterial3D
+    # Material has shading_mode == SHADING_MODE_UNSHADED
+    # Material has transparency == TRANSPARENCY_ALPHA_SCISSOR
+
+- test_make_3d_material_applies_tint
+    # SymbolAtlas.make_3d_material("human_fighter", Color.BLUE) has albedo_color == Color.BLUE
 ```
 
 **Note:** These tests require the atlas PNG to exist. Either generate it in `before_all()` via `IconAtlasGenerator.save()`, or ensure it exists as a committed asset.
+
+### G4. `test_pawn_factory_atlas.gd` — PawnFactory atlas delegation tests
+
+```
+# tests/map/test_pawn_factory_atlas.gd
+
+- test_symbol_material_returns_standard_material
+    # PawnFactory.symbol_material("human", "fighter", "playerA") returns StandardMaterial3D
+
+- test_symbol_material_applies_team_tint
+    # PawnFactory.symbol_material("human", "fighter", "playerA").albedo_color is team-colored
+
+- test_symbol_material_uses_atlas_texture
+    # Material's albedo_texture is an AtlasTexture (from the atlas, not procedural)
+
+- test_unknown_race_class_returns_fallback
+    # PawnFactory.symbol_material("orc", "monk", "playerA") returns material with fallback icon
+```
 
 ### G2. `test_icon_atlas_generator.gd` — atlas generation tests
 
@@ -465,7 +553,10 @@ _hud.append_log("--- Round %d begins ---" % [...])  # No icon for round markers
     # contains at least some non-transparent pixels
 
 - test_reserved_cells_are_transparent
-    # Cells in rows 6–7 are fully transparent
+    # Cells in row 7 are fully transparent
+
+- test_race_class_cells_have_content
+    # All 8 cells in row 6 contain non-transparent pixels
 
 - test_save_creates_file
     # After save(), the file exists at the specified path
@@ -497,12 +588,13 @@ _hud.append_log("--- Round %d begins ---" % [...])  # No icon for round markers
 1. Run `IconAtlasGenerator.save("res://assets/icons/symbol_atlas.png")`.
 2. Open the PNG in an image viewer.
 3. **Verify:** 8×8 grid visible. Each icon has a distinct frame shape and recognizable interior icon. Empty cells are transparent.
-4. **Verify:** Spell row has starburst frames with element-tinted fills.
-5. **Verify:** Skill row has pentagon frames with orange fills.
-6. **Verify:** Weapon row has kite frames with grey fills.
-7. **Verify:** Equipment row has rounded-rect frames with brown fills.
-8. **Verify:** Status row has inverted-triangle frames with dark red fills.
-9. **Verify:** Fallback icon shows "?" in a plain circle.
+4. **Verify:** Spell row has upward-triangle+circle dual-geometry frames with element-tinted fills.
+5. **Verify:** Skill row has pentagon+inverted-pentagon dual-geometry frames with orange fills.
+6. **Verify:** Weapon row has hexagon+diamond dual-geometry frames with grey fills.
+7. **Verify:** Equipment row has hexagon+circle dual-geometry frames with brown fills.
+8. **Verify:** Status row has inverted-triangle+square dual-geometry frames with dark red fills.
+9. **Verify:** Row 6 contains 8 race+class identity sprites with recognizable single-shape race frames and class icons in neutral grey.
+10. **Verify:** Fallback icon shows "?" in a plain circle.
 
 ### H2. HUD icon verification
 
@@ -535,7 +627,14 @@ _hud.append_log("--- Round %d begins ---" % [...])  # No icon for round markers
 2. **Verify:** Character cards show equipment icons (weapon, armor) below character info.
 3. **Verify:** Character cards show ability icons (spells, skills) below equipment.
 
-### H6. Readability at display sizes
+### H6. Pawn token visual regression check
+
+1. Launch game → Draft → Start battle.
+2. **Verify:** 3D pawn token faces display race frames and class icons (visually unchanged from Phase 8 procedural rendering).
+3. **Verify:** Team A tokens are blue-tinted, Team B tokens are red-tinted.
+4. **Verify:** Active unit's token has highlight/glow (emissive material still works).
+
+### H7. Readability at display sizes
 
 1. **64×64** (atlas native): icons are clear and detailed.
 2. **24×24** (HUD buttons): frame shape recognizable, interior icon distinguishable.
@@ -547,7 +646,8 @@ _hud.append_log("--- Round %d begins ---" % [...])  # No icon for round markers
 ## Suggested implementation order
 
 ```
-A (IconAtlasGenerator) ─→ B (SymbolAtlas) ─┬─→ C (HUD integration)
+A (IconAtlasGenerator) ─→ B (SymbolAtlas) ─┬─→ B2 (PawnFactory refactor)
+                                             ├─→ C (HUD integration)
                                              ├─→ D (Draft UI integration)
                                              ├─→ E (Map status markers)
                                              └─→ F (Combat log icons)
@@ -557,7 +657,7 @@ A (IconAtlasGenerator) ─→ B (SymbolAtlas) ─┬─→ C (HUD integration)
                                              H (Manual verification) ←┘
 ```
 
-A → B is the critical path. Once B is complete, C, D, E, and F can be done in parallel.
+A → B is the critical path. Once B is complete, B2, C, D, E, and F can be done in parallel.
 
 ---
 
@@ -574,11 +674,13 @@ A → B is the critical path. Once B is complete, C, D, E, and F can be done in 
 | `tests/core/data/test_symbol_atlas.gd` | — | G | SymbolAtlas GUT tests |
 | `tests/map/test_icon_atlas_generator.gd` | — | G | Atlas generator GUT tests |
 | `tests/map/test_status_marker.gd` | — | G | StatusMarker GUT tests |
+| `tests/map/test_pawn_factory_atlas.gd` | — | G | PawnFactory atlas delegation GUT tests |
 
 ### Modified files
 
 | File | Group | Changes |
 |------|-------|---------|
+| `src/map/pawn_factory.gd` | B2 | Replace `symbol_material()` with `SymbolAtlas` delegation; add `_RACE_CLASS_TO_ID` mapping; remove/deprecate `make_symbol_texture()` and `_symbol_cache` |
 | `src/ui/battle_hud.gd` | C, F | Add icons to action buttons, ability/item popups, status display, roster sidebar; update `append_log()` with optional icon |
 | `src/ui/draft_scene.gd` | D | Add equipment and ability icon rows to character cards |
 | `src/map/pawn_manager.gd` | E | Add `_markers` dictionary, `update_status_markers()`, `_clear_markers()` |
@@ -588,12 +690,15 @@ A → B is the critical path. Once B is complete, C, D, E, and F can be done in 
 
 ## Definition of Done
 
-- [ ] `IconAtlasGenerator.generate()` produces a 512×512 Image with all icon cells populated
+- [ ] `IconAtlasGenerator.generate()` produces a 512×512 Image with 43 populated cells (including 8 race+class)
 - [ ] `IconAtlasGenerator.save()` writes `assets/icons/symbol_atlas.png` to disk
 - [ ] `SymbolAtlas.get_icon(id)` returns correct `AtlasTexture` for all 14 ability IDs
 - [ ] `SymbolAtlas.get_icon(id)` returns correct `AtlasTexture` for all 12 item IDs
 - [ ] `SymbolAtlas.get_icon(id)` returns correct `AtlasTexture` for all 3 status effect IDs
+- [ ] `SymbolAtlas.get_icon(id)` returns correct `AtlasTexture` for all 8 race+class IDs
 - [ ] `SymbolAtlas.get_icon("unknown")` returns fallback icon (not null)
+- [ ] `SymbolAtlas.make_3d_material(id)` returns properly configured `StandardMaterial3D`
+- [ ] `PawnFactory.symbol_material()` delegates to `SymbolAtlas` (returns atlas-backed material)
 - [ ] HUD action buttons display icons
 - [ ] HUD ability popup buttons display spell/skill icons
 - [ ] HUD item popup buttons display item icons
@@ -603,6 +708,8 @@ A → B is the critical path. Once B is complete, C, D, E, and F can be done in 
 - [ ] Combat log entries show inline action icons
 - [ ] Status markers appear as 3D billboards above affected pawns
 - [ ] Status markers appear/disappear correctly with status effect lifecycle
+- [ ] 3D pawn token faces visually unchanged from Phase 8 (atlas-backed, team-tinted)
+- [ ] Any atlas sprite can be rendered as a 3D world object via `SymbolAtlas.make_3d_material()`
 - [ ] All GUT tests pass
 - [ ] Manual visual verification confirms readability at all display sizes
 - [ ] Git tag `phase-9-complete`

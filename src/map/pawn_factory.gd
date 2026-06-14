@@ -2,7 +2,8 @@ class_name PawnFactory
 extends RefCounted
 ## Creates cylindrical token meshes, team-colored materials, and NATO-style
 ## symbol textures for unit pawns. Follows the DecorationFactory pattern.
-## Spec reference: phase8-spec.md §3.1, §3.4
+## Symbol textures now delegate to SymbolAtlas (Phase 9).
+## Spec reference: phase8-spec.md §3.1, §3.4; phase9-spec.md §7.10
 
 const TOKEN_RADIUS := 0.21
 const TOKEN_HEIGHT := 0.105
@@ -18,8 +19,17 @@ const TEAM_EMIT := {
 	"playerB": Color(1.0, 0.3, 0.3),
 }
 
-# Cache for symbol textures — keyed by "race:class:team"
-static var _symbol_cache: Dictionary = {}
+# Race+class → atlas icon ID mapping
+const _RACE_CLASS_TO_ID := {
+	"human:fighter": "human_fighter",
+	"human:archer": "human_archer",
+	"human:rogue": "human_rogue",
+	"human:bard": "human_bard",
+	"elf:black_mage": "elf_black_mage",
+	"elf:red_mage": "elf_red_mage",
+	"halfling:white_mage": "halfling_white_mage",
+	"dwarf:barbarian": "dwarf_barbarian",
+}
 
 
 static func make_token_mesh() -> Mesh:
@@ -48,33 +58,15 @@ static func active_material(team: String) -> StandardMaterial3D:
 	return m
 
 
-static func make_symbol_texture(race: String, job_class: String, team: String) -> ImageTexture:
-	var key := "%s:%s:%s" % [race, job_class, team]
-	if _symbol_cache.has(key):
-		return _symbol_cache[key]
-
-	var img := Image.create(SYMBOL_SIZE, SYMBOL_SIZE, false, Image.FORMAT_RGBA8)
-	img.fill(Color(0, 0, 0, 0))
-
-	var team_color: Color = TEAM_COLORS.get(team, Color(0.5, 0.5, 0.5))
-	var fill_color := team_color.lightened(0.3)
-	fill_color.a = 0.8
-
-	_draw_race_frame(img, race, fill_color)
-	_draw_class_icon(img, job_class, Color.WHITE)
-
-	var tex := ImageTexture.create_from_image(img)
-	_symbol_cache[key] = tex
-	return tex
-
-
 static func symbol_material(race: String, job_class: String, team: String) -> StandardMaterial3D:
-	var m := StandardMaterial3D.new()
-	m.albedo_texture = make_symbol_texture(race, job_class, team)
-	m.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA_SCISSOR
-	m.alpha_scissor_threshold = 0.1
-	m.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	return m
+	## Returns an atlas-backed material for the race+class symbol, tinted by team color.
+	## Delegates to SymbolAtlas.make_3d_material() for texture lookup.
+	var char_id: String = _RACE_CLASS_TO_ID.get(
+		"%s:%s" % [race, job_class], "_fallback")
+	var team_color: Color = TEAM_COLORS.get(team, Color(0.5, 0.5, 0.5))
+	var tint := team_color.lightened(0.3)
+	tint.a = 0.8
+	return SymbolAtlas.make_3d_material(char_id, tint)
 
 
 # --- Frame drawing (race) ---
