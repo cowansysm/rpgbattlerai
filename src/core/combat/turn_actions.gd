@@ -98,6 +98,8 @@ static func execute_attack(state: MatchState, target_pos: Vector2i) -> Dictionar
 		"target": target.character.id,
 		"target_pos": target_pos,
 		"damage": result["damage"],
+		"atk_roll": result["atk_roll"],
+		"def_roll": result["def_roll"],
 		"target_hp_after": result["target_hp_after"],
 		"is_downed": result["is_downed"],
 	}
@@ -311,6 +313,8 @@ static func _resolve_effect(
 			var outcome := {
 				"target": target.character.id,
 				"damage": result["damage"],
+				"atk_roll": result["atk_roll"],
+				"def_roll": result["def_roll"],
 				"target_hp_after": result["target_hp_after"],
 				"is_downed": result["is_downed"],
 			}

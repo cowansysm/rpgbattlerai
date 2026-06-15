@@ -3,6 +3,17 @@ extends GutTest
 ## Tests attack damage, ability effects, AoE, downing, buff/status durations,
 ## sleep skip, blind miss, and round-start cleanup.
 
+var _default_roller: Callable
+
+
+func before_each() -> void:
+	_default_roller = CombatResolver.dice_roller
+	CombatResolver.dice_roller = func() -> int: return 3
+
+
+func after_each() -> void:
+	CombatResolver.dice_roller = _default_roller
+
 
 # --- Stub terrain provider ---
 
@@ -151,9 +162,9 @@ func test_attack_deals_damage() -> void:
 	var result := TurnActions.execute_attack(state, Vector2i(1, 0))
 	assert_false(result.has("error"), "attack should succeed")
 	assert_true(result.has("damage"), "should have damage field")
-	# damage = max(1, ATK=3 + weapon=3 + 0 - DEF=0) = 6
-	assert_eq(result["damage"], 6)
-	assert_eq(result["target_hp_after"], 6)  # 12 - 6 = 6
+	# damage = max(1, roll=3 + ATK=3 + weapon=3 + 0 - DEF=0) = 9  (no defense die)
+	assert_eq(result["damage"], 9)
+	assert_eq(result["target_hp_after"], 3)  # 12 - 9 = 3
 	assert_false(result["is_downed"])
 
 
@@ -222,8 +233,8 @@ func test_spell_damage_ability() -> void:
 	assert_true(result.has("outcomes"))
 	var outcomes: Array = result["outcomes"]
 	assert_eq(outcomes.size(), 1)
-	# spell damage = 4 + 0 (flat ground), ignores DEF
-	assert_eq(outcomes[0]["damage"], 4)
+	# spell damage = 1d6(3) + 4 + 0 = 7 (flat ground, attack die only, ignores DEF)
+	assert_eq(outcomes[0]["damage"], 7)
 	assert_eq(outcomes[0]["target"], "a0")
 
 
@@ -539,6 +550,6 @@ func test_skill_damage_through_turn_actions() -> void:
 	var result := TurnActions.execute_ability(state, "power_strike", Vector2i(1, 0))
 	assert_false(result.has("error"), "power_strike should succeed: %s" % str(result))
 	var outcomes: Array = result["outcomes"]
-	# skill damage = max(1, 4 + 0 - 0) = 4 (b0 DEF=0)
-	var expected_damage: int = max(1, 4 - b0_def)
+	# skill damage = max(1, roll(3) + 4 + 0 - DEF)  (no defense die)
+	var expected_damage: int = max(1, 3 + 4 - b0_def)
 	assert_eq(outcomes[0]["damage"], expected_damage)

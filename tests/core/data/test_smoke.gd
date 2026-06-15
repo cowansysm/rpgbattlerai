@@ -50,7 +50,7 @@ func test_derived_stats_computed() -> void:
 	assert_not_null(sb, "human_archer should have final_stats")
 	assert_eq(sb.effective("spd"), 3, "spd: 3 base, no race/class modifier")
 	assert_eq(sb.effective("rng"), 3, "rng: 2 base + 1 archer")
-	assert_eq(sb.effective("hp"), 10, "hp: 10 base, no modifiers")
+	assert_eq(sb.effective("hp"), 16, "hp: 16 base, no modifiers")
 	assert_eq(sb.effective_move(), 3, "move == spd")
 
 

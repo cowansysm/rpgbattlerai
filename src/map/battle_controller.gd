@@ -445,13 +445,24 @@ func _do_attack(target_pos: Vector2i) -> void:
 
 	_log_attack_result(result)
 
+	# Show action icon on target
+	if target_unit_pre:
+		_pawn_manager.show_action_marker(target_unit_pre, "action_attack")
+
+	# Show dice roll animations above attacker and target
+	var attacker: BattleUnit = _state.current_unit
+	if attacker and result.has("atk_roll"):
+		_pawn_manager.show_dice_roll(attacker, int(result["atk_roll"]), true)
+	var atk_def_roll: int = int(result.get("def_roll", 0))
+	if target_unit_pre and atk_def_roll > 0:
+		_pawn_manager.show_dice_roll(target_unit_pre, atk_def_roll, false)
+
 	if result.get("is_downed", false) and target_unit_pre:
 		_pawn_manager.down_pawn(target_unit_pre)
 
 	# Update status markers for attacker and target
 	if target_unit_pre:
 		_pawn_manager.update_status_markers(target_unit_pre)
-	var attacker: BattleUnit = _state.current_unit
 	if attacker:
 		_pawn_manager.update_status_markers(attacker)
 
@@ -471,8 +482,26 @@ func _do_ability(target_pos: Vector2i) -> void:
 
 	_log_ability_result(result, ability_id)
 
-	# Handle downing and revive from ability outcomes
+	# Show ability icon on each affected target
+	var caster: BattleUnit = _state.current_unit
 	var outcomes: Array = result.get("outcomes", [])
+	for outcome in outcomes:
+		var target_unit: BattleUnit = units_before.get(str(outcome.get("target", "")))
+		if target_unit:
+			_pawn_manager.show_action_marker(target_unit, ability_id)
+
+	# Show dice roll animations for damage outcomes
+	for outcome in outcomes:
+		if outcome.has("atk_roll"):
+			if caster:
+				_pawn_manager.show_dice_roll(caster, int(outcome["atk_roll"]), true)
+			var def_val: int = int(outcome.get("def_roll", 0))
+			if def_val > 0:
+				var target_unit_dr: BattleUnit = units_before.get(str(outcome.get("target", "")))
+				if target_unit_dr:
+					_pawn_manager.show_dice_roll(target_unit_dr, def_val, false)
+
+	# Handle downing and revive from ability outcomes
 	for outcome in outcomes:
 		if outcome.get("is_downed", false):
 			var downed_unit: BattleUnit = units_before.get(str(outcome["target"]))
@@ -484,7 +513,6 @@ func _do_ability(target_pos: Vector2i) -> void:
 				_pawn_manager.revive_pawn(revived_unit)
 
 	# Update status markers for caster and all affected units
-	var caster: BattleUnit = _state.current_unit
 	if caster:
 		_pawn_manager.update_status_markers(caster)
 	for key in units_before:
@@ -508,7 +536,25 @@ func _do_use_item(target_pos: Vector2i) -> void:
 		str(result.get("actor", "")),
 		str(result.get("item", ""))], item_id)
 
+	# Show item icon on each affected target
+	var user: BattleUnit = _state.current_unit
 	var outcomes: Array = result.get("outcomes", [])
+	for outcome in outcomes:
+		var target_unit: BattleUnit = units_before.get(str(outcome.get("target", "")))
+		if target_unit:
+			_pawn_manager.show_action_marker(target_unit, item_id)
+
+	# Show dice roll animations for damage outcomes
+	for outcome in outcomes:
+		if outcome.has("atk_roll"):
+			if user:
+				_pawn_manager.show_dice_roll(user, int(outcome["atk_roll"]), true)
+			var def_val: int = int(outcome.get("def_roll", 0))
+			if def_val > 0:
+				var target_unit_dr: BattleUnit = units_before.get(str(outcome.get("target", "")))
+				if target_unit_dr:
+					_pawn_manager.show_dice_roll(target_unit_dr, def_val, false)
+
 	for outcome in outcomes:
 		if outcome.get("is_downed", false):
 			var downed_unit: BattleUnit = units_before.get(str(outcome["target"]))
@@ -520,7 +566,6 @@ func _do_use_item(target_pos: Vector2i) -> void:
 				_pawn_manager.revive_pawn(revived_unit)
 
 	# Update status markers for user and affected units
-	var user: BattleUnit = _state.current_unit
 	if user:
 		_pawn_manager.update_status_markers(user)
 	for key in units_before:

@@ -107,9 +107,9 @@ func test_rogue_has_speed_bonus() -> void:
 
 
 func test_barbarian_has_hp_bonus() -> void:
-	# Barbarian: base hp=18, class hp+2, dwarf hp+2 = 22
+	# Barbarian: base hp=27, class hp+2, dwarf hp+2 = 31
 	var fs := _pipeline.get_final_stats("dwarf_barbarian")
-	assert_eq(fs.effective("hp"), 22, "Barbarian HP should be 18 base + 2 class + 2 dwarf")
+	assert_eq(fs.effective("hp"), 31, "Barbarian HP should be 27 base + 2 class + 2 dwarf")
 
 
 # --- Ability Access ---

@@ -2,6 +2,17 @@ extends GutTest
 ## Tests for downed-but-revivable mechanic: downed state, revive effect,
 ## grace period expiry, untargetability, and repeated down/revive cycles.
 
+var _default_roller: Callable
+
+
+func before_each() -> void:
+	_default_roller = CombatResolver.dice_roller
+	CombatResolver.dice_roller = func() -> int: return 3
+
+
+func after_each() -> void:
+	CombatResolver.dice_roller = _default_roller
+
 
 # --- Stub terrain provider ---
 

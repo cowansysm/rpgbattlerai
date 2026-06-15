@@ -5,7 +5,7 @@
   "classes": ["fighter"],
   "level": 3,
   "bp": 18,
-  "base_stats": { "spd": 3, "atk": 3, "rng": 1, "def": 3, "hp": 16, "jump": 2 },
+  "base_stats": { "spd": 3, "atk": 3, "rng": 1, "def": 3, "hp": 24, "jump": 2 },
   "equipment": ["sword", "medium_armor", "shield"],
   "abilities": []
 }

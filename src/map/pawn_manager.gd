@@ -102,6 +102,33 @@ func update_status_markers(unit: BattleUnit) -> void:
 		_markers[unit] = markers
 
 
+func show_action_marker(unit: BattleUnit, icon_id: String) -> void:
+	## Spawn a drop-in icon above the unit's pawn. Fire-and-forget.
+	## The marker is added as a child of PawnManager (world space)
+	## and self-destructs after its animation completes.
+	var pawn: UnitPawn = _pawns.get(unit)
+	if not pawn:
+		return
+	var marker := ActionMarker.create(icon_id)
+	marker.position = pawn.position + Vector3(0.0, 0.35, 0.0)
+	add_child(marker)
+	marker.play()
+
+
+func show_dice_roll(unit: BattleUnit, value: int, is_attack: bool) -> void:
+	## Spawn a drop-in dice above the unit's pawn. Fire-and-forget.
+	## Positioned above the ActionMarker billboard (y=0.55) so dice are
+	## not obscured. Attack rolls slightly left, defense rolls slightly right.
+	var pawn: UnitPawn = _pawns.get(unit)
+	if not pawn:
+		return
+	var marker := DiceMarker.create(value, is_attack)
+	var x_offset := -0.12 if is_attack else 0.12
+	marker.position = pawn.position + Vector3(x_offset, 0.55, 0.0)
+	add_child(marker)
+	marker.play()
+
+
 func _clear_markers(unit: BattleUnit) -> void:
 	if _markers.has(unit):
 		for marker in _markers[unit]:

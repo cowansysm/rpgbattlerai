@@ -5,9 +5,18 @@ extends RefCounted
 ## Accepts explicit constant overrides for testability (defaults to Constants autoload).
 ## Spec reference: phase5-spec.md §3, §4
 
+## Injectable dice roller for testability. Default rolls 1d6.
+## Tests can swap this to a fixed callable for deterministic results.
+static var dice_roller: Callable = func() -> int: return randi() % 6 + 1
+
+
+static func roll_die() -> int:
+	return dice_roller.call()
+
 
 ## Resolve a physical (basic weapon) attack.
-## Returns {damage, target_hp_after, is_downed}.
+## Returns {damage, atk_roll, def_roll, target_hp_after, is_downed}.
+## Defense die only rolls when the target has used the Defend action.
 static func resolve_attack(
 	attacker: BattleUnit,
 	target: BattleUnit,
@@ -28,7 +37,14 @@ static func resolve_attack(
 	var e_bonus: int = elev_bonus if attacker_elev > target_elev else 0
 	var c_bonus: int = cover_def * target_cover if is_ranged else 0
 	var target_def: int = target.stats.effective("def")
-	var damage: int = max(1, atk + weapon_power + e_bonus - target_def - c_bonus)
+	var atk_roll: int = roll_die()
+	var damage: int = max(1, atk_roll + atk + weapon_power + e_bonus - target_def - c_bonus)
+
+	# Defend action grants a 1d6 defense roll against all damage
+	var def_roll: int = 0
+	if target.stats.has_modifier_from_source("defend"):
+		def_roll = roll_die()
+		damage = max(1, damage - def_roll)
 
 	_wake_on_damage(target)
 	target.current_hp = max(0, target.current_hp - damage)
@@ -36,6 +52,8 @@ static func resolve_attack(
 
 	return {
 		"damage": damage,
+		"atk_roll": atk_roll,
+		"def_roll": def_roll,
 		"target_hp_after": target.current_hp,
 		"is_downed": is_downed,
 	}
@@ -43,6 +61,8 @@ static func resolve_attack(
 
 ## Resolve a damage ability effect (spell or skill).
 ## type == "skill": reduced by DEF (physical). type == "spell": ignores DEF.
+## Defense die only rolls when the target has used the Defend action,
+## and applies to both spell and skill damage.
 static func resolve_damage(
 	attacker: BattleUnit,
 	target: BattleUnit,
@@ -56,13 +76,21 @@ static func resolve_damage(
 		elev_bonus = Constants.get_value("ELEV_BONUS", 1)
 
 	var e_bonus: int = elev_bonus if attacker_elev > target_elev else 0
+	var atk_roll: int = roll_die()
 	var damage: int
 
 	if ability_type == "skill":
 		var target_def: int = target.stats.effective("def")
-		damage = max(1, effect_value + e_bonus - target_def)
+		damage = max(1, atk_roll + effect_value + e_bonus - target_def)
 	else:
-		damage = effect_value + e_bonus
+		# Spells: attack die + value, no DEF reduction
+		damage = atk_roll + effect_value + e_bonus
+
+	# Defend action grants a 1d6 defense roll against all damage
+	var def_roll: int = 0
+	if target.stats.has_modifier_from_source("defend"):
+		def_roll = roll_die()
+		damage = max(1, damage - def_roll)
 
 	_wake_on_damage(target)
 	target.current_hp = max(0, target.current_hp - damage)
@@ -70,6 +98,8 @@ static func resolve_damage(
 
 	return {
 		"damage": damage,
+		"atk_roll": atk_roll,
+		"def_roll": def_roll,
 		"target_hp_after": target.current_hp,
 		"is_downed": is_downed,
 	}

@@ -2,6 +2,17 @@ extends GutTest
 ## Tests for CombatResolver: physical damage, spell/skill damage, healing,
 ## buffs, status effects, weapon power lookup.
 
+var _default_roller: Callable
+
+
+func before_each() -> void:
+	_default_roller = CombatResolver.dice_roller
+	CombatResolver.dice_roller = func() -> int: return 3
+
+
+func after_each() -> void:
+	CombatResolver.dice_roller = _default_roller
+
 
 # --- Helpers ---
 
@@ -30,9 +41,9 @@ func test_physical_damage_basic() -> void:
 	var result := CombatResolver.resolve_attack(
 		attacker, target, 3,  # weapon_power=3
 		0, 0, 0, false, 1, 1)  # flat ground, melee
-	# damage = max(1, 2 + 3 + 0 - 1 - 0) = 4
-	assert_eq(result["damage"], 4)
-	assert_eq(target.current_hp, 6)
+	# damage = max(1, 3 + 2 + 3 + 0 - 1 - 0) = 7  (no defense die)
+	assert_eq(result["damage"], 7)
+	assert_eq(target.current_hp, 3)
 	assert_false(result["is_downed"])
 
 
@@ -41,8 +52,8 @@ func test_physical_damage_no_weapon() -> void:
 	var target := _make_unit("b", 3, 10, 2, 1)
 	var result := CombatResolver.resolve_attack(
 		attacker, target, 0, 0, 0, 0, false, 1, 1)
-	# damage = max(1, 2 + 0 + 0 - 1 - 0) = 1
-	assert_eq(result["damage"], 1)
+	# damage = max(1, 3 + 2 + 0 + 0 - 1 - 0) = 4  (no defense die)
+	assert_eq(result["damage"], 4)
 
 
 func test_minimum_damage_is_one() -> void:
@@ -60,8 +71,8 @@ func test_elevation_bonus_applied() -> void:
 	var result := CombatResolver.resolve_attack(
 		attacker, target, 3,
 		3, 0, 0, false, 1, 1)  # attacker elev 3, target elev 0
-	# damage = max(1, 2 + 3 + 1 - 1 - 0) = 5
-	assert_eq(result["damage"], 5)
+	# damage = max(1, 3 + 2 + 3 + 1 - 1 - 0) = 8  (no defense die)
+	assert_eq(result["damage"], 8)
 
 
 func test_no_elevation_bonus_when_lower() -> void:
@@ -70,8 +81,8 @@ func test_no_elevation_bonus_when_lower() -> void:
 	var result := CombatResolver.resolve_attack(
 		attacker, target, 3,
 		0, 3, 0, false, 1, 1)  # attacker elev 0, target elev 3
-	# damage = max(1, 2 + 3 + 0 - 1 - 0) = 4  (no bonus)
-	assert_eq(result["damage"], 4)
+	# damage = max(1, 3 + 2 + 3 + 0 - 1 - 0) = 7  (no elevation bonus)
+	assert_eq(result["damage"], 7)
 
 
 func test_cover_reduces_ranged_damage() -> void:
@@ -80,8 +91,8 @@ func test_cover_reduces_ranged_damage() -> void:
 	var result := CombatResolver.resolve_attack(
 		attacker, target, 3,
 		0, 0, 1, true, 1, 1)  # cover=1, ranged
-	# damage = max(1, 2 + 3 + 0 - 1 - 1) = 3
-	assert_eq(result["damage"], 3)
+	# damage = max(1, 3 + 2 + 3 + 0 - 1 - 1) = 6  (no defense die)
+	assert_eq(result["damage"], 6)
 
 
 func test_cover_ignored_for_melee() -> void:
@@ -90,8 +101,8 @@ func test_cover_ignored_for_melee() -> void:
 	var result := CombatResolver.resolve_attack(
 		attacker, target, 3,
 		0, 0, 1, false, 1, 1)  # cover=1, but melee
-	# damage = max(1, 2 + 3 + 0 - 1 - 0) = 4
-	assert_eq(result["damage"], 4)
+	# damage = max(1, 3 + 2 + 3 + 0 - 1 - 0) = 7  (cover ignored for melee)
+	assert_eq(result["damage"], 7)
 
 
 func test_downing_at_zero_hp() -> void:
@@ -99,7 +110,7 @@ func test_downing_at_zero_hp() -> void:
 	var target := _make_unit("b", 3, 3, 2, 0)     # HP=3, DEF=0
 	var result := CombatResolver.resolve_attack(
 		attacker, target, 3, 0, 0, 0, false, 1, 1)
-	# damage = max(1, 5 + 3 + 0 - 0 - 0) = 8, HP=3-8 = clamped to 0
+	# damage = max(1, 3 + 5 + 3 + 0 - 0 - 0) = 11, HP=3-11 = clamped to 0
 	assert_true(result["is_downed"])
 	assert_eq(target.current_hp, 0)
 	assert_eq(result["target_hp_after"], 0)
@@ -120,9 +131,9 @@ func test_spell_damage_ignores_def() -> void:
 	var target := _make_unit("b", 3, 12, 2, 5)  # DEF=5
 	var result := CombatResolver.resolve_damage(
 		attacker, target, 4, "spell", 0, 0, 1)
-	# spell: damage = 4 + 0 = 4 (DEF ignored)
-	assert_eq(result["damage"], 4)
-	assert_eq(target.current_hp, 8)
+	# spell: damage = 1d6(3) + 4 + 0 = 7 (DEF ignored, attack die only)
+	assert_eq(result["damage"], 7)
+	assert_eq(target.current_hp, 5)
 
 
 func test_spell_damage_with_elevation() -> void:
@@ -130,8 +141,8 @@ func test_spell_damage_with_elevation() -> void:
 	var target := _make_unit("b", 3, 12, 2, 5)
 	var result := CombatResolver.resolve_damage(
 		attacker, target, 4, "spell", 3, 0, 1)
-	# spell: damage = 4 + 1 = 5
-	assert_eq(result["damage"], 5)
+	# spell: damage = 1d6(3) + 4 + 1 = 8 (attack die only)
+	assert_eq(result["damage"], 8)
 
 
 func test_skill_damage_reduced_by_def() -> void:
@@ -139,8 +150,8 @@ func test_skill_damage_reduced_by_def() -> void:
 	var target := _make_unit("b", 3, 16, 2, 3)  # DEF=3
 	var result := CombatResolver.resolve_damage(
 		attacker, target, 4, "skill", 0, 0, 1)
-	# skill: damage = max(1, 4 + 0 - 3) = 1
-	assert_eq(result["damage"], 1)
+	# skill: damage = max(1, 3 + 4 + 0 - 3) = 4  (no defense die)
+	assert_eq(result["damage"], 4)
 
 
 func test_skill_damage_with_elevation() -> void:
@@ -148,8 +159,8 @@ func test_skill_damage_with_elevation() -> void:
 	var target := _make_unit("b", 3, 16, 2, 3)
 	var result := CombatResolver.resolve_damage(
 		attacker, target, 4, "skill", 3, 0, 1)
-	# skill: damage = max(1, 4 + 1 - 3) = 2
-	assert_eq(result["damage"], 2)
+	# skill: damage = max(1, 3 + 4 + 1 - 3) = 5  (no defense die)
+	assert_eq(result["damage"], 5)
 
 
 func test_skill_minimum_damage_is_one() -> void:
@@ -167,6 +178,59 @@ func test_damage_downs_target() -> void:
 		attacker, target, 7, "spell", 0, 0, 1)
 	assert_true(result["is_downed"])
 	assert_eq(target.current_hp, 0)
+
+
+# --- Dice Variance Tests ---
+
+func test_high_roll_increases_damage() -> void:
+	CombatResolver.dice_roller = func() -> int: return 6
+	var attacker := _make_unit("a", 3, 10, 2, 1)
+	var target := _make_unit("b", 3, 20, 2, 1)
+	var result := CombatResolver.resolve_attack(
+		attacker, target, 3, 0, 0, 0, false, 1, 1)
+	# damage = max(1, 6 + 2 + 3 + 0 - 1 - 0) = 10  (no defense die)
+	assert_eq(result["damage"], 10)
+
+
+func test_defend_reduces_physical_damage() -> void:
+	var attacker := _make_unit("a", 3, 10, 2, 1)
+	var target := _make_unit("b", 3, 20, 2, 1)
+	# Give target the "defend" modifier (from Defend action)
+	target.stats.push_modifier(StatModifier.new("def", 2, "defend"))
+	var result := CombatResolver.resolve_attack(
+		attacker, target, 3, 0, 0, 0, false, 1, 1)
+	# DEF = 1 + 2 (defend) = 3
+	# Base damage = max(1, 3 + 2 + 3 + 0 - 3 - 0) = 5
+	# Defend def_roll = 3, final damage = max(1, 5 - 3) = 2
+	assert_eq(result["damage"], 2)
+	assert_eq(result["atk_roll"], 3)
+	assert_eq(result["def_roll"], 3)
+
+
+func test_defend_reduces_spell_damage() -> void:
+	var attacker := _make_unit("a", 3, 10, 0, 0)
+	var target := _make_unit("b", 3, 20, 2, 5)  # DEF=5
+	# Give target the "defend" modifier
+	target.stats.push_modifier(StatModifier.new("def", 2, "defend"))
+	var result := CombatResolver.resolve_damage(
+		attacker, target, 4, "spell", 0, 0, 1)
+	# spell: base damage = 3 + 4 + 0 = 7 (DEF ignored for spells)
+	# Defend def_roll = 3, final damage = max(1, 7 - 3) = 4
+	assert_eq(result["damage"], 4)
+	assert_eq(result["atk_roll"], 3)
+	assert_eq(result["def_roll"], 3)
+
+
+func test_spell_attack_die_only() -> void:
+	CombatResolver.dice_roller = func() -> int: return 5
+	var attacker := _make_unit("a", 3, 10, 0, 0)
+	var target := _make_unit("b", 3, 20, 2, 5)
+	var result := CombatResolver.resolve_damage(
+		attacker, target, 4, "spell", 0, 0, 1)
+	# spell: damage = 1d6(5) + 4 + 0 = 9 (no def roll)
+	assert_eq(result["damage"], 9)
+	assert_eq(result["atk_roll"], 5)
+	assert_eq(result["def_roll"], 0)
 
 
 # --- Healing Tests ---

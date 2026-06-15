@@ -32,6 +32,13 @@ func remove_modifiers_by_source(source: String) -> void:
 	_modifiers = _modifiers.filter(func(m: StatModifier) -> bool: return m.source != source)
 
 
+func has_modifier_from_source(source: String) -> bool:
+	for m in _modifiers:
+		if m.source == source:
+			return true
+	return false
+
+
 func effective_move() -> int:
 	return effective("spd")
 
