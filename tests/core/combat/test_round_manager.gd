@@ -96,14 +96,30 @@ func test_start_round_uses_base_ap() -> void:
 		"ap_remaining should use base_ap")
 
 
-func test_start_round_removes_defend_modifiers() -> void:
+func test_defend_persists_through_round_start() -> void:
 	var state := _deployed_state(1, 1)
 	state.parties["playerA"][0].stats.push_modifier(
 		StatModifier.new("def", 2, "defend"))
 	var base_def: int = state.parties["playerA"][0].stats.base("def")
 	assert_eq(state.parties["playerA"][0].stats.effective("def"), base_def + 2)
+	# Defend modifier should survive round start (lasts until unit's next turn)
 	RoundManager.start_round(state)
-	assert_eq(state.parties["playerA"][0].stats.effective("def"), base_def)
+	assert_eq(state.parties["playerA"][0].stats.effective("def"), base_def + 2,
+		"defend should persist through round start")
+
+
+func test_defend_removed_on_activation() -> void:
+	var state := _deployed_state(1, 1)
+	var unit: BattleUnit = state.parties["playerA"][0]
+	unit.stats.push_modifier(StatModifier.new("def", 2, "defend"))
+	var base_def: int = unit.stats.base("def")
+	assert_eq(unit.stats.effective("def"), base_def + 2)
+	RoundManager.start_round(state)
+	# Activate the unit — defend should be cleared
+	var team := RoundManager.current_team(state)
+	RoundManager.activate_unit(state, unit)
+	assert_eq(unit.stats.effective("def"), base_def,
+		"defend should be removed when unit is activated")
 
 
 func test_activation_queue_alternates_equal_parties() -> void:

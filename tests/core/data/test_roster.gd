@@ -166,3 +166,23 @@ func test_all_abilities_resolve() -> void:
 		var a := _pipeline.get_ability(id)
 		assert_not_null(a, "Ability '%s' should exist" % id)
 		assert_ne(a.effect_type, "", "Ability '%s' should have an effect_type" % id)
+
+
+# --- Willpower (WP) Derivation ---
+
+func test_all_characters_have_wp() -> void:
+	for id in _character_ids:
+		var fs := _pipeline.get_final_stats(id)
+		assert_gt(fs.effective("wp"), 0, "'%s' WP should be > 0" % id)
+
+
+func test_black_mage_has_wp_bonus() -> void:
+	# elf_black_mage: base wp=6, elf +2, black_mage +3 = 11
+	var fs := _pipeline.get_final_stats("elf_black_mage")
+	assert_eq(fs.effective("wp"), 11, "Black Mage WP should be 6 base + 2 elf + 3 class")
+
+
+func test_fighter_wp_no_bonus() -> void:
+	# human_fighter: base wp=5, human +0, fighter +0 = 5
+	var fs := _pipeline.get_final_stats("human_fighter")
+	assert_eq(fs.effective("wp"), 5, "Fighter WP should be 5 base + 0 race + 0 class")

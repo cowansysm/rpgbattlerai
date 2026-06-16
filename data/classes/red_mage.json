@@ -2,7 +2,7 @@
   "id": "red_mage",
   "display_name": "Red Mage",
   "abbr": "RDM",
-  "stat_modifiers": { "atk": 1 },
+  "stat_modifiers": { "atk": 1, "wp": 1 },
   "derived_bonuses": {},
   "equipment_access": ["rapier", "light_armor"],
   "granted_abilities": ["fire_1", "cure_1"]

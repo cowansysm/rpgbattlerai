@@ -5,7 +5,7 @@
   "classes": ["barbarian"],
   "level": 3,
   "bp": 20,
-  "base_stats": { "spd": 3, "atk": 4, "rng": 1, "def": 2, "hp": 27, "jump": 2 },
+  "base_stats": { "spd": 3, "atk": 4, "rng": 1, "def": 2, "hp": 27, "jump": 2, "wp": 5 },
   "equipment": ["greataxe", "light_armor"],
   "abilities": []
 }

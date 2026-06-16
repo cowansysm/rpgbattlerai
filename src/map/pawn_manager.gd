@@ -76,6 +76,10 @@ func get_pawn(unit: BattleUnit) -> UnitPawn:
 	return _pawns.get(unit)
 
 
+func has_pawn(unit: BattleUnit) -> bool:
+	return _pawns.has(unit)
+
+
 func sync_pawn_position(unit: BattleUnit, coord: Vector2i) -> void:
 	## Snap pawn to precise hex position after a drag-move.
 	## The pawn is already visually close; this ensures pixel-perfect alignment.
@@ -95,7 +99,7 @@ func update_status_markers(unit: BattleUnit) -> void:
 	for i in range(unit.status_effects.size()):
 		var s: Dictionary = unit.status_effects[i]
 		var marker := StatusMarker.create(s["id"])
-		marker.position = Vector3(float(i) * 0.18, 0.25, 0.0)
+		marker.position = Vector3(float(i) * 0.27, 0.25, 0.0)
 		pawn.add_child(marker)
 		markers.append(marker)
 	if not markers.is_empty():

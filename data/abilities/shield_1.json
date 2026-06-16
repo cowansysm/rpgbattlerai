@@ -3,6 +3,7 @@
   "display_name": "Shield 1",
   "type": "spell",
   "ap_cost": 1,
+  "wp_cost": 2,
   "range": 3,
   "area": {},
   "effect": { "effect_type": "buff", "stat": "def", "value": 2, "duration": 3 },

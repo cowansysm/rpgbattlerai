@@ -26,7 +26,7 @@ static func _stub_terrain(id: String) -> TerrainProps:
 # --- Helpers ---
 
 func _make_unit(id: String, spd: int = 3, hp: int = 10,
-		atk: int = 2, def_val: int = 1, rng: int = 1) -> BattleUnit:
+		atk: int = 2, def_val: int = 1, rng: int = 1, wp: int = 10) -> BattleUnit:
 	var c := CharacterData.new()
 	c.id = id
 	c.display_name = id
@@ -39,6 +39,7 @@ func _make_unit(id: String, spd: int = 3, hp: int = 10,
 	sb.set_base("atk", atk)
 	sb.set_base("def", def_val)
 	sb.set_base("rng", rng)
+	sb.set_base("wp", wp)
 	return BattleUnit.from_character(c, sb)
 
 
@@ -137,9 +138,10 @@ func _activate_unit(state: MatchState, unit: BattleUnit) -> void:
 func _skip_all_activations(state: MatchState) -> void:
 	while not RoundManager.is_round_over(state):
 		var team := RoundManager.current_team(state)
-		var available := state.unactivated_units(team)
+		var available := state.activatable_units(team)
 		if available.is_empty():
-			break
+			state.current_index += 1
+			continue
 		_activate_unit(state, available[0])
 		TurnActions.execute_wait(state)
 		RoundManager.end_activation(state)
@@ -262,14 +264,14 @@ func test_downed_unit_in_downed_units() -> void:
 	assert_eq(state.all_downed_units().size(), 1)
 
 
-func test_downed_unit_excluded_from_activation() -> void:
+func test_downed_unit_included_in_activation_queue() -> void:
 	var state := _setup_match()
 	var b0: BattleUnit = state.parties["playerB"][0]
 	b0.current_hp = 0
 	b0.is_downed = true
 	RoundManager.start_round(state)
-	# Only 3 living units should be in queue (4 total - 1 downed)
-	assert_eq(state.activation_queue.size(), 3)
+	# All 4 units (including downed b0) should be in queue
+	assert_eq(state.activation_queue.size(), 4)
 
 
 # --- Heal Does Not Revive ---
@@ -462,11 +464,11 @@ func test_revive_on_enemy_skipped() -> void:
 	assert_eq(outcomes[0].get("reason", ""), "enemy")
 
 
-# --- Grace Period ---
+# --- Downed Turn Processing ---
 
-func test_downed_unit_survives_grace_round() -> void:
+func test_downed_unit_removed_on_own_turn() -> void:
 	var state := _setup_match()
-	RoundManager.start_round(state)  # Round 1
+	RoundManager.start_round(state)
 
 	# Down b0 in round 1
 	var b0: BattleUnit = state.parties["playerB"][0]
@@ -474,34 +476,34 @@ func test_downed_unit_survives_grace_round() -> void:
 	b0.is_downed = true
 	b0.downed_round = 1
 
+	# Skip all activations — b0 will be activated as downed and permanently removed
 	_skip_all_activations(state)
 
-	# Round 2: b0 should survive (grace period)
-	var removed := RoundManager.start_round(state)
-	assert_eq(removed.size(), 0, "no units should be removed yet")
-	assert_true(b0.is_downed, "b0 should still be downed")
-	assert_true(state.is_occupied(Vector2i(1, 0)), "b0 still blocks hex")
+	# b0 should be permanently removed
+	assert_false(b0.is_downed, "should no longer be downed")
+	assert_eq(b0.current_hp, 0)
+	assert_false(state.is_occupied(Vector2i(1, 0)), "hex should be free")
 
 
-func test_downed_unit_removed_after_grace() -> void:
+func test_downed_unit_revived_before_turn_survives() -> void:
 	var state := _setup_match()
-	RoundManager.start_round(state)  # Round 1
+	RoundManager.start_round(state)
 
 	var b0: BattleUnit = state.parties["playerB"][0]
 	b0.current_hp = 0
 	b0.is_downed = true
 	b0.downed_round = 1
 
-	_skip_all_activations(state)
-	RoundManager.start_round(state)  # Round 2 (grace round)
+	# Revive b0 before its turn comes
+	CombatResolver.resolve_revive(b0, 5)
+	assert_false(b0.is_downed)
+	assert_eq(b0.current_hp, 5)
+
 	_skip_all_activations(state)
 
-	# Round 3: b0 should be permanently removed
-	var removed := RoundManager.start_round(state)
-	assert_eq(removed.size(), 1)
-	assert_eq(removed[0], b0)
-	assert_false(b0.is_downed, "should no longer be downed")
-	assert_false(state.is_occupied(Vector2i(1, 0)), "hex should be free")
+	# b0 was revived, should still be alive and on the board
+	assert_true(b0.is_alive())
+	assert_true(state.is_occupied(Vector2i(1, 0)), "b0 should still occupy hex")
 
 
 func test_revived_unit_not_removed() -> void:
@@ -521,10 +523,9 @@ func test_revived_unit_not_removed() -> void:
 	_skip_all_activations(state)
 	RoundManager.start_round(state)  # Round 2
 	_skip_all_activations(state)
+	RoundManager.start_round(state)  # Round 3
 
-	# Round 3: a0 was revived, should not be removed
-	var removed := RoundManager.start_round(state)
-	assert_eq(removed.size(), 0)
+	# a0 was revived, should not be removed
 	assert_true(a0.is_alive())
 
 

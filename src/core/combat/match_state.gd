@@ -33,6 +33,13 @@ func unactivated_units(team: String) -> Array:
 		func(u: BattleUnit) -> bool: return not u.is_activated)
 
 
+func activatable_units(team: String) -> Array:
+	## Returns units eligible for activation: living + downed (not permanently dead).
+	return parties.get(team, []).filter(
+		func(u: BattleUnit) -> bool:
+			return (u.current_hp > 0 or u.is_downed) and not u.is_activated)
+
+
 func all_living_units() -> Array:
 	var out: Array = []
 	for team in parties.keys():
@@ -62,3 +69,17 @@ func is_occupied(pos: Vector2i) -> bool:
 
 func other_team(team: String) -> String:
 	return "playerB" if team == "playerA" else "playerA"
+
+
+func check_winner() -> String:
+	## Returns the winning team string, or "" if no winner yet.
+	## A team loses when it has no living units AND no downed units.
+	for team in parties.keys():
+		var has_viable := false
+		for unit: BattleUnit in parties[team]:
+			if unit.current_hp > 0 or unit.is_downed:
+				has_viable = true
+				break
+		if not has_viable:
+			return other_team(team)
+	return ""

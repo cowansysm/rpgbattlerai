@@ -2,7 +2,7 @@
   "id": "white_mage",
   "display_name": "White Mage",
   "abbr": "WHM",
-  "stat_modifiers": {},
+  "stat_modifiers": { "wp": 2 },
   "derived_bonuses": {},
   "equipment_access": ["staff"],
   "granted_abilities": ["cure_1", "cure_2", "shield_1"]

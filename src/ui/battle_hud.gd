@@ -11,6 +11,9 @@ signal item_selected(item_id: String)
 signal finalize_move_pressed()
 signal cancel_move_pressed()
 signal unit_clicked(character_id: String)
+signal back_to_menu_pressed()
+signal confirm_activation_pressed()
+signal cancel_activation_pressed()
 
 # Action type constants matching the controller's expectations
 const ACTION_MOVE := 0
@@ -49,6 +52,7 @@ var _unit_name_label: Label
 var _hp_bar: ProgressBar
 var _ap_pip_1: Label
 var _ap_pip_2: Label
+var _wp_label: Label
 var _status_container: HBoxContainer
 
 # Action panel
@@ -70,8 +74,21 @@ var _finalize_panel: HBoxContainer
 var _btn_finalize: Button
 var _btn_cancel_move: Button
 
+# Activation confirmation (floating above bottom bar)
+var _activation_panel: PanelContainer
+var _btn_confirm_activation: Button
+var _btn_cancel_activation: Button
+
 # Targeting mode indicator
 var _targeting_label: Label
+
+# Round banner (floating center text)
+var _round_banner: Label
+
+# Match over overlay
+var _match_over_overlay: PanelContainer
+var _winner_label: Label
+var _btn_back_to_menu: Button
 
 
 func setup() -> void:
@@ -92,6 +109,8 @@ func _build_ui() -> void:
 	_build_right_sidebar()
 	_build_bottom_bar()
 	_build_floating_panels()
+	_build_round_banner()
+	_build_match_over_overlay()
 
 
 # --- Top bar ---
@@ -105,26 +124,36 @@ func _build_top_bar() -> void:
 	_root.add_child(panel)
 
 	var hbox := HBoxContainer.new()
-	hbox.add_theme_constant_override("separation", 20)
+	hbox.add_theme_constant_override("separation", 8)
 	panel.add_child(hbox)
 
+	# Left spacer — balances the right section to keep round label centered
+	var left_spacer := Control.new()
+	left_spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	hbox.add_child(left_spacer)
+
+	# Centered round / player label
 	_round_label = Label.new()
 	_round_label.text = "Round 1"
 	_round_label.add_theme_font_size_override("font_size", 16)
+	_round_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	hbox.add_child(_round_label)
 
-	var spacer := Control.new()
-	spacer.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-	hbox.add_child(spacer)
+	# Right section — turn order, pushed to the right edge
+	var right_box := HBoxContainer.new()
+	right_box.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	right_box.alignment = BoxContainer.ALIGNMENT_END
+	right_box.add_theme_constant_override("separation", 8)
+	hbox.add_child(right_box)
 
 	var turn_label := Label.new()
 	turn_label.text = "Pending:"
 	turn_label.add_theme_font_size_override("font_size", 14)
-	hbox.add_child(turn_label)
+	right_box.add_child(turn_label)
 
 	_turn_order_container = HBoxContainer.new()
 	_turn_order_container.add_theme_constant_override("separation", 8)
-	hbox.add_child(_turn_order_container)
+	right_box.add_child(_turn_order_container)
 
 
 # --- Left sidebar (team roster) ---
@@ -259,6 +288,21 @@ func _build_bottom_bar() -> void:
 	_ap_pip_2.add_theme_font_size_override("font_size", 14)
 	ap_box.add_child(_ap_pip_2)
 
+	var wp_box := HBoxContainer.new()
+	wp_box.add_theme_constant_override("separation", 4)
+	_unit_info_panel.add_child(wp_box)
+
+	var wp_tag := Label.new()
+	wp_tag.text = "WP:"
+	wp_tag.add_theme_font_size_override("font_size", 12)
+	wp_tag.add_theme_color_override("font_color", Color(0.7, 0.4, 1.0))
+	wp_box.add_child(wp_tag)
+
+	_wp_label = Label.new()
+	_wp_label.add_theme_font_size_override("font_size", 14)
+	_wp_label.add_theme_color_override("font_color", Color(0.7, 0.4, 1.0))
+	wp_box.add_child(_wp_label)
+
 	_status_container = HBoxContainer.new()
 	_status_container.add_theme_constant_override("separation", 4)
 	_unit_info_panel.add_child(_status_container)
@@ -367,6 +411,44 @@ func _build_floating_panels() -> void:
 	_item_panel.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	item_scroll.add_child(_item_panel)
 
+	# Activation confirmation — floats above the bottom bar, horizontally centered
+	var confirm_width := 280
+	var confirm_height := 50
+	_activation_panel = PanelContainer.new()
+	_activation_panel.visible = false
+	_activation_panel.anchor_left = 0.5
+	_activation_panel.anchor_right = 0.5
+	_activation_panel.anchor_top = 1.0
+	_activation_panel.anchor_bottom = 1.0
+	_activation_panel.offset_left = -confirm_width / 2
+	_activation_panel.offset_right = confirm_width / 2
+	_activation_panel.offset_top = -BOTTOM_BAR_HEIGHT - confirm_height - 8
+	_activation_panel.offset_bottom = -BOTTOM_BAR_HEIGHT - 8
+	var confirm_style := StyleBoxFlat.new()
+	confirm_style.bg_color = Color(0.0, 0.0, 0.0, 0.8)
+	confirm_style.set_content_margin_all(6)
+	confirm_style.set_corner_radius_all(6)
+	_activation_panel.add_theme_stylebox_override("panel", confirm_style)
+	_activation_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	_root.add_child(_activation_panel)
+
+	var confirm_hbox := HBoxContainer.new()
+	confirm_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	confirm_hbox.add_theme_constant_override("separation", 8)
+	_activation_panel.add_child(confirm_hbox)
+
+	_btn_confirm_activation = Button.new()
+	_btn_confirm_activation.text = "Confirm"
+	_btn_confirm_activation.custom_minimum_size = Vector2(160, 36)
+	_btn_confirm_activation.pressed.connect(func() -> void: confirm_activation_pressed.emit())
+	confirm_hbox.add_child(_btn_confirm_activation)
+
+	_btn_cancel_activation = Button.new()
+	_btn_cancel_activation.text = "Cancel"
+	_btn_cancel_activation.custom_minimum_size = Vector2(80, 36)
+	_btn_cancel_activation.pressed.connect(func() -> void: cancel_activation_pressed.emit())
+	confirm_hbox.add_child(_btn_cancel_activation)
+
 
 # --- Public update methods ---
 
@@ -380,6 +462,10 @@ func show_unit_info(unit: BattleUnit) -> void:
 	_hp_bar.value = unit.current_hp
 
 	_update_ap_pips(unit.ap_remaining)
+
+	var max_wp: int = unit.stats.effective("wp")
+	_wp_label.text = "%d/%d" % [unit.current_wp, max_wp]
+
 	_update_status_display(unit)
 
 
@@ -388,12 +474,35 @@ func hide_unit_info() -> void:
 
 
 func show_action_panel(unit: BattleUnit, abilities: Array, items: Array,
-		must_reserve_move: bool = false) -> void:
+		must_reserve_move: bool = false, item_wp_costs: Dictionary = {}) -> void:
 	_action_panel.visible = true
 	_finalize_panel.visible = true
 
 	var ap := unit.ap_remaining
+	var wp := unit.current_wp
 	var rng: int = unit.stats.effective("rng")
+
+	# When AP is depleted or unit is downed, show only End Turn button
+	if ap <= 0 or unit.is_downed:
+		_btn_attack.visible = false
+		_btn_abilities.visible = false
+		_btn_items.visible = false
+		_btn_defend.visible = false
+		_btn_wait.visible = true
+		_btn_wait.text = "End Turn [X]"
+		_btn_wait.disabled = false
+		_ability_popup.visible = false
+		_item_popup.visible = false
+		_finalize_panel.visible = false
+		return
+
+	# Restore normal visibility and text
+	_btn_attack.visible = true
+	_btn_abilities.visible = true
+	_btn_items.visible = true
+	_btn_defend.visible = true
+	_btn_wait.visible = true
+	_btn_wait.text = "Wait [X]"
 
 	if must_reserve_move:
 		# Only Move and Wait allowed; 1-AP combat actions disabled
@@ -415,8 +524,8 @@ func show_action_panel(unit: BattleUnit, abilities: Array, items: Array,
 		_btn_defend.disabled = ap < 1
 		_btn_wait.disabled = false
 
-	_populate_ability_panel(abilities, ap, unit.base_ap, unit.has_moved)
-	_populate_item_panel(items, ap)
+	_populate_ability_panel(abilities, ap, wp, unit.base_ap, unit.has_moved)
+	_populate_item_panel(items, ap, wp, item_wp_costs)
 
 
 func hide_action_panel() -> void:
@@ -424,6 +533,7 @@ func hide_action_panel() -> void:
 	_ability_popup.visible = false
 	_item_popup.visible = false
 	_finalize_panel.visible = false
+	_activation_panel.visible = false
 
 
 func set_targeting_mode(active: bool) -> void:
@@ -432,6 +542,12 @@ func set_targeting_mode(active: bool) -> void:
 	_finalize_panel.visible = not active
 	_ability_popup.visible = false
 	_item_popup.visible = false
+
+
+func set_confirm_activation_enabled(enabled: bool, unit_name: String = "") -> void:
+	_activation_panel.visible = enabled
+	if enabled:
+		_btn_confirm_activation.text = "Activate: %s" % unit_name
 
 
 func set_finalize_enabled(enabled: bool) -> void:
@@ -467,10 +583,6 @@ func update_turn_order(state: MatchState) -> void:
 func update_round_info(round_number: int, team: String) -> void:
 	var team_display := "Player A" if team == "playerA" else "Player B"
 	_round_label.text = "Round %d - %s's Turn" % [round_number, team_display]
-
-
-func show_round_end_info(round_number: int) -> void:
-	_round_label.text = "Round %d Complete - Press R for next round" % round_number
 
 
 func show_awaiting_activation(team: String) -> void:
@@ -543,7 +655,7 @@ func _toggle_item_panel() -> void:
 	_ability_popup.visible = false
 
 
-func _populate_ability_panel(abilities: Array, current_ap: int,
+func _populate_ability_panel(abilities: Array, current_ap: int, current_wp: int,
 		base_ap: int = 2, has_moved: bool = true) -> void:
 	for child in _ability_panel.get_children():
 		child.queue_free()
@@ -557,9 +669,11 @@ func _populate_ability_panel(abilities: Array, current_ap: int,
 		var ability: AbilityData = a
 		var btn := Button.new()
 
-		# Format: "Fire 2   2 AP - R4 - burst 1\n  7 fire damage"
+		# Format: "Fire 2   2 AP  3 WP - R4 - burst 1\n  7 fire damage"
 		var line1 := ability.display_name
 		line1 += "   %d AP" % ability.ap_cost
+		if ability.wp_cost > 0:
+			line1 += "  %d WP" % ability.wp_cost
 		if ability.ability_range > 0:
 			line1 += " - R%d" % ability.ability_range
 		if not ability.area.is_empty():
@@ -573,9 +687,15 @@ func _populate_ability_panel(abilities: Array, current_ap: int,
 		btn.custom_minimum_size = Vector2(200, 40)
 		btn.icon = SymbolAtlas.get_icon(ability.id)
 
-		# Disable if not enough AP, or if movement reserve blocks non-exempt abilities
+		# Disable if not enough AP, WP, or if movement reserve blocks non-exempt abilities
 		var blocked_by_reserve := must_reserve and current_ap <= 1 and ability.ap_cost < base_ap
-		btn.disabled = current_ap < ability.ap_cost or blocked_by_reserve
+		var insufficient_ap := current_ap < ability.ap_cost or blocked_by_reserve
+		var insufficient_wp := ability.wp_cost > 0 and current_wp < ability.wp_cost
+		btn.disabled = insufficient_ap or insufficient_wp
+
+		# Red-out when WP is the limiting factor (AP is sufficient)
+		if insufficient_wp and not insufficient_ap:
+			btn.add_theme_color_override("font_disabled_color", Color(0.8, 0.3, 0.3))
 
 		var aid := ability.id
 		btn.pressed.connect(func() -> void:
@@ -584,7 +704,8 @@ func _populate_ability_panel(abilities: Array, current_ap: int,
 		_ability_panel.add_child(btn)
 
 
-func _populate_item_panel(items: Array, current_ap: int) -> void:
+func _populate_item_panel(items: Array, current_ap: int, current_wp: int,
+		item_wp_costs: Dictionary = {}) -> void:
 	for child in _item_panel.get_children():
 		child.queue_free()
 
@@ -593,10 +714,21 @@ func _populate_item_panel(items: Array, current_ap: int) -> void:
 			continue
 		var item: ItemData = item_data
 		var btn := Button.new()
-		btn.text = "%s   1 AP" % item.display_name
+		var wp_cost: int = int(item_wp_costs.get(item.id, 0))
+		var label := "%s   1 AP" % item.display_name
+		if wp_cost > 0:
+			label += "  %d WP" % wp_cost
+		btn.text = label
 		btn.custom_minimum_size = Vector2(200, 36)
 		btn.icon = SymbolAtlas.get_icon(item.id)
-		btn.disabled = current_ap < 1
+
+		var insufficient_ap := current_ap < 1
+		var insufficient_wp := wp_cost > 0 and current_wp < wp_cost
+		btn.disabled = insufficient_ap or insufficient_wp
+
+		# Red-out when WP is the limiting factor
+		if insufficient_wp and not insufficient_ap:
+			btn.add_theme_color_override("font_disabled_color", Color(0.8, 0.3, 0.3))
 
 		var iid := item.id
 		btn.pressed.connect(func() -> void:
@@ -763,6 +895,71 @@ func _update_team_list(container: VBoxContainer, units: Array,
 		ap_num.add_theme_font_size_override("font_size", 11)
 		ap_row.add_child(ap_num)
 
+		# Row 4: WP bar with numbers
+		var unit_max_wp: int = unit.stats.effective("wp")
+		if unit_max_wp > 0:
+			var wp_row := HBoxContainer.new()
+			wp_row.add_theme_constant_override("separation", 4)
+			card.add_child(wp_row)
+
+			var wp_lbl := Label.new()
+			wp_lbl.text = "WP"
+			wp_lbl.add_theme_font_size_override("font_size", 11)
+			wp_lbl.add_theme_color_override("font_color", Color(0.6, 0.4, 0.8))
+			wp_lbl.custom_minimum_size.x = 22
+			wp_row.add_child(wp_lbl)
+
+			var wp_bar := ProgressBar.new()
+			wp_bar.custom_minimum_size = Vector2(0, 14)
+			wp_bar.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+			wp_bar.show_percentage = false
+			wp_bar.max_value = unit_max_wp
+			wp_bar.value = unit.current_wp
+			var wp_fill := StyleBoxFlat.new()
+			wp_fill.bg_color = Color(0.5, 0.3, 0.8)
+			wp_bar.add_theme_stylebox_override("fill", wp_fill)
+			var wp_bg := StyleBoxFlat.new()
+			wp_bg.bg_color = Color(0.15, 0.15, 0.15)
+			wp_bar.add_theme_stylebox_override("background", wp_bg)
+			wp_row.add_child(wp_bar)
+
+			var wp_num := Label.new()
+			wp_num.text = "%d/%d" % [unit.current_wp, unit_max_wp]
+			wp_num.add_theme_font_size_override("font_size", 11)
+			wp_num.custom_minimum_size.x = 42
+			wp_num.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
+			wp_row.add_child(wp_num)
+
+		# Row 5: Status effects (if any)
+		if not unit.status_effects.is_empty():
+			var status_row := HBoxContainer.new()
+			status_row.add_theme_constant_override("separation", 4)
+			card.add_child(status_row)
+
+			for s in unit.status_effects:
+				var s_icon := TextureRect.new()
+				s_icon.texture = SymbolAtlas.get_icon(s["id"])
+				s_icon.custom_minimum_size = Vector2(14, 14)
+				s_icon.stretch_mode = TextureRect.STRETCH_KEEP_ASPECT_CENTERED
+				status_row.add_child(s_icon)
+				var s_lbl := Label.new()
+				s_lbl.text = "%s(%d)" % [s["id"], s["duration"]]
+				s_lbl.add_theme_font_size_override("font_size", 10)
+				s_lbl.add_theme_color_override("font_color", Color(1.0, 0.8, 0.3))
+				status_row.add_child(s_lbl)
+
+		# Show defend indicator in sidebar
+		if unit.stats.has_modifier_from_source("defend"):
+			var def_row := HBoxContainer.new()
+			def_row.add_theme_constant_override("separation", 4)
+			card.add_child(def_row)
+
+			var def_icon := Label.new()
+			def_icon.text = "Defending (+2 DEF, defense die)"
+			def_icon.add_theme_font_size_override("font_size", 10)
+			def_icon.add_theme_color_override("font_color", Color(0.4, 0.8, 1.0))
+			def_row.add_child(def_icon)
+
 		# Separator between units
 		var sep := HSeparator.new()
 		sep.add_theme_constant_override("separation", 4)
@@ -801,6 +998,77 @@ func _hp_bar_color(current: int, maximum: int) -> Color:
 	elif ratio > 0.25:
 		return Color(0.85, 0.7, 0.1)
 	return Color(0.8, 0.15, 0.15)
+
+
+func _build_round_banner() -> void:
+	_round_banner = Label.new()
+	_round_banner.visible = false
+	_round_banner.set_anchors_preset(Control.PRESET_CENTER)
+	_round_banner.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_round_banner.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+	_round_banner.add_theme_font_size_override("font_size", 48)
+	_round_banner.add_theme_color_override("font_color", Color(1.0, 0.95, 0.7))
+	_round_banner.add_theme_color_override("font_shadow_color", Color(0.0, 0.0, 0.0, 0.7))
+	_round_banner.add_theme_constant_override("shadow_offset_x", 2)
+	_round_banner.add_theme_constant_override("shadow_offset_y", 2)
+	_round_banner.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_root.add_child(_round_banner)
+
+
+func show_round_banner(round_number: int) -> void:
+	_round_banner.text = "Round %d" % round_number
+	_round_banner.visible = true
+	_round_banner.modulate.a = 1.0
+
+	var tw := _round_banner.create_tween()
+	# Hold for 1.5s fully visible
+	tw.tween_interval(1.5)
+	# Fade out over 0.5s
+	tw.tween_property(_round_banner, "modulate:a", 0.0, 0.5)\
+		.set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_CUBIC)
+	# Hide after fade
+	tw.tween_callback(func() -> void: _round_banner.visible = false)
+
+
+func _build_match_over_overlay() -> void:
+	_match_over_overlay = PanelContainer.new()
+	_match_over_overlay.visible = false
+	_match_over_overlay.set_anchors_preset(Control.PRESET_CENTER)
+	_match_over_overlay.custom_minimum_size = Vector2(400, 200)
+	_match_over_overlay.offset_left = -200
+	_match_over_overlay.offset_right = 200
+	_match_over_overlay.offset_top = -100
+	_match_over_overlay.offset_bottom = 100
+	var style := StyleBoxFlat.new()
+	style.bg_color = Color(0.0, 0.0, 0.0, 0.85)
+	style.set_content_margin_all(20)
+	style.set_corner_radius_all(8)
+	_match_over_overlay.add_theme_stylebox_override("panel", style)
+	_match_over_overlay.mouse_filter = Control.MOUSE_FILTER_STOP
+	_root.add_child(_match_over_overlay)
+
+	var vbox := VBoxContainer.new()
+	vbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	vbox.add_theme_constant_override("separation", 20)
+	_match_over_overlay.add_child(vbox)
+
+	_winner_label = Label.new()
+	_winner_label.text = ""
+	_winner_label.add_theme_font_size_override("font_size", 28)
+	_winner_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
+	_winner_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(_winner_label)
+
+	_btn_back_to_menu = Button.new()
+	_btn_back_to_menu.text = "Back to Main Menu"
+	_btn_back_to_menu.custom_minimum_size = Vector2(200, 44)
+	_btn_back_to_menu.pressed.connect(func() -> void: back_to_menu_pressed.emit())
+	vbox.add_child(_btn_back_to_menu)
+
+
+func show_match_over(winning_team_display: String) -> void:
+	_match_over_overlay.visible = true
+	_winner_label.text = "%s Wins!" % winning_team_display
 
 
 func _apply_panel_bg(panel: PanelContainer) -> void:

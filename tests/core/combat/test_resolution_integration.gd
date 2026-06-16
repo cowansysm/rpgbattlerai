@@ -35,7 +35,7 @@ static func _stub_terrain(id: String) -> TerrainProps:
 # --- Helpers ---
 
 func _make_unit(id: String, spd: int = 3, hp: int = 10,
-		atk: int = 2, def_val: int = 1, rng: int = 1) -> BattleUnit:
+		atk: int = 2, def_val: int = 1, rng: int = 1, wp: int = 10) -> BattleUnit:
 	var c := CharacterData.new()
 	c.id = id
 	c.display_name = id
@@ -48,6 +48,7 @@ func _make_unit(id: String, spd: int = 3, hp: int = 10,
 	sb.set_base("atk", atk)
 	sb.set_base("def", def_val)
 	sb.set_base("rng", rng)
+	sb.set_base("wp", wp)
 	return BattleUnit.from_character(c, sb)
 
 
@@ -414,13 +415,13 @@ func test_downed_unit_excluded_from_living() -> void:
 	assert_eq(state.living_units("playerB").size(), 1)
 
 
-func test_downed_unit_excluded_from_activation_queue() -> void:
+func test_downed_unit_included_in_activation_queue() -> void:
 	var state := _setup_match()
 	state.parties["playerB"][0].current_hp = 0
 	state.parties["playerB"][0].is_downed = true
 	RoundManager.start_round(state)
-	# Only 3 living units should be in queue
-	assert_eq(state.activation_queue.size(), 3)
+	# All 4 units (including downed) should be in queue
+	assert_eq(state.activation_queue.size(), 4)
 
 
 # --- Round-Start Cleanup ---
@@ -489,7 +490,7 @@ func test_status_expires_after_duration() -> void:
 	assert_false(target.has_status("sleep"))
 
 
-func test_defend_still_removed_at_round_start() -> void:
+func test_defend_persists_until_next_activation() -> void:
 	var state := _setup_match()
 	RoundManager.start_round(state)
 
@@ -504,7 +505,7 @@ func test_defend_still_removed_at_round_start() -> void:
 	TurnActions.execute_wait(state)
 	RoundManager.end_activation(state)
 
-	# Complete remaining activations
+	# Complete remaining activations — defend should persist throughout
 	for i in range(3):
 		t = RoundManager.current_team(state)
 		var u2: BattleUnit = state.unactivated_units(t)[0]
@@ -512,9 +513,16 @@ func test_defend_still_removed_at_round_start() -> void:
 		TurnActions.execute_wait(state)
 		RoundManager.end_activation(state)
 
-	# Defend cleared at round start
+	# Defend persists through round start
 	RoundManager.start_round(state)
-	assert_eq(u.stats.effective("def"), base_def)
+	assert_eq(u.stats.effective("def"), base_def + 2,
+		"defend should persist through round start")
+
+	# Defend cleared when unit activates again
+	t = RoundManager.current_team(state)
+	RoundManager.activate_unit(state, u)
+	assert_eq(u.stats.effective("def"), base_def,
+		"defend should be removed on next activation")
 
 
 # --- Sleep Skip ---

@@ -30,6 +30,7 @@ static func make_ability(d: Dictionary) -> AbilityData:
 	a.display_name = str(d.get("display_name", d["id"]))
 	a.type = str(d.get("type", ""))
 	a.ap_cost = int(d.get("ap_cost", 1))
+	a.wp_cost = int(d.get("wp_cost", 0))
 	a.ability_range = int(d.get("range", 0))
 	a.area = d.get("area", {})
 	a.effect = d.get("effect", {})

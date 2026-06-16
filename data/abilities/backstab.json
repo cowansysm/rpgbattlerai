@@ -3,6 +3,7 @@
   "display_name": "Backstab",
   "type": "skill",
   "ap_cost": 1,
+  "wp_cost": 1,
   "range": 1,
   "area": {},
   "effect": { "effect_type": "damage", "value": 5 },

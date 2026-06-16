@@ -9,6 +9,7 @@ var character: CharacterData        ## Immutable authored data (read-only refere
 var stats: StatBlock                ## Own copy for runtime modifiers; initialized from load-time derivation
 var position: Vector2i = Vector2i.ZERO
 var current_hp: int = 0
+var current_wp: int = 0
 var base_ap: int = 2					## Starting AP per activation (default 2)
 var ap_remaining: int = 2
 var is_activated: bool = false
@@ -28,6 +29,7 @@ static func from_character(c: CharacterData, final_stats: StatBlock) -> BattleUn
 	u.character = c
 	u.stats = final_stats.duplicate()
 	u.current_hp = u.stats.effective(StatKey.to_string_key(StatKey.Key.HP))
+	u.current_wp = u.stats.effective(StatKey.to_string_key(StatKey.Key.WP))
 	return u
 
 

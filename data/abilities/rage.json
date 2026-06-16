@@ -3,6 +3,7 @@
   "display_name": "Rage",
   "type": "skill",
   "ap_cost": 1,
+  "wp_cost": 1,
   "range": 0,
   "area": {},
   "effect": { "effect_type": "buff", "stat": "atk", "value": 3, "duration": 3 },

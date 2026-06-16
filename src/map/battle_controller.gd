@@ -9,7 +9,7 @@ enum ControlState {
 	ACTION_SELECT,
 	TARGETING,
 	ANIMATING,
-	ROUND_END,
+	MATCH_OVER,
 }
 
 var _state: MatchState
@@ -29,6 +29,9 @@ var _selected_tile: Vector2i = Vector2i(-999, -999)
 # Cached ability/item lists for the current unit
 var _current_abilities: Array = []
 var _current_items: Array = []
+
+# Pending activation (awaiting player confirm)
+var _pending_activation_unit: BattleUnit = null
 
 # Pending drag-move preview (not yet committed)
 var _has_pending_move: bool = false
@@ -104,6 +107,9 @@ func _init_subsystems(builder: MapBuilder) -> void:
 	_hud.finalize_move_pressed.connect(_on_finalize_move)
 	_hud.cancel_move_pressed.connect(_on_cancel_move)
 	_hud.unit_clicked.connect(_on_roster_unit_clicked)
+	_hud.back_to_menu_pressed.connect(_on_back_to_menu)
+	_hud.confirm_activation_pressed.connect(_on_confirm_activation)
+	_hud.cancel_activation_pressed.connect(_on_cancel_activation)
 
 	# Initial HUD state
 	_hud.update_roster(_state, null)
@@ -128,26 +134,38 @@ func get_drag_handler() -> DragHandler:
 
 func _enter_awaiting_activation() -> void:
 	_control_state = ControlState.AWAITING_ACTIVATION
+	_pending_activation_unit = null
 	_set_drag_enabled(false)
 	_overlay.clear()
+	_hud.set_targeting_mode(false)
 	_hud.hide_action_panel()
 	_hud.hide_unit_info()
-	_hud.set_targeting_mode(false)
 	_pawn_manager.clear_highlight()
+
+	if _check_match_over():
+		return
 
 	var team := RoundManager.current_team(_state)
 	if team.is_empty():
 		_enter_round_end()
 		return
 
+	# Get all eligible units (living + downed, not yet activated)
+	var all_eligible := _state.activatable_units(team)
+
+	# If no eligible units at all, skip this activation slot
+	if all_eligible.is_empty():
+		_state.current_index += 1
+		_enter_awaiting_activation()
+		return
+
 	# Auto-skip sleeping units for this team's activation slot
-	var available := _state.unactivated_units(team)
-	var selectable := available.filter(
+	var selectable := all_eligible.filter(
 		func(u: BattleUnit) -> bool: return not RoundManager.is_sleeping(u))
 
-	if selectable.is_empty() and not available.is_empty():
-		# All remaining unactivated units on this team are sleeping — skip one
-		var sleeping_unit: BattleUnit = available[0]
+	if selectable.is_empty() and not all_eligible.is_empty():
+		# All remaining living units on this team are sleeping — skip one
+		var sleeping_unit: BattleUnit = all_eligible[0]
 		var err := RoundManager.activate_unit(_state, sleeping_unit)
 		if not err.is_empty():
 			Log.error("BattleController", err)
@@ -182,7 +200,6 @@ func _enter_action_select() -> void:
 		_clear_pending_move()
 
 	_control_state = ControlState.ACTION_SELECT
-	_set_drag_enabled(true)
 	var unit: BattleUnit = _state.current_unit
 	if not unit:
 		return
@@ -191,18 +208,32 @@ func _enter_action_select() -> void:
 	_current_abilities = _resolver.all_abilities(unit)
 	_current_items = _get_usable_items(unit)
 
+	# Compute WP costs for usable items (resolve granted abilities)
+	var item_wp_costs := {}
+	for item in _current_items:
+		if item is ItemData and not item.granted_abilities.is_empty():
+			var ability: AbilityData = _resolver.resolve(unit, item.granted_abilities[0])
+			if ability:
+				item_wp_costs[item.id] = ability.wp_cost
+
 	_hud.show_unit_info(unit)
-	_hud.show_action_panel(unit, _current_abilities, _current_items, _must_reserve_move())
+	_hud.show_action_panel(unit, _current_abilities, _current_items, _must_reserve_move(), item_wp_costs)
 	_hud.set_targeting_mode(false)
 	_hud.set_finalize_enabled(false)
 	_hud.update_roster(_state, unit)
 	_pawn_manager.highlight_active(unit)
 
-	# Show movement overlay by default
-	_overlay.show_movement(
-		unit.position,
-		unit.stats.effective_move(),
-		unit.stats.effective("jump"))
+	# When AP is depleted or unit is downed, skip movement overlay and disable drag
+	if unit.ap_remaining <= 0 or unit.is_downed:
+		_set_drag_enabled(false)
+		_overlay.clear()
+	else:
+		_set_drag_enabled(true)
+		# Show movement overlay by default
+		_overlay.show_movement(
+			unit.position,
+			unit.stats.effective_move(),
+			unit.stats.effective("jump"))
 
 
 func _enter_targeting(action: int, ability_id: String = "", item_id: String = "") -> void:
@@ -227,7 +258,8 @@ func _enter_targeting(action: int, ability_id: String = "", item_id: String = ""
 				unit.stats.effective("jump"))
 		BattleHUD.ACTION_ATTACK:
 			var rng: int = unit.stats.effective("rng")
-			_overlay.show_targets(unit.position, rng)
+			var min_rng: int = 2 if rng > 1 else 1
+			_overlay.show_targets(unit.position, rng, min_rng)
 		BattleHUD.ACTION_ABILITY:
 			var ability := _find_ability(ability_id)
 			if ability:
@@ -251,23 +283,49 @@ func _enter_animating() -> void:
 
 
 func _enter_round_end() -> void:
-	_control_state = ControlState.ROUND_END
+	## Round complete — auto-advance to the next round.
+	_hud.append_log("--- Round %d complete ---" % _state.round_number)
+	_start_new_round()
+
+
+
+func _check_match_over() -> bool:
+	## Check if the match is over. Returns true if a winner was found.
+	var winner := _state.check_winner()
+	if not winner.is_empty():
+		_enter_match_over(winner)
+		return true
+	return false
+
+
+func _enter_match_over(winner: String) -> void:
+	_control_state = ControlState.MATCH_OVER
 	_set_drag_enabled(false)
+	_overlay.clear()
+	_hud.set_targeting_mode(false)
 	_hud.hide_action_panel()
 	_hud.hide_unit_info()
-	_hud.set_targeting_mode(false)
 	_pawn_manager.clear_highlight()
-	_hud.show_round_end_info(_state.round_number)
-	_hud.update_roster(_state, null)
-	_hud.append_log("--- Round %d complete ---" % _state.round_number)
+	var display_name := "Player A" if winner == "playerA" else "Player B"
+	_hud.show_match_over(display_name)
+	_hud.append_log("--- %s wins! ---" % display_name)
+
+
+func _on_back_to_menu() -> void:
+	get_tree().change_scene_to_file("res://scenes/draft/draft_scene.tscn")
 
 
 # --- Input handling ---
 
 func on_tile_selected(coord: Vector2i) -> void:
+	if _control_state == ControlState.MATCH_OVER:
+		return
 	_selected_tile = coord
 
 	if _control_state == ControlState.AWAITING_ACTIVATION:
+		# If there's a pending activation, clear it and try selecting the new tile
+		if _pending_activation_unit:
+			_clear_pending_activation()
 		_try_select_unit(coord)
 	elif _control_state == ControlState.TARGETING:
 		_execute_targeting(coord)
@@ -275,6 +333,8 @@ func on_tile_selected(coord: Vector2i) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not _state:
+		return
+	if _control_state == ControlState.MATCH_OVER:
 		return
 
 	if event.is_action_pressed("p4_next"):
@@ -292,11 +352,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("p4_wait"):
 		if _control_state == ControlState.ACTION_SELECT:
 			_do_wait()
-	elif event.is_action_pressed("p4_round"):
-		if _control_state == ControlState.ROUND_END:
-			_start_new_round()
 	elif event.is_action_pressed("ui_cancel"):
-		if _control_state == ControlState.TARGETING:
+		if _control_state == ControlState.AWAITING_ACTIVATION and _pending_activation_unit:
+			_clear_pending_activation()
+		elif _control_state == ControlState.TARGETING:
 			_cancel_targeting()
 	elif event.is_action_pressed("demo_clear"):
 		if _overlay:
@@ -342,15 +401,59 @@ func _on_item_selected(item_id: String) -> void:
 
 func _activate_next() -> void:
 	## Convenience shortcut (N key): picks first selectable (non-sleeping) unit.
+	## Prefers living units, falls back to downed units.
 	var team := RoundManager.current_team(_state)
-	var available := _state.unactivated_units(team)
+	var available := _state.activatable_units(team)
 	if available.is_empty():
 		return
-	# Pick first non-sleeping unit
+	# Prefer living, non-sleeping units
 	for u: BattleUnit in available:
-		if not RoundManager.is_sleeping(u):
-			_activate_chosen_unit(u)
+		if not u.is_downed and not RoundManager.is_sleeping(u):
+			_set_pending_activation(u)
 			return
+	# Fall back to downed units
+	for u: BattleUnit in available:
+		if u.is_downed:
+			_set_pending_activation(u)
+			return
+
+
+func _set_pending_activation(unit: BattleUnit) -> void:
+	## Set a unit as pending activation (preview before confirm).
+	_pending_activation_unit = unit
+	_pawn_manager.highlight_active(unit)
+	_hud.show_unit_info(unit)
+	_hud.set_confirm_activation_enabled(true, unit.character.display_name)
+	_hud.update_roster(_state, unit)
+
+
+func _clear_pending_activation() -> void:
+	## Clear pending activation and return to normal awaiting state.
+	_pending_activation_unit = null
+	_hud.set_confirm_activation_enabled(false)
+	_hud.hide_unit_info()
+
+	# Re-highlight all selectable units
+	var team := RoundManager.current_team(_state)
+	if not team.is_empty():
+		var selectable := _state.activatable_units(team).filter(
+			func(u: BattleUnit) -> bool:
+				return not RoundManager.is_sleeping(u))
+		_pawn_manager.highlight_selectable(selectable)
+		_hud.update_roster(_state, null,
+			selectable.map(func(u: BattleUnit) -> String: return u.character.id))
+
+
+func _on_confirm_activation() -> void:
+	if _pending_activation_unit:
+		var unit := _pending_activation_unit
+		_pending_activation_unit = null
+		_hud.set_confirm_activation_enabled(false)
+		_activate_chosen_unit(unit)
+
+
+func _on_cancel_activation() -> void:
+	_clear_pending_activation()
 
 
 func _activate_chosen_unit(unit: BattleUnit) -> void:
@@ -367,30 +470,30 @@ func _activate_chosen_unit(unit: BattleUnit) -> void:
 
 
 func _try_select_unit(coord: Vector2i) -> void:
-	## Handle tile click during AWAITING_ACTIVATION — activate the unit there.
+	## Handle tile click during AWAITING_ACTIVATION — set as pending activation.
 	var team := RoundManager.current_team(_state)
 	if team.is_empty():
 		return
 	var unit: BattleUnit = _state.unit_at(coord)
 	if not unit or unit.team != team or unit.is_activated:
 		return
-	if unit.is_downed or unit.current_hp <= 0:
+	if unit.current_hp <= 0 and not unit.is_downed:
 		return
 	if RoundManager.is_sleeping(unit):
 		return
-	_activate_chosen_unit(unit)
+	_set_pending_activation(unit)
 
 
 func _on_roster_unit_clicked(character_id: String) -> void:
-	## Handle roster sidebar click — activate the unit with matching character ID.
+	## Handle roster sidebar click — set as pending activation.
 	if _control_state != ControlState.AWAITING_ACTIVATION:
 		return
 	var team := RoundManager.current_team(_state)
 	if team.is_empty():
 		return
-	for u: BattleUnit in _state.unactivated_units(team):
+	for u: BattleUnit in _state.activatable_units(team):
 		if u.character.id == character_id and not RoundManager.is_sleeping(u):
-			_activate_chosen_unit(u)
+			_set_pending_activation(u)
 			return
 
 
@@ -458,7 +561,7 @@ func _do_attack(target_pos: Vector2i) -> void:
 		_pawn_manager.show_dice_roll(target_unit_pre, atk_def_roll, false)
 
 	if result.get("is_downed", false) and target_unit_pre:
-		_pawn_manager.down_pawn(target_unit_pre)
+		_delay_down_pawn(target_unit_pre)
 
 	# Update status markers for attacker and target
 	if target_unit_pre:
@@ -506,7 +609,7 @@ func _do_ability(target_pos: Vector2i) -> void:
 		if outcome.get("is_downed", false):
 			var downed_unit: BattleUnit = units_before.get(str(outcome["target"]))
 			if downed_unit:
-				_pawn_manager.down_pawn(downed_unit)
+				_delay_down_pawn(downed_unit)
 		elif outcome.get("revived", false):
 			var revived_unit: BattleUnit = units_before.get(str(outcome["target"]))
 			if revived_unit:
@@ -559,7 +662,7 @@ func _do_use_item(target_pos: Vector2i) -> void:
 		if outcome.get("is_downed", false):
 			var downed_unit: BattleUnit = units_before.get(str(outcome["target"]))
 			if downed_unit:
-				_pawn_manager.down_pawn(downed_unit)
+				_delay_down_pawn(downed_unit)
 		elif outcome.get("revived", false):
 			var revived_unit: BattleUnit = units_before.get(str(outcome["target"]))
 			if revived_unit:
@@ -598,7 +701,12 @@ func _do_wait() -> void:
 	var result := TurnActions.execute_wait(_state)
 	_hud.append_log("%s waits" % unit.character.display_name, "action_wait")
 	_overlay.clear()
-	RoundManager.end_activation(_state)
+	var removed := RoundManager.end_activation(_state)
+	if removed:
+		_pawn_manager.remove_pawn(removed)
+		_hud.append_log("%s has been permanently removed" % removed.character.display_name)
+	if _check_match_over():
+		return
 	_enter_awaiting_activation()
 
 
@@ -610,25 +718,24 @@ func _cancel_targeting() -> void:
 
 
 func _start_new_round() -> void:
-	var removed: Array = RoundManager.start_round(_state)
-	for u: BattleUnit in removed:
-		_pawn_manager.remove_pawn(u)
-		_hud.append_log("%s has been permanently removed" % u.character.display_name)
+	RoundManager.start_round(_state)
 	# Refresh status markers for all surviving units (durations may have expired)
 	for team in _state.parties.keys():
 		for unit: BattleUnit in _state.parties[team]:
 			if unit.current_hp > 0 or unit.is_downed:
 				_pawn_manager.update_status_markers(unit)
 	_hud.append_log("--- Round %d begins ---" % _state.round_number)
+	_hud.show_round_banner(_state.round_number)
 	_enter_awaiting_activation()
 
 
 func _check_end_activation_or_continue() -> void:
 	var unit: BattleUnit = _state.current_unit
-	if not unit or unit.ap_remaining <= 0:
-		if unit:
-			_hud.append_log("%s finished (0 AP)" % unit.character.display_name)
-		RoundManager.end_activation(_state)
+	if not unit:
+		var removed := RoundManager.end_activation(_state)
+		if removed:
+			_pawn_manager.remove_pawn(removed)
+			_hud.append_log("%s has been permanently removed" % removed.character.display_name)
 		_enter_awaiting_activation()
 	else:
 		_enter_action_select()
@@ -689,6 +796,15 @@ func _log_ability_result(result: Dictionary, ability_id: String = "") -> void:
 
 # --- Helpers ---
 
+func _delay_down_pawn(unit: BattleUnit) -> void:
+	## Delay the visual flip animation until after dice have fully animated.
+	## Game state (HP, is_downed) is already updated; only the visual flip is deferred.
+	get_tree().create_timer(DiceMarker.TOTAL_DURATION).timeout.connect(
+		func() -> void:
+			if is_instance_valid(_pawn_manager) and _pawn_manager.has_pawn(unit):
+				_pawn_manager.down_pawn(unit))
+
+
 func _make_unit(char_id: String) -> BattleUnit:
 	var c := GameData.get_character(char_id)
 	var fs := GameData.get_final_stats(char_id)
@@ -732,8 +848,9 @@ func _show_ability_overlay(unit: BattleUnit, ability: AbilityData) -> void:
 	if ability.ability_range == 0:
 		# Self-targeted — no overlay needed
 		return
-	# Reuse target overlay for ability range
-	_overlay.show_targets(unit.position, ability.ability_range)
+	# Ranged abilities (range > 1) cannot target adjacent hexes
+	var min_rng: int = 2 if ability.ability_range > 1 else 1
+	_overlay.show_targets(unit.position, ability.ability_range, min_rng)
 
 
 # --- Drag-and-drop movement ---

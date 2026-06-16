@@ -3,6 +3,7 @@
   "display_name": "Inspire",
   "type": "skill",
   "ap_cost": 1,
+  "wp_cost": 2,
   "range": 3,
   "area": { "shape": "burst", "radius": 1 },
   "effect": { "effect_type": "buff", "stat": "atk", "value": 2, "duration": 3 },

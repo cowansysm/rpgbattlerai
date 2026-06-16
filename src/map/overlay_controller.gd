@@ -18,12 +18,15 @@ func show_movement(start: Vector2i, move: int, jump: int) -> void:
 
 
 ## Show target overlay from origin with given range.
-func show_targets(origin: Vector2i, radius: int) -> void:
+## min_range excludes hexes closer than the minimum (default 1 = no exclusion).
+func show_targets(origin: Vector2i, radius: int, min_range: int = 1) -> void:
 	clear()
 	var mat_valid := OverlayMaterials.target_valid()
 	var mat_blocked := OverlayMaterials.target_blocked()
 	for c in RangeQuery.in_range(origin, radius, graph):
 		if c == origin:
+			continue
+		if Hex.distance(origin, c) < min_range:
 			continue
 		if LineOfSight.has_los(graph, origin, c):
 			_paint(c, mat_valid)

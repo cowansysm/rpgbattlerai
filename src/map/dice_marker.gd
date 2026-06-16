@@ -13,6 +13,7 @@ const QUAD_SIZE := CUBE_SIZE * 0.95
 const ROLL_DURATION := 2.0
 const HOLD_DURATION := 1.0
 const FADE_DURATION := 0.3
+const TOTAL_DURATION := ROLL_DURATION + HOLD_DURATION + FADE_DURATION
 
 const ATK_COLOR := Color(1.0, 0.85, 0.2)    # Gold
 const DEF_COLOR := Color(0.4, 0.75, 1.0)    # Light blue

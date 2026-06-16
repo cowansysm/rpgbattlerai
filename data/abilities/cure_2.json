@@ -3,6 +3,7 @@
   "display_name": "Cure 2",
   "type": "spell",
   "ap_cost": 2,
+  "wp_cost": 3,
   "range": 4,
   "area": {},
   "effect": { "effect_type": "heal", "value": 8 },

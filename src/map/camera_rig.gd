@@ -8,6 +8,7 @@ extends Node3D
 @export var zoom_max: float = 20.0
 @export var pan_speed: float = 8.0
 @export var zoom_step: float = 1.0
+@export var mouse_pan_speed: float = 0.02
 
 const YAW_ANGLES := [0.0, 90.0, 180.0, 270.0]
 const TWEEN_DURATION := 0.3
@@ -16,6 +17,8 @@ var _yaw_index: int = 0
 var _current_yaw_deg: float = 0.0	# Continuous yaw for smooth spherical interpolation
 var _camera: Camera3D
 var _tweening := false
+var _mmb_dragging: bool = false
+var _mmb_last_pos: Vector2 = Vector2.ZERO
 
 
 func _ready() -> void:
@@ -73,11 +76,14 @@ func zoom_by(delta: float) -> void:
 
 func pan(input_dir: Vector2, dt: float) -> void:
 	# Pan relative to the camera's yaw so WASD always feels correct.
+	_apply_pan(input_dir * pan_speed * dt)
+
+
+func _apply_pan(world_dir: Vector2) -> void:
 	var yaw_rad := deg_to_rad(_current_yaw_deg)
 	var forward := Vector3(-sin(yaw_rad), 0.0, -cos(yaw_rad))
 	var right := Vector3(cos(yaw_rad), 0.0, -sin(yaw_rad))
-	var move := (right * input_dir.x + forward * input_dir.y) * pan_speed * dt
-	position += move
+	position += right * world_dir.x + forward * world_dir.y
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -87,11 +93,21 @@ func _unhandled_input(event: InputEvent) -> void:
 		rotate_view(1)
 	elif event is InputEventMouseButton:
 		var mb := event as InputEventMouseButton
-		if mb.pressed:
+		if mb.button_index == MOUSE_BUTTON_MIDDLE:
+			_mmb_dragging = mb.pressed
+			_mmb_last_pos = mb.position
+			get_viewport().set_input_as_handled()
+		elif mb.pressed:
 			if mb.button_index == MOUSE_BUTTON_WHEEL_UP:
 				zoom_by(-zoom_step)
 			elif mb.button_index == MOUSE_BUTTON_WHEEL_DOWN:
 				zoom_by(zoom_step)
+	elif event is InputEventMouseMotion and _mmb_dragging:
+		var motion := event as InputEventMouseMotion
+		var delta := motion.position - _mmb_last_pos
+		_mmb_last_pos = motion.position
+		_apply_pan(Vector2(-delta.x, delta.y) * mouse_pan_speed)
+		get_viewport().set_input_as_handled()
 
 
 func _process(dt: float) -> void:

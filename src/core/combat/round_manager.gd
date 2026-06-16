@@ -3,27 +3,14 @@ extends RefCounted
 ## Manages the alternating activation round loop.
 ## Starts rounds, builds interleaved activation queues, advances through
 ## activations, and flips initiative at round end.
-## Round-start cleanup order: defend → buffs → statuses → unit reset.
+## Round-start cleanup order: buffs → statuses → unit reset.
+## Defend modifiers are cleared per-unit when activated (persist until next turn).
 ## Spec reference: phase4-spec.md §3.3, §4; phase5-spec.md §5.3
 
 static func start_round(state: MatchState) -> Array:
 	state.round_number += 1
 
-	# 0. Permanently remove downed units past grace period
-	var permanently_removed: Array = []
-	for team in state.parties.keys():
-		for u: BattleUnit in state.parties[team]:
-			if u.is_downed and (state.round_number - u.downed_round) >= 2:
-				u.is_downed = false
-				state.occupancy.erase(u.position)
-				permanently_removed.append(u)
-
-	# 1. Remove defend modifiers
-	for team in state.parties.keys():
-		for u: BattleUnit in state.living_units(team):
-			u.stats.remove_modifiers_by_source("defend")
-
-	# 2. Expire buff durations
+	# 1. Expire buff durations (defend modifiers are cleared per-unit on activation)
 	var expired_buffs: Array = []
 	for entry in state.buff_durations:
 		entry["remaining"] -= 1
@@ -34,7 +21,7 @@ static func start_round(state: MatchState) -> Array:
 	for e in expired_buffs:
 		state.buff_durations.erase(e)
 
-	# 3. Expire status durations
+	# 2. Expire status durations
 	for team in state.parties.keys():
 		for u: BattleUnit in state.living_units(team):
 			for s in u.status_effects:
@@ -42,26 +29,28 @@ static func start_round(state: MatchState) -> Array:
 			u.status_effects = u.status_effects.filter(
 				func(s: Dictionary) -> bool: return s["duration"] > 0)
 
-	# 4. Reset all living units for the new round
+	# 3. Reset all non-dead units for the new round (living + downed)
 	for team in state.parties.keys():
-		for u: BattleUnit in state.living_units(team):
-			u.is_activated = false
-			u.ap_remaining = u.base_ap
-			u.has_moved = false
+		for u: BattleUnit in state.parties[team]:
+			if u.current_hp > 0 or u.is_downed:
+				u.is_activated = false
+				u.has_moved = false
+				if not u.is_downed:
+					u.ap_remaining = u.base_ap
 
 	state.activation_queue = _build_queue(state)
 	state.current_index = 0
 	state.current_unit = null
 	state.phase = MatchState.Phase.AWAITING_ACTIVATION
 
-	return permanently_removed
+	return []
 
 
 static func _build_queue(state: MatchState) -> Array:
 	var init_team: String = state.initiative
 	var other_team: String = state.other_team(init_team)
-	var count_i: int = state.unactivated_units(init_team).size()
-	var count_o: int = state.unactivated_units(other_team).size()
+	var count_i: int = state.activatable_units(init_team).size()
+	var count_o: int = state.activatable_units(other_team).size()
 	var queue: Array = []
 	var i := 0
 	var o := 0
@@ -90,8 +79,11 @@ static func activate_unit(state: MatchState, unit: BattleUnit) -> String:
 		return "It is %s's turn to activate, not %s's" % [team, unit.team]
 	if unit.is_activated:
 		return "Unit '%s' is already activated this round" % unit.character.id
-	if unit.current_hp <= 0 or unit.is_downed:
-		return "Unit '%s' is downed" % unit.character.id
+	if unit.current_hp <= 0 and not unit.is_downed:
+		return "Unit '%s' is permanently removed" % unit.character.id
+
+	# Clear defend modifier when unit starts its activation (defend lasts until next turn)
+	unit.stats.remove_modifiers_by_source("defend")
 
 	state.current_unit = unit
 	unit.has_moved = false
@@ -100,9 +92,15 @@ static func activate_unit(state: MatchState, unit: BattleUnit) -> String:
 	return ""
 
 
-static func end_activation(state: MatchState) -> void:
+static func end_activation(state: MatchState) -> BattleUnit:
 	## End the current unit's activation and advance the queue.
+	## Returns the permanently removed unit if a downed unit was removed, else null.
+	var removed: BattleUnit = null
 	if state.current_unit:
+		if state.current_unit.is_downed:
+			removed = state.current_unit
+			removed.is_downed = false
+			state.occupancy.erase(removed.position)
 		state.current_unit.is_activated = true
 		state.current_unit.ap_remaining = 0
 		state.match_log.append_array(state.turn_log)
@@ -113,6 +111,7 @@ static func end_activation(state: MatchState) -> void:
 		_end_round(state)
 	else:
 		state.phase = MatchState.Phase.AWAITING_ACTIVATION
+	return removed
 
 
 static func _end_round(state: MatchState) -> void:

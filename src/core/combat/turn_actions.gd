@@ -60,8 +60,12 @@ static func execute_attack(state: MatchState, target_pos: Vector2i) -> Dictionar
 		return { "error": "Cannot attack friendly unit" }
 
 	var rng: int = unit.stats.effective("rng")
-	if RangeQuery.effective_range(unit.position, target_pos, state.graph) > rng:
+	var dist: int = RangeQuery.effective_range(unit.position, target_pos, state.graph)
+	if dist > rng:
 		return { "error": "Target out of range" }
+	# Ranged attacks (range > 1) cannot target adjacent hexes
+	if rng > 1 and dist < 2:
+		return { "error": "Target too close for ranged attack" }
 	if not LineOfSight.has_los(state.graph, unit.position, target_pos):
 		return { "error": "No line of sight to target" }
 
@@ -124,18 +128,26 @@ static func execute_ability(
 	if unit.ap_remaining < ability.ap_cost:
 		return { "error": "Not enough AP (need %d, have %d)" % [
 			ability.ap_cost, unit.ap_remaining] }
+	if ability.wp_cost > 0 and unit.current_wp < ability.wp_cost:
+		return { "error": "Not enough WP (need %d, have %d)" % [
+			ability.wp_cost, unit.current_wp] }
 
 	# Self-targeted abilities (range 0): target_pos must be caster position
 	if ability.ability_range == 0:
 		if target_pos != unit.position:
 			return { "error": "Self-targeted ability must target caster position" }
 	else:
-		if RangeQuery.effective_range(unit.position, target_pos, state.graph) > ability.ability_range:
+		var ability_dist: int = RangeQuery.effective_range(unit.position, target_pos, state.graph)
+		if ability_dist > ability.ability_range:
 			return { "error": "Target out of ability range" }
+		# Ranged abilities (range > 1) cannot target adjacent hexes
+		if ability.ability_range > 1 and ability_dist < 2:
+			return { "error": "Target too close for ranged ability" }
 		if not LineOfSight.has_los(state.graph, unit.position, target_pos):
 			return { "error": "No line of sight to target" }
 
 	unit.ap_remaining -= ability.ap_cost
+	unit.current_wp -= ability.wp_cost
 
 	# Resolve effect on affected units
 	var effect: Dictionary = ability.effect
@@ -213,7 +225,13 @@ static func execute_use_item(
 		if item and not item.granted_abilities.is_empty():
 			ability = _resolve_ability(state, unit, item.granted_abilities[0])
 
+	if ability and ability.wp_cost > 0 and unit.current_wp < ability.wp_cost:
+		return { "error": "Not enough WP (need %d, have %d)" % [
+			ability.wp_cost, unit.current_wp] }
+
 	unit.ap_remaining -= 1
+	if ability:
+		unit.current_wp -= ability.wp_cost
 
 	if ability:
 		# Resolve the item's granted ability effect

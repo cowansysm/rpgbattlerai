@@ -3,6 +3,7 @@
   "display_name": "Smoke Bomb",
   "type": "item",
   "ap_cost": 1,
+  "wp_cost": 1,
   "range": 2,
   "area": { "shape": "burst", "radius": 1 },
   "effect": { "effect_type": "status", "status_id": "blind", "duration": 2 },

@@ -18,7 +18,7 @@ static func _stub_terrain(id: String) -> TerrainProps:
 # --- Helpers ---
 
 func _make_unit(id: String, team: String, spd: int = 3, hp: int = 10,
-		atk: int = 2, rng: int = 1, def: int = 1) -> BattleUnit:
+		atk: int = 2, rng: int = 1, def: int = 1, wp: int = 0) -> BattleUnit:
 	var c := CharacterData.new()
 	c.id = id
 	c.display_name = id
@@ -31,6 +31,7 @@ func _make_unit(id: String, team: String, spd: int = 3, hp: int = 10,
 	sb.set_base("def", def)
 	sb.set_base("atk", atk)
 	sb.set_base("rng", rng)
+	sb.set_base("wp", wp)
 	var u := BattleUnit.from_character(c, sb)
 	u.team = team
 	return u
@@ -327,12 +328,14 @@ func _stub_ability_provider(unit: BattleUnit, ability_id: String) -> AbilityData
 		var a := AbilityData.new()
 		a.id = "fire_1"
 		a.ap_cost = 1
+		a.wp_cost = 2
 		a.ability_range = 3
 		return a
 	if ability_id == "fire_2" and "fire_2" in unit.character.abilities:
 		var a := AbilityData.new()
 		a.id = "fire_2"
 		a.ap_cost = 2
+		a.wp_cost = 3
 		a.ability_range = 4
 		return a
 	return null
@@ -346,7 +349,7 @@ func _ability_state() -> MatchState:
 		tiles.append(TileRecord.new(c.x, c.y, 0, "grass"))
 	map.tiles = tiles
 
-	var caster := _make_unit("caster", "playerA", 3, 12, 0, 0, 0)
+	var caster := _make_unit("caster", "playerA", 3, 12, 0, 0, 0, 10)
 	caster.character.abilities = ["fire_1", "fire_2"]
 	var target := _make_unit("target", "playerB")
 	target.position = Vector2i(2, 0)
@@ -410,6 +413,58 @@ func test_ability_records_action() -> void:
 	assert_eq(state.turn_log[0]["action"], "ability")
 	assert_eq(state.turn_log[0]["ability"], "fire_1")
 	assert_eq(state.turn_log[0]["ap_spent"], 1)
+
+
+# --- Willpower (WP) tests ---
+
+func test_ability_deducts_wp() -> void:
+	var state := _ability_state()
+	var wp_before: int = state.current_unit.current_wp
+	TurnActions.execute_ability(state, "fire_1", Vector2i(2, 0))
+	assert_eq(state.current_unit.current_wp, wp_before - 2)
+
+
+func test_ability_insufficient_wp_fails() -> void:
+	var state := _ability_state()
+	state.current_unit.current_wp = 1  # fire_1 costs 2 WP
+	var result := TurnActions.execute_ability(state, "fire_1", Vector2i(2, 0))
+	assert_true(result.has("error"), "ability with insufficient WP should fail")
+	assert_string_contains(result["error"], "WP")
+
+
+func test_attack_does_not_cost_wp() -> void:
+	var state := _adjacent_state()
+	state.current_unit.current_wp = 5
+	var wp_before: int = state.current_unit.current_wp
+	TurnActions.execute_attack(state, Vector2i(1, 0))
+	assert_eq(state.current_unit.current_wp, wp_before, "attack should not cost WP")
+
+
+func test_use_item_deducts_wp() -> void:
+	var state := _adjacent_state()
+	var unit := state.current_unit
+	unit.current_wp = 5
+	# Wire an item provider with a granted ability that costs WP
+	var smoke := ItemData.new()
+	smoke.id = "smoke_bomb_pouch"
+	smoke.slot = "accessory"
+	smoke.granted_abilities = ["smoke_bomb"]
+	unit.character.equipment = ["smoke_bomb_pouch"]
+	state.item_provider = func(id: String) -> ItemData:
+		if id == "smoke_bomb_pouch": return smoke
+		return null
+	var sb_ability := AbilityData.new()
+	sb_ability.id = "smoke_bomb"
+	sb_ability.ap_cost = 1
+	sb_ability.wp_cost = 1
+	sb_ability.ability_range = 2
+	sb_ability.effect = { "effect_type": "status", "status_id": "blind", "duration": 2 }
+	state.ability_provider = func(_u: BattleUnit, aid: String) -> AbilityData:
+		if aid == "smoke_bomb": return sb_ability
+		return null
+	var result := TurnActions.execute_use_item(state, "smoke_bomb_pouch", Vector2i(1, 0))
+	assert_false(result.has("error"), "use item should succeed: %s" % str(result))
+	assert_eq(unit.current_wp, 4, "WP should be deducted by item ability cost")
 
 
 # --- No active unit tests ---

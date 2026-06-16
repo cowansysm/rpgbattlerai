@@ -5,7 +5,7 @@
   "classes": ["white_mage"],
   "level": 4,
   "bp": 24,
-  "base_stats": { "spd": 2, "atk": 0, "rng": 1, "def": 0, "hp": 20, "jump": 2 },
+  "base_stats": { "spd": 2, "atk": 0, "rng": 1, "def": 0, "hp": 20, "jump": 2, "wp": 6 },
   "equipment": ["staff"],
   "abilities": []
 }

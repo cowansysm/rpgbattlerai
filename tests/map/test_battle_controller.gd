@@ -107,6 +107,9 @@ func _make_controller(state: MatchState) -> BattleController:
 	hud.finalize_move_pressed.connect(ctrl._on_finalize_move)
 	hud.cancel_move_pressed.connect(ctrl._on_cancel_move)
 	hud.unit_clicked.connect(ctrl._on_roster_unit_clicked)
+	hud.back_to_menu_pressed.connect(ctrl._on_back_to_menu)
+	hud.confirm_activation_pressed.connect(ctrl._on_confirm_activation)
+	hud.cancel_activation_pressed.connect(ctrl._on_cancel_activation)
 
 	ctrl._builder = builder
 
@@ -131,8 +134,15 @@ func test_activate_next_transitions_to_action_select() -> void:
 	ctrl._enter_awaiting_activation()
 	ctrl._activate_next()
 
+	# activate_next now sets pending — not yet in ACTION_SELECT
+	assert_eq(ctrl._control_state, BattleController.ControlState.AWAITING_ACTIVATION,
+		"should still be AWAITING_ACTIVATION until confirmed")
+	assert_not_null(ctrl._pending_activation_unit, "should have a pending unit")
+
+	ctrl._on_confirm_activation()
+
 	assert_eq(ctrl._control_state, BattleController.ControlState.ACTION_SELECT,
-		"should transition to ACTION_SELECT after activation")
+		"should transition to ACTION_SELECT after confirmation")
 	assert_not_null(state.current_unit, "should have a current unit")
 
 
@@ -142,6 +152,7 @@ func test_defend_executes_immediately() -> void:
 
 	ctrl._enter_awaiting_activation()
 	ctrl._activate_next()
+	ctrl._on_confirm_activation()
 
 	var unit := state.current_unit
 	var ap_before := unit.ap_remaining
@@ -157,6 +168,7 @@ func test_wait_ends_activation() -> void:
 
 	ctrl._enter_awaiting_activation()
 	ctrl._activate_next()
+	ctrl._on_confirm_activation()
 	ctrl._do_wait()
 
 	assert_eq(ctrl._control_state, BattleController.ControlState.AWAITING_ACTIVATION,
@@ -170,6 +182,7 @@ func test_targeting_cancel_returns_to_action_select() -> void:
 
 	ctrl._enter_awaiting_activation()
 	ctrl._activate_next()
+	ctrl._on_confirm_activation()
 	ctrl._enter_targeting(BattleHUD.ACTION_MOVE)
 
 	assert_eq(ctrl._control_state, BattleController.ControlState.TARGETING)
@@ -186,16 +199,19 @@ func test_full_round_cycle() -> void:
 
 	ctrl._enter_awaiting_activation()
 
-	# Activate and wait for both units
+	# Activate and wait for both units (select + confirm + wait)
 	ctrl._activate_next()
+	ctrl._on_confirm_activation()
 	ctrl._do_wait()
 
 	ctrl._activate_next()
+	ctrl._on_confirm_activation()
 	ctrl._do_wait()
 
-	# Should be at round end
-	assert_eq(ctrl._control_state, BattleController.ControlState.ROUND_END,
-		"after all units wait, should be at ROUND_END")
+	# Rounds auto-advance — should be in AWAITING_ACTIVATION for round 2
+	assert_eq(ctrl._control_state, BattleController.ControlState.AWAITING_ACTIVATION,
+		"after all units wait, round should auto-advance to AWAITING_ACTIVATION")
+	assert_eq(state.round_number, 2, "round should have advanced to 2")
 
 
 func test_start_new_round_transitions() -> void:
@@ -203,20 +219,30 @@ func test_start_new_round_transitions() -> void:
 	var ctrl := _make_controller(state)
 
 	ctrl._enter_awaiting_activation()
+	assert_eq(state.round_number, 1, "should start at round 1")
 
-	# Complete the round
+	# Complete the round (select + confirm + wait for each) — auto-advances
 	ctrl._activate_next()
+	ctrl._on_confirm_activation()
 	ctrl._do_wait()
 	ctrl._activate_next()
+	ctrl._on_confirm_activation()
 	ctrl._do_wait()
 
-	assert_eq(ctrl._control_state, BattleController.ControlState.ROUND_END)
-
-	# Start new round
-	ctrl._start_new_round()
+	# Round auto-advanced
 	assert_eq(ctrl._control_state, BattleController.ControlState.AWAITING_ACTIVATION,
-		"new round should return to AWAITING_ACTIVATION")
+		"new round should auto-advance to AWAITING_ACTIVATION")
 	assert_eq(state.round_number, 2, "round number should increment")
+
+	# Complete round 2 — should auto-advance again
+	ctrl._activate_next()
+	ctrl._on_confirm_activation()
+	ctrl._do_wait()
+	ctrl._activate_next()
+	ctrl._on_confirm_activation()
+	ctrl._do_wait()
+
+	assert_eq(state.round_number, 3, "round number should increment again")
 
 
 func test_drag_move_creates_pending_preview() -> void:
@@ -225,6 +251,7 @@ func test_drag_move_creates_pending_preview() -> void:
 
 	ctrl._enter_awaiting_activation()
 	ctrl._activate_next()
+	ctrl._on_confirm_activation()
 
 	var unit := state.current_unit
 	assert_not_null(unit)
@@ -249,6 +276,7 @@ func test_finalize_move_commits() -> void:
 
 	ctrl._enter_awaiting_activation()
 	ctrl._activate_next()
+	ctrl._on_confirm_activation()
 
 	var unit := state.current_unit
 	assert_not_null(unit)
@@ -271,6 +299,7 @@ func test_cancel_move_reverts() -> void:
 
 	ctrl._enter_awaiting_activation()
 	ctrl._activate_next()
+	ctrl._on_confirm_activation()
 
 	var unit := state.current_unit
 	assert_not_null(unit)
@@ -295,6 +324,7 @@ func test_must_reserve_move_blocks_at_1ap() -> void:
 
 	ctrl._enter_awaiting_activation()
 	ctrl._activate_next()
+	ctrl._on_confirm_activation()
 
 	var unit := state.current_unit
 	assert_not_null(unit)
@@ -312,6 +342,7 @@ func test_after_move_no_reserve() -> void:
 
 	ctrl._enter_awaiting_activation()
 	ctrl._activate_next()
+	ctrl._on_confirm_activation()
 
 	var unit := state.current_unit
 	assert_not_null(unit)
@@ -338,12 +369,19 @@ func test_tile_click_activates_unit() -> void:
 	var unit: BattleUnit = available[0]
 	var pos := unit.position
 
-	# Simulate tile click at that unit's position
+	# Simulate tile click — sets pending, not yet activated
 	ctrl.on_tile_selected(pos)
 
+	assert_eq(ctrl._control_state, BattleController.ControlState.AWAITING_ACTIVATION,
+		"tile click should set pending, not activate yet")
+	assert_eq(ctrl._pending_activation_unit, unit, "clicked unit should be pending")
+
+	# Confirm activation
+	ctrl._on_confirm_activation()
+
 	assert_eq(ctrl._control_state, BattleController.ControlState.ACTION_SELECT,
-		"clicking own unit tile should transition to ACTION_SELECT")
-	assert_eq(state.current_unit, unit, "clicked unit should be current_unit")
+		"confirm should transition to ACTION_SELECT")
+	assert_eq(state.current_unit, unit, "confirmed unit should be current_unit")
 
 
 func test_tile_click_wrong_team_ignored() -> void:
@@ -389,8 +427,15 @@ func test_activate_next_still_works() -> void:
 	ctrl._enter_awaiting_activation()
 	ctrl._activate_next()
 
+	assert_not_null(ctrl._pending_activation_unit,
+		"N-key should set pending activation unit")
+	assert_eq(ctrl._control_state, BattleController.ControlState.AWAITING_ACTIVATION,
+		"should still be AWAITING until confirmed")
+
+	ctrl._on_confirm_activation()
+
 	assert_eq(ctrl._control_state, BattleController.ControlState.ACTION_SELECT,
-		"N-key shortcut should still activate first available unit")
+		"after confirm, should be in ACTION_SELECT")
 	assert_not_null(state.current_unit, "should have a current unit")
 
 
@@ -405,9 +450,156 @@ func test_roster_click_activates_unit() -> void:
 	assert_false(available.is_empty())
 	var unit: BattleUnit = available[0]
 
-	# Simulate roster click via signal handler
+	# Simulate roster click — sets pending
 	ctrl._on_roster_unit_clicked(unit.character.id)
 
+	assert_eq(ctrl._pending_activation_unit, unit, "roster click should set pending")
+	assert_eq(ctrl._control_state, BattleController.ControlState.AWAITING_ACTIVATION,
+		"should still be AWAITING until confirmed")
+
+	# Confirm activation
+	ctrl._on_confirm_activation()
+
 	assert_eq(ctrl._control_state, BattleController.ControlState.ACTION_SELECT,
-		"roster click should transition to ACTION_SELECT")
-	assert_eq(state.current_unit, unit, "clicked roster unit should be current_unit")
+		"confirm should transition to ACTION_SELECT")
+	assert_eq(state.current_unit, unit, "confirmed roster unit should be current_unit")
+
+
+func test_cancel_activation_clears_pending() -> void:
+	var state := _make_state()
+	var ctrl := _make_controller(state)
+
+	ctrl._enter_awaiting_activation()
+	ctrl._activate_next()
+
+	assert_not_null(ctrl._pending_activation_unit, "should have pending unit")
+
+	ctrl._on_cancel_activation()
+
+	assert_eq(ctrl._pending_activation_unit, null, "cancel should clear pending unit")
+	assert_eq(ctrl._control_state, BattleController.ControlState.AWAITING_ACTIVATION,
+		"should remain in AWAITING_ACTIVATION after cancel")
+	assert_eq(state.current_unit, null, "no unit should be activated")
+
+
+func test_zero_ap_stays_in_action_select() -> void:
+	var state := _make_state()
+	var ctrl := _make_controller(state)
+
+	ctrl._enter_awaiting_activation()
+	ctrl._activate_next()
+	ctrl._on_confirm_activation()
+
+	var unit := state.current_unit
+	assert_not_null(unit)
+	unit.ap_remaining = 0
+
+	ctrl._check_end_activation_or_continue()
+
+	assert_eq(ctrl._control_state, BattleController.ControlState.ACTION_SELECT,
+		"0 AP should stay in ACTION_SELECT for explicit End Turn")
+	assert_not_null(state.current_unit, "unit should still be current")
+
+
+func test_match_over_when_team_eliminated() -> void:
+	var state := _make_state()
+	var ctrl := _make_controller(state)
+
+	# Eliminate all playerB units
+	for unit: BattleUnit in state.parties["playerB"]:
+		unit.current_hp = 0
+		unit.is_downed = false
+
+	assert_eq(state.check_winner(), "playerA", "playerA should win when playerB has no viable units")
+
+
+func test_no_winner_while_downed_units_remain() -> void:
+	var state := _make_state()
+	var ctrl := _make_controller(state)
+
+	# Down all playerB units but don't eliminate them
+	for unit: BattleUnit in state.parties["playerB"]:
+		unit.current_hp = 0
+		unit.is_downed = true
+
+	assert_eq(state.check_winner(), "", "no winner while downed units still exist")
+
+
+func test_check_winner_empty_when_both_alive() -> void:
+	var state := _make_state()
+	assert_eq(state.check_winner(), "", "no winner when both teams have living units")
+
+
+func test_downed_unit_can_be_activated() -> void:
+	var state := _make_state()
+	var ctrl := _make_controller(state)
+
+	ctrl._enter_awaiting_activation()
+
+	# Down the current team's unit
+	var team := RoundManager.current_team(state)
+	var units := state.activatable_units(team)
+	assert_false(units.is_empty())
+	var unit: BattleUnit = units[0]
+	unit.current_hp = 0
+	unit.is_downed = true
+
+	# Re-enter to pick up the downed state
+	ctrl._enter_awaiting_activation()
+
+	# Should be able to select the downed unit via tile click
+	ctrl.on_tile_selected(unit.position)
+	assert_eq(ctrl._pending_activation_unit, unit,
+		"downed unit should be selectable via tile click")
+
+	# Confirm activation
+	ctrl._on_confirm_activation()
+	assert_eq(ctrl._control_state, BattleController.ControlState.ACTION_SELECT,
+		"downed unit should enter ACTION_SELECT")
+	assert_eq(state.current_unit, unit, "downed unit should be current_unit")
+
+
+func test_downed_unit_end_turn_removes() -> void:
+	var state := _make_state()
+	var ctrl := _make_controller(state)
+
+	ctrl._enter_awaiting_activation()
+
+	var team := RoundManager.current_team(state)
+	var units := state.activatable_units(team)
+	var unit: BattleUnit = units[0]
+	unit.current_hp = 0
+	unit.is_downed = true
+
+	ctrl._enter_awaiting_activation()
+	ctrl.on_tile_selected(unit.position)
+	ctrl._on_confirm_activation()
+
+	# End the downed unit's turn (End Turn / Wait)
+	ctrl._do_wait()
+
+	# Unit should have been removed (is_downed false, permanently dead)
+	assert_false(unit.is_downed, "downed unit should be permanently removed after end turn")
+	assert_eq(unit.current_hp, 0, "removed unit should have 0 HP")
+
+
+func test_activate_next_prefers_living_over_downed() -> void:
+	var state := _make_state()
+	var ctrl := _make_controller(state)
+
+	ctrl._enter_awaiting_activation()
+
+	var team := RoundManager.current_team(state)
+	var units := state.activatable_units(team)
+	# If there's a living unit, activate_next should prefer it
+	var has_living := false
+	for u: BattleUnit in units:
+		if not u.is_downed:
+			has_living = true
+			break
+
+	if has_living:
+		ctrl._activate_next()
+		assert_not_null(ctrl._pending_activation_unit)
+		assert_false(ctrl._pending_activation_unit.is_downed,
+			"activate_next should prefer living units")

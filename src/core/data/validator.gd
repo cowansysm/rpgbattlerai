@@ -54,6 +54,8 @@ static func validate_ability(d: Dictionary) -> Array[String]:
 			e.append_array(validate_ability_effect(d["effect"], str(d.get("id", "?"))))
 	if d.has("ap_cost") and int(d["ap_cost"]) < 0:
 		e.append("ability '%s' has negative ap_cost" % d.get("id", "?"))
+	if d.has("wp_cost") and int(d["wp_cost"]) < 0:
+		e.append("ability '%s' has negative wp_cost" % d.get("id", "?"))
 	return e
 
 

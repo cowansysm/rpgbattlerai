@@ -9,6 +9,7 @@ extends Resource
 @export var display_name: String = ""
 @export var type: String = ""
 @export var ap_cost: int = 1
+@export var wp_cost: int = 0
 @export var ability_range: int = 0
 @export var area: Dictionary = {}
 @export var effect: Dictionary = {}

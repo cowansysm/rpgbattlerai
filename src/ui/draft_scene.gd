@@ -23,7 +23,6 @@ var _bp_label: Label
 var _count_label: Label
 var _tier_info_label: Label
 var _roster_grid: GridContainer
-var _selected_list: VBoxContainer
 var _confirm_btn: Button
 var _map_label: Label
 var _summary_a: VBoxContainer
@@ -131,18 +130,6 @@ func _build_ui() -> void:
 
 	_draft_panel.add_child(_spacer(12))
 
-	# Selected list label
-	var selected_label := Label.new()
-	selected_label.text = "Your Party"
-	_draft_panel.add_child(selected_label)
-
-	_draft_panel.add_child(_spacer(4))
-
-	_selected_list = VBoxContainer.new()
-	_draft_panel.add_child(_selected_list)
-
-	_draft_panel.add_child(_spacer(12))
-
 	# Confirm button
 	_confirm_btn = Button.new()
 	_confirm_btn.text = "Confirm Party"
@@ -213,7 +200,6 @@ func _show_draft(player_name: String, draft: PartyDraft) -> void:
 	_player_label.text = "%s — Draft Your Party" % player_name
 	_tier_info_label.text = _tier_id.capitalize()
 	_update_roster_grid()
-	_update_selected_list()
 	_update_info_bar()
 	_confirm_btn.disabled = true
 
@@ -280,7 +266,6 @@ func _on_character_clicked(character_id: String) -> void:
 			Log.info("DraftScene", err)
 			return
 	_update_roster_grid()
-	_update_selected_list()
 	_update_info_bar()
 
 
@@ -391,26 +376,6 @@ func _update_roster_grid() -> void:
 			card.add_child(ability_row)
 
 		_roster_grid.add_child(card)
-
-
-func _update_selected_list() -> void:
-	for child in _selected_list.get_children():
-		child.queue_free()
-
-	for id in _current_draft.selected_ids():
-		var c: CharacterData = GameData.get_character(id)
-		if not c:
-			continue
-		var hbox := HBoxContainer.new()
-		var label := Label.new()
-		label.text = "%s (%d BP)" % [c.display_name, c.bp]
-		label.size_flags_horizontal = SIZE_EXPAND_FILL
-		var remove_btn := Button.new()
-		remove_btn.text = "X"
-		remove_btn.pressed.connect(_on_character_clicked.bind(id))
-		hbox.add_child(label)
-		hbox.add_child(remove_btn)
-		_selected_list.add_child(hbox)
 
 
 func _update_info_bar() -> void:

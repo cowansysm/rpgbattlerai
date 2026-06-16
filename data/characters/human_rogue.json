@@ -5,7 +5,7 @@
   "classes": ["rogue"],
   "level": 3,
   "bp": 16,
-  "base_stats": { "spd": 4, "atk": 2, "rng": 1, "def": 1, "hp": 17, "jump": 2 },
+  "base_stats": { "spd": 4, "atk": 2, "rng": 1, "def": 1, "hp": 17, "jump": 2, "wp": 5 },
   "equipment": ["daggers", "light_armor", "smoke_bomb_pouch"],
   "abilities": []
 }
