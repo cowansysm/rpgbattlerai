@@ -500,7 +500,7 @@ func test_defend_persists_until_next_activation() -> void:
 
 	var base_def: int = u.stats.base("def")
 	TurnActions.execute_defend(state)
-	assert_eq(u.stats.effective("def"), base_def + 2)
+	assert_eq(u.stats.effective("def"), base_def + 3)
 
 	TurnActions.execute_wait(state)
 	RoundManager.end_activation(state)
@@ -515,11 +515,17 @@ func test_defend_persists_until_next_activation() -> void:
 
 	# Defend persists through round start
 	RoundManager.start_round(state)
-	assert_eq(u.stats.effective("def"), base_def + 2,
+	assert_eq(u.stats.effective("def"), base_def + 3,
 		"defend should persist through round start")
 
 	# Defend cleared when unit activates again
 	t = RoundManager.current_team(state)
+	if t != u.team:
+		# Skip other team's activation to reach our unit's turn
+		var skip_u: BattleUnit = state.unactivated_units(t)[0]
+		RoundManager.activate_unit(state, skip_u)
+		TurnActions.execute_wait(state)
+		RoundManager.end_activation(state)
 	RoundManager.activate_unit(state, u)
 	assert_eq(u.stats.effective("def"), base_def,
 		"defend should be removed on next activation")

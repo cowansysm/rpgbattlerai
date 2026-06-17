@@ -68,6 +68,42 @@ func _graph_with_rocks() -> HexGraph:
 	return g
 
 
+# --- Helper: build a staircase graph for cumulative jump tests ---
+# Tiles: (0,0) elev 0 → (1,0) elev 1 → (2,0) elev 2 → (3,0) elev 3
+# Each step is +1 elevation, so cumulative climb = number of steps taken.
+
+func _graph_staircase() -> HexGraph:
+	var map := MapData.new()
+	map.id = "test_staircase"
+	var tiles: Array[TileRecord] = []
+	tiles.append(TileRecord.new(0, 0, 0, "grass"))
+	tiles.append(TileRecord.new(1, 0, 1, "grass"))
+	tiles.append(TileRecord.new(2, 0, 2, "grass"))
+	tiles.append(TileRecord.new(3, 0, 3, "grass"))
+	map.tiles = tiles
+	var g := HexGraph.new()
+	g.build(map, _stub_terrain)
+	return g
+
+
+# --- Helper: build a valley graph for descent tests ---
+# Tiles: (0,0) elev 2 → (1,0) elev 1 → (2,0) elev 0 → (3,0) elev 1
+# Going down counts toward jump budget same as going up.
+
+func _graph_valley() -> HexGraph:
+	var map := MapData.new()
+	map.id = "test_valley"
+	var tiles: Array[TileRecord] = []
+	tiles.append(TileRecord.new(0, 0, 2, "grass"))
+	tiles.append(TileRecord.new(1, 0, 1, "grass"))
+	tiles.append(TileRecord.new(2, 0, 0, "grass"))
+	tiles.append(TileRecord.new(3, 0, 1, "grass"))
+	map.tiles = tiles
+	var g := HexGraph.new()
+	g.build(map, _stub_terrain)
+	return g
+
+
 # --- Reachable set tests ---
 
 func test_reachable_flat_open() -> void:
@@ -125,6 +161,60 @@ func test_rough_terrain_costs_more() -> void:
 	assert_false(reach.has(Vector2i(1, 0)), "brush (cost 2) unreachable with budget 1")
 	var reach2 := Movement.reachable(g, Vector2i(0, 0), 2, 99)
 	assert_true(reach2.has(Vector2i(1, 0)), "brush reachable with budget 2")
+
+
+# --- Cumulative jump budget tests ---
+
+func test_cumulative_jump_blocks_multi_step_climb() -> void:
+	# Staircase: (0,0)→(1,0)→(2,0) each step +1 elev. Total = 2.
+	# Jump budget of 1 should block reaching (2,0) even though each step is only 1.
+	var g := _graph_staircase()
+	var reach := Movement.reachable(g, Vector2i(0, 0), 10, 1)
+	assert_true(reach.has(Vector2i(1, 0)), "first step (cum=1) should be reachable with jump 1")
+	assert_false(reach.has(Vector2i(2, 0)), "second step (cum=2) should be blocked with jump 1")
+
+
+func test_cumulative_jump_allows_within_total_budget() -> void:
+	# Same staircase, jump=3 allows reaching all tiles (cum max = 3).
+	var g := _graph_staircase()
+	var reach := Movement.reachable(g, Vector2i(0, 0), 10, 3)
+	assert_true(reach.has(Vector2i(1, 0)), "step 1 (cum=1) reachable with jump 3")
+	assert_true(reach.has(Vector2i(2, 0)), "step 2 (cum=2) reachable with jump 3")
+	assert_true(reach.has(Vector2i(3, 0)), "step 3 (cum=3) reachable with jump 3")
+
+
+func test_cumulative_jump_counts_descent() -> void:
+	# Valley: (0,0) elev 2 → (1,0) elev 1 → (2,0) elev 0. Each step is -1 (abs 1).
+	# Cumulative = 2 after two steps. Jump=1 should block (2,0).
+	var g := _graph_valley()
+	var reach := Movement.reachable(g, Vector2i(0, 0), 10, 1)
+	assert_true(reach.has(Vector2i(1, 0)), "first descent (cum=1) reachable with jump 1")
+	assert_false(reach.has(Vector2i(2, 0)), "second descent (cum=2) blocked with jump 1")
+
+
+func test_cumulative_jump_up_and_down() -> void:
+	# Valley: (0,0) elev 2 → (1,0) elev 1 → (2,0) elev 0 → (3,0) elev 1.
+	# To reach (3,0): down 1, down 1, up 1 = cumulative 3. Jump=2 should block it.
+	var g := _graph_valley()
+	var reach := Movement.reachable(g, Vector2i(0, 0), 10, 2)
+	assert_true(reach.has(Vector2i(2, 0)), "two descents (cum=2) reachable with jump 2")
+	assert_false(reach.has(Vector2i(3, 0)), "descent+ascent (cum=3) blocked with jump 2")
+
+
+func test_path_cumulative_jump_staircase() -> void:
+	# Path to (2,0) on staircase with jump=1 should be empty (cumulative 2 > 1).
+	var g := _graph_staircase()
+	var p := Movement.path(g, Vector2i(0, 0), Vector2i(2, 0), 1)
+	assert_eq(p.size(), 0, "path up staircase should be empty when cumulative elev exceeds jump")
+
+
+func test_path_cumulative_jump_staircase_allowed() -> void:
+	# Path to (2,0) on staircase with jump=2 should succeed.
+	var g := _graph_staircase()
+	var p := Movement.path(g, Vector2i(0, 0), Vector2i(2, 0), 2)
+	assert_true(p.size() >= 2, "path should exist with sufficient jump budget")
+	assert_eq(p[0], Vector2i(0, 0), "path starts at origin")
+	assert_eq(p[p.size() - 1], Vector2i(2, 0), "path ends at goal")
 
 
 # --- Two-tier tests ---

@@ -45,13 +45,13 @@ func test_reference_resolution() -> void:
 
 
 func test_derived_stats_computed() -> void:
-	# Human Archer: base spd:3 + human(0) + archer(rng:1) → spd:3, rng:3
+	# Human Archer: base spd:10 + human(0) + archer(rng:1) → spd:10, rng:3
 	var sb := _pipeline.get_final_stats("human_archer")
 	assert_not_null(sb, "human_archer should have final_stats")
-	assert_eq(sb.effective("spd"), 3, "spd: 3 base, no race/class modifier")
+	assert_eq(sb.effective("spd"), 10, "spd: 10 base, no race/class modifier")
 	assert_eq(sb.effective("rng"), 3, "rng: 2 base + 1 archer")
-	assert_eq(sb.effective("hp"), 16, "hp: 16 base, no modifiers")
-	assert_eq(sb.effective_move(), 3, "move == spd")
+	assert_eq(sb.effective("hp"), 42, "hp: 42 base, no modifiers")
+	assert_eq(sb.effective_move(), 10, "move == spd")
 
 
 func test_battle_unit_from_loaded_character() -> void:

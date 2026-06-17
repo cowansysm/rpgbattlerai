@@ -62,6 +62,47 @@ func test_clean_set_passes() -> void:
 	assert_eq(errors.size(), 0, "clean set should have no ref errors")
 
 
+func test_dangling_required_class_ref_detected() -> void:
+	var knight := ClassData.new()
+	knight.id = "knight"
+	knight.granted_abilities = [] as Array[String]
+	knight.equipment_access = [] as Array[String]
+	knight.required_classes = [["ghost_class", 2]]
+	var registries := {
+		"races": EntityRegistry.new(),
+		"classes": _make_registry_with([knight]),
+		"abilities": EntityRegistry.new(),
+		"items": EntityRegistry.new(),
+		"characters": EntityRegistry.new(),
+		"maps": EntityRegistry.new(),
+	}
+	var errors := Validator.validate_references(registries)
+	assert_true(errors.size() > 0, "should detect dangling required_class ref")
+	assert_true(errors[0].find("unknown class") >= 0)
+
+
+func test_valid_required_class_ref_passes() -> void:
+	var fighter := ClassData.new()
+	fighter.id = "fighter"
+	fighter.granted_abilities = [] as Array[String]
+	fighter.equipment_access = [] as Array[String]
+	var knight := ClassData.new()
+	knight.id = "knight"
+	knight.granted_abilities = [] as Array[String]
+	knight.equipment_access = [] as Array[String]
+	knight.required_classes = [["fighter", 2]]
+	var registries := {
+		"races": EntityRegistry.new(),
+		"classes": _make_registry_with([fighter, knight]),
+		"abilities": EntityRegistry.new(),
+		"items": EntityRegistry.new(),
+		"characters": EntityRegistry.new(),
+		"maps": EntityRegistry.new(),
+	}
+	var errors := Validator.validate_references(registries)
+	assert_eq(errors.size(), 0, "valid required_class ref should pass")
+
+
 # --- Integration tests (fixture directories) ---
 
 func test_fixture_valid_set_passes_referential() -> void:

@@ -26,18 +26,20 @@ func run(base_path: String = "res://data") -> Array[String]:
 
 
 ## Loads all entity types with structural validation. Returns accumulated errors.
+## Uses consolidated single-file format (array-of-objects JSON).
+## Maps still load from a directory since each map file is large.
 func _load_all(base_path: String) -> Array[String]:
 	var errors: Array[String] = []
-	errors.append_array(races.load_validated(
-		base_path.path_join("races"), Validator.validate_race, DataFactory.make_race))
-	errors.append_array(classes.load_validated(
-		base_path.path_join("classes"), Validator.validate_class, DataFactory.make_class))
-	errors.append_array(abilities.load_validated(
-		base_path.path_join("abilities"), Validator.validate_ability, DataFactory.make_ability))
-	errors.append_array(items.load_validated(
-		base_path.path_join("items"), Validator.validate_item, DataFactory.make_item))
-	errors.append_array(characters.load_validated(
-		base_path.path_join("characters"), Validator.validate_character, DataFactory.make_character))
+	errors.append_array(races.load_validated_file(
+		base_path.path_join("races.json"), Validator.validate_race, DataFactory.make_race))
+	errors.append_array(classes.load_validated_file(
+		base_path.path_join("classes.json"), Validator.validate_class, DataFactory.make_class))
+	errors.append_array(abilities.load_validated_file(
+		base_path.path_join("abilities.json"), Validator.validate_ability, DataFactory.make_ability))
+	errors.append_array(items.load_validated_file(
+		base_path.path_join("items.json"), Validator.validate_item, DataFactory.make_item))
+	errors.append_array(characters.load_validated_file(
+		base_path.path_join("characters.json"), Validator.validate_character, DataFactory.make_character))
 	errors.append_array(maps.load_validated(
 		base_path.path_join("maps"), Validator.validate_map, DataFactory.make_map))
 	errors.append_array(terrains.load_from(base_path.path_join("terrain.json")))

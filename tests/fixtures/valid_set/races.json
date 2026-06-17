@@ -1,0 +1,8 @@
+[
+  {
+    "id": "test_race",
+    "name": "Test Race",
+    "stats": { "spd": 1 },
+    "flavor": "A test race."
+  }
+]

@@ -87,7 +87,7 @@ static func execute_attack(state: MatchState, target_pos: Vector2i) -> Dictionar
 	var weapon_power: int = CombatResolver.get_weapon_power(unit, state.item_provider)
 	var attacker_elev: int = state.graph.elevation(unit.position)
 	var target_elev: int = state.graph.elevation(target_pos)
-	var target_cover: int = state.graph.terrain_props(target_pos).cover
+	var target_cover: int = state.graph.effective_cover(target_pos)
 	var is_ranged: bool = rng > 1
 
 	unit.ap_remaining -= 1
@@ -140,9 +140,6 @@ static func execute_ability(
 		var ability_dist: int = RangeQuery.effective_range(unit.position, target_pos, state.graph)
 		if ability_dist > ability.ability_range:
 			return { "error": "Target out of ability range" }
-		# Ranged abilities (range > 1) cannot target adjacent hexes
-		if ability.ability_range > 1 and ability_dist < 2:
-			return { "error": "Target too close for ranged ability" }
 		if not LineOfSight.has_los(state.graph, unit.position, target_pos):
 			return { "error": "No line of sight to target" }
 
@@ -152,7 +149,7 @@ static func execute_ability(
 	# Resolve effect on affected units
 	var effect: Dictionary = ability.effect
 	var effect_type: String = str(effect.get("effect_type", ""))
-	var affected: Array = _collect_affected_units(state, target_pos, ability.area)
+	var affected: Array = _collect_affected_units(state, unit.position, target_pos, ability.area)
 
 	var outcomes: Array = []
 	for affected_unit: BattleUnit in affected:
@@ -179,13 +176,13 @@ static func execute_defend(state: MatchState) -> Dictionary:
 	if unit.ap_remaining < 1:
 		return { "error": "Not enough AP" }
 
-	unit.stats.push_modifier(StatModifier.new("def", 2, "defend"))
+	unit.stats.push_modifier(StatModifier.new("def", 3, "defend"))
 	unit.ap_remaining -= 1
 
 	var record := {
 		"action": "defend",
 		"actor": unit.character.id,
-		"modifier": "+2 DEF",
+		"modifier": "+3 DEF",
 	}
 	state.turn_log.append(record)
 	return record
@@ -237,7 +234,7 @@ static func execute_use_item(
 		# Resolve the item's granted ability effect
 		var effect: Dictionary = ability.effect
 		var effect_type: String = str(effect.get("effect_type", ""))
-		var affected: Array = _collect_affected_units(state, target_pos, ability.area)
+		var affected: Array = _collect_affected_units(state, unit.position, target_pos, ability.area)
 
 		var outcomes: Array = []
 		for affected_unit: BattleUnit in affected:
@@ -284,26 +281,44 @@ static func _handle_downing(state: MatchState, unit: BattleUnit) -> void:
 
 
 static func _collect_affected_units(
-	state: MatchState, target_pos: Vector2i, area: Dictionary
+	state: MatchState, caster_pos: Vector2i, target_pos: Vector2i, area: Dictionary
 ) -> Array:
 	## Collect all units affected by an ability at target_pos with the given area.
-	## Single-target if no area; burst collects all units within radius.
+	## Single-target if no area. Shapes: burst, line, cone, ring.
+	## Directional shapes (line, cone) orient from caster toward target.
 	if area.is_empty() or not area.has("shape"):
 		var u := state.unit_at(target_pos)
 		return [u] if u else []
 
-	if str(area.get("shape", "")) == "burst":
-		var radius: int = int(area.get("radius", 0))
-		var units: Array = []
-		for hex in Hex.hexes_in_range(target_pos, radius):
-			var u := state.unit_at(hex)
-			if u:
-				units.append(u)
-		return units
+	var shape: String = str(area.get("shape", ""))
+	var hexes: Array[Vector2i] = []
 
-	# Unknown shape — fall back to single target
-	var u := state.unit_at(target_pos)
-	return [u] if u else []
+	match shape:
+		"burst":
+			var radius: int = int(area.get("radius", 0))
+			hexes = Hex.hexes_in_range(target_pos, radius)
+		"line":
+			var length: int = int(area.get("length", 1))
+			var direction: int = Hex.direction_toward(caster_pos, target_pos)
+			hexes = Hex.line_in_direction(target_pos, direction, length)
+		"cone":
+			var depth: int = int(area.get("depth", 1))
+			var direction: int = Hex.direction_toward(caster_pos, target_pos)
+			hexes = Hex.cone_in_direction(target_pos, direction, depth)
+		"ring":
+			var radius: int = int(area.get("radius", 1))
+			hexes = Hex.ring(target_pos, radius)
+
+	if hexes.is_empty():
+		var u := state.unit_at(target_pos)
+		return [u] if u else []
+
+	var units: Array = []
+	for hex in hexes:
+		var u := state.unit_at(hex)
+		if u:
+			units.append(u)
+	return units
 
 
 static func _resolve_effect(

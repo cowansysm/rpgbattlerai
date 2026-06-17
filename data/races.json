@@ -1,0 +1,22 @@
+[
+  {
+    "id": "human", "name": "Human",
+    "stats": {},
+    "flavor": "Balanced and adaptable, humans excel through versatility rather than specialization."
+  },
+  {
+    "id": "dwarf", "name": "Dwarf",
+    "stats": { "spd": -2, "def": 2, "hp": 5, "wp": -2 },
+    "flavor": "Stout and enduring, dwarves are hard to move and harder to kill."
+  },
+  {
+    "id": "elf", "name": "Elf",
+    "stats": { "spd": 1, "hp": -3, "wp": 3 },
+    "flavor": "Nimble and long-lived, elves trade resilience for grace and speed."
+  },
+  {
+    "id": "halfling", "name": "Halfling",
+    "stats": { "spd": 1, "def": -1, "hp": -2, "wp": 2 },
+    "flavor": "Small and quick, halflings rely on agility over armor."
+  }
+]

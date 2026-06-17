@@ -47,10 +47,10 @@ func test_all_characters_create_battle_units() -> void:
 
 func test_weapon_power_melee() -> void:
 	var expected: Dictionary = {
-		"human_fighter": 3,    # sword
-		"human_rogue": 2,      # daggers
-		"dwarf_barbarian": 5,  # greataxe
-		"elf_red_mage": 3,     # rapier
+		"human_fighter": 5,    # sword
+		"human_rogue": 3,      # daggers
+		"dwarf_barbarian": 8,  # greataxe
+		"elf_red_mage": 5,     # rapier
 	}
 	for id in expected.keys():
 		var c := _pipeline.get_character(id)
@@ -63,8 +63,8 @@ func test_weapon_power_melee() -> void:
 
 func test_weapon_power_ranged() -> void:
 	var expected: Dictionary = {
-		"human_archer": 2,  # bow
-		"human_bard": 1,    # sling
+		"human_archer": 4,  # bow
+		"human_bard": 2,    # sling
 	}
 	for id in expected.keys():
 		var c := _pipeline.get_character(id)
@@ -81,17 +81,17 @@ func test_caster_weapon_power() -> void:
 		var fs := _pipeline.get_final_stats(id)
 		var u := BattleUnit.from_character(c, fs)
 		var wp: int = CombatResolver.get_weapon_power(u, _pipeline.get_item)
-		assert_eq(wp, 1, "'%s' weapon power (staff) should be 1" % id)
+		assert_eq(wp, 2, "'%s' weapon power (staff) should be 2" % id)
 
 
 # --- Equipment Passives ---
 
 func test_fighter_def_includes_equipment() -> void:
-	# Fighter: base def=3, class def+1, medium_armor def+2, shield def+2 = 8
+	# Fighter: base def=10, class def+2 = 12 (before equipment passives)
 	var fs := _pipeline.get_final_stats("human_fighter")
-	# Base 3 + fighter class +1 = 4 (from stat derivation)
+	# Base 10 + fighter class +2 = 12 (from stat derivation)
 	# Equipment passives are applied separately — check the derived stat
-	assert_gte(fs.effective("def"), 4, "Fighter DEF should include class modifier")
+	assert_gte(fs.effective("def"), 12, "Fighter DEF should include class modifier")
 
 
 func test_archer_has_range_bonus() -> void:
@@ -101,15 +101,15 @@ func test_archer_has_range_bonus() -> void:
 
 
 func test_rogue_has_speed_bonus() -> void:
-	# Rogue: base spd=4, class spd+1, elf spd+0 (human) = 5
+	# Rogue: base spd=10, class spd+2, human +0 = 12
 	var fs := _pipeline.get_final_stats("human_rogue")
-	assert_eq(fs.effective("spd"), 5, "Rogue SPD should be 4 base + 1 class")
+	assert_eq(fs.effective("spd"), 12, "Rogue SPD should be 10 base + 2 class")
 
 
 func test_barbarian_has_hp_bonus() -> void:
-	# Barbarian: base hp=27, class hp+2, dwarf hp+2 = 31
+	# Barbarian: base hp=55, class hp+8, dwarf hp+5 = 68
 	var fs := _pipeline.get_final_stats("dwarf_barbarian")
-	assert_eq(fs.effective("hp"), 31, "Barbarian HP should be 27 base + 2 class + 2 dwarf")
+	assert_eq(fs.effective("hp"), 68, "Barbarian HP should be 55 base + 8 class + 5 dwarf")
 
 
 # --- Ability Access ---
@@ -177,12 +177,12 @@ func test_all_characters_have_wp() -> void:
 
 
 func test_black_mage_has_wp_bonus() -> void:
-	# elf_black_mage: base wp=6, elf +2, black_mage +3 = 11
+	# elf_black_mage: base wp=12, elf +3, black_mage +6 = 21
 	var fs := _pipeline.get_final_stats("elf_black_mage")
-	assert_eq(fs.effective("wp"), 11, "Black Mage WP should be 6 base + 2 elf + 3 class")
+	assert_eq(fs.effective("wp"), 21, "Black Mage WP should be 12 base + 3 elf + 6 class")
 
 
 func test_fighter_wp_no_bonus() -> void:
-	# human_fighter: base wp=5, human +0, fighter +0 = 5
+	# human_fighter: base wp=12, human +0, fighter +0 = 12
 	var fs := _pipeline.get_final_stats("human_fighter")
-	assert_eq(fs.effective("wp"), 5, "Fighter WP should be 5 base + 0 race + 0 class")
+	assert_eq(fs.effective("wp"), 12, "Fighter WP should be 12 base + 0 race + 0 class")

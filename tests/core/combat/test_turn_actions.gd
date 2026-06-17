@@ -249,7 +249,7 @@ func test_defend_pushes_modifier() -> void:
 	var base_def: int = state.current_unit.stats.effective("def")
 	var result := TurnActions.execute_defend(state)
 	assert_false(result.has("error"))
-	assert_eq(state.current_unit.stats.effective("def"), base_def + 2)
+	assert_eq(state.current_unit.stats.effective("def"), base_def + 3)
 	assert_eq(state.current_unit.ap_remaining, 1)
 
 

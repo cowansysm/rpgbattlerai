@@ -13,12 +13,24 @@ func test_make_race() -> void:
 func test_make_class() -> void:
 	var d := {"id": "rogue", "display_name": "Rogue", "abbr": "ROG",
 		"stat_modifiers": {"spd": 1, "jump": 1}, "derived_bonuses": {},
-		"equipment_access": ["daggers"], "granted_abilities": ["backstab"]}
+		"equipment_access": ["daggers"], "granted_abilities": ["backstab"],
+		"level_max": 3, "required_classes": [["fighter", 2]]}
 	var c := DataFactory.make_class(d)
 	assert_eq(c.id, "rogue")
 	assert_eq(c.abbr, "ROG")
 	assert_eq(c.stat_modifiers["jump"], 1)
 	assert_eq(c.granted_abilities[0], "backstab")
+	assert_eq(c.level_max, 3)
+	assert_eq(c.required_classes.size(), 1)
+	assert_eq(c.required_classes[0][0], "fighter")
+	assert_eq(c.required_classes[0][1], 2)
+
+
+func test_make_class_defaults() -> void:
+	var d := {"id": "basic", "stats": {}}
+	var c := DataFactory.make_class(d)
+	assert_eq(c.level_max, 1, "level_max should default to 1")
+	assert_eq(c.required_classes.size(), 0, "required_classes should default to empty")
 
 
 func test_make_ability_maps_range() -> void:

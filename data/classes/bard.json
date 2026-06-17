@@ -1,9 +1,0 @@
-{
-  "id": "bard",
-  "display_name": "Bard",
-  "abbr": "BRD",
-  "stat_modifiers": { "wp": 1 },
-  "derived_bonuses": {},
-  "equipment_access": ["sling", "light_armor"],
-  "granted_abilities": ["inspire", "lullaby"]
-}

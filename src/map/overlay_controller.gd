@@ -48,6 +48,33 @@ func show_revive_targets(origin: Vector2i, radius: int, state: MatchState, caste
 			_paint(c, mat)
 
 
+## Show AoE shape preview from caster to target. Paints affected hexes.
+func show_aoe_preview(caster_pos: Vector2i, target_pos: Vector2i, area: Dictionary) -> void:
+	clear()
+	var mat := OverlayMaterials.target_valid()
+	var shape: String = str(area.get("shape", ""))
+	var hexes: Array[Vector2i] = []
+
+	match shape:
+		"burst":
+			var radius: int = int(area.get("radius", 0))
+			hexes = Hex.hexes_in_range(target_pos, radius)
+		"line":
+			var length: int = int(area.get("length", 1))
+			var direction: int = Hex.direction_toward(caster_pos, target_pos)
+			hexes = Hex.line_in_direction(target_pos, direction, length)
+		"cone":
+			var depth: int = int(area.get("depth", 1))
+			var direction: int = Hex.direction_toward(caster_pos, target_pos)
+			hexes = Hex.cone_in_direction(target_pos, direction, depth)
+		"ring":
+			var radius: int = int(area.get("radius", 1))
+			hexes = Hex.ring(target_pos, radius)
+
+	for c in hexes:
+		_paint(c, mat)
+
+
 ## Show selectable unit tiles (awaiting activation) — gold highlights.
 func show_selectable(positions: Array) -> void:
 	clear()

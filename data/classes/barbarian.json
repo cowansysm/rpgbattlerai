@@ -1,9 +1,0 @@
-{
-  "id": "barbarian",
-  "display_name": "Barbarian",
-  "abbr": "BRB",
-  "stat_modifiers": { "atk": 1, "hp": 2, "def": -1 },
-  "derived_bonuses": {},
-  "equipment_access": ["greataxe", "light_armor"],
-  "granted_abilities": ["reckless_swing", "rage"]
-}

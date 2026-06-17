@@ -1,0 +1,12 @@
+[
+  {
+    "id": "bad_ability",
+    "name": "Bad Ability",
+    "type": "skill",
+    "ap": 1,
+    "range": 1,
+    "area": {},
+    "effect": { "value": 5 },
+    "source": "class"
+  }
+]

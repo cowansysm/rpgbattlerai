@@ -1,0 +1,13 @@
+[
+  {
+    "id": "test_class",
+    "name": "Test Class",
+    "abbr": "TST",
+    "stats": {},
+    "derived_bonuses": {},
+    "equipment_access": ["test_item"],
+    "granted_abilities": ["bad_ability"],
+    "level_max": 1,
+    "required_classes": []
+  }
+]

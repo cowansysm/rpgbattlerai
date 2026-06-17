@@ -1,0 +1,12 @@
+[
+  {
+    "id": "test_item",
+    "name": "Test Item",
+    "slot": "weapon",
+    "bp": 1,
+    "passive": {},
+    "granted_abilities": [],
+    "power": 2,
+    "range": 1
+  }
+]

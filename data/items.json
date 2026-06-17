@@ -1,0 +1,50 @@
+[
+  {
+    "id": "sword", "name": "Sword", "slot": "weapon",
+    "bp": 2, "power": 5, "range": 1
+  },
+  {
+    "id": "bow", "name": "Bow", "slot": "weapon",
+    "bp": 2, "power": 4, "range": 3
+  },
+  {
+    "id": "daggers", "name": "Daggers", "slot": "weapon",
+    "bp": 1, "power": 3, "range": 1
+  },
+  {
+    "id": "rapier", "name": "Rapier", "slot": "weapon",
+    "bp": 2, "power": 5, "range": 1
+  },
+  {
+    "id": "greataxe", "name": "Greataxe", "slot": "weapon",
+    "bp": 3, "power": 8, "range": 1
+  },
+  {
+    "id": "sling", "name": "Sling", "slot": "weapon",
+    "bp": 1, "power": 2, "range": 2
+  },
+  {
+    "id": "staff", "name": "Staff", "slot": "weapon",
+    "bp": 1, "power": 2, "range": 1
+  },
+  {
+    "id": "light_armor", "name": "Light Armor", "slot": "armor",
+    "bp": 1, "passive": { "def": 2 }
+  },
+  {
+    "id": "medium_armor", "name": "Medium Armor", "slot": "armor",
+    "bp": 2, "passive": { "def": 3 }
+  },
+  {
+    "id": "shield", "name": "Shield", "slot": "shield",
+    "bp": 2, "passive": { "def": 3 }
+  },
+  {
+    "id": "bracer_of_accuracy", "name": "Bracer of Accuracy", "slot": "accessory",
+    "bp": 2, "passive": { "accuracy": 1 }
+  },
+  {
+    "id": "smoke_bomb_pouch", "name": "Smoke Bomb Pouch", "slot": "accessory",
+    "bp": 2, "granted_abilities": ["smoke_bomb"]
+  }
+]

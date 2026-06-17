@@ -33,6 +33,9 @@ var _current_items: Array = []
 # Pending activation (awaiting player confirm)
 var _pending_activation_unit: BattleUnit = null
 
+# Cycle index for N-key rotation through selectable units
+var _cycle_index: int = -1
+
 # Pending drag-move preview (not yet committed)
 var _has_pending_move: bool = false
 var _pending_move_coord: Vector2i = Vector2i(-999, -999)
@@ -135,6 +138,7 @@ func get_drag_handler() -> DragHandler:
 func _enter_awaiting_activation() -> void:
 	_control_state = ControlState.AWAITING_ACTIVATION
 	_pending_activation_unit = null
+	_cycle_index = -1
 	_set_drag_enabled(false)
 	_overlay.clear()
 	_hud.set_targeting_mode(false)
@@ -400,22 +404,17 @@ func _on_item_selected(item_id: String) -> void:
 # --- Action execution ---
 
 func _activate_next() -> void:
-	## Convenience shortcut (N key): picks first selectable (non-sleeping) unit.
-	## Prefers living units, falls back to downed units.
+	## Convenience shortcut (N key): cycles through selectable (non-sleeping) units.
+	## Each press advances to the next unit and shows the activation dialog.
 	var team := RoundManager.current_team(_state)
-	var available := _state.activatable_units(team)
-	if available.is_empty():
+	var selectable: Array[BattleUnit] = []
+	for u: BattleUnit in _state.activatable_units(team):
+		if not RoundManager.is_sleeping(u):
+			selectable.append(u)
+	if selectable.is_empty():
 		return
-	# Prefer living, non-sleeping units
-	for u: BattleUnit in available:
-		if not u.is_downed and not RoundManager.is_sleeping(u):
-			_set_pending_activation(u)
-			return
-	# Fall back to downed units
-	for u: BattleUnit in available:
-		if u.is_downed:
-			_set_pending_activation(u)
-			return
+	_cycle_index = (_cycle_index + 1) % selectable.size()
+	_set_pending_activation(selectable[_cycle_index])
 
 
 func _set_pending_activation(unit: BattleUnit) -> void:

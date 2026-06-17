@@ -140,14 +140,14 @@ func test_defend_persists_until_next_round() -> void:
 
 	var base_def: int = unit.stats.base("def")
 	TurnActions.execute_defend(state)
-	assert_eq(unit.stats.effective("def"), base_def + 2,
+	assert_eq(unit.stats.effective("def"), base_def + 3,
 		"DEF should be increased after defend")
 
 	TurnActions.execute_wait(state)
 	RoundManager.end_activation(state)
 
 	# DEF still boosted during the rest of this round
-	assert_eq(unit.stats.effective("def"), base_def + 2)
+	assert_eq(unit.stats.effective("def"), base_def + 3)
 
 	# Complete the round (wait for remaining 3 units)
 	for i in range(3):
@@ -157,10 +157,21 @@ func test_defend_persists_until_next_round() -> void:
 		TurnActions.execute_wait(state)
 		RoundManager.end_activation(state)
 
-	# Start round 2 — defend modifier should be cleared
+	# Start round 2 — defend persists through round start (cleared on activation)
 	RoundManager.start_round(state)
+	assert_eq(unit.stats.effective("def"), base_def + 3,
+		"DEF should persist through round start")
+	# Defend cleared when unit is activated again
+	var t2 := RoundManager.current_team(state)
+	if t2 != unit.team:
+		# Skip other team's activation to reach our unit's turn
+		var skip_u: BattleUnit = state.unactivated_units(t2)[0]
+		RoundManager.activate_unit(state, skip_u)
+		TurnActions.execute_wait(state)
+		RoundManager.end_activation(state)
+	RoundManager.activate_unit(state, unit)
 	assert_eq(unit.stats.effective("def"), base_def,
-		"DEF should be reset after round start")
+		"DEF should be reset on next activation")
 
 
 func test_two_rounds_initiative_alternates() -> void:

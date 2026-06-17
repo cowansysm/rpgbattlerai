@@ -50,6 +50,37 @@ func test_valid_class_passes() -> void:
 	assert_eq(Validator.validate_class(d).size(), 0)
 
 
+func test_valid_class_with_level_max_and_required_classes() -> void:
+	var d := {"id": "knight", "stats": {"atk": 2},
+		"level_max": 5, "required_classes": [["fighter", 2]]}
+	assert_eq(Validator.validate_class(d).size(), 0)
+
+
+func test_class_level_max_zero_rejected() -> void:
+	var d := {"id": "bad", "stats": {}, "level_max": 0}
+	assert_true(Validator.validate_class(d).size() > 0, "level_max 0 should be rejected")
+
+
+func test_class_level_max_negative_rejected() -> void:
+	var d := {"id": "bad", "stats": {}, "level_max": -1}
+	assert_true(Validator.validate_class(d).size() > 0, "negative level_max should be rejected")
+
+
+func test_class_required_classes_bad_structure_rejected() -> void:
+	var d := {"id": "bad", "stats": {}, "required_classes": "not_an_array"}
+	assert_true(Validator.validate_class(d).size() > 0, "non-array required_classes should be rejected")
+
+
+func test_class_required_classes_bad_pair_rejected() -> void:
+	var d := {"id": "bad", "stats": {}, "required_classes": [["fighter"]]}
+	assert_true(Validator.validate_class(d).size() > 0, "pair with wrong element count should be rejected")
+
+
+func test_class_required_classes_bad_level_rejected() -> void:
+	var d := {"id": "bad", "stats": {}, "required_classes": [["fighter", 0]]}
+	assert_true(Validator.validate_class(d).size() > 0, "pair with level 0 should be rejected")
+
+
 # --- Ability validation ---
 
 func test_valid_ability_passes() -> void:

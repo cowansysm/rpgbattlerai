@@ -1,9 +1,0 @@
-{
-  "id": "rogue",
-  "display_name": "Rogue",
-  "abbr": "ROG",
-  "stat_modifiers": { "spd": 1, "atk": 1, "def": -1, "jump": 1 },
-  "derived_bonuses": {},
-  "equipment_access": ["daggers", "light_armor", "smoke_bomb_pouch"],
-  "granted_abilities": ["backstab"]
-}

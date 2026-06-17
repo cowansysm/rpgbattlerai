@@ -1,6 +1,0 @@
-{
-  "id": "halfling",
-  "display_name": "Halfling",
-  "stat_modifiers": { "spd": 1, "def": -1, "wp": 1 },
-  "flavor": "Small and quick, halflings rely on agility over armor."
-}

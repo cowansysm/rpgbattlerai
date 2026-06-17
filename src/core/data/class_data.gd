@@ -10,3 +10,5 @@ extends Resource
 @export var derived_bonuses: Dictionary = {}
 @export var equipment_access: Array[String] = []
 @export var granted_abilities: Array[String] = []
+@export var level_max: int = 1
+@export var required_classes: Array = []

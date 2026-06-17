@@ -9,9 +9,16 @@ var _id_of: Dictionary = {}       ## Vector2i -> int (AStar point id)
 var _coord_of: Dictionary = {}    ## int -> Vector2i
 var _elev: Dictionary = {}        ## Vector2i -> int
 var _terrain: Dictionary = {}     ## Vector2i -> String (terrain id)
+var _tile_tags: Dictionary = {}   ## Vector2i -> Array[String] (per-tile tags)
 var _mover_jump: int = -1         ## Current Jump/Climb value for edges (-1 = unset)
 var _terrain_provider: Callable   ## (String) -> TerrainProps — injected at build
 var _edge_cache: Dictionary = {}  ## int (jump_climb) -> Array of [id_a, id_b] pairs
+
+## Tag effect definitions: tag -> {move_cost, cover}
+const TAG_EFFECTS := {
+	"rough": { "move_cost": 1, "cover": 0 },
+	"cover": { "move_cost": 0, "cover": 2 },
+}
 
 
 func build(map: MapData, terrain_provider: Callable) -> void:
@@ -20,6 +27,7 @@ func build(map: MapData, terrain_provider: Callable) -> void:
 	_coord_of.clear()
 	_elev.clear()
 	_terrain.clear()
+	_tile_tags.clear()
 	_edge_cache.clear()
 	_mover_jump = -1
 	_terrain_provider = terrain_provider
@@ -31,6 +39,8 @@ func build(map: MapData, terrain_provider: Callable) -> void:
 		_coord_of[next_id] = c
 		_elev[c] = t.elevation
 		_terrain[c] = t.terrain
+		if not t.tags.is_empty():
+			_tile_tags[c] = t.tags
 		next_id += 1
 
 
@@ -65,7 +75,20 @@ func is_impassable(c: Vector2i) -> bool:
 
 
 func move_cost(c: Vector2i) -> int:
-	return terrain_props(c).move_cost
+	var base: int = terrain_props(c).move_cost
+	for tag in _tile_tags.get(c, []):
+		if TAG_EFFECTS.has(tag):
+			base += int(TAG_EFFECTS[tag].get("move_cost", 0))
+	return base
+
+
+## Returns effective cover value including terrain and tag bonuses.
+func effective_cover(c: Vector2i) -> int:
+	var base: int = terrain_props(c).cover
+	for tag in _tile_tags.get(c, []):
+		if TAG_EFFECTS.has(tag):
+			base += int(TAG_EFFECTS[tag].get("cover", 0))
+	return base
 
 
 func tile_count() -> int:

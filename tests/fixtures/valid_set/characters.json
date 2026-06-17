@@ -1,0 +1,13 @@
+[
+  {
+    "id": "test_fighter",
+    "name": "Test Fighter",
+    "race": "test_race",
+    "classes": ["test_class"],
+    "level": 1,
+    "bp": 10,
+    "stats": { "spd": 3, "atk": 2, "rng": 1, "def": 1, "hp": 10, "jump": 2 },
+    "equipment": ["test_item"],
+    "abilities": []
+  }
+]
