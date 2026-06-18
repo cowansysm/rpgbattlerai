@@ -1,8 +1,7 @@
 class_name DevMenu
 extends CanvasLayer
 ## Dev-only tools menu. Instantiated only when Dev.enabled.
-## Provides entry points to internal tooling (map editor in A1, etc.).
-## Alpha A0: the seam — Map Editor button is stubbed as disabled.
+## Provides entry points to internal tooling.
 
 var _panel: PanelContainer
 var _vbox: VBoxContainer
@@ -37,11 +36,10 @@ func _build_ui() -> void:
 	var sep := HSeparator.new()
 	_vbox.add_child(sep)
 
-	# Map Editor — stubbed for A1
+	# Map Editor
 	var map_editor_btn := Button.new()
-	map_editor_btn.text = "Map Editor (A1)"
-	map_editor_btn.disabled = true
-	map_editor_btn.tooltip_text = "Coming in Phase A1"
+	map_editor_btn.text = "Map Editor"
+	map_editor_btn.pressed.connect(_on_map_editor_pressed)
 	_vbox.add_child(map_editor_btn)
 
 	# Close button
@@ -49,6 +47,10 @@ func _build_ui() -> void:
 	close_btn.text = "Close"
 	close_btn.pressed.connect(_on_close)
 	_vbox.add_child(close_btn)
+
+
+func _on_map_editor_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/editor/map_editor.tscn")
 
 
 func _on_close() -> void:

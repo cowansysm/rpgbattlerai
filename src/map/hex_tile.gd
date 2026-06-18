@@ -18,7 +18,8 @@ var _selection_mesh: MeshInstance3D
 
 
 func setup(tq: int, tr: int, te: int, tt: String,
-		mesh: Mesh, mat: Material, highlight_mat: Material) -> void:
+		mesh: Mesh, mat: Material, highlight_mat: Material,
+		floor_elev: int = 0) -> void:
 	hex_q = tq
 	hex_r = tr
 	hex_elevation = te
@@ -33,8 +34,8 @@ func setup(tq: int, tr: int, te: int, tt: String,
 	_base_mesh.material_override = mat
 	add_child(_base_mesh)
 
-	# Side wall — opaque vertical face extending from tile bottom to ground.
-	var wall_height: float = te * HexWorld.ELEV_UNIT
+	# Side wall — opaque vertical face extending from tile bottom to floor.
+	var wall_height: float = (te - floor_elev) * HexWorld.ELEV_UNIT
 	if wall_height > 0.001:
 		var wall_mesh := TileMesh.make_wall_mesh(wall_height)
 		var wall := MeshInstance3D.new()

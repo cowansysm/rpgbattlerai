@@ -50,3 +50,9 @@ func all_characters() -> Array:
 
 func all_maps() -> Array:
 	return _pipeline.maps.all()
+
+func all_terrain_ids() -> Array:
+	return _pipeline.terrains.ids()
+
+func has_terrain(id: String) -> bool:
+	return _pipeline.terrains.has(id)

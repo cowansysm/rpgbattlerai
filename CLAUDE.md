@@ -156,14 +156,40 @@ All MVP phases complete:
 - Phase 10: Dice/action markers, HP rebalance
 - Phase 11: Polish — WP system, victory detection, defend duration, min range, status sidebar
 
-**Alpha phases:**
-- Phase A0: Terrain effects, condensed map format, dev flag & dev tools menu
-
 Main scene: `res://scenes/draft/draft_scene.tscn` (party draft → deploy → combat)
+
+## Alpha (in progress)
+
+The Alpha extends the MVP into a single-player game. Its specs and implementation plans are complete (see Documentation). Implementation has **started**: A0 is done and A1 is underway; A2–A10 are **planned but not yet built** — treat their `alpha-*` docs as the plan of record, not as describing current code. Do not assume any A2–A10 system is built unless the source actually shows it.
+
+Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A9 content are parallel; A7 AI joins at A8):
+
+- [x] A0: Terrain effects, condensed map format, dev flag & dev tools menu — **complete**
+- [~] A1: Map editor (dev tool, gated by the dev flag) — **in progress**
+- [ ] A2: CSV ↔ JSON content pipeline
+- [ ] A3: `MAG`/`RES` stats & magical resolution
+- [ ] A4: Character instances, classes & the Vagabond-rooted job tree
+- [ ] A5: Battle Bands & save system (`user://`)
+- [ ] A6: Economy — gold, shops & loot
+- [ ] A7: AI opponent (`AIController` over `TurnActions`)
+- [ ] A8: Roguelike run (branching node graph, ≤3 parallel paths, down-limit death)
+- [ ] A9: Content expansion (authored via A1/A2)
+- [ ] A10: Polish & meta-progression
+
+Key Alpha decisions: dev-tool map editor (player-facing later); CSV↔JSON authoring via spreadsheets; FFT-style progression (XP + JP + job tree + gold/shop + loot); roguelike single-player; every character starts **Vagabond** → unlocks **Thief/Soldier/Adept** at level 3 → archetype branches (support / control / physical·melee·ranged / magical·arcane·divine); characters permadie on the **3rd down** per run (tunable `DOWN_LIMIT`); the attack die and Defend die persist through the A3 magic change (Defend reduces magical damage too).
 
 ## Documentation
 
-Phase specs and implementation plans live in `docs/`:
+Phase specs and implementation plans live in `docs/`.
+
+**MVP (implemented):**
+
 - `rpg-specs.md` — master MVP specification
 - `rpg-implementation-plan.md` — high-level phase roadmap
-- `phase<N>-spec.md` / `phase<N>-implementation-plan.md` — per-phase details (0-11)
+- `phase<N>-spec.md` / `phase<N>-implementation-plan.md` — per-phase details (0–11)
+
+**Alpha (in progress — A0 done, A1 underway, A2–A10 planned):**
+
+- `alpha-specs.md` — master Alpha specification
+- `alpha-implementation-plan.md` — Alpha milestone roadmap (A0–A10)
+- `alpha-phaseA<N>-spec.md` / `alpha-phaseA<N>-implementation-plan.md` — per-sub-phase details (A0–A10)

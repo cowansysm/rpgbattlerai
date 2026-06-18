@@ -146,11 +146,19 @@ The `.gutconfig.json` at the project root configures test directories (`res://te
 
 ## Documentation
 
-Phase specs and implementation plans live in `docs/`:
+Phase specs and implementation plans live in `docs/`.
+
+**MVP (implemented):**
 
 - `rpg-specs.md` — master MVP specification
 - `rpg-implementation-plan.md` — high-level phase roadmap
 - `phase<N>-spec.md` / `phase<N>-implementation-plan.md` — per-phase details (0–11)
+
+**Alpha (planned — documented, not yet implemented):**
+
+- `alpha-specs.md` — master Alpha specification
+- `alpha-implementation-plan.md` — Alpha milestone roadmap (A0–A10)
+- `alpha-phaseA<N>-spec.md` / `alpha-phaseA<N>-implementation-plan.md` — per-sub-phase details (A0–A10)
 
 ## Phase Status
 
@@ -169,6 +177,10 @@ All MVP phases are complete:
 - [x] Phase 10 — Dice/Action Markers & HP Rebalance
 - [x] Phase 11 — Polish: WP System, Victory Detection, Defend Duration, Min Range
 
-### Deferred (post-MVP)
+### Alpha (planned — documented, not yet implemented)
 
-AI opponents, multiplayer/networking, in-app character builder and free-form multiclassing, floating damage numbers and particle effects, audio feedback, and undo-within-activation are intentionally deferred beyond the MVP.
+The next milestone, **Alpha**, is fully specced (see Documentation) but **not yet built** — the `alpha-*` docs are the plan of record, not a description of existing code. Alpha extends the MVP into a single-player game: a dev-tool map editor, effectful terrain, a CSV↔JSON content pipeline, persistent **character instances** with FFT-style leveling and a **Vagabond-rooted job tree**, **Battle Bands** with `user://` saves, an economy (gold/shops/loot), a tactical **AI opponent**, and a **roguelike run** of branching nodes. Sub-phases A0–A10 each have a spec + implementation plan.
+
+### Deferred (beyond Alpha)
+
+Networked multiplayer, final art/audio, and deeper systems (equipment crafting, coordinated/look-ahead AI, rich narrative campaigns) remain deferred. The Alpha architecture is designed to leave clean seams for them.

@@ -58,10 +58,12 @@ func _select(tile: HexTile) -> void:
 		_selected = tile
 		_selected.set_highlighted(true)
 	tile_selected.emit(tile.coord())
-	DebugReadout.show_tile(tile)
+	# Guard: signal handlers (e.g. map editor rebuild) may free the tile
+	if is_instance_valid(tile):
+		DebugReadout.show_tile(tile)
 
 
 func _deselect() -> void:
-	if _selected:
+	if _selected and is_instance_valid(_selected):
 		_selected.set_highlighted(false)
-		_selected = null
+	_selected = null

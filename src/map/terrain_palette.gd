@@ -12,6 +12,11 @@ const COLORS: Dictionary = {
 	"shallow_water": Color(0.40, 0.70, 0.90, 0.70),
 	"deep_water":    Color(0.15, 0.35, 0.70, 0.85),
 	"cliff":         Color(0.40, 0.36, 0.32),
+	"rubble":        Color(0.45, 0.40, 0.35),
+	"barricade":     Color(0.55, 0.45, 0.30),
+	"lava":          Color(0.85, 0.25, 0.10),
+	"spikes":        Color(0.50, 0.50, 0.55),
+	"bog":           Color(0.35, 0.45, 0.25),
 }
 
 
