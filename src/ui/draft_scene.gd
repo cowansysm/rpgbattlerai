@@ -337,9 +337,10 @@ func _update_roster_grid() -> void:
 		var fs: StatBlock = GameData.get_final_stats(char_data.id)
 		var stats_line := ""
 		if fs:
-			stats_line = "\nSPD %d  ATK %d  DEF %d  HP %d" % [
+			stats_line = "\nSPD %d  ATK %d  DEF %d  HP %d  MAG %d  RES %d" % [
 				fs.effective("spd"), fs.effective("atk"),
-				fs.effective("def"), fs.effective("hp")]
+				fs.effective("def"), fs.effective("hp"),
+				fs.effective("mag"), fs.effective("res")]
 
 		btn.text = "%s\n%s · %d BP%s" % [
 			char_data.display_name,

@@ -161,7 +161,7 @@ func test_valid_map_passes() -> void:
 
 
 func test_map_bad_terrain_rejected() -> void:
-	var d := {"id": "bad", "tiles": [{"q": 0, "r": 0, "elevation": 0, "terrain": "lava"}]}
+	var d := {"id": "bad", "tiles": [{"q": 0, "r": 0, "elevation": 0, "terrain": "nonexistent_terrain"}]}
 	assert_true(Validator.validate_map(d).size() > 0)
 
 

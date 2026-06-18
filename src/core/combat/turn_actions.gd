@@ -346,7 +346,7 @@ static func _resolve_effect(
 			var value: int = int(effect.get("value", 0))
 			var result := CombatResolver.resolve_damage(
 				caster, target, value, ability.type,
-				attacker_elev, target_elev)
+				attacker_elev, target_elev, -1, ability.mag_scaling)
 			if result["is_downed"]:
 				_handle_downing(state, target)
 			var outcome := {
@@ -365,7 +365,7 @@ static func _resolve_effect(
 			if target.is_downed:
 				return { "target": target.character.id, "skipped": true, "reason": "downed" }
 			var value: int = int(effect.get("value", 0))
-			var result := CombatResolver.resolve_heal(target, value)
+			var result := CombatResolver.resolve_heal(target, value, caster, ability.mag_scaling)
 			return {
 				"target": target.character.id,
 				"healing": result["healing"],

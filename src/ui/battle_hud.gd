@@ -53,6 +53,7 @@ var _hp_bar: ProgressBar
 var _ap_pip_1: Label
 var _ap_pip_2: Label
 var _wp_label: Label
+var _combat_stats_label: Label
 var _status_container: HBoxContainer
 
 # Action panel
@@ -303,6 +304,11 @@ func _build_bottom_bar() -> void:
 	_wp_label.add_theme_color_override("font_color", Color(0.7, 0.4, 1.0))
 	wp_box.add_child(_wp_label)
 
+	_combat_stats_label = Label.new()
+	_combat_stats_label.add_theme_font_size_override("font_size", 12)
+	_combat_stats_label.add_theme_color_override("font_color", Color(0.8, 0.8, 0.8))
+	_unit_info_panel.add_child(_combat_stats_label)
+
 	_status_container = HBoxContainer.new()
 	_status_container.add_theme_constant_override("separation", 4)
 	_unit_info_panel.add_child(_status_container)
@@ -465,6 +471,10 @@ func show_unit_info(unit: BattleUnit) -> void:
 
 	var max_wp: int = unit.stats.effective("wp")
 	_wp_label.text = "%d/%d" % [unit.current_wp, max_wp]
+
+	_combat_stats_label.text = "ATK %d  DEF %d  MAG %d  RES %d" % [
+		unit.stats.effective("atk"), unit.stats.effective("def"),
+		unit.stats.effective("mag"), unit.stats.effective("res")]
 
 	_update_status_display(unit)
 

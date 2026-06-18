@@ -5,6 +5,7 @@ extends CanvasLayer
 
 var _panel: PanelContainer
 var _vbox: VBoxContainer
+var _status_label: Label
 
 
 func _ready() -> void:
@@ -42,6 +43,30 @@ func _build_ui() -> void:
 	map_editor_btn.pressed.connect(_on_map_editor_pressed)
 	_vbox.add_child(map_editor_btn)
 
+	# CSV Pipeline
+	var csv_sep := HSeparator.new()
+	_vbox.add_child(csv_sep)
+
+	var csv_label := Label.new()
+	csv_label.text = "CSV Pipeline"
+	csv_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_vbox.add_child(csv_label)
+
+	var export_btn := Button.new()
+	export_btn.text = "Export All → CSV"
+	export_btn.pressed.connect(_on_csv_export_pressed)
+	_vbox.add_child(export_btn)
+
+	var import_btn := Button.new()
+	import_btn.text = "Import All CSV → JSON"
+	import_btn.pressed.connect(_on_csv_import_pressed)
+	_vbox.add_child(import_btn)
+
+	_status_label = Label.new()
+	_status_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_status_label.add_theme_font_size_override("font_size", 12)
+	_vbox.add_child(_status_label)
+
 	# Close button
 	var close_btn := Button.new()
 	close_btn.text = "Close"
@@ -51,6 +76,28 @@ func _build_ui() -> void:
 
 func _on_map_editor_pressed() -> void:
 	get_tree().change_scene_to_file("res://scenes/editor/map_editor.tscn")
+
+
+func _on_csv_export_pressed() -> void:
+	_status_label.text = "Exporting..."
+	var errors := CsvExporter.export_all()
+	if errors.is_empty():
+		_status_label.text = "Export OK"
+	else:
+		_status_label.text = "%d error(s)" % errors.size()
+		for e in errors:
+			Log.error("DevMenu", e)
+
+
+func _on_csv_import_pressed() -> void:
+	_status_label.text = "Importing..."
+	var errors := CsvImporter.import_all()
+	if errors.is_empty():
+		_status_label.text = "Import OK"
+	else:
+		_status_label.text = "%d error(s)" % errors.size()
+		for e in errors:
+			Log.error("DevMenu", e)
 
 
 func _on_close() -> void:

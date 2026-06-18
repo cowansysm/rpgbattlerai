@@ -105,18 +105,19 @@ static func make_3d_material(id: String, tint: Color = Color.WHITE) -> StandardM
 static func _ensure_loaded() -> void:
 	if _atlas != null:
 		return
-	# Try resource load first (works in-engine), fall back to file load (headless tests)
-	var tex = load(ATLAS_PATH)
-	if tex:
-		_atlas = tex
-		return
-	# File-based fallback for headless/test environments
-	var img := Image.load_from_file(ATLAS_PATH)
-	if img and not img.is_empty():
-		_atlas = ImageTexture.create_from_image(img)
-	else:
-		# Generate on the fly if PNG doesn't exist yet
-		_atlas = ImageTexture.create_from_image(IconAtlasGenerator.generate())
+	# Check file existence before loading to avoid engine errors in headless/test mode
+	if ResourceLoader.exists(ATLAS_PATH):
+		var tex = load(ATLAS_PATH)
+		if tex:
+			_atlas = tex
+			return
+	if FileAccess.file_exists(ATLAS_PATH):
+		var img := Image.load_from_file(ATLAS_PATH)
+		if img and not img.is_empty():
+			_atlas = ImageTexture.create_from_image(img)
+			return
+	# Generate on the fly if PNG doesn't exist yet
+	_atlas = ImageTexture.create_from_image(IconAtlasGenerator.generate())
 
 
 static func _make_region(col: int, row: int) -> AtlasTexture:

@@ -39,6 +39,7 @@ static func make_ability(d: Dictionary) -> AbilityData:
 	a.area = d.get("area", {})
 	a.effect = d.get("effect", {})
 	a.effect_type = str(d.get("effect", {}).get("effect_type", ""))
+	a.mag_scaling = float(d.get("mag_scaling", 1.0))
 	a.source = str(d.get("source", "class"))
 	return a
 

@@ -37,7 +37,7 @@
   },
   {
     "id": "bard", "name": "Bard", "abbr": "BRD",
-    "stats": { "wp": 3 },
+    "stats": { "wp": 3, "mag": 2 },
     "derived_bonuses": {},
     "equipment_access": ["sling", "light_armor"],
     "granted_abilities": ["inspire", "lullaby"],
@@ -46,7 +46,7 @@
   },
   {
     "id": "black_mage", "name": "Black Mage", "abbr": "BLM",
-    "stats": { "wp": 6 },
+    "stats": { "wp": 6, "mag": 4 },
     "derived_bonuses": {},
     "equipment_access": ["staff"],
     "granted_abilities": ["fire_1", "fire_2", "ice_1", "thunder_1"],
@@ -55,7 +55,7 @@
   },
   {
     "id": "red_mage", "name": "Red Mage", "abbr": "RDM",
-    "stats": { "atk": 1, "wp": 2 },
+    "stats": { "atk": 1, "wp": 2, "mag": 2, "res": 1 },
     "derived_bonuses": {},
     "equipment_access": ["rapier", "light_armor"],
     "granted_abilities": ["fire_1", "cure_1"],
@@ -64,7 +64,7 @@
   },
   {
     "id": "white_mage", "name": "White Mage", "abbr": "WHM",
-    "stats": { "wp": 4 },
+    "stats": { "wp": 4, "mag": 3, "res": 1 },
     "derived_bonuses": {},
     "equipment_access": ["staff"],
     "granted_abilities": ["cure_1", "cure_2", "shield_1"],

@@ -25,11 +25,17 @@ func test_symbol_material_applies_team_tint() -> void:
 		"material should have team-tinted albedo_color")
 
 
-func test_symbol_material_uses_atlas_texture() -> void:
+func test_symbol_material_uses_atlas_with_uv_offset() -> void:
 	var mat := PawnFactory.symbol_material("elf", "black_mage", "playerB")
 	assert_not_null(mat.albedo_texture, "material should have a texture")
-	assert_true(mat.albedo_texture is AtlasTexture,
-		"texture should be an AtlasTexture from the atlas")
+	# make_3d_material uses full atlas + UV offset/scale (not AtlasTexture,
+	# which is ignored by the 3D renderer)
+	var cell_uv := 1.0 / 8.0  # 64 / 512
+	assert_eq(mat.uv1_scale, Vector3(cell_uv, cell_uv, 1.0),
+		"UV scale should select one cell from atlas")
+	# elf_black_mage is at col 4, row 6
+	assert_eq(mat.uv1_offset, Vector3(4.0 * cell_uv, 6.0 * cell_uv, 0.0),
+		"UV offset should point to elf_black_mage cell")
 
 
 func test_symbol_material_is_unshaded() -> void:
@@ -45,9 +51,8 @@ func test_symbol_material_has_alpha_scissor() -> void:
 func test_unknown_race_class_returns_fallback() -> void:
 	var mat := PawnFactory.symbol_material("orc", "monk", "playerA")
 	assert_not_null(mat, "should return a material even for unknown race+class")
-	assert_true(mat.albedo_texture is AtlasTexture,
-		"should still return atlas-backed texture (fallback)")
-	# Fallback is at col 6, row 5 → region (384, 320, 64, 64)
-	var tex: AtlasTexture = mat.albedo_texture
-	assert_eq(tex.region, Rect2(384, 320, 64, 64),
-		"unknown race+class should use fallback icon")
+	assert_not_null(mat.albedo_texture, "should have atlas texture for fallback")
+	# Fallback "_fallback" is at col 6, row 5 → UV offset (0.75, 0.625, 0)
+	var cell_uv := 1.0 / 8.0
+	assert_eq(mat.uv1_offset, Vector3(6.0 * cell_uv, 5.0 * cell_uv, 0.0),
+		"unknown race+class should use fallback UV offset")

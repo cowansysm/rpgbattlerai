@@ -60,7 +60,8 @@ static func resolve_attack(
 
 
 ## Resolve a damage ability effect (spell or skill).
-## type == "skill": reduced by DEF (physical). type == "spell": ignores DEF.
+## type == "skill": reduced by DEF (physical).
+## type == "spell": scales with MAG, reduced by RES (magical).
 ## Defense die only rolls when the target has used the Defend action,
 ## and applies to both spell and skill damage.
 static func resolve_damage(
@@ -71,6 +72,7 @@ static func resolve_damage(
 	attacker_elev: int,
 	target_elev: int,
 	elev_bonus: int = -1,
+	mag_scaling: float = 1.0,
 ) -> Dictionary:
 	if elev_bonus < 0:
 		elev_bonus = Constants.get_value("ELEV_BONUS", 1)
@@ -83,8 +85,9 @@ static func resolve_damage(
 		var target_def: int = target.stats.effective("def")
 		damage = max(1, atk_roll + effect_value + e_bonus - target_def)
 	else:
-		# Spells: attack die + value, no DEF reduction
-		damage = atk_roll + effect_value + e_bonus
+		# Spells: scales with caster MAG, reduced by target RES
+		var mag_bonus: int = int(round(mag_scaling * attacker.stats.effective("mag")))
+		damage = max(1, atk_roll + effect_value + mag_bonus + e_bonus - target.stats.effective("res"))
 
 	# Defend action grants a 1d6 defense roll against all damage
 	var def_roll: int = 0
@@ -106,12 +109,16 @@ static func resolve_damage(
 
 
 ## Resolve a healing effect. Clamped to max HP.
+## Optionally scales with caster MAG when mag_scaling > 0.
 static func resolve_heal(
 	target: BattleUnit,
 	effect_value: int,
+	caster: BattleUnit = null,
+	mag_scaling: float = 0.0,
 ) -> Dictionary:
+	var bonus: int = int(round(mag_scaling * caster.stats.effective("mag"))) if caster and mag_scaling > 0.0 else 0
 	var max_hp: int = target.stats.effective("hp")
-	var healing: int = max(0, min(effect_value, max_hp - target.current_hp))
+	var healing: int = max(0, min(effect_value + bonus, max_hp - target.current_hp))
 	target.current_hp = min(target.current_hp + healing, max_hp)
 
 	return {

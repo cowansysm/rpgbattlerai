@@ -33,11 +33,11 @@
   },
   {
     "id": "medium_armor", "name": "Medium Armor", "slot": "armor",
-    "bp": 2, "passive": { "def": 3 }
+    "bp": 2, "passive": { "def": 3, "res": 1 }
   },
   {
     "id": "shield", "name": "Shield", "slot": "shield",
-    "bp": 2, "passive": { "def": 3 }
+    "bp": 2, "passive": { "def": 3, "res": 1 }
   },
   {
     "id": "bracer_of_accuracy", "name": "Bracer of Accuracy", "slot": "accessory",

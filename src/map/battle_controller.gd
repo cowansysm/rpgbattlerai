@@ -467,6 +467,7 @@ func _activate_chosen_unit(unit: BattleUnit) -> void:
 	_hud.append_log("%s activated (%s)" % [unit.character.display_name, unit.team], race_class_id)
 
 	# Alpha A0: apply per-turn terrain damage at activation start
+	var was_downed_before := unit.is_downed
 	var terrain_outcomes := RoundManager.on_activation_start(_state, unit)
 	for outcome in terrain_outcomes:
 		var dmg: int = int(outcome.get("amount", 0))
@@ -481,8 +482,8 @@ func _activate_chosen_unit(unit: BattleUnit) -> void:
 	if _check_match_over():
 		return
 
-	# If the unit was downed by terrain damage, end activation immediately
-	if unit.is_downed:
+	# If the unit was downed by terrain damage THIS activation, end immediately
+	if unit.is_downed and not was_downed_before:
 		var removed := RoundManager.end_activation(_state)
 		if removed:
 			_pawn_manager.remove_pawn(removed)

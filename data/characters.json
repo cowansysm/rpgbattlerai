@@ -2,56 +2,56 @@
   {
     "id": "human_fighter", "name": "Human Fighter", "race": "human",
     "classes": ["fighter"], "level": 3, "bp": 18,
-    "stats": { "spd": 10, "atk": 10, "rng": 1, "def": 10, "hp": 55, "jump": 2, "wp": 12 },
+    "stats": { "spd": 10, "atk": 10, "rng": 1, "def": 10, "hp": 55, "jump": 2, "wp": 12, "mag": 0, "res": 0 },
     "equipment": ["sword", "medium_armor", "shield"],
     "abilities": []
   },
   {
     "id": "human_archer", "name": "Human Archer", "race": "human",
     "classes": ["archer"], "level": 2, "bp": 13,
-    "stats": { "spd": 10, "atk": 10, "rng": 2, "def": 9, "hp": 42, "jump": 2, "wp": 10 },
+    "stats": { "spd": 10, "atk": 10, "rng": 2, "def": 9, "hp": 42, "jump": 2, "wp": 10, "mag": 0, "res": 0 },
     "equipment": ["bow", "bracer_of_accuracy", "light_armor"],
     "abilities": []
   },
   {
     "id": "human_rogue", "name": "Human Rogue", "race": "human",
     "classes": ["rogue"], "level": 3, "bp": 16,
-    "stats": { "spd": 10, "atk": 8, "rng": 1, "def": 9, "hp": 40, "jump": 2, "wp": 10 },
+    "stats": { "spd": 10, "atk": 8, "rng": 1, "def": 9, "hp": 40, "jump": 2, "wp": 10, "mag": 0, "res": 0 },
     "equipment": ["daggers", "light_armor", "smoke_bomb_pouch"],
     "abilities": []
   },
   {
     "id": "human_bard", "name": "Human Bard", "race": "human",
     "classes": ["bard"], "level": 3, "bp": 17,
-    "stats": { "spd": 10, "atk": 8, "rng": 2, "def": 9, "hp": 45, "jump": 2, "wp": 12 },
+    "stats": { "spd": 10, "atk": 8, "rng": 2, "def": 9, "hp": 45, "jump": 2, "wp": 12, "mag": 0, "res": 0 },
     "equipment": ["sling", "light_armor"],
     "abilities": []
   },
   {
     "id": "dwarf_barbarian", "name": "Dwarf Barbarian", "race": "dwarf",
     "classes": ["barbarian"], "level": 3, "bp": 20,
-    "stats": { "spd": 10, "atk": 10, "rng": 1, "def": 9, "hp": 55, "jump": 2, "wp": 12 },
+    "stats": { "spd": 10, "atk": 10, "rng": 1, "def": 9, "hp": 55, "jump": 2, "wp": 12, "mag": 0, "res": 0 },
     "equipment": ["greataxe", "light_armor"],
     "abilities": []
   },
   {
     "id": "elf_black_mage", "name": "Elf Black Mage", "race": "elf",
     "classes": ["black_mage"], "level": 5, "bp": 30,
-    "stats": { "spd": 10, "atk": 7, "rng": 0, "def": 8, "hp": 40, "jump": 2, "wp": 12 },
+    "stats": { "spd": 10, "atk": 7, "rng": 0, "def": 8, "hp": 40, "jump": 2, "wp": 12, "mag": 0, "res": 0 },
     "equipment": ["staff"],
     "abilities": []
   },
   {
     "id": "elf_red_mage", "name": "Elf Red Mage", "race": "elf",
     "classes": ["red_mage"], "level": 4, "bp": 26,
-    "stats": { "spd": 10, "atk": 9, "rng": 1, "def": 9, "hp": 45, "jump": 2, "wp": 12 },
+    "stats": { "spd": 10, "atk": 9, "rng": 1, "def": 9, "hp": 45, "jump": 2, "wp": 12, "mag": 0, "res": 0 },
     "equipment": ["rapier", "light_armor"],
     "abilities": []
   },
   {
     "id": "halfling_white_mage", "name": "Halfling White Mage", "race": "halfling",
     "classes": ["white_mage"], "level": 4, "bp": 24,
-    "stats": { "spd": 10, "atk": 7, "rng": 1, "def": 9, "hp": 47, "jump": 2, "wp": 12 },
+    "stats": { "spd": 10, "atk": 7, "rng": 1, "def": 9, "hp": 47, "jump": 2, "wp": 12, "mag": 0, "res": 0 },
     "equipment": ["staff"],
     "abilities": []
   }

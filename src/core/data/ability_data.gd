@@ -14,4 +14,5 @@ extends Resource
 @export var area: Dictionary = {}
 @export var effect: Dictionary = {}
 @export var effect_type: String = ""
+@export var mag_scaling: float = 1.0
 @export var source: String = ""

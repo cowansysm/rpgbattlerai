@@ -131,8 +131,8 @@ func test_set_zone_on_missing_tile_is_noop() -> void:
 	var m := MapEditorModel.new()
 	m.new_map("t", "standard", "rect", 2)
 	m.set_zone(Vector2i(99, 99), "playerA", true)
-	if m.zones.has("playerA"):
-		assert_false(m.zones["playerA"].has(Vector2i(99, 99)))
+	assert_false(m.zones.has("playerA") and m.zones["playerA"].has(Vector2i(99, 99)),
+		"zone should not contain a coord for a tile that does not exist")
 
 
 # --- undo/redo ---
