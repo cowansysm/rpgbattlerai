@@ -88,6 +88,15 @@ func _build_ui() -> void:
 		btn.pressed.connect(_on_tier_selected.bind(tier_id))
 		tier_buttons.add_child(btn)
 
+	# Alpha A0: Dev Tools button (only shown in dev mode)
+	if Dev.enabled:
+		_tier_panel.add_child(_spacer(24))
+		var dev_btn := Button.new()
+		dev_btn.text = "Dev Tools"
+		dev_btn.custom_minimum_size.y = 40
+		dev_btn.pressed.connect(_on_dev_tools_pressed)
+		_tier_panel.add_child(dev_btn)
+
 	# --- Draft panel ---
 	_draft_panel = VBoxContainer.new()
 	_draft_panel.visible = false
@@ -385,3 +394,9 @@ func _update_info_bar() -> void:
 		_current_draft.min_characters(),
 		_current_draft.max_characters()]
 	_confirm_btn.disabled = not _current_draft.is_valid()
+
+
+# Alpha A0: Dev Tools menu handler
+func _on_dev_tools_pressed() -> void:
+	var dev_menu := DevMenu.new()
+	add_child(dev_menu)

@@ -24,7 +24,7 @@ res://
 │   ├── main/                # Entry point scene
 │   └── map/                 # Battle map / combat scene
 ├── src/
-│   ├── autoload/            # Singletons: Log, Constants, GameData, MatchData
+│   ├── autoload/            # Singletons: Log, Constants, Dev, GameData, MatchData
 │   ├── core/
 │   │   ├── combat/          # Match state, turns, resolution, abilities, deployment
 │   │   ├── data/            # Entity Resources, loader, validator, pipeline, stats
@@ -97,9 +97,10 @@ Each entity type is a single JSON file containing an array of objects:
 
 1. **Log** — `src/autoload/logger.gd` — levels: DEBUG, INFO, WARN, ERROR
 2. **Constants** — `src/autoload/constants.gd` — loads `data/constants.json`
-3. **GameData** — `src/autoload/game_data.gd` — facade over `DataPipeline`
-4. **DebugReadout** — `src/debug/debug_readout.gd` — debug overlay
-5. **MatchData** — `src/autoload/match_data.gd` — per-match state transfer between scenes
+3. **Dev** — `src/autoload/dev.gd` — dev mode flag (`--dev`/`--no-dev`/`user://dev.cfg`/`OS.is_debug_build()`)
+4. **GameData** — `src/autoload/game_data.gd` — facade over `DataPipeline`
+5. **DebugReadout** — `src/debug/debug_readout.gd` — debug overlay (gated by `Dev.enabled`)
+6. **MatchData** — `src/autoload/match_data.gd` — per-match state transfer between scenes
 
 ## Combat System
 
@@ -109,6 +110,8 @@ Each entity type is a single JSON file containing an array of objects:
 - **Status effects** with duration tracking, stat modifiers, and special rules
 - **Victory:** immediate win when opposing team has no living units
 - **Minimum range 2** for ranged attacks (cannot target adjacent hexes)
+- **Terrain effects:** damage-on-enter (spikes), damage-per-turn (lava), status-on-enter (bog), occupant stat modifiers, water tagging
+- **Condensed map format:** minified JSON with positional tile arrays `[q, r, elev, terrain]`
 
 ## Hex System
 
@@ -152,6 +155,9 @@ All MVP phases complete:
 - Phase 9: Symbol atlas & icon system
 - Phase 10: Dice/action markers, HP rebalance
 - Phase 11: Polish — WP system, victory detection, defend duration, min range, status sidebar
+
+**Alpha phases:**
+- Phase A0: Terrain effects, condensed map format, dev flag & dev tools menu
 
 Main scene: `res://scenes/draft/draft_scene.tscn` (party draft → deploy → combat)
 

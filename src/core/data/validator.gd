@@ -8,6 +8,7 @@ const TERRAINS := [
 	"grass", "road", "brush", "trees", "rocks",
 	"shallow_water", "deep_water", "cliff",
 	"rubble", "barricade",
+	"lava", "spikes", "bog",
 ]
 const SLOTS := ["weapon", "armor", "shield", "accessory"]
 const ABILITY_TYPES := ["spell", "skill", "item", "passive"]
@@ -188,16 +189,31 @@ static func validate_map(d: Dictionary) -> Array[String]:
 		var tile_coords := {}
 		for idx in range(d["tiles"].size()):
 			var t: Variant = d["tiles"][idx]
-			if typeof(t) != TYPE_DICTIONARY:
-				e.append("map '%s' tile %d is not a Dictionary" % [d.get("id", "?"), idx])
+			var tq: int = 0
+			var tr: int = 0
+			var terrain_str: String = ""
+			if typeof(t) == TYPE_ARRAY:
+				# Alpha A0 condensed format: [q, r, elevation, terrain, (tags)]
+				if t.size() < 4:
+					e.append("map '%s' tile %d condensed array has < 4 elements" % [d.get("id", "?"), idx])
+					continue
+				tq = int(t[0])
+				tr = int(t[1])
+				terrain_str = str(t[3])
+			elif typeof(t) == TYPE_DICTIONARY:
+				if not t.has("q") or not t.has("r"):
+					e.append("map '%s' tile %d missing 'q' or 'r'" % [d.get("id", "?"), idx])
+					continue
+				tq = int(t["q"])
+				tr = int(t["r"])
+				terrain_str = str(t.get("terrain", ""))
+			else:
+				e.append("map '%s' tile %d is not an Array or Dictionary" % [d.get("id", "?"), idx])
 				continue
-			if not t.has("q") or not t.has("r"):
-				e.append("map '%s' tile %d missing 'q' or 'r'" % [d.get("id", "?"), idx])
-				continue
-			if t.has("terrain") and not TERRAINS.has(str(t["terrain"])):
+			if not terrain_str.is_empty() and not TERRAINS.has(terrain_str):
 				e.append("map '%s' tile (%d,%d) has unknown terrain '%s'" % [
-					d.get("id", "?"), int(t["q"]), int(t["r"]), t["terrain"]])
-			tile_coords["%d,%d" % [int(t["q"]), int(t["r"])]] = true
+					d.get("id", "?"), tq, tr, terrain_str])
+			tile_coords["%d,%d" % [tq, tr]] = true
 		# Validate deployment zones reference existing tiles
 		if d.has("deployment_zones") and typeof(d["deployment_zones"]) == TYPE_DICTIONARY:
 			for zone_name in d["deployment_zones"].keys():

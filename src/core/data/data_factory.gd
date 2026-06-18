@@ -77,11 +77,17 @@ static func make_map(d: Dictionary) -> MapData:
 	m.deployment_zones = d.get("deployment_zones", {})
 	var tiles: Array[TileRecord] = []
 	for t in d.get("tiles", []):
-		var tile_tags: Array[String] = _to_str_array(t.get("tags", []))
-		tiles.append(TileRecord.new(
-			int(t["q"]), int(t["r"]),
-			int(t.get("elevation", 0)), str(t.get("terrain", "grass")),
-			tile_tags))
+		if typeof(t) == TYPE_ARRAY:
+			# Alpha A0 condensed format: [q, r, elevation, terrain, (tags)]
+			var tags_c: Array[String] = _to_str_array(t[4]) if t.size() > 4 else _to_str_array([])
+			tiles.append(TileRecord.new(int(t[0]), int(t[1]), int(t[2]), str(t[3]), tags_c))
+		else:
+			# MVP verbose dict format
+			var tile_tags: Array[String] = _to_str_array(t.get("tags", []))
+			tiles.append(TileRecord.new(
+				int(t["q"]), int(t["r"]),
+				int(t.get("elevation", 0)), str(t.get("terrain", "grass")),
+				tile_tags))
 	m.tiles = tiles
 	return m
 

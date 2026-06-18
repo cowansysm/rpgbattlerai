@@ -127,3 +127,19 @@ static func is_round_over(state: MatchState) -> bool:
 static func is_sleeping(unit: BattleUnit) -> bool:
 	## Check if a unit is sleeping (for activation skip logic).
 	return unit.has_status("sleep")
+
+
+## Alpha A0: apply damage_per_turn from terrain at the start of a unit's activation.
+## Returns an array of outcome dicts (empty if no effect).
+static func on_activation_start(state: MatchState, unit: BattleUnit) -> Array:
+	var outcomes: Array = []
+	if unit.current_hp <= 0:
+		return outcomes
+	var dmg: int = state.graph.damage_per_turn(unit.position)
+	if dmg > 0:
+		unit.current_hp = max(0, unit.current_hp - dmg)
+		outcomes.append({"target": unit.character.id, "type": "terrain_damage",
+			"amount": dmg, "target_hp_after": unit.current_hp})
+		if unit.current_hp <= 0:
+			TurnActions._handle_downing(state, unit)
+	return outcomes

@@ -75,7 +75,7 @@ func setup(tq: int, tr: int, te: int, tt: String,
 	if deco_mesh:
 		var deco := MeshInstance3D.new()
 		deco.mesh = deco_mesh
-		deco.position.y = TileMesh.TILE_HEIGHT * 0.5 + 0.105
+		deco.position = Vector3(0.28, TileMesh.TILE_HEIGHT * 0.5 + 0.06, 0.0)
 		var deco_mat := StandardMaterial3D.new()
 		if tt == "trees":
 			deco_mat.albedo_color = Color(0.15, 0.50, 0.15)

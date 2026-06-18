@@ -95,6 +95,28 @@ func tile_count() -> int:
 	return _id_of.size()
 
 
+# --- Alpha A0: terrain effect accessors ---
+
+func damage_on_enter(c: Vector2i) -> int:
+	return terrain_props(c).damage_on_enter
+
+
+func damage_per_turn(c: Vector2i) -> int:
+	return terrain_props(c).damage_per_turn
+
+
+func status_on_enter(c: Vector2i) -> Dictionary:
+	return terrain_props(c).status_on_enter
+
+
+func occupant_modifiers(c: Vector2i) -> Array:
+	return terrain_props(c).occupant_modifiers
+
+
+func is_water(c: Vector2i) -> bool:
+	return terrain_props(c).is_water
+
+
 # --- Per-mover edge connection (cached) ---
 
 func set_mover(jump_climb: int) -> void:

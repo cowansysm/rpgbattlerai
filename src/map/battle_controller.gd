@@ -465,6 +465,33 @@ func _activate_chosen_unit(unit: BattleUnit) -> void:
 	var race_class_id := "%s_%s" % [unit.character.race,
 		unit.character.classes[0] if not unit.character.classes.is_empty() else ""]
 	_hud.append_log("%s activated (%s)" % [unit.character.display_name, unit.team], race_class_id)
+
+	# Alpha A0: apply per-turn terrain damage at activation start
+	var terrain_outcomes := RoundManager.on_activation_start(_state, unit)
+	for outcome in terrain_outcomes:
+		var dmg: int = int(outcome.get("amount", 0))
+		var hp_after: int = int(outcome.get("target_hp_after", 0))
+		_hud.append_log("%s takes %d terrain damage (%d HP)" % [
+			unit.character.display_name, dmg, hp_after], "terrain_damage")
+		if unit.current_hp <= 0:
+			_pawn_manager.down_pawn(unit)
+			_hud.append_log("%s DOWNED by terrain!" % unit.character.display_name)
+	_pawn_manager.update_status_markers(unit)
+
+	if _check_match_over():
+		return
+
+	# If the unit was downed by terrain damage, end activation immediately
+	if unit.is_downed:
+		var removed := RoundManager.end_activation(_state)
+		if removed:
+			_pawn_manager.remove_pawn(removed)
+			_hud.append_log("%s has been permanently removed" % removed.character.display_name)
+		if _check_match_over():
+			return
+		_enter_awaiting_activation()
+		return
+
 	_enter_action_select()
 
 
@@ -521,6 +548,18 @@ func _do_move(destination: Vector2i) -> void:
 	var unit: BattleUnit = _state.current_unit
 	_hud.append_log("%s moves to (%d,%d)" % [
 		unit.character.display_name, destination.x, destination.y], "action_move")
+
+	# Alpha A0: log terrain enter effects
+	for outcome in result.get("terrain_effects", []):
+		if outcome.get("type") == "terrain_damage":
+			_hud.append_log("%s takes %d terrain damage (%d HP)" % [
+				unit.character.display_name, int(outcome["amount"]),
+				int(outcome["target_hp_after"])], "terrain_damage")
+		elif outcome.get("type") == "terrain_status":
+			_hud.append_log("%s afflicted by %s" % [
+				unit.character.display_name, str(outcome["status_id"])], "terrain_status")
+	if unit:
+		_pawn_manager.update_status_markers(unit)
 
 	# Animate pawn movement
 	_enter_animating()
@@ -904,6 +943,18 @@ func _on_finalize_move() -> void:
 
 	_hud.append_log("%s moves to (%d,%d)" % [
 		unit.character.display_name, destination.x, destination.y], "action_move")
+
+	# Alpha A0: log terrain enter effects from drag-move
+	for outcome in result.get("terrain_effects", []):
+		if outcome.get("type") == "terrain_damage":
+			_hud.append_log("%s takes %d terrain damage (%d HP)" % [
+				unit.character.display_name, int(outcome["amount"]),
+				int(outcome["target_hp_after"])], "terrain_damage")
+		elif outcome.get("type") == "terrain_status":
+			_hud.append_log("%s afflicted by %s" % [
+				unit.character.display_name, str(outcome["status_id"])], "terrain_status")
+	if unit:
+		_pawn_manager.update_status_markers(unit)
 
 	if _drag_handler:
 		_drag_handler.confirm_preview()

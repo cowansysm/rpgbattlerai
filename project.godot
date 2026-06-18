@@ -18,6 +18,7 @@ config/features=PackedStringArray("4.6", "Forward Plus")
 
 Log="*res://src/autoload/logger.gd"
 Constants="*res://src/autoload/constants.gd"
+Dev="*res://src/autoload/dev.gd"
 GameData="*res://src/autoload/game_data.gd"
 DebugReadout="*res://src/debug/debug_readout.gd"
 MatchData="*res://src/autoload/match_data.gd"

@@ -31,6 +31,8 @@ static func auto_deploy(state: MatchState, zones: Dictionary) -> Array[String]:
 				continue
 			units[i].position = tile
 			state.occupancy[tile] = units[i]
+			# Alpha A0: apply occupant modifiers from the deployment tile
+			TurnActions.apply_terrain_modifiers_on_deploy(units[i], state.graph)
 
 	if errors.is_empty():
 		state.phase = MatchState.Phase.ROUND_START

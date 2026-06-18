@@ -30,6 +30,13 @@ func load_from(path: String) -> Array[String]:
 		p.blocks_los = bool(d.get("blocks_los", false))
 		p.cover = int(d.get("cover", 0))
 		p.los_height = int(d.get("los_height", 0))
+		# Alpha A0 effect fields (optional, neutral defaults)
+		p.damage_on_enter = int(d.get("damage_on_enter", 0))
+		p.damage_per_turn = int(d.get("damage_per_turn", 0))
+		p.status_on_enter = d.get("status_on_enter", {})
+		p.occupant_modifiers = d.get("occupant_modifiers", [])
+		p.is_water = bool(d.get("is_water", false))
+		p.terrain_tags = _to_str_array(d.get("tags", []))
 		_entries[str(id)] = p
 	return errors
 
@@ -48,3 +55,11 @@ func size() -> int:
 
 func ids() -> Array:
 	return _entries.keys()
+
+
+static func _to_str_array(raw: Variant) -> Array[String]:
+	var out: Array[String] = []
+	if typeof(raw) == TYPE_ARRAY:
+		for v in raw:
+			out.append(str(v))
+	return out

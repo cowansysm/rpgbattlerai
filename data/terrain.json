@@ -1,12 +1,15 @@
 {
   "grass":         { "move_cost": 1, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0 },
   "road":          { "move_cost": 1, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0 },
-  "brush":         { "move_cost": 2, "impassable": false, "blocks_los": false, "cover": 1, "los_height": 0 },
-  "trees":         { "move_cost": 2, "impassable": false, "blocks_los": true,  "cover": 2, "los_height": 2 },
+  "brush":         { "move_cost": 2, "impassable": false, "blocks_los": false, "cover": 1, "los_height": 0, "tags": ["forest"] },
+  "trees":         { "move_cost": 2, "impassable": false, "blocks_los": true,  "cover": 2, "los_height": 2, "tags": ["forest"] },
   "rocks":         { "move_cost": 3, "impassable": false, "blocks_los": true,  "cover": 0, "los_height": 2 },
-  "shallow_water": { "move_cost": 2, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0 },
-  "deep_water":    { "move_cost": 0, "impassable": true,  "blocks_los": false, "cover": 0, "los_height": 0 },
+  "shallow_water": { "move_cost": 2, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0, "is_water": true },
+  "deep_water":    { "move_cost": 0, "impassable": true,  "blocks_los": false, "cover": 0, "los_height": 0, "is_water": true },
   "cliff":         { "move_cost": 0, "impassable": true,  "blocks_los": true,  "cover": 0, "los_height": 3 },
   "rubble":        { "move_cost": 2, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0 },
-  "barricade":     { "move_cost": 1, "impassable": false, "blocks_los": false, "cover": 2, "los_height": 0 }
+  "barricade":     { "move_cost": 1, "impassable": false, "blocks_los": false, "cover": 2, "los_height": 0 },
+  "lava":          { "move_cost": 2, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0, "damage_per_turn": 4, "tags": ["hazard"] },
+  "spikes":        { "move_cost": 1, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0, "damage_on_enter": 3, "tags": ["hazard"] },
+  "bog":           { "move_cost": 2, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0, "status_on_enter": { "status_id": "slowed", "duration": 1 }, "occupant_modifiers": [{ "key": "spd", "value": -1 }], "tags": ["hazard"] }
 }

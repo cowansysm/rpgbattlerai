@@ -33,6 +33,10 @@ static func execute_move(state: MatchState, destination: Vector2i) -> Dictionary
 	unit.ap_remaining -= 1
 	unit.has_moved = true
 
+	# Alpha A0: apply terrain effects on entering the destination tile
+	_apply_terrain_modifiers(unit, state.graph, destination)
+	var terrain_outcomes: Array = _apply_enter_effects(state, unit, destination)
+
 	var record := {
 		"action": "move",
 		"actor": unit.character.id,
@@ -40,6 +44,8 @@ static func execute_move(state: MatchState, destination: Vector2i) -> Dictionary
 		"to": destination,
 		"cost": int(reach[destination]),
 	}
+	if not terrain_outcomes.is_empty():
+		record["terrain_effects"] = terrain_outcomes
 	state.turn_log.append(record)
 	return record
 
@@ -417,3 +423,43 @@ static func _resolve_effect(
 
 	# Unknown effect type — return empty outcome
 	return { "target": target.character.id, "effect_type": effect_type }
+
+
+# --- Alpha A0: terrain effect helpers ---
+
+static func _apply_terrain_modifiers(unit: BattleUnit, g: HexGraph, c: Vector2i) -> void:
+	## Clear existing terrain modifiers and reapply from the destination tile.
+	unit.stats.remove_modifiers_by_source("terrain")
+	for m in g.occupant_modifiers(c):
+		unit.stats.push_modifier(StatModifier.new(str(m["key"]), int(m["value"]), "terrain"))
+
+
+static func _apply_enter_effects(state: MatchState, unit: BattleUnit, c: Vector2i) -> Array:
+	## Apply damage_on_enter and status_on_enter from the destination tile.
+	## Returns an array of outcome dicts for the action record.
+	var outcomes: Array = []
+	var g: HexGraph = state.graph
+
+	var dmg: int = g.damage_on_enter(c)
+	if dmg > 0 and unit.current_hp > 0:
+		unit.current_hp = max(0, unit.current_hp - dmg)
+		outcomes.append({"target": unit.character.id, "type": "terrain_damage", "amount": dmg,
+			"target_hp_after": unit.current_hp})
+		if unit.current_hp <= 0:
+			_handle_downing(state, unit)
+
+	var st: Dictionary = g.status_on_enter(c)
+	if not st.is_empty() and unit.current_hp > 0:
+		var status_id: String = str(st.get("status_id", ""))
+		var duration: int = int(st.get("duration", 1))
+		if not status_id.is_empty():
+			CombatResolver.resolve_status(unit, status_id, duration, "terrain")
+			outcomes.append({"target": unit.character.id, "type": "terrain_status",
+				"status_id": status_id, "duration": duration})
+
+	return outcomes
+
+
+static func apply_terrain_modifiers_on_deploy(unit: BattleUnit, g: HexGraph) -> void:
+	## Apply occupant modifiers for the unit's current position at deployment.
+	_apply_terrain_modifiers(unit, g, unit.position)

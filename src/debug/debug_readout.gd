@@ -5,6 +5,8 @@ var _label: Label
 
 
 func _ready() -> void:
+	# Alpha A0: only show debug overlay in dev mode
+	visible = Dev.enabled
 	_label = Label.new()
 	_label.anchor_left = 0.0
 	_label.anchor_top = 0.0
