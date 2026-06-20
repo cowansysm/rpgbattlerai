@@ -33,6 +33,12 @@ static func from_character(c: CharacterData, final_stats: StatBlock) -> BattleUn
 	return u
 
 
+static func from_instance(ci: RefCounted, race_provider: Callable, class_provider: Callable) -> BattleUnit:
+	var resolver := preload("res://src/core/progression/instance_stat_resolver.gd")
+	var sb: StatBlock = resolver.resolve(ci, race_provider, class_provider)
+	return BattleUnit.from_character(ci.to_character_data(sb), sb)
+
+
 func has_status(status_id: String) -> bool:
 	for s in status_effects:
 		if s["id"] == status_id:

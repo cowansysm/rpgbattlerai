@@ -8,6 +8,12 @@
     "equipment_access": ["test_item"],
     "granted_abilities": ["test_ability"],
     "level_max": 1,
-    "required_classes": []
+    "required_classes": [],
+    "archetype": "",
+    "branch": "",
+    "tier": "starting",
+    "growth": {},
+    "jp_costs": {},
+    "prerequisites": {}
   }
 ]

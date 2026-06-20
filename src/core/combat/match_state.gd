@@ -21,6 +21,7 @@ var occupancy: Dictionary = {}			# Vector2i -> BattleUnit
 var ability_provider: Callable = Callable()	# (BattleUnit, String) -> AbilityData or null
 var item_provider: Callable = Callable()	# (String) -> ItemData or null
 var buff_durations: Array = []				# [{source_tag, unit, remaining}, ...]
+var ai_teams: Array = []					# Team strings controlled by AI (e.g. ["playerB"])
 
 
 func living_units(team: String) -> Array:

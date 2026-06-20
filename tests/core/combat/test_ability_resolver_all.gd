@@ -32,22 +32,22 @@ func _make_unit(char_id: String) -> BattleUnit:
 # --- Tests ---
 
 func test_all_abilities_includes_class_granted() -> void:
-	# Elf Black Mage gets abilities from the black_mage class
+	# Elf Black Mage starts as vagabond which grants basic_strike
 	var unit := _make_unit("elf_black_mage")
 	assert_not_null(unit, "elf_black_mage should exist")
 
 	var abilities := _resolver.all_abilities(unit)
-	assert_gt(abilities.size(), 0, "black mage should have abilities")
+	assert_gt(abilities.size(), 0, "vagabond should have abilities")
 
-	# Check that fire_1 is in the list (granted by black_mage class)
+	# Check that basic_strike is in the list (granted by vagabond class)
 	var ids: Array = []
 	for a in abilities:
 		ids.append(a.id)
-	assert_true("fire_1" in ids, "should include class-granted fire_1")
+	assert_true("basic_strike" in ids, "should include class-granted basic_strike")
 
 
 func test_all_abilities_includes_equipment_granted() -> void:
-	# Human Rogue has equipment with granted abilities (smoke_bomb from smoke_bomb_pouch)
+	# Human Rogue starts as vagabond which grants basic_strike
 	var unit := _make_unit("human_rogue")
 	assert_not_null(unit, "human_rogue should exist")
 
@@ -56,12 +56,12 @@ func test_all_abilities_includes_equipment_granted() -> void:
 	for a in abilities:
 		ids.append(a.id)
 
-	# Rogue class should grant backstab; equipment may grant smoke_bomb
-	assert_true("backstab" in ids, "should include class-granted backstab")
+	# Vagabond class grants basic_strike
+	assert_true("basic_strike" in ids, "should include class-granted basic_strike")
 
 
 func test_all_abilities_for_fighter() -> void:
-	# Human Fighter — class grants power_strike
+	# Human Fighter — vagabond class grants basic_strike
 	var unit := _make_unit("human_fighter")
 	assert_not_null(unit, "human_fighter should exist")
 
@@ -69,7 +69,7 @@ func test_all_abilities_for_fighter() -> void:
 	var ids: Array = []
 	for a in abilities:
 		ids.append(a.id)
-	assert_true("power_strike" in ids, "should include class-granted power_strike")
+	assert_true("basic_strike" in ids, "should include class-granted basic_strike")
 
 
 func test_all_abilities_deduplicates() -> void:

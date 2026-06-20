@@ -116,6 +116,8 @@ static func _coerce(cell: String, col: Dictionary) -> Variant:
 			match col["type"]:
 				"int":
 					return int(cell)
+				"float":
+					return float(cell)
 				"bool":
 					return cell.strip_edges().to_lower() in ["1", "true", "yes"]
 				_:

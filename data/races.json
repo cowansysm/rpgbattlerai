@@ -2,21 +2,25 @@
   {
     "id": "human", "name": "Human",
     "stats": {},
+    "base_stats": { "spd": 5, "atk": 5, "rng": 1, "def": 5, "hp": 30, "jump": 2, "wp": 5, "mag": 3, "res": 3 },
     "flavor": "Balanced and adaptable, humans excel through versatility rather than specialization."
   },
   {
     "id": "dwarf", "name": "Dwarf",
     "stats": { "spd": -2, "def": 2, "hp": 5, "wp": -2, "res": 2 },
+    "base_stats": { "spd": 3, "atk": 5, "rng": 1, "def": 7, "hp": 35, "jump": 1, "wp": 3, "mag": 1, "res": 5 },
     "flavor": "Stout and enduring, dwarves are hard to move and harder to kill."
   },
   {
     "id": "elf", "name": "Elf",
     "stats": { "spd": 1, "hp": -3, "wp": 3, "mag": 2 },
+    "base_stats": { "spd": 6, "atk": 3, "rng": 1, "def": 4, "hp": 25, "jump": 2, "wp": 8, "mag": 5, "res": 3 },
     "flavor": "Nimble and long-lived, elves trade resilience for grace and speed."
   },
   {
     "id": "halfling", "name": "Halfling",
     "stats": { "spd": 1, "def": -1, "hp": -2, "wp": 2, "mag": 1 },
+    "base_stats": { "spd": 6, "atk": 4, "rng": 1, "def": 4, "hp": 25, "jump": 3, "wp": 7, "mag": 4, "res": 3 },
     "flavor": "Small and quick, halflings rely on agility over armor."
   }
 ]

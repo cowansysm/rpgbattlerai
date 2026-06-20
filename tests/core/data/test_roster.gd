@@ -1,5 +1,6 @@
 extends GutTest
-## Phase 6: Verify all 8 spec characters instantiate correctly with full loadouts.
+## Phase 6 / A4: Verify all 8 templates instantiate correctly with vagabond class.
+## Tests updated for A4 job-tree classes (vagabond, soldier, thief, adept).
 
 var _pipeline: DataPipeline
 
@@ -43,14 +44,58 @@ func test_all_characters_create_battle_units() -> void:
 		assert_false(u.is_activated)
 
 
+func test_all_characters_are_vagabond() -> void:
+	for id in _character_ids:
+		var c := _pipeline.get_character(id)
+		assert_eq(c.classes[0], "vagabond", "'%s' should be vagabond class" % id)
+
+
+func test_all_characters_have_recommended_path() -> void:
+	for id in _character_ids:
+		var c := _pipeline.get_character(id)
+		assert_ne(c.recommended_path, "", "'%s' should have recommended_path" % id)
+
+
+# --- Job Tree Classes ---
+
+func test_vagabond_class_exists() -> void:
+	var cls := _pipeline.get_job_class("vagabond")
+	assert_not_null(cls)
+	assert_eq(cls.tier, "starting")
+	assert_true("basic_strike" in cls.granted_abilities)
+
+
+func test_soldier_class_exists() -> void:
+	var cls := _pipeline.get_job_class("soldier")
+	assert_not_null(cls)
+	assert_eq(cls.tier, "tier1")
+	assert_eq(cls.archetype, "physical")
+	assert_true("power_strike" in cls.granted_abilities)
+	assert_eq(int(cls.prerequisites.get("level", 0)), 3)
+
+
+func test_thief_class_exists() -> void:
+	var cls := _pipeline.get_job_class("thief")
+	assert_not_null(cls)
+	assert_eq(cls.tier, "tier1")
+	assert_eq(cls.archetype, "control")
+	assert_true("backstab" in cls.granted_abilities)
+
+
+func test_adept_class_exists() -> void:
+	var cls := _pipeline.get_job_class("adept")
+	assert_not_null(cls)
+	assert_eq(cls.tier, "tier1")
+	assert_eq(cls.archetype, "magical")
+	assert_true("fire_1" in cls.granted_abilities)
+
+
 # --- Weapon Power ---
 
 func test_weapon_power_melee() -> void:
 	var expected: Dictionary = {
 		"human_fighter": 5,    # sword
 		"human_rogue": 3,      # daggers
-		"dwarf_barbarian": 8,  # greataxe
-		"elf_red_mage": 5,     # rapier
 	}
 	for id in expected.keys():
 		var c := _pipeline.get_character(id)
@@ -63,8 +108,8 @@ func test_weapon_power_melee() -> void:
 
 func test_weapon_power_ranged() -> void:
 	var expected: Dictionary = {
-		"human_archer": 4,  # bow
-		"human_bard": 2,    # sling
+		"human_archer": 2,   # sling
+		"human_bard": 2,     # sling
 	}
 	for id in expected.keys():
 		var c := _pipeline.get_character(id)
@@ -84,68 +129,44 @@ func test_caster_weapon_power() -> void:
 		assert_eq(wp, 2, "'%s' weapon power (staff) should be 2" % id)
 
 
-# --- Equipment Passives ---
+# --- Vagabond Stat Modifiers ---
 
-func test_fighter_def_includes_equipment() -> void:
-	# Fighter: base def=10, class def+2 = 12 (before equipment passives)
+func test_fighter_def_includes_vagabond() -> void:
+	# Human Fighter: base def=10, vagabond def+1, human +0 = 11
 	var fs := _pipeline.get_final_stats("human_fighter")
-	# Base 10 + fighter class +2 = 12 (from stat derivation)
-	# Equipment passives are applied separately — check the derived stat
-	assert_gte(fs.effective("def"), 12, "Fighter DEF should include class modifier")
+	assert_eq(fs.effective("def"), 11, "Fighter DEF should include vagabond modifier")
 
 
-func test_archer_has_range_bonus() -> void:
-	# Archer: base rng=2, class rng+1 = 3
-	var fs := _pipeline.get_final_stats("human_archer")
-	assert_eq(fs.effective("rng"), 3, "Archer RNG should be 2 base + 1 class")
-
-
-func test_rogue_has_speed_bonus() -> void:
-	# Rogue: base spd=10, class spd+2, human +0 = 12
-	var fs := _pipeline.get_final_stats("human_rogue")
-	assert_eq(fs.effective("spd"), 12, "Rogue SPD should be 10 base + 2 class")
-
-
-func test_barbarian_has_hp_bonus() -> void:
-	# Barbarian: base hp=55, class hp+8, dwarf hp+5 = 68
-	var fs := _pipeline.get_final_stats("dwarf_barbarian")
-	assert_eq(fs.effective("hp"), 68, "Barbarian HP should be 55 base + 8 class + 5 dwarf")
+func test_fighter_atk_includes_vagabond() -> void:
+	# Human Fighter: base atk=10, vagabond atk+1, human +0 = 11
+	var fs := _pipeline.get_final_stats("human_fighter")
+	assert_eq(fs.effective("atk"), 11, "Fighter ATK should include vagabond modifier")
 
 
 # --- Ability Access ---
 
-func test_fighter_has_power_strike() -> void:
-	var c := _pipeline.get_character("human_fighter")
-	var cls := _pipeline.get_job_class("fighter")
+func test_vagabond_has_basic_strike() -> void:
+	var cls := _pipeline.get_job_class("vagabond")
+	assert_true("basic_strike" in cls.granted_abilities,
+		"Vagabond class should grant basic_strike")
+
+
+func test_soldier_has_power_strike() -> void:
+	var cls := _pipeline.get_job_class("soldier")
 	assert_true("power_strike" in cls.granted_abilities,
-		"Fighter class should grant power_strike")
+		"Soldier class should grant power_strike")
 
 
-func test_black_mage_has_all_spells() -> void:
-	var cls := _pipeline.get_job_class("black_mage")
-	for spell_id in ["fire_1", "fire_2", "ice_1", "thunder_1"]:
-		assert_true(spell_id in cls.granted_abilities,
-			"Black Mage class should grant '%s'" % spell_id)
+func test_adept_has_fire_1() -> void:
+	var cls := _pipeline.get_job_class("adept")
+	assert_true("fire_1" in cls.granted_abilities,
+		"Adept class should grant fire_1")
 
 
-func test_white_mage_has_all_spells() -> void:
-	var cls := _pipeline.get_job_class("white_mage")
-	for spell_id in ["cure_1", "cure_2", "shield_1"]:
-		assert_true(spell_id in cls.granted_abilities,
-			"White Mage class should grant '%s'" % spell_id)
-
-
-func test_bard_has_songs() -> void:
-	var cls := _pipeline.get_job_class("bard")
-	for ability_id in ["inspire", "lullaby"]:
-		assert_true(ability_id in cls.granted_abilities,
-			"Bard class should grant '%s'" % ability_id)
-
-
-func test_rogue_has_backstab() -> void:
-	var cls := _pipeline.get_job_class("rogue")
+func test_thief_has_backstab() -> void:
+	var cls := _pipeline.get_job_class("thief")
 	assert_true("backstab" in cls.granted_abilities,
-		"Rogue class should grant backstab")
+		"Thief class should grant backstab")
 
 
 func test_smoke_bomb_granted_by_item() -> void:
@@ -157,6 +178,7 @@ func test_smoke_bomb_granted_by_item() -> void:
 
 func test_all_abilities_resolve() -> void:
 	var ability_ids: Array[String] = [
+		"basic_strike", "first_aid",
 		"fire_1", "fire_2", "ice_1", "thunder_1",
 		"cure_1", "cure_2", "shield_1",
 		"power_strike", "reckless_swing", "rage",
@@ -176,13 +198,17 @@ func test_all_characters_have_wp() -> void:
 		assert_gt(fs.effective("wp"), 0, "'%s' WP should be > 0" % id)
 
 
-func test_black_mage_has_wp_bonus() -> void:
-	# elf_black_mage: base wp=12, elf +3, black_mage +6 = 21
-	var fs := _pipeline.get_final_stats("elf_black_mage")
-	assert_eq(fs.effective("wp"), 21, "Black Mage WP should be 12 base + 3 elf + 6 class")
-
-
-func test_fighter_wp_no_bonus() -> void:
-	# human_fighter: base wp=12, human +0, fighter +0 = 12
+func test_fighter_wp_with_vagabond() -> void:
+	# human_fighter: base wp=12, human +0, vagabond +0 = 12
 	var fs := _pipeline.get_final_stats("human_fighter")
 	assert_eq(fs.effective("wp"), 12, "Fighter WP should be 12 base + 0 race + 0 class")
+
+
+# --- Race Base Stats ---
+
+func test_races_have_base_stats() -> void:
+	for race_id in ["human", "dwarf", "elf", "halfling"]:
+		var r := _pipeline.get_race(race_id)
+		assert_not_null(r)
+		assert_false(r.base_stats.is_empty(), "Race '%s' should have base_stats" % race_id)
+		assert_true(r.base_stats.has("hp"), "Race '%s' base_stats should have hp" % race_id)

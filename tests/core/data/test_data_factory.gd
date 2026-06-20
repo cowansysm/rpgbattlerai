@@ -26,6 +26,52 @@ func test_make_class() -> void:
 	assert_eq(c.required_classes[0][1], 2)
 
 
+func test_make_class_with_a4_fields() -> void:
+	var d := {"id": "soldier", "name": "Soldier", "abbr": "SLD",
+		"stats": {"atk": 3, "def": 2, "hp": 10},
+		"archetype": "physical", "branch": "melee", "tier": "tier1",
+		"growth": {"hp": 1.5, "atk": 0.5},
+		"jp_costs": {"reckless_swing": 80, "rage": 60},
+		"prerequisites": {"level": 3},
+		"equipment_access": ["sword"], "granted_abilities": ["power_strike"],
+		"level_max": 50, "required_classes": []}
+	var c := DataFactory.make_class(d)
+	assert_eq(c.archetype, "physical")
+	assert_eq(c.branch, "melee")
+	assert_eq(c.tier, "tier1")
+	assert_eq(c.growth["hp"], 1.5)
+	assert_eq(c.growth["atk"], 0.5)
+	assert_eq(int(c.jp_costs["reckless_swing"]), 80)
+	assert_eq(int(c.jp_costs["rage"]), 60)
+	assert_eq(int(c.prerequisites.get("level", 0)), 3)
+
+
+func test_make_class_folds_required_classes_into_prerequisites() -> void:
+	var d := {"id": "knight", "stats": {},
+		"required_classes": [["fighter", 2]]}
+	var c := DataFactory.make_class(d)
+	assert_eq(c.required_classes.size(), 1)
+	# prerequisites should be populated from required_classes
+	assert_true(c.prerequisites.has("classes"))
+
+
+func test_make_race_with_base_stats() -> void:
+	var d := {"id": "dwarf", "name": "Dwarf", "stats": {"def": 2},
+		"base_stats": {"spd": 3, "hp": 35, "def": 7}, "flavor": ""}
+	var r := DataFactory.make_race(d)
+	assert_eq(int(r.base_stats.get("spd", 0)), 3)
+	assert_eq(int(r.base_stats.get("hp", 0)), 35)
+	assert_eq(int(r.base_stats.get("def", 0)), 7)
+
+
+func test_make_character_with_recommended_path() -> void:
+	var d := {"id": "hero", "name": "Hero", "race": "human", "classes": ["vagabond"],
+		"level": 1, "bp": 10, "stats": {"hp": 30, "spd": 5, "atk": 5, "rng": 1, "def": 5},
+		"equipment": [], "abilities": [], "recommended_path": "physical"}
+	var c := DataFactory.make_character(d)
+	assert_eq(c.recommended_path, "physical")
+
+
 func test_make_class_defaults() -> void:
 	var d := {"id": "basic", "stats": {}}
 	var c := DataFactory.make_class(d)

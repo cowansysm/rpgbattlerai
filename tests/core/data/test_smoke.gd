@@ -12,8 +12,8 @@ func before_all() -> void:
 
 func test_entity_counts() -> void:
 	assert_eq(_pipeline.races.size(), 4, "4 races expected")
-	assert_eq(_pipeline.classes.size(), 8, "8 classes expected")
-	assert_eq(_pipeline.abilities.size(), 14, "14 abilities expected")
+	assert_eq(_pipeline.classes.size(), 4, "4 classes expected")
+	assert_eq(_pipeline.abilities.size(), 16, "16 abilities expected")
 	assert_eq(_pipeline.items.size(), 12, "12 items expected")
 	assert_eq(_pipeline.characters.size(), 8, "8 characters expected")
 	assert_eq(_pipeline.maps.size(), 6, "6 maps expected")
@@ -23,19 +23,19 @@ func test_accessor_returns_correct_type() -> void:
 	var human := _pipeline.get_race("human")
 	assert_not_null(human)
 	assert_eq(human.id, "human")
-	var archer := _pipeline.get_job_class("archer")
-	assert_not_null(archer)
-	assert_eq(archer.id, "archer")
-	var bow := _pipeline.get_item("bow")
-	assert_not_null(bow)
-	assert_eq(bow.id, "bow")
+	var vagabond := _pipeline.get_job_class("vagabond")
+	assert_not_null(vagabond)
+	assert_eq(vagabond.id, "vagabond")
+	var sword := _pipeline.get_item("sword")
+	assert_not_null(sword)
+	assert_eq(sword.id, "sword")
 	var fire_1 := _pipeline.get_ability("fire_1")
 	assert_not_null(fire_1)
 	assert_eq(fire_1.effect_type, "damage")
 
 
 func test_reference_resolution() -> void:
-	var c := _pipeline.get_character("human_archer")
+	var c := _pipeline.get_character("human_fighter")
 	assert_not_null(c)
 	assert_not_null(_pipeline.get_race(c.race), "race ref resolves")
 	for cls_id in c.classes:
@@ -45,20 +45,20 @@ func test_reference_resolution() -> void:
 
 
 func test_derived_stats_computed() -> void:
-	# Human Archer: base spd:10 + human(0) + archer(rng:1) → spd:10, rng:3
-	var sb := _pipeline.get_final_stats("human_archer")
-	assert_not_null(sb, "human_archer should have final_stats")
+	# Human Fighter: base spd:10 + human(0) + vagabond(atk:1,def:1,hp:5) → spd:10, atk:11
+	var sb := _pipeline.get_final_stats("human_fighter")
+	assert_not_null(sb, "human_fighter should have final_stats")
 	assert_eq(sb.effective("spd"), 10, "spd: 10 base, no race/class modifier")
-	assert_eq(sb.effective("rng"), 3, "rng: 2 base + 1 archer")
-	assert_eq(sb.effective("hp"), 42, "hp: 42 base, no modifiers")
+	assert_eq(sb.effective("atk"), 11, "atk: 10 base + 1 vagabond")
+	assert_eq(sb.effective("hp"), 55, "hp: 50 base + 5 vagabond")
 	assert_eq(sb.effective_move(), 10, "move == spd")
 
 
 func test_battle_unit_from_loaded_character() -> void:
-	var c := _pipeline.get_character("human_archer")
-	var sb := _pipeline.get_final_stats("human_archer")
+	var c := _pipeline.get_character("human_fighter")
+	var sb := _pipeline.get_final_stats("human_fighter")
 	var unit := BattleUnit.from_character(c, sb)
 	assert_true(unit.current_hp > 0, "BattleUnit HP should be positive")
 	assert_eq(unit.ap_remaining, 2)
 	assert_false(unit.is_activated)
-	assert_eq(unit.character.id, "human_archer")
+	assert_eq(unit.character.id, "human_fighter")

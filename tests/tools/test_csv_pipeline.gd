@@ -119,7 +119,7 @@ func test_unflatten_scalar_fields() -> void:
 	var header := PackedStringArray()
 	for c in cols:
 		header.append(c["name"])
-	var row := PackedStringArray(["test_1", "Test", "spell", "1", "2", "3", "", "", "", "", "", "", "", "", "class"])
+	var row := PackedStringArray(["test_1", "Test", "spell", "1", "2", "3", "", "", "", "", "", "", "", "", "", "class"])
 	var obj := CsvImporter.unflatten(header, row, cols)
 	assert_eq(obj["id"], "test_1")
 	assert_eq(obj["name"], "Test")
@@ -132,7 +132,7 @@ func test_unflatten_blank_cells_omitted() -> void:
 	var header := PackedStringArray()
 	for c in cols:
 		header.append(c["name"])
-	var row := PackedStringArray(["test_1", "Test", "spell", "1", "", "3", "", "", "", "", "", "", "", "", ""])
+	var row := PackedStringArray(["test_1", "Test", "spell", "1", "", "3", "", "", "", "", "", "", "", "", "", ""])
 	var obj := CsvImporter.unflatten(header, row, cols)
 	assert_false(obj.has("wp"), "blank wp should be omitted")
 	assert_false(obj.has("area"), "blank area fields should not create nested dict")
@@ -144,9 +144,9 @@ func test_unflatten_dotted_nested() -> void:
 	var header := PackedStringArray()
 	for c in cols:
 		header.append(c["name"])
-	# Build row: id, name, type, ap, wp, range, area.shape, area.radius,
+	# Build row: id, name, type, ap, wp, range, mag_scaling, area.shape, area.radius,
 	#            effect.effect_type, effect.value, effect.element, effect.status_id, effect.duration, effect.stat, source
-	var row := PackedStringArray(["x", "X", "spell", "1", "3", "3", "burst", "1", "damage", "10", "fire", "", "", "", "class"])
+	var row := PackedStringArray(["x", "X", "spell", "1", "3", "3", "", "burst", "1", "damage", "10", "fire", "", "", "", "class"])
 	var obj := CsvImporter.unflatten(header, row, cols)
 	assert_true(obj.has("area"))
 	assert_eq(obj["area"]["shape"], "burst")
@@ -294,7 +294,7 @@ func test_validate_rows_accumulates_all_errors() -> void:
 		{"id": "ok", "type": "banana"},  # bad type
 	]
 	var errors := CsvImporter.validate_rows("abilities", rows)
-	assert_ge(errors.size(), 2, "should accumulate errors from multiple rows")
+	assert_true(errors.size() >= 2, "should accumulate errors from multiple rows")
 
 
 # ---------------------------------------------------------------------------
@@ -367,6 +367,12 @@ func _file_round_trip(entity: String) -> void:
 	var reimported := _load_array(entity, json_out)
 	assert_eq(original.size(), reimported.size(), "row count mismatch for %s" % entity)
 
+	# Keyed-dict entities (terrain) may have keys reordered by JSON.stringify;
+	# sort both arrays by id so comparison is order-independent.
+	if EntitySchema.is_keyed_dict(entity):
+		original.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.get("id", "")) < str(b.get("id", "")))
+		reimported.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return str(a.get("id", "")) < str(b.get("id", "")))
+
 	for i in range(original.size()):
 		assert_true(_semantic_eq(original[i], reimported[i]),
 			"%s[%d] round-trip mismatch: original=%s reimported=%s" % [
@@ -410,7 +416,7 @@ func _semantic_eq(a: Variant, b: Variant) -> bool:
 	if typeof(a) != typeof(b):
 		# int/float coercion
 		if (typeof(a) in [TYPE_INT, TYPE_FLOAT]) and (typeof(b) in [TYPE_INT, TYPE_FLOAT]):
-			return int(a) == int(b)
+			return is_equal_approx(float(a), float(b))
 		return false
 
 	if typeof(a) == TYPE_DICTIONARY:
@@ -446,10 +452,14 @@ func _semantic_eq(a: Variant, b: Variant) -> bool:
 	return a == b
 
 
-## An empty dict or empty array is trivially empty.
+## An empty dict, empty array, or empty string is trivially empty.
+## Empty strings are treated as trivially empty because the CSV pipeline
+## cannot distinguish between an absent key and an empty string value.
 func _is_trivially_empty(v: Variant) -> bool:
 	if typeof(v) == TYPE_DICTIONARY:
 		return (v as Dictionary).is_empty()
 	if typeof(v) == TYPE_ARRAY:
 		return (v as Array).is_empty()
+	if typeof(v) == TYPE_STRING:
+		return (v as String).is_empty()
 	return false

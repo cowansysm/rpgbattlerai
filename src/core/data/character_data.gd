@@ -13,5 +13,6 @@ extends Resource
 @export var base_stats: Dictionary = {}
 @export var equipment: Array[String] = []
 @export var abilities: Array[String] = []
+@export var recommended_path: String = ""
 
 var final_stats: StatBlock = null

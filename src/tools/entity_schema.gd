@@ -38,10 +38,10 @@ static func _col(col_name: String, path: String, mode: Mode, type: String) -> Di
 	return {"name": col_name, "path": path, "mode": mode, "type": type}
 
 
-static func _stat_columns(prefix: String) -> Array[Dictionary]:
+static func _stat_columns(prefix: String, type: String = "int") -> Array[Dictionary]:
 	var cols: Array[Dictionary] = []
 	for key in StatKey.all_strings():
-		cols.append(_col(prefix + "." + key, prefix + "." + key, Mode.DOTTED, "int"))
+		cols.append(_col(prefix + "." + key, prefix + "." + key, Mode.DOTTED, type))
 	return cols
 
 
@@ -57,6 +57,7 @@ static func _abilities() -> Array[Dictionary]:
 		_col("ap", "ap", Mode.SCALAR, "int"),
 		_col("wp", "wp", Mode.SCALAR, "int"),
 		_col("range", "range", Mode.SCALAR, "int"),
+		_col("mag_scaling", "mag_scaling", Mode.SCALAR, "float"),
 		_col("area.shape", "area.shape", Mode.DOTTED, "str"),
 		_col("area.radius", "area.radius", Mode.DOTTED, "int"),
 		_col("effect.effect_type", "effect.effect_type", Mode.DOTTED, "str"),
@@ -75,14 +76,20 @@ static func _classes() -> Array[Dictionary]:
 		_col("id", "id", Mode.SCALAR, "str"),
 		_col("name", "name", Mode.SCALAR, "str"),
 		_col("abbr", "abbr", Mode.SCALAR, "str"),
+		_col("archetype", "archetype", Mode.SCALAR, "str"),
+		_col("branch", "branch", Mode.SCALAR, "str"),
+		_col("tier", "tier", Mode.SCALAR, "str"),
 		_col("level_max", "level_max", Mode.SCALAR, "int"),
 	]
 	cols.append_array(_stat_columns("stats"))
+	cols.append_array(_stat_columns("growth", "float"))
 	cols.append_array([
 		_col("equipment_access", "equipment_access", Mode.JSON, "str"),
 		_col("granted_abilities", "granted_abilities", Mode.JSON, "str"),
 		_col("required_classes", "required_classes", Mode.JSON, "str"),
 		_col("derived_bonuses", "derived_bonuses", Mode.JSON, "str"),
+		_col("jp_costs", "jp_costs", Mode.JSON, "str"),
+		_col("prerequisites", "prerequisites", Mode.JSON, "str"),
 	])
 	return cols
 
@@ -108,6 +115,7 @@ static func _characters() -> Array[Dictionary]:
 		_col("race", "race", Mode.SCALAR, "str"),
 		_col("level", "level", Mode.SCALAR, "int"),
 		_col("bp", "bp", Mode.SCALAR, "int"),
+		_col("recommended_path", "recommended_path", Mode.SCALAR, "str"),
 	]
 	cols.append_array(_stat_columns("stats"))
 	cols.append_array([
@@ -125,6 +133,7 @@ static func _races() -> Array[Dictionary]:
 		_col("flavor", "flavor", Mode.SCALAR, "str"),
 	]
 	cols.append_array(_stat_columns("stats"))
+	cols.append_array(_stat_columns("base_stats"))
 	return cols
 
 

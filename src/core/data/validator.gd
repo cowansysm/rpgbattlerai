@@ -13,6 +13,8 @@ const TERRAINS := [
 const SLOTS := ["weapon", "armor", "shield", "accessory"]
 const ABILITY_TYPES := ["spell", "skill", "item", "passive"]
 const EFFECT_TYPES := ["damage", "heal", "status", "buff", "revive"]
+const ARCHETYPES := ["", "support", "control", "physical", "magical"]
+const TIERS := ["starting", "tier1", "advanced", "elite"]
 
 
 # --- Shared helpers ---
@@ -38,6 +40,9 @@ static func validate_race(d: Dictionary) -> Array[String]:
 	var stats_dict: Variant = d.get("stats", d.get("stat_modifiers", null))
 	if stats_dict != null and typeof(stats_dict) == TYPE_DICTIONARY:
 		e.append_array(validate_stat_keys(stats_dict, str(d.get("id", "?")), "stats"))
+	# A4: Validate base_stats keys
+	if d.has("base_stats") and typeof(d["base_stats"]) == TYPE_DICTIONARY:
+		e.append_array(validate_stat_keys(d["base_stats"], str(d.get("id", "?")), "base_stats"))
 	return e
 
 
@@ -58,6 +63,24 @@ static func validate_class(d: Dictionary) -> Array[String]:
 	# Validate required_classes structure (optional, defaults to [])
 	if d.has("required_classes"):
 		e.append_array(_validate_required_classes_structure(d))
+	# A4: Validate archetype enum
+	if d.has("archetype") and not ARCHETYPES.has(str(d["archetype"])):
+		e.append("class '%s' has unknown archetype '%s'" % [d.get("id", "?"), d["archetype"]])
+	# A4: Validate tier enum
+	if d.has("tier") and not TIERS.has(str(d["tier"])):
+		e.append("class '%s' has unknown tier '%s'" % [d.get("id", "?"), d["tier"]])
+	# A4: Validate growth keys are valid stat keys
+	if d.has("growth") and typeof(d["growth"]) == TYPE_DICTIONARY:
+		e.append_array(validate_stat_keys(d["growth"], str(d.get("id", "?")), "growth"))
+	# A4: Validate jp_costs values are non-negative
+	if d.has("jp_costs") and typeof(d["jp_costs"]) == TYPE_DICTIONARY:
+		for ab_id in d["jp_costs"].keys():
+			var cost: Variant = d["jp_costs"][ab_id]
+			if (typeof(cost) != TYPE_INT and typeof(cost) != TYPE_FLOAT) or int(cost) < 0:
+				e.append("class '%s' jp_costs['%s'] must be a non-negative integer" % [d.get("id", "?"), ab_id])
+	# A4: Validate prerequisites structure
+	if d.has("prerequisites") and typeof(d["prerequisites"]) == TYPE_DICTIONARY:
+		e.append_array(_validate_prerequisites_structure(d))
 	return e
 
 
@@ -82,6 +105,31 @@ static func _validate_required_classes_structure(d: Dictionary) -> Array[String]
 			e.append("class '%s' required_classes[%d][1] must be an integer (level)" % [cls_id, idx])
 		elif int(pair[1]) < 1:
 			e.append("class '%s' required_classes[%d][1] level must be >= 1" % [cls_id, idx])
+	return e
+
+
+static func _validate_prerequisites_structure(d: Dictionary) -> Array[String]:
+	var e: Array[String] = []
+	var cls_id: String = str(d.get("id", "?"))
+	var pre: Dictionary = d["prerequisites"]
+	if pre.has("level"):
+		if typeof(pre["level"]) != TYPE_INT and typeof(pre["level"]) != TYPE_FLOAT:
+			e.append("class '%s' prerequisites.level must be an integer" % cls_id)
+		elif int(pre["level"]) < 0:
+			e.append("class '%s' prerequisites.level must be >= 0" % cls_id)
+	if pre.has("classes"):
+		if typeof(pre["classes"]) != TYPE_ARRAY:
+			e.append("class '%s' prerequisites.classes must be an array" % cls_id)
+		else:
+			for idx in range(pre["classes"].size()):
+				var pair: Variant = pre["classes"][idx]
+				if typeof(pair) != TYPE_ARRAY or pair.size() != 2:
+					e.append("class '%s' prerequisites.classes[%d] must be a [class_id, threshold] pair" % [cls_id, idx])
+					continue
+				if typeof(pair[0]) != TYPE_STRING:
+					e.append("class '%s' prerequisites.classes[%d][0] must be a string" % [cls_id, idx])
+				if typeof(pair[1]) != TYPE_INT and typeof(pair[1]) != TYPE_FLOAT:
+					e.append("class '%s' prerequisites.classes[%d][1] must be an integer" % [cls_id, idx])
 	return e
 
 
@@ -255,6 +303,15 @@ static func validate_references(registries: Dictionary) -> Array[String]:
 			var req_id: String = pair[0]
 			if not registries["classes"].has(req_id):
 				e.append("class '%s' requires unknown class '%s'" % [cls.id, req_id])
+		# A4: Validate prerequisites.classes references
+		for pair in cls.prerequisites.get("classes", []):
+			if typeof(pair) == TYPE_ARRAY and pair.size() == 2:
+				if not registries["classes"].has(str(pair[0])):
+					e.append("class '%s' prerequisite references unknown class '%s'" % [cls.id, pair[0]])
+		# A4: Validate jp_costs ability references
+		for ab_id in cls.jp_costs.keys():
+			if not registries["abilities"].has(str(ab_id)):
+				e.append("class '%s' jp_costs references unknown ability '%s'" % [cls.id, ab_id])
 	# Item references
 	for it in registries["items"].all():
 		for ab in it.granted_abilities:

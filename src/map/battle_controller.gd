@@ -20,6 +20,8 @@ var _hud: BattleHUD
 var _resolver: AbilityResolver
 var _drag_handler: DragHandler
 
+var _ai_controller: AIController = null
+
 var _control_state: int = ControlState.AWAITING_ACTIVATION
 var _pending_action: int = -1
 var _pending_ability_id: String = ""
@@ -114,6 +116,14 @@ func _init_subsystems(builder: MapBuilder) -> void:
 	_hud.confirm_activation_pressed.connect(_on_confirm_activation)
 	_hud.cancel_activation_pressed.connect(_on_cancel_activation)
 
+	# AI controller
+	_ai_controller = AIController.new()
+	var ai_seed: int = int(Time.get_ticks_msec())
+	var ai_diff: String = str(Constants.get_value("AI_DIFFICULTY", "normal"))
+	_ai_controller.setup(_hud, _pawn_manager, _overlay, ai_seed, ai_diff)
+	_ai_controller.turn_complete.connect(_on_ai_turn_complete)
+	add_child(_ai_controller)
+
 	# Initial HUD state
 	_hud.update_roster(_state, null)
 	_hud.update_turn_order(_state)
@@ -178,6 +188,11 @@ func _enter_awaiting_activation() -> void:
 		_hud.append_log("%s is asleep -- skipped" % sleeping_unit.character.display_name, "sleep")
 		RoundManager.end_activation(_state)
 		_enter_awaiting_activation()
+		return
+
+	# AI team routing — hand off to AIController instead of human input
+	if team in _state.ai_teams:
+		_handle_ai_activation(team, selectable)
 		return
 
 	# Highlight selectable units on the map
@@ -291,6 +306,63 @@ func _enter_round_end() -> void:
 	_hud.append_log("--- Round %d complete ---" % _state.round_number)
 	_start_new_round()
 
+
+func _handle_ai_activation(team: String, selectable: Array) -> void:
+	## Activate the first selectable AI unit and hand off to AIController.
+	if selectable.is_empty():
+		return
+
+	var unit: BattleUnit = selectable[0]
+	_pawn_manager.highlight_active(unit)
+	_hud.update_round_info(_state.round_number, team)
+	_hud.update_turn_order(_state)
+
+	var err := RoundManager.activate_unit(_state, unit)
+	if not err.is_empty():
+		Log.error("BattleController", "AI activation failed: %s" % err)
+		return
+
+	var race_class_id := "%s_%s" % [unit.character.race,
+		unit.character.classes[0] if not unit.character.classes.is_empty() else ""]
+	_hud.append_log("[AI] %s activated (%s)" % [unit.character.display_name, team], race_class_id)
+
+	# Apply per-turn terrain damage at activation start
+	var was_downed_before := unit.is_downed
+	var terrain_outcomes := RoundManager.on_activation_start(_state, unit)
+	for outcome in terrain_outcomes:
+		var dmg: int = int(outcome.get("amount", 0))
+		var hp_after: int = int(outcome.get("target_hp_after", 0))
+		_hud.append_log("[AI] %s takes %d terrain damage (%d HP)" % [
+			unit.character.display_name, dmg, hp_after], "terrain_damage")
+		if unit.current_hp <= 0:
+			_pawn_manager.down_pawn(unit)
+			_hud.append_log("[AI] %s DOWNED by terrain!" % unit.character.display_name)
+	_pawn_manager.update_status_markers(unit)
+
+	if _check_match_over():
+		return
+
+	# If downed by terrain THIS activation, end immediately
+	if unit.is_downed and not was_downed_before:
+		var removed := RoundManager.end_activation(_state)
+		if removed:
+			_pawn_manager.remove_pawn(removed)
+			_hud.append_log("[AI] %s has been permanently removed" % removed.character.display_name)
+		if _check_match_over():
+			return
+		_enter_awaiting_activation()
+		return
+
+	# Hand off to AI controller
+	_control_state = ControlState.ANIMATING
+	_ai_controller.take_turn(_state)
+
+
+func _on_ai_turn_complete() -> void:
+	## Called when AIController finishes an activation.
+	if _check_match_over():
+		return
+	_enter_awaiting_activation()
 
 
 func _check_match_over() -> bool:

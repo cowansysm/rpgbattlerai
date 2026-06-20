@@ -1,74 +1,54 @@
 [
   {
-    "id": "fighter", "name": "Fighter", "abbr": "FGT",
-    "stats": { "atk": 2, "def": 2 },
+    "id": "vagabond", "name": "Vagabond", "abbr": "VGB",
+    "archetype": "", "branch": "", "tier": "starting",
+    "stats": { "atk": 1, "def": 1, "hp": 5 },
+    "growth": { "hp": 1.2, "atk": 0.3, "def": 0.3, "spd": 0.2, "wp": 0.1 },
     "derived_bonuses": {},
-    "equipment_access": ["sword", "medium_armor", "shield"],
+    "equipment_access": ["sword", "daggers", "staff", "sling", "light_armor"],
+    "granted_abilities": ["basic_strike"],
+    "jp_costs": { "first_aid": 30 },
+    "level_max": 50,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "soldier", "name": "Soldier", "abbr": "SLD",
+    "archetype": "physical", "branch": "melee", "tier": "tier1",
+    "stats": { "atk": 3, "def": 2, "hp": 10 },
+    "growth": { "hp": 1.5, "atk": 0.5, "def": 0.4, "spd": 0.2 },
+    "derived_bonuses": {},
+    "equipment_access": ["sword", "greataxe", "medium_armor", "shield", "light_armor"],
     "granted_abilities": ["power_strike"],
-    "level_max": 1,
-    "required_classes": []
+    "jp_costs": { "reckless_swing": 80, "rage": 60 },
+    "level_max": 50,
+    "required_classes": [],
+    "prerequisites": { "level": 3 }
   },
   {
-    "id": "archer", "name": "Archer", "abbr": "Arc",
-    "stats": { "rng": 1 },
+    "id": "thief", "name": "Thief", "abbr": "THF",
+    "archetype": "control", "branch": "", "tier": "tier1",
+    "stats": { "spd": 2, "atk": 1, "jump": 1 },
+    "growth": { "hp": 1.0, "spd": 0.4, "atk": 0.4, "def": 0.2 },
     "derived_bonuses": {},
-    "equipment_access": ["bow", "light_armor", "bracer_of_accuracy"],
-    "granted_abilities": [],
-    "level_max": 1,
-    "required_classes": []
-  },
-  {
-    "id": "barbarian", "name": "Barbarian", "abbr": "BRB",
-    "stats": { "atk": 3, "hp": 8, "def": -2 },
-    "derived_bonuses": {},
-    "equipment_access": ["greataxe", "light_armor"],
-    "granted_abilities": ["reckless_swing", "rage"],
-    "level_max": 1,
-    "required_classes": []
-  },
-  {
-    "id": "rogue", "name": "Rogue", "abbr": "ROG",
-    "stats": { "spd": 2, "atk": 2, "def": -2, "jump": 1 },
-    "derived_bonuses": {},
-    "equipment_access": ["daggers", "light_armor", "smoke_bomb_pouch"],
+    "equipment_access": ["daggers", "sling", "light_armor", "smoke_bomb_pouch"],
     "granted_abilities": ["backstab"],
-    "level_max": 1,
-    "required_classes": []
+    "jp_costs": { "lullaby": 80 },
+    "level_max": 50,
+    "required_classes": [],
+    "prerequisites": { "level": 3 }
   },
   {
-    "id": "bard", "name": "Bard", "abbr": "BRD",
-    "stats": { "wp": 3, "mag": 2 },
+    "id": "adept", "name": "Adept", "abbr": "ADT",
+    "archetype": "magical", "branch": "arcane", "tier": "tier1",
+    "stats": { "mag": 3, "wp": 4, "res": 1 },
+    "growth": { "hp": 0.8, "mag": 0.5, "wp": 0.4, "res": 0.3 },
     "derived_bonuses": {},
-    "equipment_access": ["sling", "light_armor"],
-    "granted_abilities": ["inspire", "lullaby"],
-    "level_max": 1,
-    "required_classes": []
-  },
-  {
-    "id": "black_mage", "name": "Black Mage", "abbr": "BLM",
-    "stats": { "wp": 6, "mag": 4 },
-    "derived_bonuses": {},
-    "equipment_access": ["staff"],
-    "granted_abilities": ["fire_1", "fire_2", "ice_1", "thunder_1"],
-    "level_max": 1,
-    "required_classes": []
-  },
-  {
-    "id": "red_mage", "name": "Red Mage", "abbr": "RDM",
-    "stats": { "atk": 1, "wp": 2, "mag": 2, "res": 1 },
-    "derived_bonuses": {},
-    "equipment_access": ["rapier", "light_armor"],
-    "granted_abilities": ["fire_1", "cure_1"],
-    "level_max": 1,
-    "required_classes": []
-  },
-  {
-    "id": "white_mage", "name": "White Mage", "abbr": "WHM",
-    "stats": { "wp": 4, "mag": 3, "res": 1 },
-    "derived_bonuses": {},
-    "equipment_access": ["staff"],
-    "granted_abilities": ["cure_1", "cure_2", "shield_1"],
-    "level_max": 1,
-    "required_classes": []
+    "equipment_access": ["staff", "sling"],
+    "granted_abilities": ["fire_1"],
+    "jp_costs": { "cure_1": 60, "ice_1": 80, "thunder_1": 100, "shield_1": 80 },
+    "level_max": 50,
+    "required_classes": [],
+    "prerequisites": { "level": 3 }
   }
 ]

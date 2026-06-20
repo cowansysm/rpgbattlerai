@@ -11,6 +11,7 @@ static func make_race(d: Dictionary) -> RaceData:
 	r.display_name = str(d.get("name", d.get("display_name", d["id"])))
 	r.stat_modifiers = d.get("stats", d.get("stat_modifiers", {}))
 	r.flavor = str(d.get("flavor", ""))
+	r.base_stats = d.get("base_stats", {})
 	return r
 
 
@@ -25,6 +26,15 @@ static func make_class(d: Dictionary) -> ClassData:
 	c.granted_abilities = _to_str_array(d.get("granted_abilities", []))
 	c.level_max = int(d.get("level_max", 1))
 	c.required_classes = _parse_required_classes(d.get("required_classes", []))
+	c.archetype = str(d.get("archetype", ""))
+	c.branch = str(d.get("branch", ""))
+	c.tier = str(d.get("tier", "starting"))
+	c.growth = d.get("growth", {})
+	c.jp_costs = d.get("jp_costs", {})
+	if d.has("prerequisites"):
+		c.prerequisites = d["prerequisites"]
+	elif c.required_classes.size() > 0:
+		c.prerequisites = {"classes": c.required_classes}
 	return c
 
 
@@ -68,6 +78,7 @@ static func make_character(d: Dictionary) -> CharacterData:
 	c.base_stats = d.get("stats", d.get("base_stats", {}))
 	c.equipment = _to_str_array(d.get("equipment", []))
 	c.abilities = _to_str_array(d.get("abilities", []))
+	c.recommended_path = str(d.get("recommended_path", ""))
 	return c
 
 

@@ -10,5 +10,29 @@
   "terrain_tags": {
     "rough": { "move_cost": 1 },
     "cover": { "def": 2 }
+  },
+  "MAX_LEVEL": 50,
+  "TIER1_UNLOCK_LEVEL": 3,
+  "XP_CURVE_BASE": 10,
+  "JP_PER_BATTLE": 20,
+  "JP_SHARE": 0,
+  "ABILITY_SLOTS": 6,
+  "CLASS_UNLOCK_COST": 0,
+  "GROWTH_MODEL": "per_class_rate",
+  "AI_DIFFICULTY": "normal",
+  "AI_TOP_N": 3,
+  "AI_TEMPERATURE": 1.0,
+  "AI_PACE_DELAY": 0.4,
+  "AI_MAX_TILES": 12,
+  "AI_WEIGHTS": {
+    "damage": 10.0,
+    "kill": 25.0,
+    "exposure": 3.0,
+    "cover": 4.0,
+    "elev": 2.0,
+    "hazard": 8.0,
+    "target": 8.0,
+    "ability": 6.0,
+    "resource": 2.0
   }
 }

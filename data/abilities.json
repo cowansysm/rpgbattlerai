@@ -1,5 +1,19 @@
 [
   {
+    "id": "basic_strike", "name": "Basic Strike", "type": "skill",
+    "ap": 1, "wp": 0, "range": 1,
+    "mag_scaling": 0.0,
+    "effect": { "effect_type": "damage", "value": 3 },
+    "source": "class"
+  },
+  {
+    "id": "first_aid", "name": "First Aid", "type": "skill",
+    "ap": 1, "wp": 1, "range": 0,
+    "mag_scaling": 0.0,
+    "effect": { "effect_type": "heal", "value": 3 },
+    "source": "class"
+  },
+  {
     "id": "fire_1", "name": "Fire 1", "type": "spell",
     "ap": 1, "wp": 3, "range": 3,
     "effect": { "effect_type": "damage", "value": 4, "element": "fire" },
