@@ -11,5 +11,9 @@
   "barricade":     { "move_cost": 1, "impassable": false, "blocks_los": false, "cover": 2, "los_height": 0 },
   "lava":          { "move_cost": 2, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0, "damage_per_turn": 4, "tags": ["hazard"] },
   "spikes":        { "move_cost": 1, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0, "damage_on_enter": 3, "tags": ["hazard"] },
-  "bog":           { "move_cost": 2, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0, "status_on_enter": { "status_id": "slowed", "duration": 1 }, "occupant_modifiers": [{ "key": "spd", "value": -1 }], "tags": ["hazard"] }
+  "bog":           { "move_cost": 2, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0, "status_on_enter": { "status_id": "slowed", "duration": 1 }, "occupant_modifiers": [{ "key": "spd", "value": -1 }], "tags": ["hazard"] },
+  "sand":          { "move_cost": 2, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0 },
+  "ice":           { "move_cost": 1, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0, "status_on_enter": { "status_id": "slowed", "duration": 1 }, "tags": ["hazard"] },
+  "cursed_ground": { "move_cost": 1, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0, "occupant_modifiers": [{ "key": "res", "value": -2 }], "tags": ["hazard"] },
+  "blessed_ground":{ "move_cost": 1, "impassable": false, "blocks_los": false, "cover": 0, "los_height": 0, "occupant_modifiers": [{ "key": "res", "value": 2 }, { "key": "def", "value": 1 }] }
 }

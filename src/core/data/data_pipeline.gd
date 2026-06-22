@@ -42,9 +42,10 @@ func _load_all(base_path: String) -> Array[String]:
 		base_path.path_join("items.json"), Validator.validate_item, DataFactory.make_item))
 	errors.append_array(characters.load_validated_file(
 		base_path.path_join("characters.json"), Validator.validate_character, DataFactory.make_character))
+	# Load terrain before maps so referential validation can check terrain IDs
+	errors.append_array(terrains.load_from(base_path.path_join("terrain.json")))
 	errors.append_array(maps.load_validated(
 		base_path.path_join("maps"), Validator.validate_map, DataFactory.make_map))
-	errors.append_array(terrains.load_from(base_path.path_join("terrain.json")))
 	errors.append_array(_load_economy_data(base_path))
 	return errors
 

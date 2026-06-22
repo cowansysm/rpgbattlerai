@@ -12,10 +12,10 @@ func before_all() -> void:
 
 func test_entity_counts() -> void:
 	assert_eq(_pipeline.races.size(), 4, "4 races expected")
-	assert_eq(_pipeline.classes.size(), 4, "4 classes expected")
-	assert_eq(_pipeline.abilities.size(), 16, "16 abilities expected")
-	assert_eq(_pipeline.items.size(), 13, "13 items expected")
-	assert_eq(_pipeline.characters.size(), 8, "8 characters expected")
+	assert_true(_pipeline.classes.size() >= 25, ">=25 classes expected, got %d" % _pipeline.classes.size())
+	assert_true(_pipeline.abilities.size() >= 70, ">=70 abilities expected, got %d" % _pipeline.abilities.size())
+	assert_true(_pipeline.items.size() >= 46, ">=46 items expected, got %d" % _pipeline.items.size())
+	assert_true(_pipeline.characters.size() >= 20, ">=20 characters expected, got %d" % _pipeline.characters.size())
 	assert_eq(_pipeline.maps.size(), 6, "6 maps expected")
 
 

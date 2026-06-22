@@ -100,6 +100,7 @@ static func _items() -> Array[Dictionary]:
 		_col("name", "name", Mode.SCALAR, "str"),
 		_col("slot", "slot", Mode.SCALAR, "str"),
 		_col("bp", "bp", Mode.SCALAR, "int"),
+		_col("price", "price", Mode.SCALAR, "int"),
 		_col("power", "power", Mode.SCALAR, "int"),
 		_col("range", "range", Mode.SCALAR, "int"),
 		_col("price", "price", Mode.SCALAR, "int"),

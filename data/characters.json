@@ -62,5 +62,101 @@
     "stats": { "spd": 10, "atk": 7, "rng": 1, "def": 9, "hp": 47, "jump": 2, "wp": 12, "mag": 0, "res": 0 },
     "equipment": ["staff"],
     "abilities": []
+  },
+  {
+    "id": "dwarf_guardian", "name": "Dwarf Guardian", "race": "dwarf",
+    "classes": ["vagabond"], "level": 3, "bp": 18,
+    "recommended_path": "physical",
+    "stats": { "spd": 8, "atk": 9, "rng": 1, "def": 12, "hp": 55, "jump": 2, "wp": 8, "mag": 0, "res": 5 },
+    "equipment": ["sword", "medium_armor", "shield"],
+    "abilities": []
+  },
+  {
+    "id": "dwarf_cleric", "name": "Dwarf Cleric", "race": "dwarf",
+    "classes": ["vagabond"], "level": 3, "bp": 14,
+    "recommended_path": "magical",
+    "stats": { "spd": 8, "atk": 7, "rng": 1, "def": 10, "hp": 48, "jump": 2, "wp": 10, "mag": 3, "res": 6 },
+    "equipment": ["staff", "light_armor"],
+    "abilities": []
+  },
+  {
+    "id": "elf_ranger", "name": "Elf Ranger", "race": "elf",
+    "classes": ["vagabond"], "level": 3, "bp": 14,
+    "recommended_path": "physical",
+    "stats": { "spd": 12, "atk": 8, "rng": 2, "def": 7, "hp": 38, "jump": 2, "wp": 10, "mag": 2, "res": 3 },
+    "equipment": ["sling", "light_armor"],
+    "abilities": []
+  },
+  {
+    "id": "elf_enchanter", "name": "Elf Enchanter", "race": "elf",
+    "classes": ["vagabond"], "level": 3, "bp": 12,
+    "recommended_path": "support",
+    "stats": { "spd": 11, "atk": 6, "rng": 1, "def": 7, "hp": 35, "jump": 2, "wp": 14, "mag": 6, "res": 4 },
+    "equipment": ["staff"],
+    "abilities": []
+  },
+  {
+    "id": "halfling_scout", "name": "Halfling Scout", "race": "halfling",
+    "classes": ["vagabond"], "level": 3, "bp": 14,
+    "recommended_path": "control",
+    "stats": { "spd": 12, "atk": 8, "rng": 1, "def": 7, "hp": 36, "jump": 3, "wp": 10, "mag": 2, "res": 3 },
+    "equipment": ["daggers", "light_armor"],
+    "abilities": []
+  },
+  {
+    "id": "halfling_herbalist", "name": "Halfling Herbalist", "race": "halfling",
+    "classes": ["vagabond"], "level": 3, "bp": 12,
+    "recommended_path": "support",
+    "stats": { "spd": 11, "atk": 6, "rng": 1, "def": 7, "hp": 35, "jump": 2, "wp": 12, "mag": 5, "res": 4 },
+    "equipment": ["staff"],
+    "abilities": []
+  },
+  {
+    "id": "human_knight", "name": "Human Knight", "race": "human",
+    "classes": ["vagabond"], "level": 4, "bp": 22,
+    "recommended_path": "physical",
+    "stats": { "spd": 9, "atk": 11, "rng": 1, "def": 11, "hp": 55, "jump": 2, "wp": 10, "mag": 0, "res": 2 },
+    "equipment": ["sword", "medium_armor", "shield"],
+    "abilities": []
+  },
+  {
+    "id": "human_mage", "name": "Human Mage", "race": "human",
+    "classes": ["vagabond"], "level": 3, "bp": 12,
+    "recommended_path": "magical",
+    "stats": { "spd": 9, "atk": 6, "rng": 1, "def": 7, "hp": 38, "jump": 2, "wp": 12, "mag": 5, "res": 3 },
+    "equipment": ["staff"],
+    "abilities": []
+  },
+  {
+    "id": "human_healer", "name": "Human Healer", "race": "human",
+    "classes": ["vagabond"], "level": 3, "bp": 14,
+    "recommended_path": "magical",
+    "stats": { "spd": 9, "atk": 6, "rng": 1, "def": 8, "hp": 40, "jump": 2, "wp": 12, "mag": 4, "res": 4 },
+    "equipment": ["staff", "light_armor"],
+    "abilities": []
+  },
+  {
+    "id": "elf_assassin", "name": "Elf Assassin", "race": "elf",
+    "classes": ["vagabond"], "level": 4, "bp": 18,
+    "recommended_path": "control",
+    "stats": { "spd": 13, "atk": 9, "rng": 1, "def": 7, "hp": 35, "jump": 3, "wp": 10, "mag": 3, "res": 3 },
+    "equipment": ["daggers", "light_armor"],
+    "abilities": []
+  },
+  {
+    "id": "dwarf_berserker", "name": "Dwarf Berserker", "race": "dwarf",
+    "classes": ["vagabond"], "level": 4, "bp": 20,
+    "recommended_path": "physical",
+    "stats": { "spd": 8, "atk": 12, "rng": 1, "def": 9, "hp": 58, "jump": 2, "wp": 8, "mag": 0, "res": 4 },
+    "equipment": ["greataxe", "light_armor"],
+    "abilities": []
+  },
+  {
+    "id": "halfling_trickster", "name": "Halfling Trickster", "race": "halfling",
+    "classes": ["vagabond"], "level": 3, "bp": 14,
+    "recommended_path": "control",
+    "stats": { "spd": 12, "atk": 7, "rng": 1, "def": 7, "hp": 34, "jump": 3, "wp": 12, "mag": 4, "res": 3 },
+    "equipment": ["daggers", "light_armor"],
+    "abilities": []
   }
 ]

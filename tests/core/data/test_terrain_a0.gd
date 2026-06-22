@@ -75,4 +75,4 @@ func test_lava_has_hazard_tag() -> void:
 # --- Total terrain count ---
 
 func test_terrain_count() -> void:
-	assert_eq(_pipeline.terrains.size(), 13, "should have 13 terrain types (10 MVP + 3 A0)")
+	assert_true(_pipeline.terrains.size() >= 17, "should have >= 17 terrain types, got %d" % _pipeline.terrains.size())

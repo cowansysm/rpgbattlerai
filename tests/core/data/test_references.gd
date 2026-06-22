@@ -82,18 +82,33 @@ func test_dangling_required_class_ref_detected() -> void:
 
 
 func test_valid_required_class_ref_passes() -> void:
+	var vagabond := ClassData.new()
+	vagabond.id = "vagabond"
+	vagabond.tier = "starting"
+	vagabond.granted_abilities = [] as Array[String]
+	vagabond.equipment_access = [] as Array[String]
+	vagabond.prerequisites = {}
+	vagabond.jp_costs = {}
+	vagabond.required_classes = []
 	var fighter := ClassData.new()
 	fighter.id = "fighter"
+	fighter.tier = "tier1"
 	fighter.granted_abilities = [] as Array[String]
 	fighter.equipment_access = [] as Array[String]
+	fighter.prerequisites = {"level": 3}
+	fighter.jp_costs = {}
+	fighter.required_classes = []
 	var knight := ClassData.new()
 	knight.id = "knight"
+	knight.tier = "advanced"
 	knight.granted_abilities = [] as Array[String]
 	knight.equipment_access = [] as Array[String]
+	knight.prerequisites = {"level": 6, "classes": [["fighter", 100]]}
+	knight.jp_costs = {}
 	knight.required_classes = [["fighter", 2]]
 	var registries := {
 		"races": EntityRegistry.new(),
-		"classes": _make_registry_with([fighter, knight]),
+		"classes": _make_registry_with([vagabond, fighter, knight]),
 		"abilities": EntityRegistry.new(),
 		"items": EntityRegistry.new(),
 		"characters": EntityRegistry.new(),
@@ -101,6 +116,99 @@ func test_valid_required_class_ref_passes() -> void:
 	}
 	var errors := Validator.validate_references(registries)
 	assert_eq(errors.size(), 0, "valid required_class ref should pass")
+
+
+# --- A9: Job tree validation ---
+
+func _make_class(id: String, tier: String, prereqs: Dictionary = {}) -> ClassData:
+	var cls := ClassData.new()
+	cls.id = id
+	cls.tier = tier
+	cls.granted_abilities = [] as Array[String]
+	cls.equipment_access = [] as Array[String]
+	cls.prerequisites = prereqs
+	cls.jp_costs = {}
+	cls.required_classes = []
+	return cls
+
+
+func test_valid_tree_passes() -> void:
+	var vagabond := _make_class("vagabond", "starting")
+	var soldier := _make_class("soldier", "tier1", {"level": 3})
+	var knight := _make_class("knight", "advanced", {"level": 6, "classes": [["soldier", 100]]})
+	var templar := _make_class("templar", "elite", {"level": 10, "classes": [["knight", 200]]})
+	var reg := _make_registry_with([vagabond, soldier, knight, templar])
+	var errors := Validator.validate_job_tree(reg)
+	assert_eq(errors.size(), 0, "valid tree should pass: %s" % str(errors))
+
+
+func test_cycle_detected() -> void:
+	var vagabond := _make_class("vagabond", "starting")
+	var a := _make_class("a", "tier1", {"level": 3, "classes": [["b", 50]]})
+	var b := _make_class("b", "tier1", {"level": 3, "classes": [["a", 50]]})
+	var reg := _make_registry_with([vagabond, a, b])
+	var errors := Validator.validate_job_tree(reg)
+	var has_cycle := false
+	for err in errors:
+		if err.find("cycle") >= 0:
+			has_cycle = true
+			break
+	assert_true(has_cycle, "should detect cycle: %s" % str(errors))
+
+
+func test_orphan_detected() -> void:
+	var vagabond := _make_class("vagabond", "starting")
+	var soldier := _make_class("soldier", "tier1", {"level": 3})
+	# orphan requires a non-existent parent, making it unreachable
+	var orphan := _make_class("orphan", "advanced", {"level": 6, "classes": [["nonexistent", 100]]})
+	var reg := _make_registry_with([vagabond, soldier, orphan])
+	var errors := Validator.validate_job_tree(reg)
+	var has_orphan := false
+	for err in errors:
+		if err.find("orphan") >= 0 or err.find("not reachable") >= 0:
+			has_orphan = true
+			break
+	assert_true(has_orphan, "should detect orphan class: %s" % str(errors))
+
+
+func test_multiple_starting_classes_rejected() -> void:
+	var vag1 := _make_class("vagabond", "starting")
+	var vag2 := _make_class("vagabond2", "starting")
+	var reg := _make_registry_with([vag1, vag2])
+	var errors := Validator.validate_job_tree(reg)
+	var has_multi := false
+	for err in errors:
+		if err.find("multiple starting") >= 0:
+			has_multi = true
+			break
+	assert_true(has_multi, "should reject multiple starting classes: %s" % str(errors))
+
+
+func test_elite_requiring_only_tier1_rejected() -> void:
+	var vagabond := _make_class("vagabond", "starting")
+	var soldier := _make_class("soldier", "tier1", {"level": 3})
+	var bad_elite := _make_class("bad_elite", "elite", {"level": 10, "classes": [["soldier", 200]]})
+	var reg := _make_registry_with([vagabond, soldier, bad_elite])
+	var errors := Validator.validate_job_tree(reg)
+	var has_tier_error := false
+	for err in errors:
+		if err.find("advanced class") >= 0 or err.find("elite") >= 0:
+			has_tier_error = true
+			break
+	assert_true(has_tier_error, "elite requiring only tier1 should fail: %s" % str(errors))
+
+
+func test_advanced_with_no_class_prereq_rejected() -> void:
+	var vagabond := _make_class("vagabond", "starting")
+	var bad_advanced := _make_class("bad_adv", "advanced", {"level": 6})
+	var reg := _make_registry_with([vagabond, bad_advanced])
+	var errors := Validator.validate_job_tree(reg)
+	var has_error := false
+	for err in errors:
+		if err.find("advanced") >= 0 and err.find("require") >= 0:
+			has_error = true
+			break
+	assert_true(has_error, "advanced with no class prereq should fail: %s" % str(errors))
 
 
 # --- Integration tests (fixture directories) ---

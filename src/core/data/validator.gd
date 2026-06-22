@@ -8,9 +8,10 @@ const TERRAINS := [
 	"grass", "road", "brush", "trees", "rocks",
 	"shallow_water", "deep_water", "cliff",
 	"rubble", "barricade",
-	"lava", "spikes", "bog",
+	"lava", "spikes", "bog", "sand",
+	"ice", "cursed_ground", "blessed_ground",
 ]
-const SLOTS := ["weapon", "armor", "shield", "accessory"]
+const SLOTS := ["weapon", "armor", "shield", "accessory", "consumable"]
 const ABILITY_TYPES := ["spell", "skill", "item", "passive"]
 const EFFECT_TYPES := ["damage", "heal", "status", "buff", "revive"]
 const ARCHETYPES := ["", "support", "control", "physical", "magical"]
@@ -231,8 +232,11 @@ static func validate_character(d: Dictionary) -> Array[String]:
 	return e
 
 
-static func validate_map(d: Dictionary) -> Array[String]:
+## Validates map structure. When known_terrains is provided (non-empty),
+## terrain IDs are checked against that list instead of the hardcoded TERRAINS const.
+static func validate_map(d: Dictionary, known_terrains: Array[String] = []) -> Array[String]:
 	var e: Array[String] = []
+	var terrain_list: Array = known_terrains if not known_terrains.is_empty() else TERRAINS
 	if not d.has("id"):
 		e.append("map missing required field 'id'")
 	if not d.has("tiles"):
@@ -264,7 +268,7 @@ static func validate_map(d: Dictionary) -> Array[String]:
 			else:
 				e.append("map '%s' tile %d is not an Array or Dictionary" % [d.get("id", "?"), idx])
 				continue
-			if not terrain_str.is_empty() and not TERRAINS.has(terrain_str):
+			if not terrain_str.is_empty() and not terrain_list.has(terrain_str):
 				e.append("map '%s' tile (%d,%d) has unknown terrain '%s'" % [
 					d.get("id", "?"), tq, tr, terrain_str])
 			tile_coords["%d,%d" % [tq, tr]] = true
@@ -330,6 +334,147 @@ static func validate_references(registries: Dictionary) -> Array[String]:
 				if not registries["terrains"].has(t.terrain):
 					e.append("map '%s' tile (%d,%d) uses terrain '%s' not in terrain registry" % [
 						m.id, t.q, t.r, t.terrain])
+	# A9: Job tree structural validation
+	if registries.has("classes"):
+		e.append_array(validate_job_tree(registries["classes"]))
+	return e
+
+
+# --- Job tree validation (A9) ---
+
+## Validates the class job tree is structurally sound:
+## - Exactly one starting class (Vagabond) with no prerequisites
+## - Acyclic prerequisite graph
+## - No orphan classes (all reachable from root via prerequisite chains)
+## - Tier consistency (advanced requires tier1, elite requires advanced)
+static func validate_job_tree(classes_reg: EntityRegistry) -> Array[String]:
+	var e: Array[String] = []
+	if classes_reg.size() == 0:
+		return e
+
+	# 1. Find root(s): classes with tier "starting"
+	var roots: Array[String] = []
+	for cls in classes_reg.all():
+		if cls.tier == "starting":
+			roots.append(cls.id)
+	if roots.size() == 0:
+		e.append("job tree has no starting class (tier 'starting')")
+		return e
+	if roots.size() > 1:
+		e.append("job tree has multiple starting classes: %s" % str(roots))
+
+	# 2. Build prerequisite graph: child → parent classes
+	# Also build reverse graph: parent → children (for reachability)
+	var children_of: Dictionary = {}  # parent_id → [child_ids]
+	for cls in classes_reg.all():
+		var prereq_classes: Array = cls.prerequisites.get("classes", [])
+		for pair in prereq_classes:
+			if typeof(pair) == TYPE_ARRAY and pair.size() == 2:
+				var parent_id: String = str(pair[0])
+				if not children_of.has(parent_id):
+					children_of[parent_id] = []
+				children_of[parent_id].append(cls.id)
+
+	# 3. Cycle detection via DFS on prerequisite graph
+	var visited: Dictionary = {}
+	var in_stack: Dictionary = {}
+	for cls in classes_reg.all():
+		if not visited.has(cls.id):
+			var cycle_errors := _dfs_cycle_check(cls.id, classes_reg, visited, in_stack)
+			e.append_array(cycle_errors)
+
+	# 4. Reachability: BFS from root to find all reachable classes
+	var reachable: Dictionary = {}
+	var queue: Array[String] = []
+	for root_id in roots:
+		queue.append(root_id)
+		reachable[root_id] = true
+	while not queue.is_empty():
+		var current: String = queue.pop_front()
+		# Find all classes that list 'current' as a prerequisite
+		for child_id in children_of.get(current, []):
+			if not reachable.has(child_id):
+				reachable[child_id] = true
+				queue.append(child_id)
+		# Also consider classes reachable via tier1 (level-only prereqs)
+		# tier1 classes with only level prereqs are reachable from root by leveling
+	# tier1 classes with only a level prerequisite (no class prereqs) are
+	# implicitly reachable from root since any character starts at root
+	for cls in classes_reg.all():
+		if cls.tier == "tier1":
+			var prereq_classes: Array = cls.prerequisites.get("classes", [])
+			if prereq_classes.is_empty() and not reachable.has(cls.id):
+				reachable[cls.id] = true
+				queue.append(cls.id)
+				# Re-propagate from newly reachable tier1 classes
+				while not queue.is_empty():
+					var current2: String = queue.pop_front()
+					for child_id in children_of.get(current2, []):
+						if not reachable.has(child_id):
+							reachable[child_id] = true
+							queue.append(child_id)
+	for cls in classes_reg.all():
+		if not reachable.has(cls.id):
+			e.append("class '%s' is not reachable from starting class (orphan)" % cls.id)
+
+	# 5. Tier consistency
+	for cls in classes_reg.all():
+		var prereq_classes: Array = cls.prerequisites.get("classes", [])
+		var prereq_tiers: Array[String] = []
+		for pair in prereq_classes:
+			if typeof(pair) == TYPE_ARRAY and pair.size() == 2:
+				var req_cls: ClassData = classes_reg.get_entry(str(pair[0]))
+				if req_cls:
+					prereq_tiers.append(req_cls.tier)
+		match cls.tier:
+			"starting":
+				if not cls.prerequisites.is_empty():
+					e.append("starting class '%s' should have no prerequisites" % cls.id)
+			"tier1":
+				if not prereq_classes.is_empty():
+					e.append("tier1 class '%s' should not require other classes (level-only)" % cls.id)
+			"advanced":
+				if prereq_classes.is_empty():
+					e.append("advanced class '%s' should require at least one class prerequisite" % cls.id)
+				elif not prereq_tiers.is_empty():
+					var has_tier1 := false
+					for pt in prereq_tiers:
+						if pt == "tier1":
+							has_tier1 = true
+							break
+					if not has_tier1:
+						e.append("advanced class '%s' should require at least one tier1 class" % cls.id)
+			"elite":
+				if prereq_classes.is_empty():
+					e.append("elite class '%s' should require at least one class prerequisite" % cls.id)
+				elif not prereq_tiers.is_empty():
+					var has_advanced := false
+					for pt in prereq_tiers:
+						if pt == "advanced":
+							has_advanced = true
+							break
+					if not has_advanced:
+						e.append("elite class '%s' should require at least one advanced class" % cls.id)
+	return e
+
+
+## DFS cycle detection on the prerequisite graph.
+static func _dfs_cycle_check(cls_id: String, classes_reg: EntityRegistry,
+		visited: Dictionary, in_stack: Dictionary) -> Array[String]:
+	var e: Array[String] = []
+	visited[cls_id] = true
+	in_stack[cls_id] = true
+	var cls: ClassData = classes_reg.get_entry(cls_id)
+	if cls:
+		var prereq_classes: Array = cls.prerequisites.get("classes", [])
+		for pair in prereq_classes:
+			if typeof(pair) == TYPE_ARRAY and pair.size() == 2:
+				var parent_id: String = str(pair[0])
+				if in_stack.has(parent_id):
+					e.append("job tree cycle detected: '%s' → '%s'" % [cls_id, parent_id])
+				elif not visited.has(parent_id) and classes_reg.has(parent_id):
+					e.append_array(_dfs_cycle_check(parent_id, classes_reg, visited, in_stack))
+	in_stack.erase(cls_id)
 	return e
 
 
