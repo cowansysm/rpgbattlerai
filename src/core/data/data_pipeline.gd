@@ -11,6 +11,8 @@ var items := EntityRegistry.new()
 var characters := EntityRegistry.new()
 var maps := EntityRegistry.new()
 var terrains := TerrainRegistry.new()
+var loot_tables: Dictionary = {}
+var shop_pools: Dictionary = {}
 
 
 ## Runs the full pipeline. Returns Array[String] of errors (empty == success).
@@ -43,16 +45,21 @@ func _load_all(base_path: String) -> Array[String]:
 	errors.append_array(maps.load_validated(
 		base_path.path_join("maps"), Validator.validate_map, DataFactory.make_map))
 	errors.append_array(terrains.load_from(base_path.path_join("terrain.json")))
+	errors.append_array(_load_economy_data(base_path))
 	return errors
 
 
 ## Cross-entity referential integrity check.
 func _validate_references() -> Array[String]:
-	return Validator.validate_references({
+	var e: Array[String] = []
+	e.append_array(Validator.validate_references({
 		"races": races, "classes": classes, "abilities": abilities,
 		"items": items, "characters": characters, "maps": maps,
 		"terrains": terrains,
-	})
+	}))
+	e.append_array(Validator.validate_shop_pools(shop_pools, items))
+	e.append_array(Validator.validate_loot_tables(loot_tables, shop_pools, items))
+	return e
 
 
 ## Computes final stat blocks for all characters.
@@ -91,3 +98,33 @@ func get_terrain(id: String) -> TerrainProps:
 func get_final_stats(id: String) -> StatBlock:
 	var c := get_character(id)
 	return c.final_stats if c else null
+
+func get_loot_table(table_id: String) -> Dictionary:
+	return loot_tables.get(table_id, {})
+
+func get_shop_pool(pool_id: String) -> Array:
+	return shop_pools.get(pool_id, []) as Array
+
+func all_shop_pool_ids() -> Array:
+	return shop_pools.keys()
+
+
+func _load_economy_data(base_path: String) -> Array[String]:
+	var errors: Array[String] = []
+	var loot_path: String = base_path.path_join("loot_tables.json")
+	if FileAccess.file_exists(loot_path):
+		var text: String = FileAccess.get_file_as_string(loot_path)
+		var parsed: Variant = JSON.parse_string(text)
+		if parsed is Dictionary:
+			loot_tables = parsed as Dictionary
+		else:
+			errors.append("loot_tables.json: expected Dictionary at root")
+	var pool_path: String = base_path.path_join("shop_pools.json")
+	if FileAccess.file_exists(pool_path):
+		var text: String = FileAccess.get_file_as_string(pool_path)
+		var parsed: Variant = JSON.parse_string(text)
+		if parsed is Dictionary:
+			shop_pools = parsed as Dictionary
+		else:
+			errors.append("shop_pools.json: expected Dictionary at root")
+	return errors

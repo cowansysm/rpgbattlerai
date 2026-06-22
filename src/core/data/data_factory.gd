@@ -60,6 +60,7 @@ static func make_item(d: Dictionary) -> ItemData:
 	i.display_name = str(d.get("name", d.get("display_name", d["id"])))
 	i.slot = str(d.get("slot", ""))
 	i.bp_value = int(d.get("bp", d.get("bp_value", 0)))
+	i.price = int(d.get("price", -1))
 	i.passive = d.get("passive", {})
 	i.granted_abilities = _to_str_array(d.get("granted_abilities", []))
 	i.weapon_power = int(d.get("power", d.get("weapon_power", 0)))

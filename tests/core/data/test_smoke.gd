@@ -14,7 +14,7 @@ func test_entity_counts() -> void:
 	assert_eq(_pipeline.races.size(), 4, "4 races expected")
 	assert_eq(_pipeline.classes.size(), 4, "4 classes expected")
 	assert_eq(_pipeline.abilities.size(), 16, "16 abilities expected")
-	assert_eq(_pipeline.items.size(), 12, "12 items expected")
+	assert_eq(_pipeline.items.size(), 13, "13 items expected")
 	assert_eq(_pipeline.characters.size(), 8, "8 characters expected")
 	assert_eq(_pipeline.maps.size(), 6, "6 maps expected")
 

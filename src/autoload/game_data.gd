@@ -56,3 +56,12 @@ func all_terrain_ids() -> Array:
 
 func has_terrain(id: String) -> bool:
 	return _pipeline.terrains.has(id)
+
+func get_loot_table(table_id: String) -> Dictionary:
+	return _pipeline.get_loot_table(table_id)
+
+func get_shop_pool(pool_id: String) -> Array:
+	return _pipeline.get_shop_pool(pool_id)
+
+func all_shop_pool_ids() -> Array:
+	return _pipeline.all_shop_pool_ids()

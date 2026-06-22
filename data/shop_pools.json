@@ -1,0 +1,6 @@
+{
+  "tier1_weapons": ["sword", "bow", "daggers", "rapier", "sling", "staff"],
+  "tier1_armor": ["light_armor", "medium_armor", "shield"],
+  "tier1_gear": ["sword", "bow", "daggers", "rapier", "sling", "staff", "light_armor", "medium_armor", "shield", "bracer_of_accuracy"],
+  "starter_consumables": ["potion"]
+}

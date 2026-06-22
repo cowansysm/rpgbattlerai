@@ -89,6 +89,45 @@ func assign_equipment(ci: CharacterInstance, slot: String, item_id: String,
 	return true
 
 
+## Adds a consumable to inventory, stacking by id.
+func add_consumable(item_id: String, qty: int = 1) -> void:
+	var consumables: Array = inventory["consumables"] as Array
+	for entry in consumables:
+		if entry is Dictionary and str(entry["id"]) == item_id:
+			entry["qty"] = int(entry["qty"]) + qty
+			return
+	consumables.append({"id": item_id, "qty": qty})
+
+
+## Removes a consumable from inventory. Returns false if not held or insufficient qty.
+func remove_consumable(item_id: String, qty: int = 1) -> bool:
+	var consumables: Array = inventory["consumables"] as Array
+	for i in range(consumables.size()):
+		var entry: Variant = consumables[i]
+		if entry is Dictionary and str(entry["id"]) == item_id:
+			var current: int = int(entry["qty"])
+			if current < qty:
+				return false
+			if current == qty:
+				consumables.remove_at(i)
+			else:
+				entry["qty"] = current - qty
+			return true
+	return false
+
+
+func has_consumable(item_id: String) -> bool:
+	return consumable_qty(item_id) > 0
+
+
+func consumable_qty(item_id: String) -> int:
+	var consumables: Array = inventory["consumables"] as Array
+	for entry in consumables:
+		if entry is Dictionary and str(entry["id"]) == item_id:
+			return int(entry["qty"])
+	return 0
+
+
 func unassign_equipment(ci: CharacterInstance, slot: String) -> void:
 	if ci.equipment.has(slot):
 		add_to_inventory(str(ci.equipment[slot]))

@@ -1,50 +1,54 @@
 [
   {
     "id": "sword", "name": "Sword", "slot": "weapon",
-    "bp": 2, "power": 5, "range": 1
+    "bp": 2, "power": 5, "range": 1, "price": 50
   },
   {
     "id": "bow", "name": "Bow", "slot": "weapon",
-    "bp": 2, "power": 4, "range": 3
+    "bp": 2, "power": 4, "range": 3, "price": 50
   },
   {
     "id": "daggers", "name": "Daggers", "slot": "weapon",
-    "bp": 1, "power": 3, "range": 1
+    "bp": 1, "power": 3, "range": 1, "price": 30
   },
   {
     "id": "rapier", "name": "Rapier", "slot": "weapon",
-    "bp": 2, "power": 5, "range": 1
+    "bp": 2, "power": 5, "range": 1, "price": 55
   },
   {
     "id": "greataxe", "name": "Greataxe", "slot": "weapon",
-    "bp": 3, "power": 8, "range": 1
+    "bp": 3, "power": 8, "range": 1, "price": 80
   },
   {
     "id": "sling", "name": "Sling", "slot": "weapon",
-    "bp": 1, "power": 2, "range": 2
+    "bp": 1, "power": 2, "range": 2, "price": 25
   },
   {
     "id": "staff", "name": "Staff", "slot": "weapon",
-    "bp": 1, "power": 2, "range": 1
+    "bp": 1, "power": 2, "range": 1, "price": 20
   },
   {
     "id": "light_armor", "name": "Light Armor", "slot": "armor",
-    "bp": 1, "passive": { "def": 2 }
+    "bp": 1, "passive": { "def": 2 }, "price": 30
   },
   {
     "id": "medium_armor", "name": "Medium Armor", "slot": "armor",
-    "bp": 2, "passive": { "def": 3, "res": 1 }
+    "bp": 2, "passive": { "def": 3, "res": 1 }, "price": 60
   },
   {
     "id": "shield", "name": "Shield", "slot": "shield",
-    "bp": 2, "passive": { "def": 3, "res": 1 }
+    "bp": 2, "passive": { "def": 3, "res": 1 }, "price": 50
   },
   {
     "id": "bracer_of_accuracy", "name": "Bracer of Accuracy", "slot": "accessory",
-    "bp": 2, "passive": { "accuracy": 1 }
+    "bp": 2, "passive": { "accuracy": 1 }, "price": 40
   },
   {
     "id": "smoke_bomb_pouch", "name": "Smoke Bomb Pouch", "slot": "accessory",
-    "bp": 2, "granted_abilities": ["smoke_bomb"]
+    "bp": 2, "granted_abilities": ["smoke_bomb"], "price": 45
+  },
+  {
+    "id": "potion", "name": "Potion", "slot": "",
+    "bp": 0, "price": 10
   }
 ]

@@ -191,10 +191,16 @@ static func validate_item(d: Dictionary) -> Array[String]:
 	var e: Array[String] = []
 	if not d.has("id"):
 		e.append("item missing required field 'id'")
-	if not d.has("slot"):
-		e.append("item '%s' missing required field 'slot'" % d.get("id", "?"))
-	if d.has("slot") and not SLOTS.has(str(d["slot"])):
+	# slot is optional (empty or absent = consumable); if present and non-empty, must be valid
+	if d.has("slot") and str(d["slot"]) != "" and not SLOTS.has(str(d["slot"])):
 		e.append("item '%s' has unknown slot '%s'" % [d.get("id", "?"), d["slot"]])
+	# price must be int >= -1 when present
+	if d.has("price"):
+		var p: Variant = d["price"]
+		if typeof(p) != TYPE_INT and typeof(p) != TYPE_FLOAT:
+			e.append("item '%s' price must be numeric" % d.get("id", "?"))
+		elif int(p) < -1:
+			e.append("item '%s' price must be >= -1" % d.get("id", "?"))
 	# passive dict: free-form keys allowed, but values must be numeric
 	if d.has("passive") and typeof(d["passive"]) == TYPE_DICTIONARY:
 		for pk in d["passive"].keys():
@@ -324,4 +330,67 @@ static func validate_references(registries: Dictionary) -> Array[String]:
 				if not registries["terrains"].has(t.terrain):
 					e.append("map '%s' tile (%d,%d) uses terrain '%s' not in terrain registry" % [
 						m.id, t.q, t.r, t.terrain])
+	return e
+
+
+## Validates shop pool item references against the items registry.
+static func validate_shop_pools(pools: Dictionary, items_reg: EntityRegistry) -> Array[String]:
+	var e: Array[String] = []
+	for pool_id in pools.keys():
+		var pool: Variant = pools[pool_id]
+		if not pool is Array:
+			e.append("shop pool '%s' must be an Array" % pool_id)
+			continue
+		for item_id in (pool as Array):
+			if not items_reg.has(str(item_id)):
+				e.append("shop pool '%s' references unknown item '%s'" % [pool_id, item_id])
+	return e
+
+
+## Validates loot table structure and references.
+static func validate_loot_tables(tables: Dictionary, pools: Dictionary,
+		items_reg: EntityRegistry) -> Array[String]:
+	var e: Array[String] = []
+	var valid_kinds: Array = ["equipment", "consumable", "nothing"]
+	for table_id in tables.keys():
+		var table: Variant = tables[table_id]
+		if not table is Dictionary:
+			e.append("loot table '%s' must be a Dictionary" % table_id)
+			continue
+		var td: Dictionary = table as Dictionary
+		# Validate gold range
+		var gold: Variant = td.get("gold", {})
+		if gold is Dictionary:
+			var gd: Dictionary = gold as Dictionary
+			var gmin: int = int(gd.get("min", 0))
+			var gmax: int = int(gd.get("max", 0))
+			if gmin < 0:
+				e.append("loot table '%s' gold.min must be >= 0" % table_id)
+			if gmax < gmin:
+				e.append("loot table '%s' gold.max must be >= gold.min" % table_id)
+		# Validate rolls
+		var rolls: int = int(td.get("rolls", 1))
+		if rolls < 1:
+			e.append("loot table '%s' rolls must be >= 1" % table_id)
+		# Validate drops
+		var drops: Variant = td.get("drops", [])
+		if not drops is Array:
+			e.append("loot table '%s' drops must be an Array" % table_id)
+			continue
+		for drop in (drops as Array):
+			if not drop is Dictionary:
+				continue
+			var dd: Dictionary = drop as Dictionary
+			var kind: String = str(dd.get("kind", ""))
+			if not valid_kinds.has(kind):
+				e.append("loot table '%s' drop has unknown kind '%s'" % [table_id, kind])
+			if kind == "equipment":
+				var pool_id: String = str(dd.get("pool", ""))
+				if not pools.has(pool_id):
+					e.append("loot table '%s' drop references unknown pool '%s'" % [table_id, pool_id])
+			if kind == "consumable":
+				if not dd.has("id"):
+					e.append("loot table '%s' consumable drop missing 'id'" % table_id)
+				elif not items_reg.has(str(dd["id"])):
+					e.append("loot table '%s' consumable drop references unknown item '%s'" % [table_id, dd["id"]])
 	return e

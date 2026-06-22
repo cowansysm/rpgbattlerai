@@ -4,7 +4,7 @@ extends Control
 ## inspect characters, field for battle.
 ## Spec reference: alpha-phaseA5-spec.md §8
 
-enum PanelState { BAND_SELECT, ROSTER_VIEW, INSTANCE_INSPECT, FIELD_SELECT }
+enum PanelState { BAND_SELECT, ROSTER_VIEW, INSTANCE_INSPECT, FIELD_SELECT, SHOP }
 
 var _state: int = PanelState.BAND_SELECT
 var _band: BattleBand = null
@@ -51,6 +51,13 @@ var _field_start_btn: Button
 var _selected_map: MapData
 var _fielded_set: Dictionary = {}
 
+# --- Shop widgets ---
+var _shop_panel: VBoxContainer
+var _shop_gold_label: Label
+var _shop_buy_list: VBoxContainer
+var _shop_sell_list: VBoxContainer
+var _shop_feedback: Label
+
 
 func _ready() -> void:
 	_name_gen = NameGenerator.new()
@@ -91,6 +98,7 @@ func _build_ui() -> void:
 	_build_roster_panel(root)
 	_build_inspect_panel(root)
 	_build_field_panel(root)
+	_build_shop_panel(root)
 
 
 func _build_band_select_panel(root: VBoxContainer) -> void:
@@ -176,6 +184,12 @@ func _build_roster_panel(root: VBoxContainer) -> void:
 	save_btn.custom_minimum_size.y = 40
 	save_btn.pressed.connect(_on_save_band)
 	actions.add_child(save_btn)
+
+	var shop_btn := Button.new()
+	shop_btn.text = "Shop"
+	shop_btn.custom_minimum_size.y = 40
+	shop_btn.pressed.connect(_on_show_shop)
+	actions.add_child(shop_btn)
 
 	var field_btn := Button.new()
 	field_btn.text = "Field for Battle"
@@ -309,6 +323,55 @@ func _build_field_panel(root: VBoxContainer) -> void:
 	actions.add_child(back_btn)
 
 
+func _build_shop_panel(root: VBoxContainer) -> void:
+	_shop_panel = VBoxContainer.new()
+	_shop_panel.visible = false
+	root.add_child(_shop_panel)
+
+	var title := Label.new()
+	title.text = "Shop"
+	title.add_theme_font_size_override("font_size", 24)
+	_shop_panel.add_child(title)
+
+	_shop_gold_label = Label.new()
+	_shop_gold_label.add_theme_font_size_override("font_size", 16)
+	_shop_panel.add_child(_shop_gold_label)
+
+	_shop_panel.add_child(_spacer(8))
+
+	_shop_feedback = Label.new()
+	_shop_feedback.add_theme_color_override("font_color", Color(1.0, 0.8, 0.2))
+	_shop_panel.add_child(_shop_feedback)
+
+	_shop_panel.add_child(_spacer(8))
+
+	var buy_header := Label.new()
+	buy_header.text = "Buy"
+	buy_header.add_theme_font_size_override("font_size", 18)
+	_shop_panel.add_child(buy_header)
+
+	_shop_buy_list = VBoxContainer.new()
+	_shop_panel.add_child(_shop_buy_list)
+
+	_shop_panel.add_child(_spacer(12))
+
+	var sell_header := Label.new()
+	sell_header.text = "Sell"
+	sell_header.add_theme_font_size_override("font_size", 18)
+	_shop_panel.add_child(sell_header)
+
+	_shop_sell_list = VBoxContainer.new()
+	_shop_panel.add_child(_shop_sell_list)
+
+	_shop_panel.add_child(_spacer(12))
+
+	var back_btn := Button.new()
+	back_btn.text = "Back"
+	back_btn.custom_minimum_size.y = 40
+	back_btn.pressed.connect(_on_shop_back)
+	_shop_panel.add_child(back_btn)
+
+
 func _spacer(height: int) -> Control:
 	var s := Control.new()
 	s.custom_minimum_size.y = height
@@ -325,6 +388,7 @@ func _show_band_select() -> void:
 	_roster_panel.visible = false
 	_inspect_panel.visible = false
 	_field_panel.visible = false
+	_shop_panel.visible = false
 	_refresh_band_list()
 
 
@@ -334,6 +398,7 @@ func _show_roster_view() -> void:
 	_roster_panel.visible = true
 	_inspect_panel.visible = false
 	_field_panel.visible = false
+	_shop_panel.visible = false
 	_refresh_roster()
 
 
@@ -344,6 +409,7 @@ func _show_inspect(ci: CharacterInstance) -> void:
 	_roster_panel.visible = false
 	_inspect_panel.visible = true
 	_field_panel.visible = false
+	_shop_panel.visible = false
 	_refresh_inspect()
 
 
@@ -353,8 +419,20 @@ func _show_field_select() -> void:
 	_roster_panel.visible = false
 	_inspect_panel.visible = false
 	_field_panel.visible = true
+	_shop_panel.visible = false
 	_fielded_set.clear()
 	_refresh_field_select()
+
+
+func _show_shop() -> void:
+	_state = PanelState.SHOP
+	_band_panel.visible = false
+	_roster_panel.visible = false
+	_inspect_panel.visible = false
+	_field_panel.visible = false
+	_shop_panel.visible = true
+	_shop_feedback.text = ""
+	_refresh_shop()
 
 
 # ============================================================
@@ -771,4 +849,115 @@ func _on_start_battle() -> void:
 
 
 func _on_field_back() -> void:
+	_show_roster_view()
+
+
+# ============================================================
+# SHOP
+# ============================================================
+
+func _on_show_shop() -> void:
+	if _band == null:
+		return
+	_show_shop()
+
+
+func _refresh_shop() -> void:
+	if _band == null:
+		return
+	_shop_gold_label.text = "Gold: %d" % _band.gold
+
+	# --- Buy list ---
+	for child in _shop_buy_list.get_children():
+		child.queue_free()
+	var pool_prov := func(id: String) -> Array:
+		return GameData.get_shop_pool(id)
+	var pool_ids: Array[String] = []
+	for pid in GameData.all_shop_pool_ids():
+		pool_ids.append(str(pid))
+	var buyable: Array[String] = ShopService.available_items(pool_ids, pool_prov)
+	if buyable.is_empty():
+		var empty := Label.new()
+		empty.text = "Nothing available."
+		_shop_buy_list.add_child(empty)
+	else:
+		for item_id in buyable:
+			var item: ItemData = GameData.get_item(item_id)
+			if item == null:
+				continue
+			var price: int = Pricing.buy_price(item)
+			var btn := Button.new()
+			btn.text = "Buy %s — %d gold" % [item.display_name, price]
+			btn.custom_minimum_size.y = 30
+			btn.disabled = _band.gold < price
+			var iid: String = item_id
+			btn.pressed.connect(_on_shop_buy.bind(iid))
+			_shop_buy_list.add_child(btn)
+
+	# --- Sell list ---
+	for child in _shop_sell_list.get_children():
+		child.queue_free()
+	var equip_list: Array = _band.inventory["equipment"] as Array
+	var has_sellable: bool = false
+	for eid in equip_list:
+		var item: ItemData = GameData.get_item(str(eid))
+		if item == null:
+			continue
+		has_sellable = true
+		var sell_val: int = Pricing.sell_value(item)
+		var btn := Button.new()
+		btn.text = "Sell %s — %d gold" % [item.display_name, sell_val]
+		btn.custom_minimum_size.y = 30
+		var sid: String = str(eid)
+		btn.pressed.connect(_on_shop_sell.bind(sid))
+		_shop_sell_list.add_child(btn)
+	# Consumables
+	var consumables: Array = _band.inventory.get("consumables", []) as Array
+	for entry in consumables:
+		if not entry is Dictionary:
+			continue
+		var cid: String = str(entry.get("id", ""))
+		var qty: int = int(entry.get("qty", 0))
+		if cid.is_empty() or qty <= 0:
+			continue
+		var item: ItemData = GameData.get_item(cid)
+		if item == null:
+			continue
+		has_sellable = true
+		var sell_val: int = Pricing.sell_value(item)
+		var btn := Button.new()
+		btn.text = "Sell %s (x%d) — %d gold each" % [item.display_name, qty, sell_val]
+		btn.custom_minimum_size.y = 30
+		var scid: String = cid
+		btn.pressed.connect(_on_shop_sell.bind(scid))
+		_shop_sell_list.add_child(btn)
+	if not has_sellable:
+		var empty := Label.new()
+		empty.text = "Nothing to sell."
+		_shop_sell_list.add_child(empty)
+
+
+func _on_shop_buy(item_id: String) -> void:
+	var err := ShopService.buy(_band, item_id, _item_prov)
+	if err.is_empty():
+		var item: ItemData = GameData.get_item(item_id)
+		var name_str: String = item.display_name if item != null else item_id
+		_shop_feedback.text = "Bought %s" % name_str
+	else:
+		_shop_feedback.text = err
+	_refresh_shop()
+
+
+func _on_shop_sell(item_id: String) -> void:
+	var err := ShopService.sell(_band, item_id, _item_prov)
+	if err.is_empty():
+		var item: ItemData = GameData.get_item(item_id)
+		var name_str: String = item.display_name if item != null else item_id
+		_shop_feedback.text = "Sold %s" % name_str
+	else:
+		_shop_feedback.text = err
+	_refresh_shop()
+
+
+func _on_shop_back() -> void:
 	_show_roster_view()

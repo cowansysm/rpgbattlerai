@@ -14,10 +14,12 @@ res://
 │   ├── abilities.json       # All abilities (consolidated array)
 │   ├── characters.json      # 8 character templates
 │   ├── classes.json         # Class/job definitions (Vagabond + tier-1 branches)
-│   ├── items.json           # 12 equipment items
+│   ├── items.json           # 13 items (12 equipment + 1 consumable)
 │   ├── races.json           # 4 race definitions (with base_stats)
-│   ├── constants.json       # Game balance tuning (incl. AI presets)
+│   ├── constants.json       # Game balance tuning (incl. AI presets, economy tunables)
 │   ├── terrain.json         # Terrain type definitions
+│   ├── loot_tables.json     # Loot table definitions (standard_battle, boss_battle)
+│   ├── shop_pools.json      # Shop pool definitions (tier1_weapons, tier1_armor, etc.)
 │   ├── maps/                # Map JSON files (condensed format)
 │   └── names/               # Per-race name tables (human, elf, dwarf, halfling)
 ├── scenes/
@@ -31,6 +33,7 @@ res://
 │   │   ├── ai/              # AI planner, scorer, plan model
 │   │   ├── combat/          # Match state, turns, resolution, abilities, deployment
 │   │   ├── data/            # Entity Resources, loader, validator, pipeline, stats
+│   │   ├── economy/         # Pricing, LootRoller, ShopService
 │   │   ├── hex/             # Hex math, pathfinding, LOS, range queries
 │   │   └── progression/     # Character instances, name generation, stat resolver
 │   ├── debug/               # Debug readout
@@ -42,6 +45,7 @@ res://
     ├── core/combat/         # Combat unit + integration tests
     ├── core/data/           # Data layer tests
     ├── core/hex/            # Hex math tests
+    ├── core/economy/        # Economy tests (pricing, shop, loot, validation, integration)
     ├── core/progression/    # Character instance & bridge tests
     ├── map/                 # Map/visual tests
     └── fixtures/            # Test data sets (valid_set, dangling_ref, bad_effect)
@@ -153,6 +157,18 @@ Each entity type is a single JSON file containing an array of objects:
 - **CharacterInstance** extended with: `to_dict()`/`from_dict()` serialization (defensive defaults, type coercion for JSON)
 - **Tunables** in `constants.json`: `ROSTER_CAP`, `RECRUIT_COST`, `RECRUIT_STARTING_GOLD`, `STARTING_INVENTORY`
 
+## Economy System (A6)
+
+- **`Pricing`** — static buy/sell price computation: authored `price` field (≥ 0) takes precedence; fallback derives from `bp_value × PRICE_PER_BP`; sell value = `round(buy_price × SELL_RATIO)`
+- **`ShopService`** — transactional buy/sell on `BattleBand`: deducts/adds gold, routes equipment to `add_to_inventory()` and consumables (empty slot) to `add_consumable()`; returns `""` on success or error string
+- **`LootRoller`** — rolls loot from authored `loot_tables.json` with depth scaling (`1.0 + LOOT_DEPTH_SCALE × depth`); injectable `RandomNumberGenerator` for deterministic testing; `grant_rewards()` applies rolled gold/equipment/consumables to a band
+- **`ItemData`** extended with: `price: int = -1` (-1 = derive from bp_value)
+- **Consumables:** items with empty `slot` are consumables; stacked in `inventory.consumables` as `{id, qty}` dicts; `BattleBand` has `add_consumable()`, `remove_consumable()`, `has_consumable()`, `consumable_qty()` helpers
+- **Data files:** `data/loot_tables.json` (keyed dict of table definitions with gold ranges, weighted drops, roll counts); `data/shop_pools.json` (keyed dict of item ID arrays per pool)
+- **DataPipeline** loads loot tables and shop pools as plain dictionaries (not `EntityRegistry`); validates pool item refs and loot table structure via `Validator`
+- **Shop UI** integrated into `BandManagementScene` as `SHOP` panel state: buy list (from merged shop pools with prices), sell list (equipment + consumables with sell values), transaction feedback
+- **Tunables** in `constants.json`: `SELL_RATIO` (0.5), `LOOT_DEPTH_SCALE` (0.1), `PRICE_PER_BP` (5)
+
 ## AI System (A7)
 
 - **`AIPlan`** — plan model with step kinds (move, attack, ability, defend, wait) and AP cost tracking
@@ -207,7 +223,7 @@ Main scene: `res://scenes/draft/draft_scene.tscn` (party draft → deploy → co
 
 ## Alpha (in progress)
 
-The Alpha extends the MVP into a single-player game. Its specs and implementation plans are complete (see Documentation). A0–A5 and A7 are **implemented and tested**; A6, A8–A10 are **planned but not yet built** — treat their `alpha-*` docs as the plan of record, not as describing current code. Do not assume any A6+ system is built unless the source actually shows it.
+The Alpha extends the MVP into a single-player game. Its specs and implementation plans are complete (see Documentation). A0–A7 are **implemented and tested**; A8–A10 are **planned but not yet built** — treat their `alpha-*` docs as the plan of record, not as describing current code. Do not assume any A8+ system is built unless the source actually shows it.
 
 Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A9 content are parallel; A7 AI joins at A8):
 
@@ -217,7 +233,7 @@ Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A
 - [x] A3: `MAG`/`RES` stats & magical resolution — **complete**
 - [x] A4: Character instances, classes & the Vagabond-rooted job tree — **complete**
 - [x] A5: Battle Bands & save system (`user://`) — **complete**
-- [ ] A6: Economy — gold, shops & loot
+- [x] A6: Economy — gold, shops & loot — **complete**
 - [x] A7: AI opponent (`AIController` over `TurnActions`) — **complete**
 - [ ] A8: Roguelike run (branching node graph, ≤3 parallel paths, down-limit death)
 - [ ] A9: Content expansion (authored via A1/A2)

@@ -257,10 +257,10 @@ func test_import_rejects_ability_bad_type() -> void:
 	assert_gt(errors.size(), 0, "should reject ability with unknown type")
 
 
-func test_import_rejects_item_missing_slot() -> void:
-	var row := {"id": "bad_item", "name": "Bad"}
+func test_import_rejects_item_invalid_slot() -> void:
+	var row := {"id": "bad_item", "name": "Bad", "slot": "banana"}
 	var errors := CsvImporter.validate_rows("items", [row])
-	assert_gt(errors.size(), 0, "should reject item without slot")
+	assert_gt(errors.size(), 0, "should reject item with invalid slot")
 
 
 func test_import_rejects_character_missing_stats() -> void:
