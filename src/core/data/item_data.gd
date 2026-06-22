@@ -7,7 +7,6 @@ extends Resource
 @export var display_name: String = ""
 @export var slot: String = ""
 @export var bp_value: int = 0
-@export var price: int = 0
 @export var passive: Dictionary = {}
 @export var granted_abilities: Array[String] = []
 @export var price: int = -1			## Buy price; -1 = derive from bp_value
