@@ -108,6 +108,7 @@ func _build_ui() -> void:
 	# --- Draft panel ---
 	_draft_panel = VBoxContainer.new()
 	_draft_panel.visible = false
+	_draft_panel.size_flags_vertical = SIZE_EXPAND_FILL
 	root.add_child(_draft_panel)
 
 	_player_label = Label.new()
@@ -140,10 +141,16 @@ func _build_ui() -> void:
 
 	_draft_panel.add_child(_spacer(4))
 
-	# Roster grid (4 columns)
+	# Scrollable roster grid (4 columns)
+	var roster_scroll := ScrollContainer.new()
+	roster_scroll.size_flags_vertical = SIZE_EXPAND_FILL
+	roster_scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	_draft_panel.add_child(roster_scroll)
+
 	_roster_grid = GridContainer.new()
 	_roster_grid.columns = 4
-	_draft_panel.add_child(_roster_grid)
+	_roster_grid.size_flags_horizontal = SIZE_EXPAND_FILL
+	roster_scroll.add_child(_roster_grid)
 
 	_draft_panel.add_child(_spacer(12))
 
