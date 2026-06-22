@@ -34,5 +34,9 @@
     "target": 8.0,
     "ability": 6.0,
     "resource": 2.0
-  }
+  },
+  "ROSTER_CAP": 12,
+  "RECRUIT_COST": 50,
+  "RECRUIT_STARTING_GOLD": 200,
+  "STARTING_INVENTORY": ["sword", "daggers", "staff", "sling", "light_armor", "light_armor"]
 }

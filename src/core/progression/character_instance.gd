@@ -179,6 +179,71 @@ func _apply_growth(class_provider: Callable) -> void:
 		growth_accumulated[k] = int(floor(current + rate))
 
 
+## Serializes all instance state to a plain Dictionary for JSON persistence.
+func to_dict() -> Dictionary:
+	return {
+		"instance_id": instance_id,
+		"template_id": template_id,
+		"name": name,
+		"race": race,
+		"level": level,
+		"xp": xp,
+		"active_class": active_class,
+		"unlocked_classes": unlocked_classes.duplicate(),
+		"jp": jp.duplicate(),
+		"learned_abilities": learned_abilities.duplicate(),
+		"ability_loadout": ability_loadout.duplicate(),
+		"equipment": equipment.duplicate(),
+		"growth_accumulated": growth_accumulated.duplicate(),
+		"downs_this_run": downs_this_run,
+	}
+
+
+## Reconstructs a CharacterInstance from a saved Dictionary.
+## Uses defaults for any missing keys (forward-compatible).
+static func from_dict(d: Dictionary) -> CharacterInstance:
+	var ci := CharacterInstance.new()
+	ci.instance_id = str(d.get("instance_id", ""))
+	ci.template_id = str(d.get("template_id", ""))
+	ci.name = str(d.get("name", ""))
+	ci.race = str(d.get("race", ""))
+	ci.level = int(d.get("level", 1))
+	ci.xp = int(d.get("xp", 0))
+	ci.active_class = str(d.get("active_class", "vagabond"))
+	ci.unlocked_classes = _to_str_array(d.get("unlocked_classes", ["vagabond"]))
+	ci.jp = _to_int_dict(d.get("jp", {}))
+	ci.learned_abilities = _to_str_array(d.get("learned_abilities", []))
+	ci.ability_loadout = _to_str_array(d.get("ability_loadout", []))
+	ci.equipment = _to_str_dict(d.get("equipment", {}))
+	ci.growth_accumulated = _to_int_dict(d.get("growth_accumulated", {}))
+	ci.downs_this_run = int(d.get("downs_this_run", 0))
+	return ci
+
+
+static func _to_str_array(arr: Variant) -> Array[String]:
+	var out: Array[String] = []
+	if arr is Array:
+		for item in arr:
+			out.append(str(item))
+	return out
+
+
+static func _to_int_dict(d: Variant) -> Dictionary:
+	var out: Dictionary = {}
+	if d is Dictionary:
+		for key in d.keys():
+			out[str(key)] = int(d[key])
+	return out
+
+
+static func _to_str_dict(d: Variant) -> Dictionary:
+	var out: Dictionary = {}
+	if d is Dictionary:
+		for key in d.keys():
+			out[str(key)] = str(d[key])
+	return out
+
+
 static func _generate_id() -> String:
 	var t: int = Time.get_ticks_usec()
 	var r: int = randi()

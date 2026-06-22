@@ -21,11 +21,12 @@ res://
 │   ├── maps/                # Map JSON files (condensed format)
 │   └── names/               # Per-race name tables (human, elf, dwarf, halfling)
 ├── scenes/
+│   ├── band/                # Band management UI
 │   ├── draft/               # Party draft UI (main scene)
 │   ├── main/                # Entry point scene
 │   └── map/                 # Battle map / combat scene
 ├── src/
-│   ├── autoload/            # Singletons: Log, Constants, Dev, GameData, MatchData
+│   ├── autoload/            # Singletons: Log, Constants, Dev, GameData, MatchData, SaveManager
 │   ├── core/
 │   │   ├── ai/              # AI planner, scorer, plan model
 │   │   ├── combat/          # Match state, turns, resolution, abilities, deployment
@@ -108,6 +109,7 @@ Each entity type is a single JSON file containing an array of objects:
 4. **GameData** — `src/autoload/game_data.gd` — facade over `DataPipeline`
 5. **DebugReadout** — `src/debug/debug_readout.gd` — debug overlay (gated by `Dev.enabled`)
 6. **MatchData** — `src/autoload/match_data.gd` — per-match state transfer between scenes
+7. **SaveManager** — `src/autoload/save_manager.gd` — versioned JSON persistence for bands, profile, runs
 
 ## Combat System
 
@@ -137,6 +139,19 @@ Each entity type is a single JSON file containing an array of objects:
 - **`InstanceStatResolver`** computes base stats: race base_stats + active class modifiers + accumulated growth
 - **`NameGenerator`** draws from `data/names/<race>.json` with seeded RNG
 - **BattleUnit bridge:** `BattleUnit.from_instance()` synthesizes a CharacterData + derives StatBlock, feeding into the existing combat pipeline with no combat-layer changes
+
+## Battle Bands & Save System (A5)
+
+- **`BattleBand`** — persistent roster container: band_id, name, roster (`Array[CharacterInstance]`), inventory (`{equipment: [], consumables: []}`), gold
+- **`SaveManager`** (autoload) — versioned JSON persistence at `user://saves/save.json`; atomic writes (`.tmp` + rename); band lifecycle (create/delete/get); version migration hook
+- **`Recruiter`** — generates new instances from templates, deducts gold, scales recruits to band average level
+- **`BpCalculator`** — `level × 3 + equipment_bp_sum + loadout_count × 2`; used for display and future encounter scaling
+- **`BandPartyBuilder`** — converts fielded `CharacterInstance`s → `BattleUnit`s via `from_instance()`; generates throwaway opponent instances
+- **`BandBattleLauncher`** — orchestrates band-to-battle transition: resolves fielded instances → builds parties → constructs match → sets MatchData (`ai_teams = ["playerB"]`) → scene change
+- **`BandManagementScene`** — full-screen UI with 4-panel state machine: band select → roster view → instance inspect (stats, class switch, JP/abilities, equipment, dismiss) → field select → quick battle
+- **MatchData** extended with: `active_band`, `fielded_ids`, `is_instance_battle`
+- **CharacterInstance** extended with: `to_dict()`/`from_dict()` serialization (defensive defaults, type coercion for JSON)
+- **Tunables** in `constants.json`: `ROSTER_CAP`, `RECRUIT_COST`, `RECRUIT_STARTING_GOLD`, `STARTING_INVENTORY`
 
 ## AI System (A7)
 
@@ -192,7 +207,7 @@ Main scene: `res://scenes/draft/draft_scene.tscn` (party draft → deploy → co
 
 ## Alpha (in progress)
 
-The Alpha extends the MVP into a single-player game. Its specs and implementation plans are complete (see Documentation). A0–A4 and A7 are **implemented and tested**; A5–A6, A8–A10 are **planned but not yet built** — treat their `alpha-*` docs as the plan of record, not as describing current code. Do not assume any A5+ system is built unless the source actually shows it.
+The Alpha extends the MVP into a single-player game. Its specs and implementation plans are complete (see Documentation). A0–A5 and A7 are **implemented and tested**; A6, A8–A10 are **planned but not yet built** — treat their `alpha-*` docs as the plan of record, not as describing current code. Do not assume any A6+ system is built unless the source actually shows it.
 
 Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A9 content are parallel; A7 AI joins at A8):
 
@@ -201,7 +216,7 @@ Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A
 - [x] A2: CSV ↔ JSON content pipeline — **complete**
 - [x] A3: `MAG`/`RES` stats & magical resolution — **complete**
 - [x] A4: Character instances, classes & the Vagabond-rooted job tree — **complete**
-- [ ] A5: Battle Bands & save system (`user://`)
+- [x] A5: Battle Bands & save system (`user://`) — **complete**
 - [ ] A6: Economy — gold, shops & loot
 - [x] A7: AI opponent (`AIController` over `TurnActions`) — **complete**
 - [ ] A8: Roguelike run (branching node graph, ≤3 parallel paths, down-limit death)
@@ -220,7 +235,7 @@ Phase specs and implementation plans live in `docs/`.
 - `rpg-implementation-plan.md` — high-level phase roadmap
 - `phase<N>-spec.md` / `phase<N>-implementation-plan.md` — per-phase details (0–11)
 
-**Alpha (in progress — A0–A4 & A7 complete, A5–A6 & A8–A10 planned):**
+**Alpha (in progress — A0–A5 & A7 complete, A6 & A8–A10 planned):**
 
 - `alpha-specs.md` — master Alpha specification
 - `alpha-implementation-plan.md` — Alpha milestone roadmap (A0–A10)

@@ -22,6 +22,7 @@ Dev="*res://src/autoload/dev.gd"
 GameData="*res://src/autoload/game_data.gd"
 DebugReadout="*res://src/debug/debug_readout.gd"
 MatchData="*res://src/autoload/match_data.gd"
+SaveManager="*res://src/autoload/save_manager.gd"
 
 [editor_plugins]
 

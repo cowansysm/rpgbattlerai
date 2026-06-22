@@ -43,6 +43,12 @@ func _build_ui() -> void:
 	map_editor_btn.pressed.connect(_on_map_editor_pressed)
 	_vbox.add_child(map_editor_btn)
 
+	# Band Management
+	var band_btn := Button.new()
+	band_btn.text = "Band Management"
+	band_btn.pressed.connect(_on_band_management_pressed)
+	_vbox.add_child(band_btn)
+
 	# CSV Pipeline
 	var csv_sep := HSeparator.new()
 	_vbox.add_child(csv_sep)
@@ -98,6 +104,10 @@ func _on_csv_import_pressed() -> void:
 		_status_label.text = "%d error(s)" % errors.size()
 		for e in errors:
 			Log.error("DevMenu", e)
+
+
+func _on_band_management_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/band/band_scene.tscn")
 
 
 func _on_close() -> void:

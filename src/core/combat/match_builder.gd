@@ -117,6 +117,36 @@ func build_match(
 	return {"state": state, "errors": []}
 
 
+## Builds a complete MatchState from two pre-built BattleUnit arrays and a map.
+## Used by the band-to-battle path (A5) where parties come from CharacterInstances.
+## Returns {state: MatchState, errors: Array[String]}.
+func build_match_from_parties(
+	party_a: Array[BattleUnit],
+	party_b: Array[BattleUnit],
+	map_data: MapData,
+) -> Dictionary:
+	var errors: Array[String] = []
+	if party_a.is_empty():
+		errors.append("Party A is empty")
+	if party_b.is_empty():
+		errors.append("Party B is empty")
+	if not errors.is_empty():
+		return {"state": null, "errors": errors}
+
+	var state := MatchSetup.create(party_a, party_b, map_data, _terrain_provider)
+
+	var resolver := AbilityResolver.new(_ability_getter, _class_getter, _item_getter)
+	state.ability_provider = resolver.resolve
+	state.item_provider = _item_getter
+
+	var deploy_errors := Deployment.auto_deploy(state, map_data.deployment_zones)
+	if not deploy_errors.is_empty():
+		return {"state": null, "errors": deploy_errors}
+
+	RoundManager.start_round(state)
+	return {"state": state, "errors": []}
+
+
 func _create_party(ids: Array[String], errors: Array[String]) -> Array[BattleUnit]:
 	var party: Array[BattleUnit] = []
 	for id in ids:

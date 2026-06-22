@@ -88,6 +88,14 @@ func _build_ui() -> void:
 		btn.pressed.connect(_on_tier_selected.bind(tier_id))
 		tier_buttons.add_child(btn)
 
+	# Alpha A5: Band Management button
+	_tier_panel.add_child(_spacer(24))
+	var band_btn := Button.new()
+	band_btn.text = "Band Management"
+	band_btn.custom_minimum_size.y = 40
+	band_btn.pressed.connect(_on_band_management_pressed)
+	_tier_panel.add_child(band_btn)
+
 	# Alpha A0: Dev Tools button (only shown in dev mode)
 	if Dev.enabled:
 		_tier_panel.add_child(_spacer(24))
@@ -395,6 +403,11 @@ func _update_info_bar() -> void:
 		_current_draft.min_characters(),
 		_current_draft.max_characters()]
 	_confirm_btn.disabled = not _current_draft.is_valid()
+
+
+# Alpha A5: Band Management handler
+func _on_band_management_pressed() -> void:
+	get_tree().change_scene_to_file("res://scenes/band/band_scene.tscn")
 
 
 # Alpha A0: Dev Tools menu handler
