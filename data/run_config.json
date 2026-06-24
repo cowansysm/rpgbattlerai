@@ -1,0 +1,28 @@
+{
+	"run_length": 12,
+	"max_parallel": 3,
+	"cross_link_chance": 0.25,
+	"node_weights": {
+		"battle": 50,
+		"event": 15,
+		"boon": 10,
+		"hazard": 10,
+		"shop": 8,
+		"rest": 7
+	},
+	"shop_rest_spacing": 2,
+	"depth_bp_curve": [30, 40, 50, 60, 75, 90, 105, 120, 140, 160, 185, 210, 250],
+	"boss_bp_multiplier": 1.5,
+	"enemy_count_range": [2, 4],
+	"depth_tier_map": {
+		"0": "skirmish",
+		"4": "standard",
+		"8": "large"
+	},
+	"loot_table_by_kind": {
+		"battle": "standard_battle",
+		"boss": "boss_battle"
+	},
+	"xp_per_battle": 30,
+	"jp_per_battle": 20
+}

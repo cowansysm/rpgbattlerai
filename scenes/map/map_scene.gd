@@ -36,7 +36,7 @@ func _ready() -> void:
 	var controller := BattleController.new()
 	if has_match:
 		controller.setup_from_state(builder, MatchData.match_state)
-		MatchData.clear()
+		MatchData.clear_match()
 		Log.info("MapScene", "Loaded match from draft (map: %s)" % active_map_id)
 	else:
 		controller.setup(builder, map_data)

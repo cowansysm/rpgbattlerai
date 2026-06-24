@@ -385,10 +385,27 @@ func _enter_match_over(winner: String) -> void:
 	var display_name := "Player A" if winner == "playerA" else "Player B"
 	_hud.show_match_over(display_name)
 	_hud.append_log("--- %s wins! ---" % display_name)
+	if MatchData.active_run != null:
+		_hud.set_back_button_text("Return to Run")
 
 
 func _on_back_to_menu() -> void:
-	get_tree().change_scene_to_file("res://scenes/draft/draft_scene.tscn")
+	if MatchData.active_run != null:
+		_complete_run_battle()
+	else:
+		get_tree().change_scene_to_file("res://scenes/draft/draft_scene.tscn")
+
+
+func _complete_run_battle() -> void:
+	var winner: String = _state.check_winner()
+	var downed_ids: Array[String] = DeathModel.extract_downed_ids(_state, "playerA")
+	MatchData.battle_result = {
+		"winner": winner,
+		"player_won": winner == "playerA",
+		"downed_instance_ids": downed_ids,
+		"node_id": MatchData.run_node_id,
+	}
+	get_tree().change_scene_to_file("res://scenes/run/run_scene.tscn")
 
 
 # --- Input handling ---

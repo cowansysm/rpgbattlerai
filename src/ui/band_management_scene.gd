@@ -197,6 +197,12 @@ func _build_roster_panel(root: VBoxContainer) -> void:
 	field_btn.pressed.connect(_on_show_field_select)
 	actions.add_child(field_btn)
 
+	var embark_btn := Button.new()
+	embark_btn.text = "Embark on Run"
+	embark_btn.custom_minimum_size.y = 40
+	embark_btn.pressed.connect(_on_embark_run)
+	actions.add_child(embark_btn)
+
 	var back_btn := Button.new()
 	back_btn.text = "Back"
 	back_btn.custom_minimum_size.y = 40
@@ -961,3 +967,21 @@ func _on_shop_sell(item_id: String) -> void:
 
 func _on_shop_back() -> void:
 	_show_roster_view()
+
+
+# ============================================================
+# EMBARK ON RUN
+# ============================================================
+
+func _on_embark_run() -> void:
+	if _band == null or _band.roster.is_empty():
+		return
+	SaveManager.save_game()
+	MatchData.clear()
+	MatchData.active_band = _band
+	# Field entire roster for the run
+	var ids: Array[String] = []
+	for ci in _band.roster:
+		ids.append(ci.instance_id)
+	MatchData.fielded_ids = ids
+	get_tree().change_scene_to_file("res://scenes/run/run_scene.tscn")

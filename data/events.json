@@ -1,0 +1,112 @@
+{
+	"events": [
+		{
+			"id": "traveling_merchant",
+			"kind": "event",
+			"text": "A traveling merchant offers a deal.",
+			"choices": [
+				{
+					"label": "Trade",
+					"effects": [
+						{"type": "gold", "value": -20},
+						{"type": "item", "item_id": "potion", "qty": 2}
+					]
+				},
+				{
+					"label": "Decline",
+					"effects": []
+				}
+			]
+		},
+		{
+			"id": "mysterious_shrine",
+			"kind": "event",
+			"text": "A mysterious shrine glows faintly.",
+			"choices": [
+				{
+					"label": "Pray",
+					"effects": [
+						{"type": "heal_all", "value": 1}
+					]
+				},
+				{
+					"label": "Walk away",
+					"effects": [
+						{"type": "gold", "value": 10}
+					]
+				}
+			]
+		},
+		{
+			"id": "fork_in_road",
+			"kind": "event",
+			"text": "The path splits. An old sign points two ways.",
+			"choices": [
+				{
+					"label": "Take the shortcut",
+					"effects": [
+						{"type": "damage_random", "value": 1}
+					]
+				},
+				{
+					"label": "Take the safe route",
+					"effects": [
+						{"type": "xp", "value": 10}
+					]
+				}
+			]
+		}
+	],
+	"boons": [
+		{
+			"id": "found_cache",
+			"kind": "boon",
+			"text": "You discover a hidden cache of gold!",
+			"effects": [
+				{"type": "gold", "value": 30}
+			]
+		},
+		{
+			"id": "blessing",
+			"kind": "boon",
+			"text": "A shrine blesses your band with renewed vigor.",
+			"effects": [
+				{"type": "heal_all", "value": 1}
+			]
+		},
+		{
+			"id": "windfall",
+			"kind": "boon",
+			"text": "A generous villager gifts supplies.",
+			"effects": [
+				{"type": "item", "item_id": "potion", "qty": 1}
+			]
+		}
+	],
+	"hazards": [
+		{
+			"id": "ambush_trap",
+			"kind": "hazard",
+			"text": "An ambush! One of your band is injured.",
+			"effects": [
+				{"type": "damage_random", "value": 1}
+			]
+		},
+		{
+			"id": "toll",
+			"kind": "hazard",
+			"text": "Bandits demand a toll for passage.",
+			"effects": [
+				{"type": "gold", "value": -25}
+			]
+		},
+		{
+			"id": "cursed_fog",
+			"kind": "hazard",
+			"text": "A cursed fog weakens your entire band.",
+			"effects": [
+				{"type": "damage_all", "value": 1}
+			]
+		}
+	]
+}

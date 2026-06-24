@@ -1081,6 +1081,11 @@ func show_match_over(winning_team_display: String) -> void:
 	_winner_label.text = "%s Wins!" % winning_team_display
 
 
+func set_back_button_text(text: String) -> void:
+	if _btn_back_to_menu:
+		_btn_back_to_menu.text = text
+
+
 func _apply_panel_bg(panel: PanelContainer) -> void:
 	var style := StyleBoxFlat.new()
 	style.bg_color = PANEL_BG
