@@ -4,7 +4,7 @@ extends Node
 ## Spec reference: alpha-phaseA5-spec.md §4
 
 const SAVE_PATH: String = "user://saves/save.json"
-const CURRENT_SAVE_VERSION: int = 1
+const CURRENT_SAVE_VERSION: int = 2
 
 var bands: Array[BattleBand] = []
 var profile: Dictionary = {}        ## Reserved for A8/A10 meta-progression
@@ -42,7 +42,11 @@ func load_game() -> void:
 		return
 	var doc: Dictionary = _migrate(raw as Dictionary)
 	profile = doc.get("profile", {}) as Dictionary
-	active_run = doc.get("active_run", null)
+	var raw_run: Variant = doc.get("active_run", null)
+	if raw_run is Dictionary and not (raw_run as Dictionary).is_empty():
+		active_run = RunState.from_dict(raw_run as Dictionary)
+	else:
+		active_run = null
 	var band_arr: Variant = doc.get("bands", [])
 	if band_arr is Array:
 		for entry in (band_arr as Array):
@@ -57,7 +61,7 @@ func save_game() -> void:
 	var doc: Dictionary = {
 		"save_version": CURRENT_SAVE_VERSION,
 		"profile": profile,
-		"active_run": active_run,
+		"active_run": _serialize_active_run(),
 		"bands": _serialize_bands(),
 	}
 	var tmp: String = _save_path + ".tmp"
@@ -113,6 +117,23 @@ func _migrate(doc: Dictionary) -> Dictionary:
 		# Pre-versioned or corrupted — return minimal valid structure
 		Log.warn("SaveManager", "Unknown save version %d; treating as empty" % version)
 		return {"save_version": CURRENT_SAVE_VERSION, "profile": {}, "bands": [], "active_run": null}
-	# Future migrations go here:
-	# if version < 2: doc = _migrate_v1_to_v2(doc)
+	if version < 2:
+		doc = _migrate_v1_to_v2(doc)
 	return doc
+
+
+func _migrate_v1_to_v2(doc: Dictionary) -> Dictionary:
+	if not doc.has("active_run"):
+		doc["active_run"] = null
+	doc["save_version"] = 2
+	return doc
+
+
+func _serialize_active_run() -> Variant:
+	if active_run == null:
+		return null
+	if active_run is RunState:
+		return (active_run as RunState).to_dict()
+	if active_run is Dictionary:
+		return active_run
+	return null

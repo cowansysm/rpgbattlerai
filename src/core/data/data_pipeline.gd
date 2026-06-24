@@ -13,6 +13,8 @@ var maps := EntityRegistry.new()
 var terrains := TerrainRegistry.new()
 var loot_tables: Dictionary = {}
 var shop_pools: Dictionary = {}
+var run_config: Dictionary = {}
+var events_data: Dictionary = {}
 
 
 ## Runs the full pipeline. Returns Array[String] of errors (empty == success).
@@ -47,6 +49,7 @@ func _load_all(base_path: String) -> Array[String]:
 	errors.append_array(maps.load_validated(
 		base_path.path_join("maps"), Validator.validate_map, DataFactory.make_map))
 	errors.append_array(_load_economy_data(base_path))
+	errors.append_array(_load_run_data(base_path))
 	return errors
 
 
@@ -109,6 +112,12 @@ func get_shop_pool(pool_id: String) -> Array:
 func all_shop_pool_ids() -> Array:
 	return shop_pools.keys()
 
+func get_run_config() -> Dictionary:
+	return run_config
+
+func get_events_data() -> Dictionary:
+	return events_data
+
 
 func _load_economy_data(base_path: String) -> Array[String]:
 	var errors: Array[String] = []
@@ -128,4 +137,25 @@ func _load_economy_data(base_path: String) -> Array[String]:
 			shop_pools = parsed as Dictionary
 		else:
 			errors.append("shop_pools.json: expected Dictionary at root")
+	return errors
+
+
+func _load_run_data(base_path: String) -> Array[String]:
+	var errors: Array[String] = []
+	var rc_path: String = base_path.path_join("run_config.json")
+	if FileAccess.file_exists(rc_path):
+		var text: String = FileAccess.get_file_as_string(rc_path)
+		var parsed: Variant = JSON.parse_string(text)
+		if parsed is Dictionary:
+			run_config = parsed as Dictionary
+		else:
+			errors.append("run_config.json: expected Dictionary at root")
+	var ev_path: String = base_path.path_join("events.json")
+	if FileAccess.file_exists(ev_path):
+		var text: String = FileAccess.get_file_as_string(ev_path)
+		var parsed: Variant = JSON.parse_string(text)
+		if parsed is Dictionary:
+			events_data = parsed as Dictionary
+		else:
+			errors.append("events.json: expected Dictionary at root")
 	return errors

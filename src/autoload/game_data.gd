@@ -48,6 +48,9 @@ func get_final_stats(id: String) -> StatBlock:
 func all_characters() -> Array:
 	return _pipeline.characters.all()
 
+func all_items() -> Array:
+	return _pipeline.items.ids()
+
 func all_maps() -> Array:
 	return _pipeline.maps.all()
 
@@ -65,3 +68,9 @@ func get_shop_pool(pool_id: String) -> Array:
 
 func all_shop_pool_ids() -> Array:
 	return _pipeline.all_shop_pool_ids()
+
+func get_run_config() -> Dictionary:
+	return _pipeline.get_run_config()
+
+func get_events_data() -> Dictionary:
+	return _pipeline.get_events_data()
