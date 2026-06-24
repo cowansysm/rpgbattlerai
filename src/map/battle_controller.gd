@@ -129,6 +129,27 @@ func _init_subsystems(builder: MapBuilder) -> void:
 	_hud.update_turn_order(_state)
 	_hud.append_log("--- Battle begins! ---")
 
+	# Dev combat panel (cheat controls)
+	if Dev.enabled:
+		var dev_panel := DevCombatPanel.new()
+		dev_panel.setup(self)
+		add_child(dev_panel)
+
+
+## Public getters for dev tools access.
+func get_match_state() -> MatchState:
+	return _state
+
+func get_hud() -> BattleHUD:
+	return _hud
+
+func get_pawn_manager() -> PawnManager:
+	return _pawn_manager
+
+## Triggers match-over check (used by DevCombatPanel after force-killing units).
+func check_match_over_now() -> bool:
+	return _check_match_over()
+
 
 func setup_drag(camera: Camera3D, builder: MapBuilder) -> void:
 	_drag_handler = DragHandler.new()

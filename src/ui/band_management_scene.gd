@@ -58,6 +58,10 @@ var _shop_buy_list: VBoxContainer
 var _shop_sell_list: VBoxContainer
 var _shop_feedback: Label
 
+# --- Dev tools containers (gated by Dev.enabled) ---
+var _dev_roster_box: VBoxContainer
+var _dev_inspect_box: VBoxContainer
+
 
 func _ready() -> void:
 	_name_gen = NameGenerator.new()
@@ -209,6 +213,11 @@ func _build_roster_panel(root: VBoxContainer) -> void:
 	back_btn.pressed.connect(_on_roster_back)
 	actions.add_child(back_btn)
 
+	# Dev controls container (populated in _refresh_dev_roster)
+	if Dev.enabled:
+		_dev_roster_box = VBoxContainer.new()
+		_roster_panel.add_child(_dev_roster_box)
+
 
 func _build_inspect_panel(root: VBoxContainer) -> void:
 	_inspect_panel = VBoxContainer.new()
@@ -270,6 +279,13 @@ func _build_inspect_panel(root: VBoxContainer) -> void:
 
 	_equip_buttons = VBoxContainer.new()
 	_inspect_panel.add_child(_equip_buttons)
+
+	_inspect_panel.add_child(_spacer(12))
+
+	# Dev controls container (populated in _refresh_dev_inspect)
+	if Dev.enabled:
+		_dev_inspect_box = VBoxContainer.new()
+		_inspect_panel.add_child(_dev_inspect_box)
 
 	_inspect_panel.add_child(_spacer(12))
 
@@ -558,6 +574,9 @@ func _refresh_roster() -> void:
 		inv_label.text = "Inventory: %s" % ", ".join(items_str)
 		_roster_list.add_child(inv_label)
 
+	if Dev.enabled:
+		_refresh_dev_roster()
+
 
 func _on_inspect_instance(instance_id: String) -> void:
 	var ci := _band.get_instance(instance_id)
@@ -642,6 +661,9 @@ func _refresh_inspect() -> void:
 	_refresh_class_buttons()
 	_refresh_ability_buttons()
 	_refresh_equip_buttons()
+
+	if Dev.enabled:
+		_refresh_dev_inspect()
 
 
 func _refresh_class_buttons() -> void:
@@ -967,6 +989,236 @@ func _on_shop_sell(item_id: String) -> void:
 
 func _on_shop_back() -> void:
 	_show_roster_view()
+
+
+# ============================================================
+# DEV TOOLS (gated by Dev.enabled)
+# ============================================================
+
+func _refresh_dev_roster() -> void:
+	if _dev_roster_box == null or _band == null:
+		return
+	for child in _dev_roster_box.get_children():
+		child.queue_free()
+
+	_dev_roster_box.add_child(HSeparator.new())
+
+	var header := Label.new()
+	header.text = "DEV TOOLS"
+	header.add_theme_font_size_override("font_size", 16)
+	header.add_theme_color_override("font_color", Color.ORANGE_RED)
+	_dev_roster_box.add_child(header)
+
+	# Gold controls
+	var gold_row := HBoxContainer.new()
+	_dev_roster_box.add_child(gold_row)
+	var gold_label := Label.new()
+	gold_label.text = "Gold:"
+	gold_row.add_child(gold_label)
+	var gold_spin := SpinBox.new()
+	gold_spin.min_value = 0
+	gold_spin.max_value = 999999
+	gold_spin.value = _band.gold
+	gold_spin.size_flags_horizontal = SIZE_EXPAND_FILL
+	gold_row.add_child(gold_spin)
+	var gold_set_btn := Button.new()
+	gold_set_btn.text = "Set"
+	gold_set_btn.pressed.connect(func() -> void:
+		DevCheatService.set_gold(_band, int(gold_spin.value))
+		_refresh_roster())
+	gold_row.add_child(gold_set_btn)
+
+	var add_gold_btn := Button.new()
+	add_gold_btn.text = "Add 10000 Gold"
+	add_gold_btn.pressed.connect(func() -> void:
+		DevCheatService.add_gold(_band, 10000)
+		_refresh_roster())
+	_dev_roster_box.add_child(add_gold_btn)
+
+	# Toggle buttons
+	var toggle_inf_gold := CheckBox.new()
+	toggle_inf_gold.text = "Infinite Gold"
+	toggle_inf_gold.button_pressed = DevOverrides.get_flag("DEV_INFINITE_GOLD", false)
+	toggle_inf_gold.toggled.connect(func(pressed: bool) -> void:
+		if pressed:
+			DevOverrides.set_override("DEV_INFINITE_GOLD", true)
+		else:
+			DevOverrides.clear_override("DEV_INFINITE_GOLD"))
+	_dev_roster_box.add_child(toggle_inf_gold)
+
+	var toggle_free_recruit := CheckBox.new()
+	toggle_free_recruit.text = "Free Recruits"
+	toggle_free_recruit.button_pressed = DevOverrides.get_flag("DEV_FREE_RECRUIT", false)
+	toggle_free_recruit.toggled.connect(func(pressed: bool) -> void:
+		if pressed:
+			DevOverrides.set_override("DEV_FREE_RECRUIT", true)
+		else:
+			DevOverrides.clear_override("DEV_FREE_RECRUIT")
+		_refresh_roster())
+	_dev_roster_box.add_child(toggle_free_recruit)
+
+	# Add all items
+	var add_items_btn := Button.new()
+	add_items_btn.text = "Add All Equipment Items"
+	add_items_btn.pressed.connect(func() -> void:
+		DevCheatService.add_all_items(_band)
+		_refresh_roster())
+	_dev_roster_box.add_child(add_items_btn)
+
+
+func _refresh_dev_inspect() -> void:
+	if _dev_inspect_box == null or _inspected == null:
+		return
+	for child in _dev_inspect_box.get_children():
+		child.queue_free()
+
+	_dev_inspect_box.add_child(HSeparator.new())
+
+	var header := Label.new()
+	header.text = "DEV TOOLS"
+	header.add_theme_font_size_override("font_size", 16)
+	header.add_theme_color_override("font_color", Color.ORANGE_RED)
+	_dev_inspect_box.add_child(header)
+
+	# --- Level controls ---
+	var level_row := HBoxContainer.new()
+	_dev_inspect_box.add_child(level_row)
+	var level_label := Label.new()
+	level_label.text = "Level:"
+	level_row.add_child(level_label)
+	var level_spin := SpinBox.new()
+	level_spin.min_value = 1
+	level_spin.max_value = Constants.get_value("MAX_LEVEL", 50)
+	level_spin.value = _inspected.level
+	level_spin.size_flags_horizontal = SIZE_EXPAND_FILL
+	level_row.add_child(level_spin)
+	var level_set_btn := Button.new()
+	level_set_btn.text = "Set"
+	level_set_btn.pressed.connect(func() -> void:
+		DevCheatService.set_level(_inspected, int(level_spin.value), _class_prov)
+		_refresh_inspect())
+	level_row.add_child(level_set_btn)
+
+	var max_level_btn := Button.new()
+	max_level_btn.text = "Max Level (%d)" % Constants.get_value("MAX_LEVEL", 50)
+	max_level_btn.pressed.connect(func() -> void:
+		DevCheatService.set_level(_inspected, Constants.get_value("MAX_LEVEL", 50), _class_prov)
+		_refresh_inspect())
+	_dev_inspect_box.add_child(max_level_btn)
+
+	# --- XP controls ---
+	var xp_row := HBoxContainer.new()
+	_dev_inspect_box.add_child(xp_row)
+	var xp_label := Label.new()
+	xp_label.text = "XP:"
+	xp_row.add_child(xp_label)
+	var xp_spin := SpinBox.new()
+	xp_spin.min_value = 0
+	xp_spin.max_value = 999999
+	xp_spin.value = _inspected.xp
+	xp_spin.size_flags_horizontal = SIZE_EXPAND_FILL
+	xp_row.add_child(xp_spin)
+	var xp_add_btn := Button.new()
+	xp_add_btn.text = "Add"
+	xp_add_btn.pressed.connect(func() -> void:
+		DevCheatService.add_xp(_inspected, int(xp_spin.value), _class_prov)
+		_refresh_inspect())
+	xp_row.add_child(xp_add_btn)
+
+	_dev_inspect_box.add_child(HSeparator.new())
+
+	# --- JP controls ---
+	var jp_label := Label.new()
+	jp_label.text = "JP per class:"
+	jp_label.add_theme_font_size_override("font_size", 14)
+	_dev_inspect_box.add_child(jp_label)
+
+	for cls_id in _inspected.unlocked_classes:
+		var jp_row := HBoxContainer.new()
+		_dev_inspect_box.add_child(jp_row)
+		var cls_label := Label.new()
+		cls_label.text = "%s:" % cls_id.capitalize()
+		cls_label.custom_minimum_size.x = 80
+		jp_row.add_child(cls_label)
+		var jp_spin := SpinBox.new()
+		jp_spin.min_value = 0
+		jp_spin.max_value = 9999
+		jp_spin.value = int(_inspected.jp.get(cls_id, 0))
+		jp_spin.size_flags_horizontal = SIZE_EXPAND_FILL
+		jp_row.add_child(jp_spin)
+		var jp_set_btn := Button.new()
+		jp_set_btn.text = "Set"
+		var cid: String = cls_id
+		jp_set_btn.pressed.connect(func() -> void:
+			DevCheatService.set_jp(_inspected, cid, int(jp_spin.value))
+			_refresh_inspect())
+		jp_row.add_child(jp_set_btn)
+
+	var grant_jp_btn := Button.new()
+	grant_jp_btn.text = "Grant 999 JP to All Classes"
+	grant_jp_btn.pressed.connect(func() -> void:
+		DevCheatService.grant_all_jp(_inspected, 999)
+		_refresh_inspect())
+	_dev_inspect_box.add_child(grant_jp_btn)
+
+	_dev_inspect_box.add_child(HSeparator.new())
+
+	# --- Class cheats ---
+	var unlock_all_btn := Button.new()
+	unlock_all_btn.text = "Unlock All Classes"
+	unlock_all_btn.pressed.connect(func() -> void:
+		DevCheatService.force_unlock_all_classes(_inspected, _class_prov)
+		_refresh_inspect())
+	_dev_inspect_box.add_child(unlock_all_btn)
+
+	var learn_all_btn := Button.new()
+	learn_all_btn.text = "Learn All Abilities"
+	learn_all_btn.pressed.connect(func() -> void:
+		DevCheatService.force_learn_all_abilities(_inspected, _class_prov)
+		_refresh_inspect())
+	_dev_inspect_box.add_child(learn_all_btn)
+
+	var reset_downs_btn := Button.new()
+	reset_downs_btn.text = "Reset Downs (%d → 0)" % _inspected.downs_this_run
+	reset_downs_btn.pressed.connect(func() -> void:
+		DevCheatService.reset_downs(_inspected)
+		_refresh_inspect())
+	_dev_inspect_box.add_child(reset_downs_btn)
+
+	_dev_inspect_box.add_child(HSeparator.new())
+
+	# --- Force equip (bypass class restrictions) ---
+	var force_equip_label := Label.new()
+	force_equip_label.text = "Force Equip (ignores class):"
+	force_equip_label.add_theme_font_size_override("font_size", 14)
+	_dev_inspect_box.add_child(force_equip_label)
+
+	var equip_row := HBoxContainer.new()
+	_dev_inspect_box.add_child(equip_row)
+
+	var item_option := OptionButton.new()
+	item_option.size_flags_horizontal = SIZE_EXPAND_FILL
+	var item_ids: Array[String] = []
+	for item_id in GameData.all_items():
+		var item: ItemData = GameData.get_item(item_id)
+		if item != null and not item.slot.is_empty():
+			item_option.add_item("%s (%s)" % [item.display_name, item.slot])
+			item_ids.append(item_id)
+	equip_row.add_child(item_option)
+
+	var force_equip_btn := Button.new()
+	force_equip_btn.text = "Force Equip"
+	force_equip_btn.pressed.connect(func() -> void:
+		var idx: int = item_option.selected
+		if idx < 0 or idx >= item_ids.size():
+			return
+		var sel_item_id: String = item_ids[idx]
+		var sel_item: ItemData = GameData.get_item(sel_item_id)
+		if sel_item == null:
+			return
+		DevCheatService.force_equip(_inspected, sel_item.slot, sel_item_id)
+		_refresh_inspect())
+	equip_row.add_child(force_equip_btn)
 
 
 # ============================================================

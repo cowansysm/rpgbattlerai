@@ -49,6 +49,12 @@ func _build_ui() -> void:
 	band_btn.pressed.connect(_on_band_management_pressed)
 	_vbox.add_child(band_btn)
 
+	# Dev Overrides
+	var overrides_btn := Button.new()
+	overrides_btn.text = "Dev Overrides"
+	overrides_btn.pressed.connect(_on_overrides_pressed)
+	_vbox.add_child(overrides_btn)
+
 	# CSV Pipeline
 	var csv_sep := HSeparator.new()
 	_vbox.add_child(csv_sep)
@@ -104,6 +110,11 @@ func _on_csv_import_pressed() -> void:
 		_status_label.text = "%d error(s)" % errors.size()
 		for e in errors:
 			Log.error("DevMenu", e)
+
+
+func _on_overrides_pressed() -> void:
+	var panel := DevOverridesPanel.new()
+	get_tree().root.add_child(panel)
 
 
 func _on_band_management_pressed() -> void:

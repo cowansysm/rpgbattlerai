@@ -11,17 +11,17 @@ res://
 ├── addons/gut/              # GUT v9.6.0 test framework (vendored)
 ├── assets/icons/            # Status effect and ability icons
 ├── data/
-│   ├── abilities.json       # All abilities (consolidated array)
-│   ├── characters.json      # 8 character templates
-│   ├── classes.json         # Class/job definitions (Vagabond + tier-1 branches)
-│   ├── items.json           # 13 items (12 equipment + 1 consumable)
+│   ├── abilities.json       # 82 abilities (39 skills, 36 spells, 7 item-bound)
+│   ├── characters.json      # 20 character templates (7 human, 5 elf, 4 dwarf, 4 halfling)
+│   ├── classes.json         # 25 class/job definitions (1 starting, 3 tier-1, 12 advanced, 9 elite)
+│   ├── items.json           # 46 items (40 equipment + 6 consumables)
 │   ├── races.json           # 4 race definitions (with base_stats)
 │   ├── constants.json       # Game balance tuning (incl. AI presets, economy tunables)
-│   ├── terrain.json         # Terrain type definitions
-│   ├── loot_tables.json     # Loot table definitions (standard_battle, boss_battle)
-│   ├── shop_pools.json      # Shop pool definitions (tier1_weapons, tier1_armor, etc.)
-│   ├── maps/                # Map JSON files (condensed format)
-│   └── names/               # Per-race name tables (human, elf, dwarf, halfling)
+│   ├── terrain.json         # 17 terrain type definitions
+│   ├── loot_tables.json     # 2 loot tables (standard_battle, boss_battle)
+│   ├── shop_pools.json      # 4 shop pools (tier1_weapons, tier1_armor, tier1_gear, starter_consumables)
+│   ├── maps/                # 6 map files (condensed format)
+│   └── names/               # Per-race name tables (human, elf, dwarf, halfling; 20 given + 15 surname each)
 ├── scenes/
 │   ├── band/                # Band management UI
 │   ├── draft/               # Party draft UI (main scene)
@@ -137,7 +137,7 @@ Each entity type is a single JSON file containing an array of objects:
 ## Progression System (A4)
 
 - **`CharacterInstance`** — persistent character with generated identity (name from race tables), level/XP, JP per class, unlocked classes, learned abilities, equipment loadout
-- **Job tree:** every character starts as **Vagabond** → unlocks **Thief/Soldier/Adept** at level 3 (archetype branches planned for later tiers)
+- **Job tree:** every character starts as **Vagabond** → unlocks **Thief/Soldier/Adept** at level 3 → advanced and elite classes branch out across all archetypes (the full tree is authored: 25 classes spanning physical, magical, control, and support — see `data/classes.json`)
 - **`ClassData`** extended with: `archetype`, `branch`, `tier`, `growth`, `jp_costs`, `prerequisites`
 - **`RaceData`** extended with: `base_stats` (StatKey→int)
 - **`InstanceStatResolver`** computes base stats: race base_stats + active class modifiers + accumulated growth
@@ -223,7 +223,7 @@ Main scene: `res://scenes/draft/draft_scene.tscn` (party draft → deploy → co
 
 ## Alpha (in progress)
 
-The Alpha extends the MVP into a single-player game. Its specs and implementation plans are complete (see Documentation). A0–A7 are **implemented and tested**; A8–A10 are **planned but not yet built** — treat their `alpha-*` docs as the plan of record, not as describing current code. Do not assume any A8+ system is built unless the source actually shows it.
+The Alpha extends the MVP into a single-player game. Its specs and implementation plans are complete (see Documentation). A0–A7 are **implemented and tested**. **A9 content is substantially authored** — the class/ability/item/character/terrain libraries are at or beyond their `alpha-specs.md` §12.2 targets (25 classes, 82 abilities, 46 items, 20 templates, 17 terrains); maps (6) and economy tables (loot/shops) remain below target. **A8 (roguelike run) and A10 (polish & meta-progression) systems are not yet built** — treat their `alpha-*` docs as the plan of record, not as describing current code. Do not assume any A8/A10 system is built unless the source actually shows it.
 
 Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A9 content are parallel; A7 AI joins at A8):
 
@@ -235,9 +235,9 @@ Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A
 - [x] A5: Battle Bands & save system (`user://`) — **complete**
 - [x] A6: Economy — gold, shops & loot — **complete**
 - [x] A7: AI opponent (`AIController` over `TurnActions`) — **complete**
-- [ ] A8: Roguelike run (branching node graph, ≤3 parallel paths, down-limit death)
-- [ ] A9: Content expansion (authored via A1/A2)
-- [ ] A10: Polish & meta-progression
+- [ ] A8: Roguelike run (branching node graph, ≤3 parallel paths, down-limit death) — **not built**
+- [~] A9: Content expansion (authored via A1/A2) — **core libraries authored** (classes/abilities/items/characters/terrain at target); **maps + economy tables still below target**
+- [ ] A10: Polish & meta-progression — **not built**
 
 Key Alpha decisions: dev-tool map editor (player-facing later); CSV↔JSON authoring via spreadsheets; FFT-style progression (XP + JP + job tree + gold/shop + loot); roguelike single-player; every character starts **Vagabond** → unlocks **Thief/Soldier/Adept** at level 3 → archetype branches (support / control / physical·melee·ranged / magical·arcane·divine); characters permadie on the **3rd down** per run (tunable `DOWN_LIMIT`); the attack die and Defend die persist through the A3 magic change (Defend reduces magical damage too).
 
@@ -251,7 +251,7 @@ Phase specs and implementation plans live in `docs/`.
 - `rpg-implementation-plan.md` — high-level phase roadmap
 - `phase<N>-spec.md` / `phase<N>-implementation-plan.md` — per-phase details (0–11)
 
-**Alpha (in progress — A0–A5 & A7 complete, A6 & A8–A10 planned):**
+**Alpha (in progress — A0–A7 complete; A9 content largely authored; A8 & A10 planned):**
 
 - `alpha-specs.md` — master Alpha specification
 - `alpha-implementation-plan.md` — Alpha milestone roadmap (A0–A10)

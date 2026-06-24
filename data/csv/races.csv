@@ -1,0 +1,5 @@
+id,name,flavor,stats.spd,stats.atk,stats.rng,stats.def,stats.hp,stats.jump,stats.wp,stats.mag,stats.res,base_stats.spd,base_stats.atk,base_stats.rng,base_stats.def,base_stats.hp,base_stats.jump,base_stats.wp,base_stats.mag,base_stats.res
+human,Human,"Balanced and adaptable, humans excel through versatility rather than specialization.",,,,,,,,,,5.0,5.0,1.0,5.0,30.0,2.0,5.0,3.0,3.0
+dwarf,Dwarf,"Stout and enduring, dwarves are hard to move and harder to kill.",-2.0,,,2.0,5.0,,-2.0,,2.0,3.0,5.0,1.0,7.0,35.0,1.0,3.0,1.0,5.0
+elf,Elf,"Nimble and long-lived, elves trade resilience for grace and speed.",1.0,,,,-3.0,,3.0,2.0,,6.0,3.0,1.0,4.0,25.0,2.0,8.0,5.0,3.0
+halfling,Halfling,"Small and quick, halflings rely on agility over armor.",1.0,,,-1.0,-2.0,,2.0,1.0,,6.0,4.0,1.0,4.0,25.0,3.0,7.0,4.0,3.0

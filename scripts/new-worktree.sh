@@ -199,6 +199,3 @@ if [[ "$IS_ALPHA" == true ]]; then
 else
     echo "  3. Tell Claude: \"${DESCRIPTION}\""
 fi
-echo "  4. When done, push and create a PR to '${BASE_BRANCH}', then clean up:"
-echo "     ./scripts/remove-worktree.sh ${WORKTREE_NAME}"
-echo ""

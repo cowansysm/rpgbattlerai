@@ -10,6 +10,8 @@ static func buy(band: BattleBand, item_id: String, item_provider: Callable) -> S
 	if item == null:
 		return "Unknown item '%s'" % item_id
 	var cost: int = Pricing.buy_price(item)
+	if Dev.enabled and DevOverrides.get_flag("DEV_INFINITE_GOLD", false):
+		cost = 0
 	if band.gold < cost:
 		return "Not enough gold (need %d, have %d)" % [cost, band.gold]
 	band.gold -= cost

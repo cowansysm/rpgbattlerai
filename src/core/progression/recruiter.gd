@@ -11,6 +11,8 @@ static func recruit(band: BattleBand, template: CharacterData,
 		name_gen: Callable, cost: int = -1, cap: int = -1) -> Dictionary:
 	if cost < 0:
 		cost = Constants.get_value("RECRUIT_COST", 50)
+	if Dev.enabled and DevOverrides.get_flag("DEV_FREE_RECRUIT", false):
+		cost = 0
 	if band.gold < cost:
 		return {"instance": null, "error": "Not enough gold (need %d, have %d)" % [cost, band.gold]}
 	if band.is_roster_full(cap):

@@ -1,0 +1,47 @@
+id,name,slot,bp,price,power,range,passive,granted_abilities
+sword,Sword,weapon,2.0,80.0,5.0,1.0,,
+bow,Bow,weapon,2.0,100.0,4.0,3.0,,
+daggers,Daggers,weapon,1.0,50.0,3.0,1.0,,
+rapier,Rapier,weapon,2.0,90.0,5.0,1.0,,
+greataxe,Greataxe,weapon,3.0,150.0,8.0,1.0,,
+sling,Sling,weapon,1.0,30.0,2.0,2.0,,
+staff,Staff,weapon,1.0,40.0,2.0,1.0,,
+longsword,Longsword,weapon,3.0,130.0,7.0,1.0,,
+warhammer,Warhammer,weapon,3.0,160.0,9.0,1.0,,
+halberd,Halberd,weapon,3.0,140.0,7.0,1.0,,
+crossbow,Crossbow,weapon,2.0,120.0,6.0,3.0,,
+longbow,Longbow,weapon,3.0,150.0,5.0,4.0,,
+rod,Rod,weapon,2.0,70.0,3.0,1.0,"{""mag"":2.0}",
+wand,Wand,weapon,2.0,60.0,2.0,1.0,"{""mag"":3.0}",
+mace,Mace,weapon,2.0,80.0,4.0,1.0,,
+short_bow,Short Bow,weapon,1.0,60.0,3.0,2.0,,
+throwing_knives,Throwing Knives,weapon,1.0,70.0,3.0,2.0,,
+lute,Lute,weapon,1.0,50.0,1.0,1.0,,"[""inspire""]"
+light_armor,Light Armor,armor,1.0,60.0,,,"{""def"":2.0}",
+medium_armor,Medium Armor,armor,2.0,100.0,,,"{""def"":3.0,""res"":1.0}",
+robe,Robe,armor,1.0,80.0,,,"{""res"":2.0,""wp"":2.0}",
+heavy_armor,Heavy Armor,armor,3.0,180.0,,,"{""def"":5.0,""spd"":-1.0}",
+studded_leather,Studded Leather,armor,2.0,90.0,,,"{""def"":3.0}",
+chain_mail,Chain Mail,armor,2.0,130.0,,,"{""def"":4.0,""spd"":-1.0}",
+enchanted_robe,Enchanted Robe,armor,3.0,200.0,,,"{""mag"":1.0,""res"":3.0,""wp"":3.0}",
+plate_armor,Plate Armor,armor,4.0,250.0,,,"{""def"":7.0,""spd"":-2.0}",
+shield,Shield,shield,2.0,80.0,,,"{""def"":3.0,""res"":1.0}",
+buckler,Buckler,shield,1.0,40.0,,,"{""def"":1.0}",
+tower_shield,Tower Shield,shield,3.0,150.0,,,"{""def"":5.0,""spd"":-1.0}",
+crystal_shield,Crystal Shield,shield,3.0,180.0,,,"{""def"":2.0,""res"":3.0}",
+bracer_of_accuracy,Bracer of Accuracy,accessory,2.0,80.0,,,"{""accuracy"":1.0}",
+smoke_bomb_pouch,Smoke Bomb Pouch,accessory,2.0,100.0,,,,"[""smoke_bomb""]"
+ring_of_haste,Ring of Haste,accessory,2.0,120.0,,,"{""spd"":2.0}",
+amulet_of_protection,Amulet of Protection,accessory,2.0,100.0,,,"{""def"":2.0,""res"":1.0}",
+crown_of_wisdom,Crown of Wisdom,accessory,3.0,150.0,,,"{""mag"":2.0,""wp"":2.0}",
+cloak_of_shadows,Cloak of Shadows,accessory,2.0,110.0,,,"{""spd"":1.0}",
+war_horn,War Horn,accessory,2.0,130.0,,,,"[""rally""]"
+healers_charm,Healer's Charm,accessory,2.0,100.0,,,"{""res"":2.0,""wp"":1.0}",
+berserker_band,Berserker Band,accessory,2.0,90.0,,,"{""atk"":3.0,""def"":-1.0}",
+rangers_quiver,Ranger's Quiver,accessory,2.0,110.0,,,"{""rng"":1.0}",
+potion,Potion,,0.0,30.0,,,,"[""use_potion""]"
+hi_potion,Hi-Potion,,0.0,60.0,,,,"[""use_hi_potion""]"
+ether,Ether,,0.0,40.0,,,,"[""use_ether""]"
+antidote,Antidote,,0.0,20.0,,,,"[""use_antidote""]"
+phoenix_down,Phoenix Down,,0.0,100.0,,,,"[""use_phoenix_down""]"
+bomb,Bomb,,0.0,50.0,,,,"[""use_bomb""]"
