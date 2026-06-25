@@ -125,6 +125,38 @@ static func free_recruit(band: BattleBand, template: CharacterData,
 
 
 # ============================================================
+# PROFILE / META-PROGRESSION CHEATS
+# ============================================================
+
+## Force-grants a meta unlock key to the profile.
+static func grant_profile_unlock(profile: Profile, unlock_key: String) -> void:
+	profile.grant_unlock(unlock_key)
+
+
+## Force-unlocks a template in the profile.
+static func grant_profile_template(profile: Profile, template_id: String) -> void:
+	profile.grant_template(template_id)
+
+
+## Force-unlocks a class in the profile.
+static func grant_profile_class(profile: Profile, class_id: String) -> void:
+	profile.grant_class(class_id)
+
+
+## Sets completed_runs to an exact count.
+static func set_completed_runs(profile: Profile, count: int) -> void:
+	profile.completed_runs = maxi(0, count)
+
+
+## Clears all profile unlocks and resets completed_runs to 0.
+static func reset_profile(profile: Profile) -> void:
+	profile.unlocked_templates.clear()
+	profile.unlocked_classes.clear()
+	profile.meta_unlocks.clear()
+	profile.completed_runs = 0
+
+
+# ============================================================
 # COMBAT (BATTLEUNIT) CHEATS
 # ============================================================
 

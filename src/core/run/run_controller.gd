@@ -4,12 +4,27 @@ extends RefCounted
 ## Dispatches node resolution by kind, manages rewards, and persists state.
 ## Scene-level code (RunScene) calls this and handles UI/transitions.
 
+var _meta_unlocks_provider: Variant = null  ## Callable returning meta_unlocks table
+var _last_earned_unlocks: Array[Dictionary] = []
 
-## Creates a new run: resets downs, generates graph, saves to SaveManager.
+
+## Injects the meta-unlocks data provider (Callable -> Dictionary).
+func set_meta_unlocks_provider(provider: Callable) -> void:
+	_meta_unlocks_provider = provider
+
+
+## Returns unlocks earned during the most recent run-end.
+func get_last_earned_unlocks() -> Array[Dictionary]:
+	return _last_earned_unlocks
+
+
+## Creates a new run: resets downs, generates graph, applies boons, saves.
 ## Returns the new RunState.
-func embark(band: BattleBand, seed_value: int, cfg: Dictionary) -> RunState:
+func embark(band: BattleBand, seed_value: int, cfg: Dictionary,
+		boons: Array[Dictionary] = []) -> RunState:
 	DeathModel.reset_downs(band)
 	var rs: RunState = RunState.create_new(band.band_id, seed_value, cfg)
+	_apply_boons(band, rs, boons)
 	SaveManager.active_run = rs
 	SaveManager.save_game()
 	return rs
@@ -75,7 +90,8 @@ func on_battle_end(run: RunState, band: BattleBand,
 		if str(node.get("kind", "")) == "boss":
 			_apply_downs(run, band, downed_ids)
 			_end_run(run, band, "victory")
-			return {"status": "victory", "deaths": deaths, "rewards": rewards}
+			return {"status": "victory", "deaths": deaths, "rewards": rewards,
+				"earned_unlocks": _last_earned_unlocks}
 
 	# Apply death model
 	var death_result: Dictionary = _apply_downs(run, band, downed_ids)
@@ -83,7 +99,8 @@ func on_battle_end(run: RunState, band: BattleBand,
 
 	if not player_won or (death_result.get("run_lost", false) as bool):
 		_end_run(run, band, "defeat")
-		return {"status": "defeat", "deaths": deaths, "rewards": rewards}
+		return {"status": "defeat", "deaths": deaths, "rewards": rewards,
+			"earned_unlocks": _last_earned_unlocks}
 
 	_save_run(run)
 	return {"status": "continue", "deaths": deaths, "rewards": rewards}
@@ -160,10 +177,12 @@ func _apply_downs(run: RunState, band: BattleBand,
 
 
 func _end_run(run: RunState, band: BattleBand, outcome: String) -> void:
-	# Write minimal profile progress
-	if outcome == "victory":
-		var completed: int = int(SaveManager.profile.get("completed_runs", 0))
-		SaveManager.profile["completed_runs"] = completed + 1
+	# Evaluate meta-unlock rules and apply grants to the profile
+	var unlocks_table: Dictionary = {}
+	if _meta_unlocks_provider is Callable:
+		unlocks_table = (_meta_unlocks_provider as Callable).call()
+	_last_earned_unlocks = MetaUnlockEngine.evaluate_run_end(
+		SaveManager.profile, outcome, run, unlocks_table)
 	# Clear active run
 	SaveManager.active_run = null
 	SaveManager.save_game()
@@ -172,6 +191,16 @@ func _end_run(run: RunState, band: BattleBand, outcome: String) -> void:
 func _save_run(run: RunState) -> void:
 	SaveManager.active_run = run
 	SaveManager.save_game()
+
+
+func _apply_boons(band: BattleBand, run: RunState,
+		boons: Array[Dictionary]) -> void:
+	for boon in boons:
+		var effect: Dictionary = boon.get("effect", {}) as Dictionary
+		if effect.has("gold"):
+			band.gold += int(effect["gold"])
+		if effect.has("down_limit_bonus"):
+			run.down_limit += int(effect["down_limit_bonus"])
 
 
 func _make_run_rng(run: RunState) -> RandomNumberGenerator:

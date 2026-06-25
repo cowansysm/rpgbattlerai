@@ -1,0 +1,59 @@
+{
+	"rules": [
+		{
+			"id": "first_run",
+			"trigger": "runs_completed",
+			"threshold": 1,
+			"grants": {
+				"templates": [],
+				"classes": [],
+				"meta_unlocks": ["first_run"]
+			}
+		},
+		{
+			"id": "first_victory",
+			"trigger": "boss_kill",
+			"grants": {
+				"templates": [],
+				"classes": [],
+				"meta_unlocks": ["first_victory"]
+			}
+		},
+		{
+			"id": "veteran_runner",
+			"trigger": "runs_completed",
+			"threshold": 5,
+			"grants": {
+				"templates": [],
+				"classes": [],
+				"meta_unlocks": ["veteran_runner"]
+			}
+		},
+		{
+			"id": "deep_delver",
+			"trigger": "depth_reached",
+			"threshold": 10,
+			"grants": {
+				"templates": [],
+				"classes": [],
+				"meta_unlocks": ["deep_delver"]
+			}
+		}
+	],
+	"starting_boons": [
+		{
+			"id": "bonus_gold",
+			"requires": "first_victory",
+			"effect": {
+				"gold": 100
+			}
+		},
+		{
+			"id": "extra_life",
+			"requires": "veteran_runner",
+			"effect": {
+				"down_limit_bonus": 1
+			}
+		}
+	]
+}

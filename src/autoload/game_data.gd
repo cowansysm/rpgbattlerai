@@ -48,6 +48,9 @@ func get_final_stats(id: String) -> StatBlock:
 func all_characters() -> Array:
 	return _pipeline.characters.all()
 
+func all_classes() -> Array:
+	return _pipeline.classes.ids()
+
 func all_items() -> Array:
 	return _pipeline.items.ids()
 
@@ -74,3 +77,6 @@ func get_run_config() -> Dictionary:
 
 func get_events_data() -> Dictionary:
 	return _pipeline.get_events_data()
+
+func get_meta_unlocks() -> Dictionary:
+	return _pipeline.get_meta_unlocks()

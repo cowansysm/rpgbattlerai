@@ -8,7 +8,8 @@ extends RefCounted
 ## Returns {instance: CharacterInstance, error: String}.
 ## On failure, instance is null and error describes the reason.
 static func recruit(band: BattleBand, template: CharacterData,
-		name_gen: Callable, cost: int = -1, cap: int = -1) -> Dictionary:
+		name_gen: Callable, cost: int = -1, cap: int = -1,
+		bonus_classes: Array[String] = []) -> Dictionary:
 	if cost < 0:
 		cost = Constants.get_value("RECRUIT_COST", 50)
 	if Dev.enabled and DevOverrides.get_flag("DEV_FREE_RECRUIT", false):
@@ -17,7 +18,7 @@ static func recruit(band: BattleBand, template: CharacterData,
 		return {"instance": null, "error": "Not enough gold (need %d, have %d)" % [cost, band.gold]}
 	if band.is_roster_full(cap):
 		return {"instance": null, "error": "Roster is full"}
-	var ci: CharacterInstance = CharacterInstance.generate(template, name_gen)
+	var ci: CharacterInstance = CharacterInstance.generate(template, name_gen, bonus_classes)
 	band.gold -= cost
 	band.add_instance(ci, cap)
 	return {"instance": ci, "error": ""}

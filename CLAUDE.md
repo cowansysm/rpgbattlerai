@@ -177,6 +177,18 @@ Each entity type is a single JSON file containing an array of objects:
 - **`AIController`** (`src/map/ai_controller.gd`) — scene-level driver executing plans via `TurnActions` (same action backend as the human player, no privileged access); includes pacing delays and visual feedback
 - **Selection:** top-N sampling with temperature parameter; difficulty presets in `constants.json`
 
+## Meta-Progression System (A10)
+
+- **`Profile`** (`src/core/progression/profile.gd`) — persistent account-level state: `unlocked_templates`, `unlocked_classes`, `completed_runs`, `meta_unlocks`; `to_dict()`/`from_dict()` with safe defaults for backward compatibility
+- **`MetaUnlockEngine`** (`src/core/progression/meta_unlock_engine.gd`) — evaluates data-driven unlock rules at run-end; trigger types: `run_complete`, `boss_kill`, `depth_reached`, `runs_completed`; `resolve_boons()` filters eligible starting boons by profile state
+- **Data file:** `data/meta_unlocks.json` — rules array (trigger → grants to templates/classes/meta_unlocks) + starting_boons array (requires unlock → effect)
+- **Recruitment gating:** `BandManagementScene` filters templates by `profile.unlocked_templates` (no gate when empty — fresh profiles see all templates)
+- **Class seeding:** `CharacterInstance.generate()` accepts `bonus_classes` from profile; new recruits get profile-unlocked classes
+- **Starting boons:** auto-applied at embark via `RunController.embark()` (gold bonus, down_limit_bonus)
+- **Run shop:** buy-only shop overlay in `RunScene` using `ShopService.buy()` with all shop pools
+- **SaveManager** stores `profile: Profile` (not Dictionary); loads via `Profile.from_dict()`
+- **Dev tools:** profile cheats (grant templates/classes, reset, set completed_runs), DevOverrides flags (`DEV_SKIP_RECRUITMENT_GATE`, `DEV_ALL_CLASSES_UNLOCKED`), run dev panel (Win Run, Add Gold, Reset Downs)
+
 ## Dev Tooling
 
 - **Dev flag** (`src/autoload/dev.gd`): resolved from CLI args (`--dev`/`--no-dev`) → `user://dev.cfg` → `OS.is_debug_build()`; gates all dev tools
@@ -223,7 +235,7 @@ Main scene: `res://scenes/draft/draft_scene.tscn` (party draft → deploy → co
 
 ## Alpha (in progress)
 
-The Alpha extends the MVP into a single-player game. Its specs and implementation plans are complete (see Documentation). A0–A7 are **implemented and tested**. **A9 content is substantially authored** — the class/ability/item/character/terrain libraries are at or beyond their `alpha-specs.md` §12.2 targets (25 classes, 82 abilities, 46 items, 20 templates, 17 terrains); maps (6) and economy tables (loot/shops) remain below target. **A8 (roguelike run) and A10 (polish & meta-progression) systems are not yet built** — treat their `alpha-*` docs as the plan of record, not as describing current code. Do not assume any A8/A10 system is built unless the source actually shows it.
+The Alpha extends the MVP into a single-player game. Its specs and implementation plans are complete (see Documentation). A0–A8 and A10 are **implemented and tested**. **A9 content is substantially authored** — the class/ability/item/character/terrain libraries are at or beyond their `alpha-specs.md` §12.2 targets (25 classes, 82 abilities, 46 items, 20 templates, 17 terrains); maps (6) and economy tables (loot/shops) remain below target.
 
 Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A9 content are parallel; A7 AI joins at A8):
 
@@ -235,9 +247,9 @@ Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A
 - [x] A5: Battle Bands & save system (`user://`) — **complete**
 - [x] A6: Economy — gold, shops & loot — **complete**
 - [x] A7: AI opponent (`AIController` over `TurnActions`) — **complete**
-- [ ] A8: Roguelike run (branching node graph, ≤3 parallel paths, down-limit death) — **not built**
+- [x] A8: Roguelike run (branching node graph, ≤3 parallel paths, down-limit death) — **complete**
 - [~] A9: Content expansion (authored via A1/A2) — **core libraries authored** (classes/abilities/items/characters/terrain at target); **maps + economy tables still below target**
-- [ ] A10: Polish & meta-progression — **not built**
+- [x] A10: Polish & meta-progression (Profile, MetaUnlockEngine, recruitment gating, class seeding, starting boons, run shop, UX polish, seam audit) — **complete**
 
 Key Alpha decisions: dev-tool map editor (player-facing later); CSV↔JSON authoring via spreadsheets; FFT-style progression (XP + JP + job tree + gold/shop + loot); roguelike single-player; every character starts **Vagabond** → unlocks **Thief/Soldier/Adept** at level 3 → archetype branches (support / control / physical·melee·ranged / magical·arcane·divine); characters permadie on the **3rd down** per run (tunable `DOWN_LIMIT`); the attack die and Defend die persist through the A3 magic change (Defend reduces magical damage too).
 

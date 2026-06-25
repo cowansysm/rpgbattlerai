@@ -381,3 +381,50 @@ func test_restore_ap() -> void:
 	unit.ap_remaining = 0
 	DevCheatService.restore_ap(unit, 3)
 	assert_eq(unit.ap_remaining, 3)
+
+
+# ============================================================
+# PROFILE / META-PROGRESSION CHEATS
+# ============================================================
+
+func test_grant_profile_unlock() -> void:
+	var p := Profile.new()
+	DevCheatService.grant_profile_unlock(p, "test_key")
+	assert_true(p.has_unlock("test_key"))
+
+
+func test_grant_profile_template() -> void:
+	var p := Profile.new()
+	DevCheatService.grant_profile_template(p, "warrior")
+	assert_true(p.has_template("warrior"))
+
+
+func test_grant_profile_class() -> void:
+	var p := Profile.new()
+	DevCheatService.grant_profile_class(p, "sage")
+	assert_true(p.has_class("sage"))
+
+
+func test_set_completed_runs() -> void:
+	var p := Profile.new()
+	DevCheatService.set_completed_runs(p, 10)
+	assert_eq(p.completed_runs, 10)
+
+
+func test_set_completed_runs_negative_clamped() -> void:
+	var p := Profile.new()
+	DevCheatService.set_completed_runs(p, -5)
+	assert_eq(p.completed_runs, 0)
+
+
+func test_reset_profile() -> void:
+	var p := Profile.new()
+	p.grant_template("warrior")
+	p.grant_class("sage")
+	p.grant_unlock("first_victory")
+	p.completed_runs = 10
+	DevCheatService.reset_profile(p)
+	assert_eq(p.completed_runs, 0)
+	assert_true(p.unlocked_templates.is_empty())
+	assert_true(p.unlocked_classes.is_empty())
+	assert_true(p.meta_unlocks.is_empty())
