@@ -7,8 +7,8 @@ const SAVE_PATH: String = "user://saves/save.json"
 const CURRENT_SAVE_VERSION: int = 2
 
 var bands: Array[BattleBand] = []
-var profile: Dictionary = {}        ## Reserved for A8/A10 meta-progression
-var active_run: Variant = null      ## Reserved for A8 roguelike run
+var profile: Profile = Profile.new()  ## Account-level meta-progression (A10)
+var active_run: Variant = null        ## Reserved for A8 roguelike run
 
 var _save_path: String = SAVE_PATH
 
@@ -23,7 +23,7 @@ func has_save() -> bool:
 
 func load_game() -> void:
 	bands.clear()
-	profile = {}
+	profile = Profile.new()
 	active_run = null
 	if not has_save():
 		return
@@ -41,7 +41,11 @@ func load_game() -> void:
 		Log.warn("SaveManager", "Save file root is not a dictionary: %s" % _save_path)
 		return
 	var doc: Dictionary = _migrate(raw as Dictionary)
-	profile = doc.get("profile", {}) as Dictionary
+	var raw_profile: Variant = doc.get("profile", {})
+	if raw_profile is Dictionary:
+		profile = Profile.from_dict(raw_profile as Dictionary)
+	else:
+		profile = Profile.new()
 	var raw_run: Variant = doc.get("active_run", null)
 	if raw_run is Dictionary and not (raw_run as Dictionary).is_empty():
 		active_run = RunState.from_dict(raw_run as Dictionary)
@@ -60,7 +64,7 @@ func save_game() -> void:
 	DirAccess.make_dir_recursive_absolute(dir_path)
 	var doc: Dictionary = {
 		"save_version": CURRENT_SAVE_VERSION,
-		"profile": profile,
+		"profile": profile.to_dict(),
 		"active_run": _serialize_active_run(),
 		"bands": _serialize_bands(),
 	}

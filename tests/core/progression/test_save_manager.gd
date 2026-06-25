@@ -6,7 +6,7 @@ var _test_path: String = "user://saves/_test_save.json"
 
 func before_each() -> void:
 	SaveManager.bands = []
-	SaveManager.profile = {}
+	SaveManager.profile = Profile.new()
 	SaveManager.active_run = null
 	SaveManager.set_save_path(_test_path)
 	# Clean up any leftover test file
@@ -43,7 +43,7 @@ func _make_instance(id: String) -> CharacterInstance:
 func test_first_run_no_file_loads_empty() -> void:
 	SaveManager.load_game()
 	assert_eq(SaveManager.bands.size(), 0)
-	assert_eq(SaveManager.profile.size(), 0)
+	assert_eq(SaveManager.profile.completed_runs, 0)
 	assert_null(SaveManager.active_run)
 
 

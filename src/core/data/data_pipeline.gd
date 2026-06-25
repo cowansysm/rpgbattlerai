@@ -15,6 +15,7 @@ var loot_tables: Dictionary = {}
 var shop_pools: Dictionary = {}
 var run_config: Dictionary = {}
 var events_data: Dictionary = {}
+var meta_unlocks: Dictionary = {}
 
 
 ## Runs the full pipeline. Returns Array[String] of errors (empty == success).
@@ -118,6 +119,9 @@ func get_run_config() -> Dictionary:
 func get_events_data() -> Dictionary:
 	return events_data
 
+func get_meta_unlocks() -> Dictionary:
+	return meta_unlocks
+
 
 func _load_economy_data(base_path: String) -> Array[String]:
 	var errors: Array[String] = []
@@ -158,4 +162,12 @@ func _load_run_data(base_path: String) -> Array[String]:
 			events_data = parsed as Dictionary
 		else:
 			errors.append("events.json: expected Dictionary at root")
+	var mu_path: String = base_path.path_join("meta_unlocks.json")
+	if FileAccess.file_exists(mu_path):
+		var text: String = FileAccess.get_file_as_string(mu_path)
+		var parsed: Variant = JSON.parse_string(text)
+		if parsed is Dictionary:
+			meta_unlocks = parsed as Dictionary
+		else:
+			errors.append("meta_unlocks.json: expected Dictionary at root")
 	return errors

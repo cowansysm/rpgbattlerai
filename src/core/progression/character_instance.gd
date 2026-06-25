@@ -21,13 +21,17 @@ var growth_accumulated: Dictionary = {}
 var downs_this_run: int = 0
 
 
-static func generate(template: CharacterData, name_gen: Callable) -> CharacterInstance:
+static func generate(template: CharacterData, name_gen: Callable,
+		bonus_classes: Array[String] = []) -> CharacterInstance:
 	var ci := CharacterInstance.new()
 	ci.instance_id = _generate_id()
 	ci.template_id = template.id
 	ci.race = template.race
 	ci.name = name_gen.call(template.race)
 	ci.unlocked_classes = ["vagabond"]
+	for cls_id in bonus_classes:
+		if not ci.unlocked_classes.has(cls_id):
+			ci.unlocked_classes.append(cls_id)
 	ci.active_class = "vagabond"
 	ci.level = 1
 	ci.xp = 0

@@ -14,6 +14,7 @@ var _run_controller: RunController
 var _run: RunState
 var _band: BattleBand
 var _pending_node_id: String = ""
+var _name_gen: NameGenerator
 
 # UI elements
 var _map_display: RunMapDisplay
@@ -31,10 +32,16 @@ var _outcome_overlay: PanelContainer
 var _outcome_label: Label
 var _outcome_details: Label
 var _outcome_btn: Button
+var _shop_overlay: PanelContainer
+var _shop_gold_label: Label
+var _shop_item_list: VBoxContainer
 
 
 func _ready() -> void:
 	_run_controller = RunController.new()
+	_run_controller.set_meta_unlocks_provider(GameData.get_meta_unlocks)
+	_name_gen = NameGenerator.new()
+	_name_gen.load_tables()
 	_build_ui()
 	_initialize_run()
 	_update_display()
@@ -66,8 +73,11 @@ func _initialize_run() -> void:
 	elif _band != null:
 		var seed_val: int = Time.get_ticks_usec()
 		var cfg: Dictionary = GameData.get_run_config()
-		_run = _run_controller.embark(_band, seed_val, cfg)
-		Log.info("RunScene", "Embarked on new run %s" % _run.run_id)
+		# Resolve eligible starting boons from profile and auto-apply
+		var boons: Array[Dictionary] = MetaUnlockEngine.resolve_boons(
+			SaveManager.profile, GameData.get_meta_unlocks())
+		_run = _run_controller.embark(_band, seed_val, cfg, boons)
+		Log.info("RunScene", "Embarked on new run %s (boons: %d)" % [_run.run_id, boons.size()])
 	else:
 		Log.error("RunScene", "No band available for run")
 
@@ -169,9 +179,14 @@ func _build_ui() -> void:
 	abandon_btn.pressed.connect(_on_abandon_run)
 	_sidebar.add_child(abandon_btn)
 
+	# Dev tools (only when dev flag is on)
+	if Dev.enabled:
+		_build_dev_panel()
+
 	# Overlays (initially hidden)
 	_build_overlay()
 	_build_outcome_overlay()
+	_build_shop_overlay()
 
 
 func _build_overlay() -> void:
@@ -273,25 +288,25 @@ func _refresh_sidebar() -> void:
 	for child in _roster_list.get_children():
 		child.queue_free()
 	for ci in _band.roster:
+		var vbox := VBoxContainer.new()
+		# Top row: name, level, class
 		var row := HBoxContainer.new()
 		var name_label := Label.new()
-		name_label.text = "%s (Lv%d)" % [ci.name, ci.level]
+		name_label.text = "%s  Lv%d  %s" % [ci.name, ci.level, ci.active_class.capitalize()]
 		name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(name_label)
+		# Down indicator: "Lives: 2/3" style
+		var remaining: int = maxi(0, _run.down_limit + 1 - ci.downs_this_run)
+		var total_lives: int = _run.down_limit + 1
 		var downs_label := Label.new()
-		var remaining: int = maxi(0, _run.down_limit - ci.downs_this_run)
-		var hearts: String = ""
-		for _i in range(remaining):
-			hearts += "+"
-		for _i in range(ci.downs_this_run):
-			hearts += "-"
-		downs_label.text = "[%s]" % hearts
-		if remaining == 0:
+		downs_label.text = "Lives: %d/%d" % [remaining, total_lives]
+		if remaining <= 0:
 			downs_label.add_theme_color_override("font_color", Color(1.0, 0.3, 0.3))
 		elif ci.downs_this_run > 0:
 			downs_label.add_theme_color_override("font_color", Color(1.0, 0.7, 0.3))
 		row.add_child(downs_label)
-		_roster_list.add_child(row)
+		vbox.add_child(row)
+		_roster_list.add_child(vbox)
 
 
 # --- Node Interaction ---
@@ -465,12 +480,9 @@ func _show_event_outcome(result: Dictionary) -> void:
 # --- Shop ---
 
 func _show_shop_overlay() -> void:
-	# Simplified: show a message that shop was visited. Full shop UI is a
-	# future enhancement that ports the BandManagementScene shop panel.
-	_overlay_label.text = "Shop"
-	_overlay_effects_label.text = "You browse the wares. (Shop UI coming soon)\nGold: %d" % _band.gold
+	_refresh_shop_items()
 	_overlay_state = OverlayState.SHOP
-	_overlay_container.visible = true
+	_shop_overlay.visible = true
 
 
 # --- Rest ---
@@ -509,6 +521,13 @@ func _show_run_outcome(title: String, ctrl_result: Dictionary) -> void:
 		details += "\nFallen:\n"
 		for d in deaths:
 			details += "  - %s\n" % str(d)
+	# Display earned meta-progression unlocks
+	var earned: Array = ctrl_result.get("earned_unlocks", []) as Array
+	if not earned.is_empty():
+		details += "\nUnlocks earned:\n"
+		for unlock in earned:
+			details += "  - %s\n" % str(unlock.get("rule_id", ""))
+	details += "\nRuns completed: %d" % SaveManager.profile.completed_runs
 	if title == "VICTORY":
 		_outcome_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.2))
 	else:
@@ -549,13 +568,162 @@ func _build_ctx() -> Dictionary:
 			"all_characters": GameData.all_characters,
 			"class_provider": GameData.get_job_class,
 			"name_gen": func(race: String) -> String:
-				return NameGenerator.generate(race),
+				return _name_gen.generate_name(race),
 			"run_config": GameData.get_run_config(),
 			"loot_table_provider": GameData.get_loot_table,
 			"shop_pool_provider": GameData.get_shop_pool,
 		},
 		"fielded_ids": [],  # all roster members are fielded in runs
 	}
+
+
+# --- Shop Overlay ---
+
+func _build_shop_overlay() -> void:
+	_shop_overlay = PanelContainer.new()
+	_shop_overlay.set_anchors_and_offsets_preset(PRESET_CENTER)
+	_shop_overlay.custom_minimum_size = Vector2(420, 350)
+	_shop_overlay.visible = false
+	_apply_panel_bg(_shop_overlay)
+	add_child(_shop_overlay)
+
+	var margin := MarginContainer.new()
+	margin.add_theme_constant_override("margin_left", 20)
+	margin.add_theme_constant_override("margin_right", 20)
+	margin.add_theme_constant_override("margin_top", 20)
+	margin.add_theme_constant_override("margin_bottom", 20)
+	_shop_overlay.add_child(margin)
+
+	var vbox := VBoxContainer.new()
+	margin.add_child(vbox)
+
+	var title := Label.new()
+	title.text = "Shop"
+	title.add_theme_font_size_override("font_size", 18)
+	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	vbox.add_child(title)
+
+	_shop_gold_label = Label.new()
+	_shop_gold_label.add_theme_color_override("font_color", Color(1.0, 0.85, 0.4))
+	vbox.add_child(_shop_gold_label)
+
+	vbox.add_child(_make_spacer(8))
+
+	var scroll := ScrollContainer.new()
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
+	scroll.vertical_scroll_mode = ScrollContainer.SCROLL_MODE_AUTO
+	scroll.custom_minimum_size.y = 180
+	vbox.add_child(scroll)
+
+	_shop_item_list = VBoxContainer.new()
+	scroll.add_child(_shop_item_list)
+
+	vbox.add_child(_make_spacer(10))
+
+	var leave_btn := Button.new()
+	leave_btn.text = "Leave Shop"
+	leave_btn.custom_minimum_size.y = 36
+	leave_btn.pressed.connect(_on_shop_leave)
+	vbox.add_child(leave_btn)
+
+
+func _refresh_shop_items() -> void:
+	_shop_gold_label.text = "Gold: %d" % _band.gold
+
+	for child in _shop_item_list.get_children():
+		child.queue_free()
+
+	# Merge all shop pools to get available items
+	var item_ids: Array[String] = []
+	for pool_id in GameData.all_shop_pool_ids():
+		var pool: Array = GameData.get_shop_pool(pool_id)
+		for iid in pool:
+			var sid: String = str(iid)
+			if not item_ids.has(sid):
+				item_ids.append(sid)
+
+	if item_ids.is_empty():
+		var empty_label := Label.new()
+		empty_label.text = "No items available."
+		_shop_item_list.add_child(empty_label)
+		return
+
+	for item_id in item_ids:
+		var item: ItemData = GameData.get_item(item_id)
+		if item == null:
+			continue
+		var price: int = Pricing.buy_price(item)
+		var after_gold: int = _band.gold - price
+		var row := HBoxContainer.new()
+		var label := Label.new()
+		label.text = "%s — %d gp (after: %d)" % [item.display_name, price, maxi(after_gold, 0)]
+		label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		row.add_child(label)
+		var buy_btn := Button.new()
+		buy_btn.text = "Buy"
+		buy_btn.custom_minimum_size.x = 60
+		buy_btn.disabled = _band.gold < price
+		var captured_id: String = item_id
+		buy_btn.pressed.connect(func() -> void:
+			var err: String = ShopService.buy(_band, captured_id, GameData.get_item)
+			if err.is_empty():
+				Log.info("RunShop", "Bought %s" % captured_id)
+			else:
+				Log.info("RunShop", "Buy failed: %s" % err)
+			_refresh_shop_items())
+		row.add_child(buy_btn)
+		_shop_item_list.add_child(row)
+
+
+func _on_shop_leave() -> void:
+	_shop_overlay.visible = false
+	_overlay_state = OverlayState.NONE
+	_update_display()
+
+
+# --- Dev Panel ---
+
+func _build_dev_panel() -> void:
+	_sidebar.add_child(_make_separator())
+
+	var header := Label.new()
+	header.text = "DEV TOOLS"
+	header.add_theme_font_size_override("font_size", 14)
+	header.add_theme_color_override("font_color", Color.ORANGE_RED)
+	_sidebar.add_child(header)
+
+	var profile_label := Label.new()
+	profile_label.text = "Runs: %d | Unlocks: %d" % [
+		SaveManager.profile.completed_runs, SaveManager.profile.meta_unlocks.size()]
+	_sidebar.add_child(profile_label)
+
+	var win_btn := Button.new()
+	win_btn.text = "Win Current Run"
+	win_btn.custom_minimum_size.y = 28
+	win_btn.pressed.connect(func() -> void:
+		if _run != null and _band != null:
+			_run_controller._end_run(_run, _band, "victory")
+			_show_run_outcome("VICTORY (DEV)", {"earned_unlocks": _run_controller.get_last_earned_unlocks()}))
+	_sidebar.add_child(win_btn)
+
+	var gold_btn := Button.new()
+	gold_btn.text = "Add 1000 Gold"
+	gold_btn.custom_minimum_size.y = 28
+	gold_btn.pressed.connect(func() -> void:
+		if _band != null:
+			DevCheatService.add_gold(_band, 1000)
+			_update_display())
+	_sidebar.add_child(gold_btn)
+
+	var reset_downs_btn := Button.new()
+	reset_downs_btn.text = "Reset All Downs"
+	reset_downs_btn.custom_minimum_size.y = 28
+	reset_downs_btn.pressed.connect(func() -> void:
+		if _band != null:
+			for ci in _band.roster:
+				DevCheatService.reset_downs(ci)
+			_update_display())
+	_sidebar.add_child(reset_downs_btn)
 
 
 # --- Utilities ---

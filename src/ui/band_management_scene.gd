@@ -543,15 +543,21 @@ func _refresh_roster() -> void:
 			btn.pressed.connect(_on_inspect_instance.bind(iid))
 			_roster_list.add_child(btn)
 
-	# Recruit buttons (one per character template)
+	# Recruit buttons (one per character template, filtered by profile unlocks)
 	for child in _recruit_list.get_children():
 		child.queue_free()
 	var cost: int = Constants.get_value("RECRUIT_COST", 50)
 	var templates: Array = GameData.all_characters()
+	var skip_gate: bool = Dev.enabled and DevOverrides.get_flag("DEV_SKIP_RECRUITMENT_GATE", false)
+	var profile_has_unlocks: bool = not SaveManager.profile.unlocked_templates.is_empty()
 	for t in templates:
 		if not t is CharacterData:
 			continue
 		var td: CharacterData = t
+		# Filter by profile unlocks unless gate is bypassed or no unlocks exist yet
+		if not skip_gate and profile_has_unlocks:
+			if not SaveManager.profile.has_template(td.id):
+				continue
 		var btn := Button.new()
 		btn.text = "Recruit %s (%s) — %d gold" % [td.display_name, td.race, cost]
 		btn.custom_minimum_size.y = 32
@@ -589,7 +595,14 @@ func _on_recruit(template_id: String) -> void:
 	if template == null:
 		return
 	var gen_name := func(race: String) -> String: return _name_gen.generate_name(race)
-	var result := Recruiter.recruit(_band, template, gen_name)
+	# Seed profile-unlocked classes on new recruits (or all classes if dev override)
+	var bonus: Array[String] = []
+	if Dev.enabled and DevOverrides.get_flag("DEV_ALL_CLASSES_UNLOCKED", false):
+		for cid in GameData.all_classes():
+			bonus.append(str(cid))
+	else:
+		bonus = SaveManager.profile.unlocked_classes.duplicate()
+	var result := Recruiter.recruit(_band, template, gen_name, -1, -1, bonus)
 	if result["error"] != "":
 		Log.info("BandManagement", result["error"])
 		return
@@ -622,8 +635,11 @@ func _refresh_inspect() -> void:
 
 	_inspect_name.text = "%s  (Lv%d %s)" % [
 		_inspected.name, _inspected.level, _inspected.race.capitalize()]
-	_inspect_xp.text = "XP: %d / %d  |  Downs: %d" % [
-		_inspected.xp, _inspected.xp_for_next_level(), _inspected.downs_this_run]
+	var down_limit: int = Constants.get_value("DOWN_LIMIT", 2)
+	var remaining_lives: int = maxi(0, down_limit + 1 - _inspected.downs_this_run)
+	var total_lives: int = down_limit + 1
+	_inspect_xp.text = "XP: %d / %d  |  Lives: %d/%d" % [
+		_inspected.xp, _inspected.xp_for_next_level(), remaining_lives, total_lives]
 
 	# Compute stats
 	var sb: StatBlock = InstanceStatResolver.resolve(_inspected, _race_prov, _class_prov)
@@ -681,18 +697,27 @@ func _refresh_class_buttons() -> void:
 			btn.pressed.connect(_on_switch_class.bind(cid))
 		btn.custom_minimum_size.y = 30
 		_class_buttons.add_child(btn)
-	# Unlock new classes
-	var all_classes: Array = ["vagabond", "thief", "soldier", "adept"]
-	for cls_id in all_classes:
-		if _inspected.unlocked_classes.has(cls_id):
+	# Unlock / locked classes — show all known classes with status
+	for cls_id in GameData.all_classes():
+		var cid: String = str(cls_id)
+		if _inspected.unlocked_classes.has(cid):
 			continue
-		if _inspected.can_unlock(cls_id, _class_prov):
+		var cls: ClassData = GameData.get_job_class(cid)
+		if cls == null:
+			continue
+		if _inspected.can_unlock(cid, _class_prov):
 			var btn := Button.new()
-			btn.text = "Unlock %s" % cls_id.capitalize()
+			btn.text = "Unlock %s" % cls.display_name
 			btn.custom_minimum_size.y = 30
-			var cid: String = cls_id
 			btn.pressed.connect(_on_unlock_class.bind(cid))
 			_class_buttons.add_child(btn)
+		else:
+			# Show locked class with prerequisite info
+			var prereq_text: String = _format_prerequisites(cls)
+			var label := Label.new()
+			label.text = "[LOCKED] %s — %s" % [cls.display_name, prereq_text]
+			label.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))
+			_class_buttons.add_child(label)
 
 
 func _refresh_ability_buttons() -> void:
@@ -816,6 +841,23 @@ func _on_inspect_back() -> void:
 	_show_roster_view()
 
 
+func _format_prerequisites(cls: ClassData) -> String:
+	var parts: Array[String] = []
+	var pre: Dictionary = cls.prerequisites
+	if pre.is_empty():
+		return "no prerequisites"
+	var req_level: int = int(pre.get("level", 0))
+	if req_level > 0:
+		parts.append("Lv%d" % req_level)
+	var req_classes: Array = pre.get("classes", []) as Array
+	for pair in req_classes:
+		if pair is Array and (pair as Array).size() >= 1:
+			parts.append(str(pair[0]).capitalize())
+	if parts.is_empty():
+		return "requirements not met"
+	return "needs " + ", ".join(parts)
+
+
 # ============================================================
 # FIELD SELECT
 # ============================================================
@@ -914,8 +956,9 @@ func _refresh_shop() -> void:
 			if item == null:
 				continue
 			var price: int = Pricing.buy_price(item)
+			var after_gold: int = _band.gold - price
 			var btn := Button.new()
-			btn.text = "Buy %s — %d gold" % [item.display_name, price]
+			btn.text = "Buy %s — %d gold (after: %d)" % [item.display_name, price, maxi(after_gold, 0)]
 			btn.custom_minimum_size.y = 30
 			btn.disabled = _band.gold < price
 			var iid: String = item_id
@@ -933,11 +976,12 @@ func _refresh_shop() -> void:
 			continue
 		has_sellable = true
 		var sell_val: int = Pricing.sell_value(item)
+		var after_gold: int = _band.gold + sell_val
 		var btn := Button.new()
-		btn.text = "Sell %s — %d gold" % [item.display_name, sell_val]
+		btn.text = "Sell %s — +%d gold (after: %d)" % [item.display_name, sell_val, after_gold]
 		btn.custom_minimum_size.y = 30
 		var sid: String = str(eid)
-		btn.pressed.connect(_on_shop_sell.bind(sid))
+		btn.pressed.connect(_on_shop_sell_confirm.bind(btn, sid))
 		_shop_sell_list.add_child(btn)
 	# Consumables
 	var consumables: Array = _band.inventory.get("consumables", []) as Array
@@ -953,11 +997,12 @@ func _refresh_shop() -> void:
 			continue
 		has_sellable = true
 		var sell_val: int = Pricing.sell_value(item)
+		var after_gold: int = _band.gold + sell_val
 		var btn := Button.new()
-		btn.text = "Sell %s (x%d) — %d gold each" % [item.display_name, qty, sell_val]
+		btn.text = "Sell %s (x%d) — +%d gold each (after: %d)" % [item.display_name, qty, sell_val, after_gold]
 		btn.custom_minimum_size.y = 30
 		var scid: String = cid
-		btn.pressed.connect(_on_shop_sell.bind(scid))
+		btn.pressed.connect(_on_shop_sell_confirm.bind(btn, scid))
 		_shop_sell_list.add_child(btn)
 	if not has_sellable:
 		var empty := Label.new()
@@ -976,15 +1021,21 @@ func _on_shop_buy(item_id: String) -> void:
 	_refresh_shop()
 
 
-func _on_shop_sell(item_id: String) -> void:
-	var err := ShopService.sell(_band, item_id, _item_prov)
-	if err.is_empty():
-		var item: ItemData = GameData.get_item(item_id)
-		var name_str: String = item.display_name if item != null else item_id
-		_shop_feedback.text = "Sold %s" % name_str
+func _on_shop_sell_confirm(btn: Button, item_id: String) -> void:
+	# Two-step sell: first click shows "Confirm?", second click sells
+	if btn.has_meta("sell_confirmed"):
+		var err := ShopService.sell(_band, item_id, _item_prov)
+		if err.is_empty():
+			var item: ItemData = GameData.get_item(item_id)
+			var name_str: String = item.display_name if item != null else item_id
+			_shop_feedback.text = "Sold %s" % name_str
+		else:
+			_shop_feedback.text = err
+		_refresh_shop()
 	else:
-		_shop_feedback.text = err
-	_refresh_shop()
+		btn.set_meta("sell_confirmed", true)
+		btn.text = "Confirm sell?"
+		btn.add_theme_color_override("font_color", Color(1.0, 0.4, 0.3))
 
 
 func _on_shop_back() -> void:
@@ -1064,6 +1115,87 @@ func _refresh_dev_roster() -> void:
 		DevCheatService.add_all_items(_band)
 		_refresh_roster())
 	_dev_roster_box.add_child(add_items_btn)
+
+	# --- META / PROFILE section ---
+	_dev_roster_box.add_child(HSeparator.new())
+
+	var meta_header := Label.new()
+	meta_header.text = "META / PROFILE"
+	meta_header.add_theme_font_size_override("font_size", 14)
+	meta_header.add_theme_color_override("font_color", Color.ORANGE_RED)
+	_dev_roster_box.add_child(meta_header)
+
+	var profile_info := Label.new()
+	profile_info.text = "Completed runs: %d | Unlocks: %d" % [
+		SaveManager.profile.completed_runs, SaveManager.profile.meta_unlocks.size()]
+	_dev_roster_box.add_child(profile_info)
+
+	var grant_templates_btn := Button.new()
+	grant_templates_btn.text = "Grant All Templates"
+	grant_templates_btn.pressed.connect(func() -> void:
+		for t in GameData.all_characters():
+			if t is CharacterData:
+				DevCheatService.grant_profile_template(SaveManager.profile, (t as CharacterData).id)
+		SaveManager.save_game()
+		_refresh_roster())
+	_dev_roster_box.add_child(grant_templates_btn)
+
+	var grant_classes_btn := Button.new()
+	grant_classes_btn.text = "Grant All Classes (Profile)"
+	grant_classes_btn.pressed.connect(func() -> void:
+		for cid in GameData.all_classes():
+			DevCheatService.grant_profile_class(SaveManager.profile, str(cid))
+		SaveManager.save_game()
+		_refresh_roster())
+	_dev_roster_box.add_child(grant_classes_btn)
+
+	var reset_profile_btn := Button.new()
+	reset_profile_btn.text = "Reset Profile"
+	reset_profile_btn.pressed.connect(func() -> void:
+		DevCheatService.reset_profile(SaveManager.profile)
+		SaveManager.save_game()
+		_refresh_roster())
+	_dev_roster_box.add_child(reset_profile_btn)
+
+	var runs_row := HBoxContainer.new()
+	_dev_roster_box.add_child(runs_row)
+	var runs_label := Label.new()
+	runs_label.text = "Runs:"
+	runs_row.add_child(runs_label)
+	var runs_spin := SpinBox.new()
+	runs_spin.min_value = 0
+	runs_spin.max_value = 999
+	runs_spin.value = SaveManager.profile.completed_runs
+	runs_spin.size_flags_horizontal = SIZE_EXPAND_FILL
+	runs_row.add_child(runs_spin)
+	var runs_set_btn := Button.new()
+	runs_set_btn.text = "Set"
+	runs_set_btn.pressed.connect(func() -> void:
+		DevCheatService.set_completed_runs(SaveManager.profile, int(runs_spin.value))
+		SaveManager.save_game()
+		_refresh_roster())
+	runs_row.add_child(runs_set_btn)
+
+	var toggle_skip_gate := CheckBox.new()
+	toggle_skip_gate.text = "Skip Recruit Gate"
+	toggle_skip_gate.button_pressed = DevOverrides.get_flag("DEV_SKIP_RECRUITMENT_GATE", false)
+	toggle_skip_gate.toggled.connect(func(pressed: bool) -> void:
+		if pressed:
+			DevOverrides.set_override("DEV_SKIP_RECRUITMENT_GATE", true)
+		else:
+			DevOverrides.clear_override("DEV_SKIP_RECRUITMENT_GATE")
+		_refresh_roster())
+	_dev_roster_box.add_child(toggle_skip_gate)
+
+	var toggle_all_classes := CheckBox.new()
+	toggle_all_classes.text = "All Classes Unlocked"
+	toggle_all_classes.button_pressed = DevOverrides.get_flag("DEV_ALL_CLASSES_UNLOCKED", false)
+	toggle_all_classes.toggled.connect(func(pressed: bool) -> void:
+		if pressed:
+			DevOverrides.set_override("DEV_ALL_CLASSES_UNLOCKED", true)
+		else:
+			DevOverrides.clear_override("DEV_ALL_CLASSES_UNLOCKED"))
+	_dev_roster_box.add_child(toggle_all_classes)
 
 
 func _refresh_dev_inspect() -> void:
