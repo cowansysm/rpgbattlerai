@@ -1,0 +1,2024 @@
+[
+  {
+    "id": "bat_scouts",
+    "name": "Bat Scouting Party",
+    "min_band_level": 1,
+    "enemies": [
+      {
+        "character": "bat_swarm",
+        "count": 2
+      },
+      {
+        "character": "bat_nightstalker",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "bat",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "bat_warband",
+    "name": "Bat Warband",
+    "min_band_level": 2,
+    "enemies": [
+      {
+        "character": "bat_swarm",
+        "count": 2
+      },
+      {
+        "character": "bat_nightstalker",
+        "count": 1
+      },
+      {
+        "character": "bat_echocaster",
+        "count": 1
+      },
+      {
+        "character": "bat_screecher",
+        "count": 1
+      }
+    ],
+    "map": "river_crossing",
+    "level_offset": 0,
+    "tags": [
+      "bat",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "demon_scouts",
+    "name": "Demon Scouting Party",
+    "min_band_level": 7,
+    "enemies": [
+      {
+        "character": "demon_brute",
+        "count": 2
+      },
+      {
+        "character": "demon_hellfire",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "demon",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "demon_warband",
+    "name": "Demon Warband",
+    "min_band_level": 8,
+    "enemies": [
+      {
+        "character": "demon_brute",
+        "count": 2
+      },
+      {
+        "character": "demon_hellfire",
+        "count": 1
+      },
+      {
+        "character": "demon_corruptor",
+        "count": 1
+      },
+      {
+        "character": "demon_dreadlord",
+        "count": 1
+      }
+    ],
+    "map": "sunken_courtyard",
+    "level_offset": 0,
+    "tags": [
+      "demon",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "dire_beast_scouts",
+    "name": "Dire Beast Scouting Party",
+    "min_band_level": 5,
+    "enemies": [
+      {
+        "character": "dire_beast_maw",
+        "count": 2
+      },
+      {
+        "character": "dire_beast_ravager",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "dire_beast",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "dire_beast_warband",
+    "name": "Dire Beast Warband",
+    "min_band_level": 6,
+    "enemies": [
+      {
+        "character": "dire_beast_maw",
+        "count": 2
+      },
+      {
+        "character": "dire_beast_ravager",
+        "count": 1
+      },
+      {
+        "character": "dire_beast_pouncer",
+        "count": 1
+      },
+      {
+        "character": "dire_beast_bulwark",
+        "count": 1
+      }
+    ],
+    "map": "forest_clearing",
+    "level_offset": 0,
+    "tags": [
+      "dire_beast",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "drake_scouts",
+    "name": "Drake Scouting Party",
+    "min_band_level": 7,
+    "enemies": [
+      {
+        "character": "drake_maw",
+        "count": 2
+      },
+      {
+        "character": "drake_skyhunter",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "drake",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "drake_warband",
+    "name": "Drake Warband",
+    "min_band_level": 8,
+    "enemies": [
+      {
+        "character": "drake_maw",
+        "count": 2
+      },
+      {
+        "character": "drake_skyhunter",
+        "count": 1
+      },
+      {
+        "character": "drake_firebreather",
+        "count": 1
+      },
+      {
+        "character": "drake_scalelord",
+        "count": 1
+      }
+    ],
+    "map": "sunken_courtyard",
+    "level_offset": 0,
+    "tags": [
+      "drake",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "elemental_scouts",
+    "name": "Elemental Scouting Party",
+    "min_band_level": 6,
+    "enemies": [
+      {
+        "character": "elemental_stoneheart",
+        "count": 2
+      },
+      {
+        "character": "elemental_pyre",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "elemental",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "elemental_warband",
+    "name": "Elemental Warband",
+    "min_band_level": 7,
+    "enemies": [
+      {
+        "character": "elemental_stoneheart",
+        "count": 2
+      },
+      {
+        "character": "elemental_pyre",
+        "count": 1
+      },
+      {
+        "character": "elemental_coreguard",
+        "count": 1
+      },
+      {
+        "character": "elemental_frostform",
+        "count": 1
+      }
+    ],
+    "map": "sunken_courtyard",
+    "level_offset": 0,
+    "tags": [
+      "elemental",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "gargoyle_scouts",
+    "name": "Gargoyle Scouting Party",
+    "min_band_level": 4,
+    "enemies": [
+      {
+        "character": "gargoyle_sentinel",
+        "count": 2
+      },
+      {
+        "character": "gargoyle_skywatcher",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "gargoyle",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "gargoyle_warband",
+    "name": "Gargoyle Warband",
+    "min_band_level": 5,
+    "enemies": [
+      {
+        "character": "gargoyle_sentinel",
+        "count": 2
+      },
+      {
+        "character": "gargoyle_skywatcher",
+        "count": 1
+      },
+      {
+        "character": "gargoyle_wardstone",
+        "count": 1
+      },
+      {
+        "character": "gargoyle_stoneguard",
+        "count": 1
+      }
+    ],
+    "map": "mountain_pass",
+    "level_offset": 0,
+    "tags": [
+      "gargoyle",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "gnoll_scouts",
+    "name": "Gnoll Scouting Party",
+    "min_band_level": 2,
+    "enemies": [
+      {
+        "character": "gnoll_reaver",
+        "count": 2
+      },
+      {
+        "character": "gnoll_hunter",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "gnoll",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "gnoll_warband",
+    "name": "Gnoll Warband",
+    "min_band_level": 3,
+    "enemies": [
+      {
+        "character": "gnoll_reaver",
+        "count": 2
+      },
+      {
+        "character": "gnoll_hunter",
+        "count": 1
+      },
+      {
+        "character": "gnoll_demoncaller",
+        "count": 1
+      },
+      {
+        "character": "gnoll_painbringer",
+        "count": 1
+      }
+    ],
+    "map": "forest_clearing",
+    "level_offset": 0,
+    "tags": [
+      "gnoll",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "goblin_scouts",
+    "name": "Goblin Scouting Party",
+    "min_band_level": 1,
+    "enemies": [
+      {
+        "character": "goblin_soldier",
+        "count": 2
+      },
+      {
+        "character": "goblin_skirmisher",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "goblin",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "goblin_warband",
+    "name": "Goblin Warband",
+    "min_band_level": 2,
+    "enemies": [
+      {
+        "character": "goblin_soldier",
+        "count": 2
+      },
+      {
+        "character": "goblin_skirmisher",
+        "count": 1
+      },
+      {
+        "character": "goblin_shaman",
+        "count": 1
+      },
+      {
+        "character": "goblin_trapper",
+        "count": 1
+      }
+    ],
+    "map": "forest_clearing",
+    "level_offset": 0,
+    "tags": [
+      "goblin",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "golem_scouts",
+    "name": "Golem Scouting Party",
+    "min_band_level": 6,
+    "enemies": [
+      {
+        "character": "golem_colossus",
+        "count": 2
+      },
+      {
+        "character": "golem_runeguard",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "golem",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "golem_warband",
+    "name": "Golem Warband",
+    "min_band_level": 7,
+    "enemies": [
+      {
+        "character": "golem_colossus",
+        "count": 2
+      },
+      {
+        "character": "golem_runeguard",
+        "count": 1
+      },
+      {
+        "character": "golem_crusher",
+        "count": 1
+      },
+      {
+        "character": "golem_bulwark",
+        "count": 1
+      }
+    ],
+    "map": "mountain_pass",
+    "level_offset": 0,
+    "tags": [
+      "golem",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "harpy_scouts",
+    "name": "Harpy Scouting Party",
+    "min_band_level": 2,
+    "enemies": [
+      {
+        "character": "harpy_talon",
+        "count": 2
+      },
+      {
+        "character": "harpy_diver",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "harpy",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "harpy_warband",
+    "name": "Harpy Warband",
+    "min_band_level": 3,
+    "enemies": [
+      {
+        "character": "harpy_talon",
+        "count": 2
+      },
+      {
+        "character": "harpy_diver",
+        "count": 1
+      },
+      {
+        "character": "harpy_windcaller",
+        "count": 1
+      },
+      {
+        "character": "harpy_screecher",
+        "count": 1
+      }
+    ],
+    "map": "open_plains",
+    "level_offset": 0,
+    "tags": [
+      "harpy",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "hobgoblin_scouts",
+    "name": "Hobgoblin Scouting Party",
+    "min_band_level": 2,
+    "enemies": [
+      {
+        "character": "hobgoblin_captain",
+        "count": 2
+      },
+      {
+        "character": "hobgoblin_crossbowman",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "hobgoblin",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "hobgoblin_warband",
+    "name": "Hobgoblin Warband",
+    "min_band_level": 3,
+    "enemies": [
+      {
+        "character": "hobgoblin_captain",
+        "count": 2
+      },
+      {
+        "character": "hobgoblin_crossbowman",
+        "count": 1
+      },
+      {
+        "character": "hobgoblin_warcaster",
+        "count": 1
+      },
+      {
+        "character": "hobgoblin_drillmaster",
+        "count": 1
+      }
+    ],
+    "map": "open_plains",
+    "level_offset": 0,
+    "tags": [
+      "hobgoblin",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "imp_scouts",
+    "name": "Imp Scouting Party",
+    "min_band_level": 3,
+    "enemies": [
+      {
+        "character": "imp_firebrand",
+        "count": 2
+      },
+      {
+        "character": "imp_firebrand",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "imp",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "imp_warband",
+    "name": "Imp Warband",
+    "min_band_level": 4,
+    "enemies": [
+      {
+        "character": "imp_firebrand",
+        "count": 2
+      },
+      {
+        "character": "imp_flameling",
+        "count": 1
+      },
+      {
+        "character": "imp_tormentor",
+        "count": 1
+      },
+      {
+        "character": "imp_warden",
+        "count": 1
+      }
+    ],
+    "map": "sunken_courtyard",
+    "level_offset": 0,
+    "tags": [
+      "imp",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "insectoid_scouts",
+    "name": "Insectoid Scouting Party",
+    "min_band_level": 1,
+    "enemies": [
+      {
+        "character": "insectoid_drone",
+        "count": 2
+      },
+      {
+        "character": "insectoid_swarmer",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "insectoid",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "insectoid_warband",
+    "name": "Insectoid Warband",
+    "min_band_level": 2,
+    "enemies": [
+      {
+        "character": "insectoid_drone",
+        "count": 2
+      },
+      {
+        "character": "insectoid_swarmer",
+        "count": 1
+      },
+      {
+        "character": "insectoid_stinger",
+        "count": 1
+      },
+      {
+        "character": "insectoid_carapace",
+        "count": 1
+      }
+    ],
+    "map": "open_plains",
+    "level_offset": 0,
+    "tags": [
+      "insectoid",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "kobold_scouts",
+    "name": "Kobold Scouting Party",
+    "min_band_level": 1,
+    "enemies": [
+      {
+        "character": "kobold_tunneler",
+        "count": 2
+      },
+      {
+        "character": "kobold_skirmisher",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "kobold",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "kobold_warband",
+    "name": "Kobold Warband",
+    "min_band_level": 2,
+    "enemies": [
+      {
+        "character": "kobold_tunneler",
+        "count": 2
+      },
+      {
+        "character": "kobold_skirmisher",
+        "count": 1
+      },
+      {
+        "character": "kobold_firebrand",
+        "count": 1
+      },
+      {
+        "character": "kobold_trapsmith",
+        "count": 1
+      }
+    ],
+    "map": "forest_clearing",
+    "level_offset": 0,
+    "tags": [
+      "kobold",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "lizardfolk_scouts",
+    "name": "Lizardfolk Scouting Party",
+    "min_band_level": 3,
+    "enemies": [
+      {
+        "character": "lizardfolk_warrior",
+        "count": 2
+      },
+      {
+        "character": "lizardfolk_spearfisher",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "lizardfolk",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "lizardfolk_warband",
+    "name": "Lizardfolk Warband",
+    "min_band_level": 4,
+    "enemies": [
+      {
+        "character": "lizardfolk_warrior",
+        "count": 2
+      },
+      {
+        "character": "lizardfolk_spearfisher",
+        "count": 1
+      },
+      {
+        "character": "lizardfolk_swampcaller",
+        "count": 1
+      },
+      {
+        "character": "lizardfolk_stalker",
+        "count": 1
+      }
+    ],
+    "map": "river_crossing",
+    "level_offset": 0,
+    "tags": [
+      "lizardfolk",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "merfolk_scouts",
+    "name": "Merfolk Scouting Party",
+    "min_band_level": 3,
+    "enemies": [
+      {
+        "character": "merfolk_guardian",
+        "count": 2
+      },
+      {
+        "character": "merfolk_spearfisher",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "merfolk",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "merfolk_warband",
+    "name": "Merfolk Warband",
+    "min_band_level": 4,
+    "enemies": [
+      {
+        "character": "merfolk_guardian",
+        "count": 2
+      },
+      {
+        "character": "merfolk_spearfisher",
+        "count": 1
+      },
+      {
+        "character": "merfolk_wavecaller",
+        "count": 1
+      },
+      {
+        "character": "merfolk_siren",
+        "count": 1
+      }
+    ],
+    "map": "river_crossing",
+    "level_offset": 0,
+    "tags": [
+      "merfolk",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "minotaur_scouts",
+    "name": "Minotaur Scouting Party",
+    "min_band_level": 5,
+    "enemies": [
+      {
+        "character": "minotaur_berserker",
+        "count": 2
+      },
+      {
+        "character": "minotaur_labyrinth_stalker",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "minotaur",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "minotaur_warband",
+    "name": "Minotaur Warband",
+    "min_band_level": 6,
+    "enemies": [
+      {
+        "character": "minotaur_berserker",
+        "count": 2
+      },
+      {
+        "character": "minotaur_labyrinth_stalker",
+        "count": 1
+      },
+      {
+        "character": "minotaur_charger",
+        "count": 1
+      },
+      {
+        "character": "minotaur_guardian",
+        "count": 1
+      }
+    ],
+    "map": "mountain_pass",
+    "level_offset": 0,
+    "tags": [
+      "minotaur",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "naga_scouts",
+    "name": "Naga Scouting Party",
+    "min_band_level": 4,
+    "enemies": [
+      {
+        "character": "naga_striker",
+        "count": 2
+      },
+      {
+        "character": "naga_spellweaver",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "naga",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "naga_warband",
+    "name": "Naga Warband",
+    "min_band_level": 5,
+    "enemies": [
+      {
+        "character": "naga_striker",
+        "count": 2
+      },
+      {
+        "character": "naga_spellweaver",
+        "count": 1
+      },
+      {
+        "character": "naga_charmer",
+        "count": 1
+      },
+      {
+        "character": "naga_warden",
+        "count": 1
+      }
+    ],
+    "map": "river_crossing",
+    "level_offset": 0,
+    "tags": [
+      "naga",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "ogre_scouts",
+    "name": "Ogre Scouting Party",
+    "min_band_level": 4,
+    "enemies": [
+      {
+        "character": "ogre_bruiser",
+        "count": 2
+      },
+      {
+        "character": "ogre_boulder_hurler",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "ogre",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "ogre_warband",
+    "name": "Ogre Warband",
+    "min_band_level": 5,
+    "enemies": [
+      {
+        "character": "ogre_bruiser",
+        "count": 2
+      },
+      {
+        "character": "ogre_boulder_hurler",
+        "count": 1
+      },
+      {
+        "character": "ogre_maneater",
+        "count": 1
+      },
+      {
+        "character": "ogre_smasher",
+        "count": 1
+      }
+    ],
+    "map": "mountain_pass",
+    "level_offset": 0,
+    "tags": [
+      "ogre",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "orc_scouts",
+    "name": "Orc Scouting Party",
+    "min_band_level": 4,
+    "enemies": [
+      {
+        "character": "orc_berserker",
+        "count": 2
+      },
+      {
+        "character": "orc_hunter",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "orc",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "orc_warband",
+    "name": "Orc Warband",
+    "min_band_level": 5,
+    "enemies": [
+      {
+        "character": "orc_berserker",
+        "count": 2
+      },
+      {
+        "character": "orc_hunter",
+        "count": 1
+      },
+      {
+        "character": "orc_spiritcaller",
+        "count": 1
+      },
+      {
+        "character": "orc_raider",
+        "count": 1
+      }
+    ],
+    "map": "mountain_pass",
+    "level_offset": 0,
+    "tags": [
+      "orc",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "skeleton_scouts",
+    "name": "Skeleton Scouting Party",
+    "min_band_level": 2,
+    "enemies": [
+      {
+        "character": "skeleton_soldier",
+        "count": 2
+      },
+      {
+        "character": "skeleton_archer",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "skeleton",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "skeleton_warband",
+    "name": "Skeleton Warband",
+    "min_band_level": 3,
+    "enemies": [
+      {
+        "character": "skeleton_soldier",
+        "count": 2
+      },
+      {
+        "character": "skeleton_archer",
+        "count": 1
+      },
+      {
+        "character": "skeleton_bonecaster",
+        "count": 1
+      },
+      {
+        "character": "skeleton_reaper",
+        "count": 1
+      }
+    ],
+    "map": "ruined_watchtower",
+    "level_offset": 0,
+    "tags": [
+      "skeleton",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "slime_scouts",
+    "name": "Slime Scouting Party",
+    "min_band_level": 2,
+    "enemies": [
+      {
+        "character": "slime_engulfer",
+        "count": 2
+      },
+      {
+        "character": "slime_corrosive",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "slime",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "slime_warband",
+    "name": "Slime Warband",
+    "min_band_level": 3,
+    "enemies": [
+      {
+        "character": "slime_engulfer",
+        "count": 2
+      },
+      {
+        "character": "slime_corrosive",
+        "count": 1
+      },
+      {
+        "character": "slime_acidic",
+        "count": 1
+      },
+      {
+        "character": "slime_splitter",
+        "count": 1
+      }
+    ],
+    "map": "river_crossing",
+    "level_offset": 0,
+    "tags": [
+      "slime",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "spider_scouts",
+    "name": "Spider Scouting Party",
+    "min_band_level": 2,
+    "enemies": [
+      {
+        "character": "spider_ambusher",
+        "count": 2
+      },
+      {
+        "character": "spider_spinner",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "spider",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "spider_warband",
+    "name": "Spider Warband",
+    "min_band_level": 3,
+    "enemies": [
+      {
+        "character": "spider_ambusher",
+        "count": 2
+      },
+      {
+        "character": "spider_spinner",
+        "count": 1
+      },
+      {
+        "character": "spider_venomfang",
+        "count": 1
+      },
+      {
+        "character": "spider_weaver",
+        "count": 1
+      }
+    ],
+    "map": "forest_clearing",
+    "level_offset": 0,
+    "tags": [
+      "spider",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "treant_scouts",
+    "name": "Treant Scouting Party",
+    "min_band_level": 5,
+    "enemies": [
+      {
+        "character": "treant_warden",
+        "count": 2
+      },
+      {
+        "character": "treant_thorncaster",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "treant",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "treant_warband",
+    "name": "Treant Warband",
+    "min_band_level": 6,
+    "enemies": [
+      {
+        "character": "treant_warden",
+        "count": 2
+      },
+      {
+        "character": "treant_thorncaster",
+        "count": 1
+      },
+      {
+        "character": "treant_grovekeeper",
+        "count": 1
+      },
+      {
+        "character": "treant_elder",
+        "count": 1
+      }
+    ],
+    "map": "forest_clearing",
+    "level_offset": 0,
+    "tags": [
+      "treant",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "troll_scouts",
+    "name": "Troll Scouting Party",
+    "min_band_level": 5,
+    "enemies": [
+      {
+        "character": "troll_render",
+        "count": 2
+      },
+      {
+        "character": "troll_boulderhurl",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "troll",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "troll_warband",
+    "name": "Troll Warband",
+    "min_band_level": 6,
+    "enemies": [
+      {
+        "character": "troll_render",
+        "count": 2
+      },
+      {
+        "character": "troll_boulderhurl",
+        "count": 1
+      },
+      {
+        "character": "troll_bog_shaman",
+        "count": 1
+      },
+      {
+        "character": "troll_feral",
+        "count": 1
+      }
+    ],
+    "map": "mountain_pass",
+    "level_offset": 0,
+    "tags": [
+      "troll",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "wolf_scouts",
+    "name": "Wolf Scouting Party",
+    "min_band_level": 2,
+    "enemies": [
+      {
+        "character": "wolf_hunter",
+        "count": 2
+      },
+      {
+        "character": "wolf_packleader",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "wolf",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "wolf_warband",
+    "name": "Wolf Warband",
+    "min_band_level": 3,
+    "enemies": [
+      {
+        "character": "wolf_hunter",
+        "count": 2
+      },
+      {
+        "character": "wolf_packleader",
+        "count": 1
+      },
+      {
+        "character": "wolf_stalker",
+        "count": 1
+      },
+      {
+        "character": "wolf_howler",
+        "count": 1
+      }
+    ],
+    "map": "forest_clearing",
+    "level_offset": 0,
+    "tags": [
+      "wolf",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "wraith_scouts",
+    "name": "Wraith Scouting Party",
+    "min_band_level": 4,
+    "enemies": [
+      {
+        "character": "wraith_specter",
+        "count": 2
+      },
+      {
+        "character": "wraith_specter",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "wraith",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "wraith_warband",
+    "name": "Wraith Warband",
+    "min_band_level": 5,
+    "enemies": [
+      {
+        "character": "wraith_specter",
+        "count": 2
+      },
+      {
+        "character": "wraith_hauntcaller",
+        "count": 1
+      },
+      {
+        "character": "wraith_soulrender",
+        "count": 1
+      },
+      {
+        "character": "wraith_veil",
+        "count": 1
+      }
+    ],
+    "map": "ruined_watchtower",
+    "level_offset": 0,
+    "tags": [
+      "wraith",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "zombie_scouts",
+    "name": "Zombie Scouting Party",
+    "min_band_level": 2,
+    "enemies": [
+      {
+        "character": "zombie_shambler",
+        "count": 2
+      },
+      {
+        "character": "zombie_plaguebearer",
+        "count": 1
+      }
+    ],
+    "level_offset": 0,
+    "tags": [
+      "zombie",
+      "warband",
+      "small"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "zombie_warband",
+    "name": "Zombie Warband",
+    "min_band_level": 3,
+    "enemies": [
+      {
+        "character": "zombie_shambler",
+        "count": 2
+      },
+      {
+        "character": "zombie_plaguebearer",
+        "count": 1
+      },
+      {
+        "character": "zombie_bloated",
+        "count": 1
+      },
+      {
+        "character": "zombie_devourer",
+        "count": 1
+      }
+    ],
+    "map": "ruined_watchtower",
+    "level_offset": 0,
+    "tags": [
+      "zombie",
+      "warband",
+      "full"
+    ],
+    "modifiers": {},
+    "weight": 1.0
+  },
+  {
+    "id": "goblinoid_raid",
+    "name": "Goblinoid Raiding Party",
+    "min_band_level": 2,
+    "map": "forest_clearing",
+    "level_offset": 0,
+    "tags": [
+      "goblinoid",
+      "mixed",
+      "pack"
+    ],
+    "modifiers": {},
+    "weight": 0.8,
+    "enemies": [
+      {
+        "character": "goblin_soldier",
+        "count": 2
+      },
+      {
+        "character": "goblin_skirmisher",
+        "count": 1
+      },
+      {
+        "character": "hobgoblin_legionnaire",
+        "count": 1
+      },
+      {
+        "character": "hobgoblin_captain",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "greenskin_warhost",
+    "name": "Greenskin Warhost",
+    "min_band_level": 5,
+    "map": "mountain_pass",
+    "level_offset": 0,
+    "tags": [
+      "greenskin",
+      "mixed",
+      "pack"
+    ],
+    "modifiers": {},
+    "weight": 0.8,
+    "enemies": [
+      {
+        "character": "orc_berserker",
+        "count": 2
+      },
+      {
+        "character": "ogre_bruiser",
+        "count": 1
+      },
+      {
+        "character": "hobgoblin_captain",
+        "count": 1
+      },
+      {
+        "character": "goblin_shaman",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "wild_pack",
+    "name": "Wild Pack",
+    "min_band_level": 2,
+    "map": "forest_clearing",
+    "level_offset": 0,
+    "tags": [
+      "beast",
+      "mixed",
+      "pack"
+    ],
+    "modifiers": {},
+    "weight": 0.8,
+    "enemies": [
+      {
+        "character": "wolf_hunter",
+        "count": 2
+      },
+      {
+        "character": "bat_swarm",
+        "count": 2
+      },
+      {
+        "character": "spider_ambusher",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "apex_predators",
+    "name": "Apex Predators",
+    "min_band_level": 6,
+    "map": "forest_clearing",
+    "level_offset": 1,
+    "tags": [
+      "beast",
+      "mixed",
+      "pack"
+    ],
+    "modifiers": {},
+    "weight": 0.8,
+    "enemies": [
+      {
+        "character": "dire_beast_maw",
+        "count": 2
+      },
+      {
+        "character": "dire_beast_pouncer",
+        "count": 1
+      },
+      {
+        "character": "wolf_savage",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "id": "undead_horde",
+    "name": "Undead Horde",
+    "min_band_level": 4,
+    "map": "ruined_watchtower",
+    "level_offset": 0,
+    "tags": [
+      "undead",
+      "mixed",
+      "pack"
+    ],
+    "modifiers": {},
+    "weight": 0.8,
+    "enemies": [
+      {
+        "character": "skeleton_soldier",
+        "count": 2
+      },
+      {
+        "character": "zombie_shambler",
+        "count": 2
+      },
+      {
+        "character": "skeleton_archer",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "haunting",
+    "name": "The Haunting",
+    "min_band_level": 5,
+    "map": "ruined_watchtower",
+    "level_offset": 0,
+    "tags": [
+      "undead",
+      "mixed",
+      "pack"
+    ],
+    "modifiers": {},
+    "weight": 0.8,
+    "enemies": [
+      {
+        "character": "wraith_specter",
+        "count": 2
+      },
+      {
+        "character": "skeleton_knight",
+        "count": 1
+      },
+      {
+        "character": "zombie_plaguebearer",
+        "count": 1
+      },
+      {
+        "character": "skeleton_bonecaster",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "swamp_ambush",
+    "name": "Swamp Ambush",
+    "min_band_level": 4,
+    "map": "river_crossing",
+    "level_offset": 0,
+    "tags": [
+      "reptilian",
+      "mixed",
+      "pack"
+    ],
+    "modifiers": {},
+    "weight": 0.8,
+    "enemies": [
+      {
+        "character": "lizardfolk_warrior",
+        "count": 2
+      },
+      {
+        "character": "naga_spellweaver",
+        "count": 1
+      },
+      {
+        "character": "slime_engulfer",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "tidal_raiders",
+    "name": "Tidal Raiders",
+    "min_band_level": 5,
+    "map": "river_crossing",
+    "level_offset": 0,
+    "tags": [
+      "aquatic",
+      "mixed",
+      "pack"
+    ],
+    "modifiers": {},
+    "weight": 0.8,
+    "enemies": [
+      {
+        "character": "merfolk_tidewarden",
+        "count": 1
+      },
+      {
+        "character": "merfolk_spearfisher",
+        "count": 2
+      },
+      {
+        "character": "naga_hydromancer",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "infernal_incursion",
+    "name": "Infernal Incursion",
+    "min_band_level": 6,
+    "map": "sunken_courtyard",
+    "level_offset": 1,
+    "tags": [
+      "demonic",
+      "mixed",
+      "pack"
+    ],
+    "modifiers": {},
+    "weight": 0.8,
+    "enemies": [
+      {
+        "character": "imp_firebrand",
+        "count": 2
+      },
+      {
+        "character": "demon_brute",
+        "count": 1
+      },
+      {
+        "character": "demon_hellfire",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "stoneguard_patrol",
+    "name": "Stoneguard Patrol",
+    "min_band_level": 6,
+    "map": "mountain_pass",
+    "level_offset": 0,
+    "tags": [
+      "construct",
+      "mixed",
+      "pack"
+    ],
+    "modifiers": {},
+    "weight": 0.8,
+    "enemies": [
+      {
+        "character": "gargoyle_sentinel",
+        "count": 2
+      },
+      {
+        "character": "golem_crusher",
+        "count": 1
+      },
+      {
+        "character": "gargoyle_smasher",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "minotaur_lord",
+    "name": "The Minotaur Lord",
+    "min_band_level": 6,
+    "map": "mountain_pass",
+    "level_offset": 2,
+    "tags": [
+      "boss"
+    ],
+    "modifiers": {
+      "enemy_buff": {
+        "hp": 10
+      }
+    },
+    "weight": 0.4,
+    "enemies": [
+      {
+        "character": "minotaur_berserker",
+        "count": 1
+      },
+      {
+        "character": "minotaur_charger",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "id": "troll_warlord",
+    "name": "Troll Warlord",
+    "min_band_level": 6,
+    "map": "mountain_pass",
+    "level_offset": 2,
+    "tags": [
+      "boss"
+    ],
+    "modifiers": {},
+    "weight": 0.4,
+    "enemies": [
+      {
+        "character": "troll_render",
+        "count": 1
+      },
+      {
+        "character": "troll_regenerator",
+        "count": 1
+      },
+      {
+        "character": "gnoll_reaver",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "id": "lich_king",
+    "name": "The Lich King",
+    "min_band_level": 5,
+    "map": "ruined_watchtower",
+    "level_offset": 2,
+    "tags": [
+      "boss"
+    ],
+    "modifiers": {},
+    "weight": 0.4,
+    "enemies": [
+      {
+        "character": "wraith_hauntcaller",
+        "count": 1
+      },
+      {
+        "character": "skeleton_knight",
+        "count": 2
+      },
+      {
+        "character": "zombie_shambler",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "id": "demon_prince",
+    "name": "Demon Prince",
+    "min_band_level": 8,
+    "map": "sunken_courtyard",
+    "level_offset": 2,
+    "tags": [
+      "boss"
+    ],
+    "modifiers": {
+      "enemy_buff": {
+        "mag": 4
+      }
+    },
+    "weight": 0.4,
+    "enemies": [
+      {
+        "character": "demon_dreadlord",
+        "count": 1
+      },
+      {
+        "character": "imp_firebrand",
+        "count": 2
+      },
+      {
+        "character": "demon_corruptor",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "elder_drake",
+    "name": "Elder Drake",
+    "min_band_level": 8,
+    "map": "sunken_courtyard",
+    "level_offset": 2,
+    "tags": [
+      "boss"
+    ],
+    "modifiers": {
+      "enemy_buff": {
+        "hp": 15
+      }
+    },
+    "weight": 0.4,
+    "enemies": [
+      {
+        "character": "drake_firebreather",
+        "count": 1
+      },
+      {
+        "character": "drake_skyhunter",
+        "count": 1
+      },
+      {
+        "character": "drake_scalelord",
+        "count": 1
+      }
+    ]
+  },
+  {
+    "id": "colossus",
+    "name": "The Colossus",
+    "min_band_level": 7,
+    "map": "ruined_watchtower",
+    "level_offset": 2,
+    "tags": [
+      "boss"
+    ],
+    "modifiers": {
+      "enemy_buff": {
+        "def": 3
+      }
+    },
+    "weight": 0.4,
+    "enemies": [
+      {
+        "character": "golem_colossus",
+        "count": 1
+      },
+      {
+        "character": "golem_sentinel",
+        "count": 2
+      }
+    ]
+  },
+  {
+    "id": "elemental_avatar",
+    "name": "Elemental Avatar",
+    "min_band_level": 7,
+    "map": "sunken_courtyard",
+    "level_offset": 2,
+    "tags": [
+      "boss"
+    ],
+    "modifiers": {},
+    "weight": 0.4,
+    "enemies": [
+      {
+        "character": "elemental_tempest",
+        "count": 1
+      },
+      {
+        "character": "elemental_pyre",
+        "count": 1
+      },
+      {
+        "character": "elemental_coreguard",
+        "count": 1
+      }
+    ]
+  }
+]

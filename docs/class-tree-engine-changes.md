@@ -32,7 +32,9 @@ ability/item/class references, 7 abilities per class, prerequisites strictly low
 - **`validate_job_tree`** (~lines 350–458) — the tier-consistency section is hardcoded to the
   4-tier model (single `starting` root; `tier1` = level-only; `advanced` requires a `tier1`;
   `elite` requires an `advanced`). Replace with the n-tier rule:
-  - The root set = classes with **no** `prerequisites.classes` (expected: just `vagabond`).
+  - The root set = classes with **no** `prerequisites.classes` (the player root `vagabond`
+    **plus all 140 monster classes** — see "Monster classes" below). Allow multiple roots;
+    do not require a single starting class.
   - For every class, **each prerequisite class must have a strictly smaller tier**.
   - Recommended: have the validator **derive** `tier` as the closure size and assert the
     authored `tier` matches (catches authoring drift).
@@ -48,6 +50,27 @@ ability/item/class references, 7 abilities per class, prerequisites strictly low
 - In `_classes()`, change the `tier` column type from `"str"` to `"int"`:
   `_col("tier", "tier", Mode.SCALAR, "int")`. (No new columns — `prerequisites` and
   `jp_costs` already round-trip as JSON cells.)
+
+## Monster classes (140) — `granted_abilities` paradigm
+
+`classes.csv` now contains **268** classes: the **128 player classes** plus **140 monster
+classes** (5 per monster race × 28 races, ids like `goblin_soldier`, `minotaur_berserker`).
+Monster classes differ from player classes:
+
+- **Standalone roots:** `tier = 0`, `prerequisites = {}`, `required_classes = []`. They are not
+  part of the Vagabond job tree; a monster character simply *is* its monster class.
+- **Innate kit via `granted_abilities`:** each monster class lists **5** abilities in
+  `granted_abilities` (its known kit) and has **empty `jp_costs`** — the opposite of player
+  classes (which use `jp_costs` and leave `granted_abilities` empty). The combat/instance
+  layer should treat a class's `granted_abilities` as abilities the unit knows innately
+  (no JP spend required), in addition to anything learned via `jp_costs`.
+- **No equipment:** `equipment_access = []` (monsters fight with innate abilities).
+- They carry archetype stat_modifiers + growth like player classes, so a monster's combat
+  profile = race `base_stats` + monster-class modifiers + growth.
+
+Validation impact: the job-tree validator must (a) allow many tier-0 roots, and (b) **not** flag
+`granted_abilities` on monster classes as an error (granted abilities still reference-check
+against the ability registry, which they pass).
 
 ## 4. Progression / unlock layer (CharacterInstance & class-switching)
 

@@ -1,5 +1,33 @@
 id,name,flavor,stats.spd,stats.atk,stats.rng,stats.def,stats.hp,stats.jump,stats.wp,stats.mag,stats.res,base_stats.spd,base_stats.atk,base_stats.rng,base_stats.def,base_stats.hp,base_stats.jump,base_stats.wp,base_stats.mag,base_stats.res
-human,Human,"Balanced and adaptable, humans excel through versatility rather than specialization.",,,,,,,,,,5.0,5.0,1.0,5.0,30.0,2.0,5.0,3.0,3.0
-dwarf,Dwarf,"Stout and enduring, dwarves are hard to move and harder to kill.",-2.0,,,2.0,5.0,,-2.0,,2.0,3.0,5.0,1.0,7.0,35.0,1.0,3.0,1.0,5.0
-elf,Elf,"Nimble and long-lived, elves trade resilience for grace and speed.",1.0,,,,-3.0,,3.0,2.0,,6.0,3.0,1.0,4.0,25.0,2.0,8.0,5.0,3.0
-halfling,Halfling,"Small and quick, halflings rely on agility over armor.",1.0,,,-1.0,-2.0,,2.0,1.0,,6.0,4.0,1.0,4.0,25.0,3.0,7.0,4.0,3.0
+human,Human,"Adaptable and hardy, but unremarkable against magic.",,,,,4,,,,-2,5,5,1,5,34,2,5,3,1
+elf,Elf,"Gifted in magic, yet frail of body.",,,,,-4,,,2,,5,5,1,5,26,2,5,5,3
+dwarf,Dwarf,"Sturdy and armored, but slow to move.",-1,,,2,,,,,,4,5,1,7,30,2,5,3,3
+halfling,Halfling,"Nimble and quick, though they lack raw strength.",1,-2,,,,,,,,6,3,1,5,30,2,5,3,3
+goblin,Goblin,"Skittering raiders, fast but poorly armored.",1,,,-2,,,,,,6,5,1,3,30,2,5,3,3
+hobgoblin,Hobgoblin,Disciplined goblinoids in heavier kit.,-1,,,2,,,,,,4,5,1,7,30,2,5,3,3
+orc,Orc,Brutal warriors with little guard against spells.,,2,,,,,,,-2,5,7,1,5,30,2,5,3,1
+ogre,Ogre,Lumbering brutes that hit like a battering ram.,-1,2,,,,,,,,4,7,1,5,30,2,5,3,3
+minotaur,Minotaur,"Massive bull-men, hard to fell and slow to turn.",-1,,,,4,,,,,4,5,1,5,34,2,5,3,3
+troll,Troll,Hulking regenerators weak to elemental harm.,,,,,4,,,,-2,5,5,1,5,34,2,5,3,1
+kobold,Kobold,"Scurrying trap-makers, quick but fragile.",1,,,,-4,,,,,6,5,1,5,26,2,5,3,3
+gnoll,Gnoll,Frenzied hyena-folk of savage ferocity.,,2,,,,,-2,,,5,7,1,5,30,2,3,3,3
+lizardfolk,Lizardfolk,"Scaled and tough, dull to the arcane.",,,,2,,,,-2,,5,5,1,7,30,2,5,1,3
+naga,Naga,"Serpentine sorcerers, sinuous but ground-bound.",-1,,,,,,,2,,4,5,1,5,30,2,5,5,3
+merfolk,Merfolk,"Tide-touched and ward-strong, lightly armored.",,,,-2,,,,,2,5,5,1,3,30,2,5,3,5
+bat,Bat,Darting fliers with paper-thin frames.,1,,,,-4,,,,,6,5,1,5,26,2,5,3,3
+wolf,Wolf,"Pack hunters, swift but exposed to magic.",1,,,,,,,,-2,6,5,1,5,30,2,5,3,1
+dire_beast,Dire Beast,Oversized predators of brute instinct.,,2,,,,,,-2,,5,7,1,5,30,2,5,1,3
+spider,Spider,Venomous skitterers of fragile resolve.,1,,,,,,-2,,,6,5,1,5,30,2,3,3,3
+insectoid,Insectoid,"Chittering swarmers, fast but feeble strikers.",1,-2,,,,,,,,6,3,1,5,30,2,5,3,3
+slime,Slime,Gelatinous oozes that shrug off spells and creep.,-1,,,,,,,,2,4,5,1,5,30,2,5,3,5
+skeleton,Skeleton,"Animated bones, rigid yet brittle to disruption.",,,,2,,,,,-2,5,5,1,7,30,2,5,3,1
+zombie,Zombie,"Shambling undead, durable but witless.",,,,,4,,-2,,,5,5,1,5,34,2,3,3,3
+wraith,Wraith,"Spectral casters, potent but barely corporeal.",,,,-2,,,,2,,5,5,1,3,30,2,5,5,3
+imp,Imp,Mischievous fiends crackling with frail magic.,,,,,-4,,,2,,5,5,1,5,26,2,5,5,3
+demon,Demon,Infernal channelers of reckless power.,,,,,,,-2,2,,5,5,1,5,30,2,3,5,3
+gargoyle,Gargoyle,"Stone sentinels, armored and arcane-numb.",,,,2,,,,-2,,5,5,1,7,30,2,5,1,3
+golem,Golem,"Constructed titans, immense but spell-blind.",,,,,4,,,-2,,5,5,1,5,34,2,5,1,3
+harpy,Harpy,Screeching raptors that strike from the air.,,,1,,-4,,,,,5,5,2,5,26,2,5,3,3
+treant,Treant,"Ancient walking trees, rooted and resolute.",-1,,,2,,,,,,4,5,1,7,30,2,5,3,3
+elemental,Elemental,"Living energy, mighty in magic, unstable in form.",,,,,,,,2,-2,5,5,1,5,30,2,5,5,1
+drake,Drake,Lesser dragonkin of great vigor and small mind.,,,,,4,,-2,,,5,5,1,5,34,2,3,3,3

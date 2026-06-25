@@ -14,6 +14,7 @@ var _run_controller: RunController
 var _run: RunState
 var _band: BattleBand
 var _pending_node_id: String = ""
+var _name_gen: NameGenerator
 
 # UI elements
 var _map_display: RunMapDisplay
@@ -35,6 +36,8 @@ var _outcome_btn: Button
 
 func _ready() -> void:
 	_run_controller = RunController.new()
+	_name_gen = NameGenerator.new()
+	_name_gen.load_tables()
 	_build_ui()
 	_initialize_run()
 	_update_display()
@@ -549,7 +552,7 @@ func _build_ctx() -> Dictionary:
 			"all_characters": GameData.all_characters,
 			"class_provider": GameData.get_job_class,
 			"name_gen": func(race: String) -> String:
-				return NameGenerator.generate(race),
+				return _name_gen.generate_name(race),
 			"run_config": GameData.get_run_config(),
 			"loot_table_provider": GameData.get_loot_table,
 			"shop_pool_provider": GameData.get_shop_pool,

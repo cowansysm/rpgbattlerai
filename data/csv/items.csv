@@ -1,47 +1,129 @@
 id,name,slot,bp,price,power,range,passive,granted_abilities
-sword,Sword,weapon,2.0,80.0,5.0,1.0,,
-bow,Bow,weapon,2.0,100.0,4.0,3.0,,
-daggers,Daggers,weapon,1.0,50.0,3.0,1.0,,
-rapier,Rapier,weapon,2.0,90.0,5.0,1.0,,
-greataxe,Greataxe,weapon,3.0,150.0,8.0,1.0,,
-sling,Sling,weapon,1.0,30.0,2.0,2.0,,
-staff,Staff,weapon,1.0,40.0,2.0,1.0,,
-longsword,Longsword,weapon,3.0,130.0,7.0,1.0,,
-warhammer,Warhammer,weapon,3.0,160.0,9.0,1.0,,
-halberd,Halberd,weapon,3.0,140.0,7.0,1.0,,
-crossbow,Crossbow,weapon,2.0,120.0,6.0,3.0,,
-longbow,Longbow,weapon,3.0,150.0,5.0,4.0,,
-rod,Rod,weapon,2.0,70.0,3.0,1.0,"{""mag"":2.0}",
-wand,Wand,weapon,2.0,60.0,2.0,1.0,"{""mag"":3.0}",
-mace,Mace,weapon,2.0,80.0,4.0,1.0,,
-short_bow,Short Bow,weapon,1.0,60.0,3.0,2.0,,
-throwing_knives,Throwing Knives,weapon,1.0,70.0,3.0,2.0,,
-lute,Lute,weapon,1.0,50.0,1.0,1.0,,"[""inspire""]"
-light_armor,Light Armor,armor,1.0,60.0,,,"{""def"":2.0}",
-medium_armor,Medium Armor,armor,2.0,100.0,,,"{""def"":3.0,""res"":1.0}",
-robe,Robe,armor,1.0,80.0,,,"{""res"":2.0,""wp"":2.0}",
-heavy_armor,Heavy Armor,armor,3.0,180.0,,,"{""def"":5.0,""spd"":-1.0}",
-studded_leather,Studded Leather,armor,2.0,90.0,,,"{""def"":3.0}",
-chain_mail,Chain Mail,armor,2.0,130.0,,,"{""def"":4.0,""spd"":-1.0}",
-enchanted_robe,Enchanted Robe,armor,3.0,200.0,,,"{""mag"":1.0,""res"":3.0,""wp"":3.0}",
-plate_armor,Plate Armor,armor,4.0,250.0,,,"{""def"":7.0,""spd"":-2.0}",
-shield,Shield,shield,2.0,80.0,,,"{""def"":3.0,""res"":1.0}",
-buckler,Buckler,shield,1.0,40.0,,,"{""def"":1.0}",
-tower_shield,Tower Shield,shield,3.0,150.0,,,"{""def"":5.0,""spd"":-1.0}",
-crystal_shield,Crystal Shield,shield,3.0,180.0,,,"{""def"":2.0,""res"":3.0}",
-bracer_of_accuracy,Bracer of Accuracy,accessory,2.0,80.0,,,"{""accuracy"":1.0}",
-smoke_bomb_pouch,Smoke Bomb Pouch,accessory,2.0,100.0,,,,"[""smoke_bomb""]"
-ring_of_haste,Ring of Haste,accessory,2.0,120.0,,,"{""spd"":2.0}",
-amulet_of_protection,Amulet of Protection,accessory,2.0,100.0,,,"{""def"":2.0,""res"":1.0}",
-crown_of_wisdom,Crown of Wisdom,accessory,3.0,150.0,,,"{""mag"":2.0,""wp"":2.0}",
-cloak_of_shadows,Cloak of Shadows,accessory,2.0,110.0,,,"{""spd"":1.0}",
-war_horn,War Horn,accessory,2.0,130.0,,,,"[""rally""]"
-healers_charm,Healer's Charm,accessory,2.0,100.0,,,"{""res"":2.0,""wp"":1.0}",
-berserker_band,Berserker Band,accessory,2.0,90.0,,,"{""atk"":3.0,""def"":-1.0}",
-rangers_quiver,Ranger's Quiver,accessory,2.0,110.0,,,"{""rng"":1.0}",
-potion,Potion,,0.0,30.0,,,,"[""use_potion""]"
-hi_potion,Hi-Potion,,0.0,60.0,,,,"[""use_hi_potion""]"
-ether,Ether,,0.0,40.0,,,,"[""use_ether""]"
-antidote,Antidote,,0.0,20.0,,,,"[""use_antidote""]"
-phoenix_down,Phoenix Down,,0.0,100.0,,,,"[""use_phoenix_down""]"
-bomb,Bomb,,0.0,50.0,,,,"[""use_bomb""]"
+sword,Sword,weapon,2,80,5,1,,
+bow,Bow,weapon,2,100,4,3,,
+daggers,Daggers,weapon,1,50,3,1,,
+rapier,Rapier,weapon,2,90,5,1,,
+greataxe,Greataxe,weapon,3,150,8,1,,
+sling,Sling,weapon,1,30,2,2,,
+staff,Staff,weapon,1,40,2,1,,
+longsword,Longsword,weapon,3,130,7,1,,
+warhammer,Warhammer,weapon,3,160,9,1,,
+halberd,Halberd,weapon,3,140,7,1,,
+crossbow,Crossbow,weapon,2,120,6,3,,
+longbow,Longbow,weapon,3,150,5,4,,
+rod,Rod,weapon,2,70,3,1,"{""mag"": 2}",
+wand,Wand,weapon,2,60,2,1,"{""mag"": 3}",
+mace,Mace,weapon,2,80,4,1,,
+short_bow,Short Bow,weapon,1,60,3,2,,
+throwing_knives,Throwing Knives,weapon,1,70,3,2,,
+lute,Lute,weapon,1,50,1,1,,"[""inspire""]"
+light_armor,Light Armor,armor,1,60,,,"{""def"": 2}",
+medium_armor,Medium Armor,armor,2,100,,,"{""def"": 3, ""res"": 1}",
+robe,Robe,armor,1,80,,,"{""res"": 2, ""wp"": 2}",
+heavy_armor,Heavy Armor,armor,3,180,,,"{""def"": 5, ""spd"": -1}",
+studded_leather,Studded Leather,armor,2,90,,,"{""def"": 3}",
+chain_mail,Chain Mail,armor,2,130,,,"{""def"": 4, ""spd"": -1}",
+enchanted_robe,Enchanted Robe,armor,3,200,,,"{""res"": 3, ""mag"": 1, ""wp"": 3}",
+plate_armor,Plate Armor,armor,4,250,,,"{""def"": 7, ""spd"": -2}",
+shield,Shield,shield,2,80,,,"{""def"": 3, ""res"": 1}",
+buckler,Buckler,shield,1,40,,,"{""def"": 1}",
+tower_shield,Tower Shield,shield,3,150,,,"{""def"": 5, ""spd"": -1}",
+crystal_shield,Crystal Shield,shield,3,180,,,"{""def"": 2, ""res"": 3}",
+bracer_of_accuracy,Bracer of Accuracy,accessory,2,80,,,"{""accuracy"": 1}",
+smoke_bomb_pouch,Smoke Bomb Pouch,accessory,2,100,,,,"[""smoke_bomb""]"
+ring_of_haste,Ring of Haste,accessory,2,120,,,"{""spd"": 2}",
+amulet_of_protection,Amulet of Protection,accessory,2,100,,,"{""def"": 2, ""res"": 1}",
+crown_of_wisdom,Crown of Wisdom,accessory,3,150,,,"{""mag"": 2, ""wp"": 2}",
+cloak_of_shadows,Cloak of Shadows,accessory,2,110,,,"{""spd"": 1}",
+war_horn,War Horn,accessory,2,130,,,,"[""rally""]"
+healers_charm,Healer's Charm,accessory,2,100,,,"{""res"": 2, ""wp"": 1}",
+berserker_band,Berserker Band,accessory,2,90,,,"{""atk"": 3, ""def"": -1}",
+rangers_quiver,Ranger's Quiver,accessory,2,110,,,"{""rng"": 1}",
+potion,Potion,,0,30,,,,"[""use_potion""]"
+hi_potion,Hi-Potion,,0,60,,,,"[""use_hi_potion""]"
+ether,Ether,,0,40,,,,"[""use_ether""]"
+antidote,Antidote,,0,20,,,,"[""use_antidote""]"
+phoenix_down,Phoenix Down,,0,100,,,,"[""use_phoenix_down""]"
+bomb,Bomb,,0,50,,,,"[""use_bomb""]"
+iron_sword,Iron Sword,weapon,1,40,4,1,,
+steel_sword,Steel Sword,weapon,2,110,6,1,,
+knight_sword,Knight Sword,weapon,3,170,8,1,"{""def"": 1}",
+flametongue,Flametongue,weapon,4,420,9,1,"{""mag"": 2}","[""rune_fire""]"
+frost_brand,Frost Brand,weapon,4,420,9,1,"{""mag"": 2}","[""rune_ice""]"
+rune_blade,Rune Blade,weapon,4,460,8,1,"{""mag"": 3}",
+excalibur,Excalibur,weapon,6,1200,14,1,"{""atk"": 2, ""res"": 2}","[""holy_3""]"
+claymore,Claymore,weapon,3,180,10,1,"{""spd"": -1}",
+zweihander,Zweihander,weapon,4,300,13,1,"{""spd"": -2}",
+dragon_slayer,Dragon Slayer,weapon,5,650,16,1,"{""atk"": 2, ""spd"": -1}",
+hatchet,Hatchet,weapon,1,45,5,1,,
+battle_axe,Battle Axe,weapon,2,130,8,1,,
+maul,Maul,weapon,3,190,11,1,"{""spd"": -1}",
+mjolnir,Mjolnir,weapon,6,1100,13,1,"{""mag"": 3}","[""thundaga""]"
+spear,Spear,weapon,2,100,6,2,,
+pike,Pike,weapon,3,160,8,2,,
+dragoon_lance,Dragoon Lance,weapon,4,380,10,2,,"[""jump""]"
+gungnir,Gungnir,weapon,6,1000,14,2,"{""spd"": 2}","[""wyvern_strike""]"
+katana,Katana,weapon,3,200,9,1,"{""spd"": 1}",
+masamune_blade,Masamune,weapon,5,700,12,1,"{""spd"": 3}",
+assassins_blade,Assassin's Blade,weapon,4,400,7,1,"{""spd"": 2}","[""backstab""]"
+hunting_bow,Hunting Bow,weapon,1,55,3,3,,
+war_bow,War Bow,weapon,3,170,6,4,,
+elven_bow,Elven Bow,weapon,4,440,7,4,"{""rng"": 1, ""spd"": 1}","[""multi_shot""]"
+heavy_crossbow,Heavy Crossbow,weapon,3,180,8,3,"{""spd"": -1}",
+oak_staff,Oak Staff,weapon,1,45,2,1,"{""mag"": 1}",
+war_staff,War Staff,weapon,2,120,4,1,"{""mag"": 2, ""res"": 1}",
+staff_of_judgment,Staff of Judgment,weapon,5,620,4,1,"{""mag"": 5, ""wp"": 2}","[""divine_judgment""]"
+wand_of_flames,Wand of Flames,weapon,3,210,3,1,"{""mag"": 4}","[""fire_2""]"
+flintlock_pistol,Flintlock Pistol,weapon,2,140,6,4,,"[""pistol_shot""]"
+hunting_rifle,Hunting Rifle,weapon,3,220,9,5,"{""spd"": -1}","[""rifle_shot""]"
+gatling_gun,Gatling Gun,weapon,5,720,11,4,"{""spd"": -2}","[""gatling_burst""]"
+padded_armor,Padded Armor,armor,1,30,,,"{""def"": 1}",
+leather_armor,Leather Armor,armor,1,55,,,"{""def"": 2, ""spd"": 0}",
+brigandine,Brigandine,armor,2,110,,,"{""def"": 4}",
+scale_mail,Scale Mail,armor,2,140,,,"{""def"": 5, ""spd"": -1}",
+banded_mail,Banded Mail,armor,3,190,,,"{""def"": 6, ""spd"": -1}",
+full_plate,Full Plate,armor,4,290,,,"{""def"": 8, ""spd"": -2}",
+mythril_mail,Mythril Mail,armor,4,360,,,"{""def"": 7, ""res"": 2}",
+adamant_armor,Adamant Armor,armor,5,520,,,"{""def"": 9, ""res"": 2, ""spd"": -1}",
+dragon_plate,Dragon Plate,armor,6,950,,,"{""def"": 11, ""res"": 4, ""spd"": -1}",
+cloth_robe,Cloth Robe,armor,1,40,,,"{""res"": 1, ""wp"": 1}",
+mage_robe,Mage Robe,armor,2,120,,,"{""res"": 2, ""mag"": 1, ""wp"": 2}",
+sorcerers_robe,Sorcerer's Robe,armor,3,220,,,"{""res"": 3, ""mag"": 3, ""wp"": 3}",
+archmage_robe,Archmage Robe,armor,5,560,,,"{""res"": 4, ""mag"": 5, ""wp"": 4}",
+shadow_garb,Shadow Garb,armor,3,240,,,"{""def"": 2, ""spd"": 3}",
+clockwork_plate,Clockwork Plate,armor,4,400,,,"{""def"": 7, ""spd"": 1}",
+vestments_of_light,Vestments of Light,armor,5,600,,,"{""res"": 6, ""mag"": 3, ""hp"": 5}",
+wooden_shield,Wooden Shield,shield,1,25,,,"{""def"": 1}",
+round_shield,Round Shield,shield,1,55,,,"{""def"": 2}",
+kite_shield,Kite Shield,shield,2,100,,,"{""def"": 4}",
+heater_shield,Heater Shield,shield,2,120,,,"{""def"": 4, ""res"": 1}",
+spiked_shield,Spiked Shield,shield,3,170,,,"{""def"": 4, ""atk"": 1}",
+dragon_shield,Dragon Shield,shield,4,360,,,"{""def"": 6, ""res"": 3}",
+aegis_shield,Aegis Shield,shield,5,560,,,"{""def"": 7, ""res"": 5}","[""protect""]"
+runic_bulwark,Runic Bulwark,shield,6,820,,,"{""def"": 8, ""res"": 6, ""mag"": 2}",
+ring_of_power,Ring of Power,accessory,2,120,,,"{""atk"": 2}",
+ring_of_protection,Ring of Protection,accessory,2,120,,,"{""def"": 2}",
+ring_of_wizardry,Ring of Wizardry,accessory,2,130,,,"{""mag"": 2}",
+ring_of_resistance,Ring of Resistance,accessory,2,120,,,"{""res"": 2}",
+ring_of_evasion,Ring of Evasion,accessory,2,130,,,"{""spd"": 2}",
+amulet_of_health,Amulet of Health,accessory,2,140,,,"{""hp"": 8}",
+amulet_of_focus,Amulet of Focus,accessory,2,110,,,"{""wp"": 3}",
+boots_of_speed,Boots of Speed,accessory,2,130,,,"{""spd"": 2}",
+boots_of_leaping,Boots of Leaping,accessory,2,110,,,"{""jump"": 2}",
+winged_boots,Winged Boots,accessory,3,260,,,"{""spd"": 2, ""jump"": 2}",
+gauntlets_of_might,Gauntlets of Might,accessory,3,240,,,"{""atk"": 3, ""def"": 1}",
+targeting_monocle,Targeting Monocle,accessory,2,150,,,"{""rng"": 1, ""atk"": 1}",
+aether_battery,Aether Battery,accessory,3,260,,,"{""mag"": 3, ""wp"": 2}",
+clockwork_core,Clockwork Core,accessory,3,280,,,"{""hp"": 6, ""spd"": 1}",
+lucky_charm,Lucky Charm,accessory,1,80,,,"{""spd"": 1}",
+genji_gloves,Genji Gloves,accessory,5,640,,,"{""atk"": 3, ""spd"": 2, ""def"": 1}",
+ribbon,Ribbon,accessory,5,700,,,"{""res"": 4, ""wp"": 3}",
+zodiac_stone,Zodiac Stone,accessory,6,1100,,,"{""atk"": 2, ""mag"": 2, ""def"": 2, ""res"": 2, ""spd"": 1}",
+tonic,Tonic,,0,20,,,,"[""use_potion""]"
+mega_potion,Mega-Potion,,0,120,,,,"[""use_hi_potion""]"
+mana_tonic,Mana Tonic,,0,50,,,,"[""use_ether""]"
+remedy,Remedy,,0,60,,,,"[""panacea""]"
+fire_flask,Fire Flask,,0,70,,,,"[""fire_bomb""]"
+frost_flask,Frost Flask,,0,70,,,,"[""frost_vial""]"
+smoke_grenade,Smoke Grenade,,0,60,,,,"[""smoke_screen""]"
+stimulant,Stimulant,,0,80,,,,"[""stim_pack""]"
