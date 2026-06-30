@@ -11,6 +11,9 @@ var active_band: BattleBand = null
 var fielded_ids: Array[String] = []
 var is_instance_battle: bool = false
 
+## Turn-system mode (A15): "run" = speed-round, "skirmish" = charge-time (A20)
+var mode: String = "run"
+
 ## Run-battle fields (A8)
 var active_run: Variant = null       ## RunState or null
 var run_node_id: String = ""         ## Node being resolved
@@ -37,6 +40,7 @@ func clear() -> void:
 	active_band = null
 	fielded_ids = []
 	is_instance_battle = false
+	mode = "run"
 	active_run = null
 	run_node_id = ""
 	battle_result = null

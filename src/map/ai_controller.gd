@@ -28,6 +28,19 @@ func setup(
 	_pace_delay = float(Constants.get_value("AI_PACE_DELAY", 0.4))
 
 
+## Generate plans for all AI units at once (speed-round batch planning).
+## All units plan against the current state snapshot (no inter-plan state mutation).
+## Returns {unit_id: String -> AIPlan}.
+func plan_all_units(state: MatchState) -> Dictionary:
+	var plans: Dictionary = {}
+	for team in state.ai_teams:
+		for unit: BattleUnit in state.living_units(team):
+			Log.info("AIController", "Batch planning for %s" % unit.character.display_name)
+			var plan: AIPlan = AIPlanner.plan(state, unit, _rng, _difficulty)
+			plans[unit.character.id] = plan
+	return plans
+
+
 ## Execute one full AI activation for state.current_unit.
 func take_turn(state: MatchState) -> void:
 	var unit: BattleUnit = state.current_unit

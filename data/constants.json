@@ -42,5 +42,6 @@
   "SELL_RATIO": 0.5,
   "LOOT_DEPTH_SCALE": 0.1,
   "PRICE_PER_BP": 5,
-  "DOWN_LIMIT": 2
+  "DOWN_LIMIT": 2,
+  "TELEGRAPH_MODE": "full"
 }

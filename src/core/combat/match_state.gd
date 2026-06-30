@@ -5,7 +5,10 @@ extends RefCounted
 ## All state transitions are explicit methods — no scene-tree dependency.
 ## Spec reference: phase4-spec.md §3
 
-enum Phase { SETUP, DEPLOYMENT, ROUND_START, AWAITING_ACTIVATION, UNIT_TURN, MATCH_OVER }
+enum Phase {
+	SETUP, DEPLOYMENT, ROUND_START, AWAITING_ACTIVATION, UNIT_TURN, MATCH_OVER,
+	AI_PLANNING, PLAYER_PLANNING, RESOLUTION,
+}
 
 var phase: int = Phase.SETUP
 var round_number: int = 0
@@ -22,6 +25,7 @@ var ability_provider: Callable = Callable()	# (BattleUnit, String) -> AbilityDat
 var item_provider: Callable = Callable()	# (String) -> ItemData or null
 var buff_durations: Array = []				# [{source_tag, unit, remaining}, ...]
 var ai_teams: Array = []					# Team strings controlled by AI (e.g. ["playerB"])
+var turn_system: TurnSystem = null			# Active turn system (null = legacy alternating)
 
 
 func living_units(team: String) -> Array:

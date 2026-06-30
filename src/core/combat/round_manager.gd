@@ -8,6 +8,21 @@ extends RefCounted
 ## Spec reference: phase4-spec.md §3.3, §4; phase5-spec.md §5.3
 
 static func start_round(state: MatchState) -> Array:
+	## Start a new round. Delegates to the active TurnSystem if one is set,
+	## otherwise runs the legacy alternating-activation flow.
+	if state.turn_system != null:
+		state.turn_system.begin_round(state)
+		return []
+
+	do_round_start_bookkeeping(state)
+	_build_and_set_queue(state)
+
+	return []
+
+
+## Shared round-start bookkeeping: increment round, expire buffs/statuses, reset units.
+## Called by both the legacy alternating path and SpeedRoundTurnSystem.
+static func do_round_start_bookkeeping(state: MatchState) -> void:
 	state.round_number += 1
 
 	# 1. Expire buff durations (defend modifiers are cleared per-unit on activation)
@@ -38,12 +53,14 @@ static func start_round(state: MatchState) -> Array:
 				if not u.is_downed:
 					u.ap_remaining = u.base_ap
 
+
+## Build the alternating activation queue and reset queue state.
+## Called by AlternatingTurnSystem.begin_round() and the legacy start_round() path.
+static func _build_and_set_queue(state: MatchState) -> void:
 	state.activation_queue = _build_queue(state)
 	state.current_index = 0
 	state.current_unit = null
 	state.phase = MatchState.Phase.AWAITING_ACTIVATION
-
-	return []
 
 
 static func _build_queue(state: MatchState) -> Array:

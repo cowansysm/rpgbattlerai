@@ -10,6 +10,12 @@ enum ControlState {
 	TARGETING,
 	ANIMATING,
 	MATCH_OVER,
+	# Speed-round states (A15)
+	SR_AI_PLANNING,
+	SR_PLAYER_SELECT,
+	SR_PLANNING_ACTION,
+	SR_PLANNING_TARGETING,
+	SR_RESOLUTION,
 }
 
 var _state: MatchState
@@ -41,6 +47,15 @@ var _cycle_index: int = -1
 # Pending drag-move preview (not yet committed)
 var _has_pending_move: bool = false
 var _pending_move_coord: Vector2i = Vector2i(-999, -999)
+
+# Speed-round state (A15)
+var _sr_turn_system: SpeedRoundTurnSystem = null
+var _player_plans: Dictionary = {}  # unit_id -> AIPlan
+var _planning_unit: BattleUnit = null
+var _planning_plan: AIPlan = null
+var _planning_ap_left: int = 0
+var _planning_moved: bool = false
+var _planning_move_dest: Vector2i = Vector2i.MAX
 
 
 func setup(builder: MapBuilder, map_data: MapData) -> void:
@@ -84,8 +99,18 @@ func setup_from_state(builder: MapBuilder, state: MatchState) -> void:
 	if not _state.item_provider.is_valid():
 		_state.item_provider = GameData.get_item
 
+	# Wire speed-round turn system for roguelike run mode (A15)
+	if MatchData.mode == "run" and _state.turn_system == null:
+		_state.turn_system = SpeedRoundTurnSystem.new()
+	if _state.turn_system is SpeedRoundTurnSystem:
+		_sr_turn_system = _state.turn_system as SpeedRoundTurnSystem
+
 	_init_subsystems(builder)
-	_enter_awaiting_activation()
+
+	if _is_speed_round():
+		_start_new_round()
+	else:
+		_enter_awaiting_activation()
 
 
 func _init_subsystems(builder: MapBuilder) -> void:
@@ -115,6 +140,8 @@ func _init_subsystems(builder: MapBuilder) -> void:
 	_hud.back_to_menu_pressed.connect(_on_back_to_menu)
 	_hud.confirm_activation_pressed.connect(_on_confirm_activation)
 	_hud.cancel_activation_pressed.connect(_on_cancel_activation)
+	_hud.commit_round_pressed.connect(_on_commit_round)
+	_hud.clear_plan_pressed.connect(_on_clear_plan)
 
 	# AI controller
 	_ai_controller = AIController.new()
@@ -443,6 +470,11 @@ func on_tile_selected(coord: Vector2i) -> void:
 		_try_select_unit(coord)
 	elif _control_state == ControlState.TARGETING:
 		_execute_targeting(coord)
+	# Speed-round planning states
+	elif _control_state == ControlState.SR_PLAYER_SELECT:
+		_sr_try_select_plan_unit(coord)
+	elif _control_state == ControlState.SR_PLANNING_TARGETING:
+		_sr_execute_plan_targeting(coord)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -457,20 +489,32 @@ func _unhandled_input(event: InputEvent) -> void:
 	elif event.is_action_pressed("p4_move"):
 		if _control_state == ControlState.ACTION_SELECT:
 			_enter_targeting(BattleHUD.ACTION_MOVE)
+		elif _control_state == ControlState.SR_PLANNING_ACTION:
+			_sr_enter_plan_targeting(BattleHUD.ACTION_MOVE)
 	elif event.is_action_pressed("p4_attack"):
 		if _control_state == ControlState.ACTION_SELECT and not _must_reserve_move():
 			_enter_targeting(BattleHUD.ACTION_ATTACK)
+		elif _control_state == ControlState.SR_PLANNING_ACTION and _planning_ap_left >= 1:
+			_sr_enter_plan_targeting(BattleHUD.ACTION_ATTACK)
 	elif event.is_action_pressed("p4_defend"):
 		if _control_state == ControlState.ACTION_SELECT and not _must_reserve_move():
 			_do_defend()
+		elif _control_state == ControlState.SR_PLANNING_ACTION and _planning_ap_left >= 1:
+			_sr_plan_defend()
 	elif event.is_action_pressed("p4_wait"):
 		if _control_state == ControlState.ACTION_SELECT:
 			_do_wait()
+		elif _control_state == ControlState.SR_PLANNING_ACTION:
+			_sr_plan_wait()
 	elif event.is_action_pressed("ui_cancel"):
 		if _control_state == ControlState.AWAITING_ACTIVATION and _pending_activation_unit:
 			_clear_pending_activation()
 		elif _control_state == ControlState.TARGETING:
 			_cancel_targeting()
+		elif _control_state == ControlState.SR_PLANNING_TARGETING:
+			_enter_sr_plan_action()
+		elif _control_state == ControlState.SR_PLANNING_ACTION:
+			_enter_sr_player_select()
 	elif event.is_action_pressed("demo_clear"):
 		if _overlay:
 			_overlay.clear()
@@ -479,6 +523,19 @@ func _unhandled_input(event: InputEvent) -> void:
 # --- HUD signal handlers ---
 
 func _on_action_selected(action_type: int) -> void:
+	# Speed-round planning mode
+	if _control_state == ControlState.SR_PLANNING_ACTION:
+		match action_type:
+			BattleHUD.ACTION_MOVE:
+				_sr_enter_plan_targeting(BattleHUD.ACTION_MOVE)
+			BattleHUD.ACTION_ATTACK:
+				_sr_enter_plan_targeting(BattleHUD.ACTION_ATTACK)
+			BattleHUD.ACTION_DEFEND:
+				_sr_plan_defend()
+			BattleHUD.ACTION_WAIT:
+				_sr_plan_wait()
+		return
+
 	if _control_state != ControlState.ACTION_SELECT:
 		return
 
@@ -494,6 +551,15 @@ func _on_action_selected(action_type: int) -> void:
 
 
 func _on_ability_selected(ability_id: String) -> void:
+	# Speed-round planning mode
+	if _control_state == ControlState.SR_PLANNING_ACTION:
+		var ability := _find_ability(ability_id)
+		if ability and ability.ability_range == 0 and _planning_unit:
+			_sr_plan_ability(_planning_unit.position, ability_id)
+			return
+		_sr_enter_plan_targeting(BattleHUD.ACTION_ABILITY, ability_id)
+		return
+
 	if _control_state != ControlState.ACTION_SELECT:
 		return
 	# Self-targeted abilities (range 0): auto-execute on caster's tile
@@ -506,6 +572,11 @@ func _on_ability_selected(ability_id: String) -> void:
 
 
 func _on_item_selected(item_id: String) -> void:
+	# Speed-round planning mode
+	if _control_state == ControlState.SR_PLANNING_ACTION:
+		_sr_enter_plan_targeting(BattleHUD.ACTION_ITEM, "", item_id)
+		return
+
 	if _control_state != ControlState.ACTION_SELECT:
 		return
 	_enter_targeting(BattleHUD.ACTION_ITEM, "", item_id)
@@ -622,7 +693,10 @@ func _try_select_unit(coord: Vector2i) -> void:
 
 
 func _on_roster_unit_clicked(character_id: String) -> void:
-	## Handle roster sidebar click — set as pending activation.
+	## Handle roster sidebar click — set as pending activation or select for planning.
+	if _control_state == ControlState.SR_PLAYER_SELECT:
+		_sr_select_plan_unit_by_id(character_id)
+		return
 	if _control_state != ControlState.AWAITING_ACTIVATION:
 		return
 	var team := RoundManager.current_team(_state)
@@ -875,7 +949,10 @@ func _start_new_round() -> void:
 				_pawn_manager.update_status_markers(unit)
 	_hud.append_log("--- Round %d begins ---" % _state.round_number)
 	_hud.show_round_banner(_state.round_number)
-	_enter_awaiting_activation()
+	if _is_speed_round():
+		_enter_ai_planning()
+	else:
+		_enter_awaiting_activation()
 
 
 func _check_end_activation_or_continue() -> void:
@@ -1108,3 +1185,614 @@ func _must_reserve_move() -> bool:
 	if not unit:
 		return false
 	return unit.base_ap >= 2 and not unit.has_moved and unit.ap_remaining <= 1
+
+
+# =======================================================================
+# Speed-Round Flow (A15)
+# =======================================================================
+
+func _is_speed_round() -> bool:
+	return _sr_turn_system != null
+
+
+# --- Stage 1: AI Planning ---
+
+func _enter_ai_planning() -> void:
+	_control_state = ControlState.SR_AI_PLANNING
+	_set_drag_enabled(false)
+	_overlay.clear()
+	_hud.hide_action_panel()
+	_hud.hide_unit_info()
+	_hud.hide_commit_round_panel()
+	_pawn_manager.clear_highlight()
+	_hud.set_phase_label("Round %d - AI Planning..." % _state.round_number)
+	_hud.append_log("[Speed Round] AI is planning...")
+
+	# Generate AI plans for all AI units
+	var ai_plans: Dictionary = _ai_controller.plan_all_units(_state)
+
+	# Collect AI units list
+	var ai_units: Array = []
+	for team in _state.ai_teams:
+		for unit: BattleUnit in _state.living_units(team):
+			ai_units.append(unit)
+
+	# Commit AI plans to the turn system
+	_sr_turn_system.commit_ai_plans(ai_plans, ai_units)
+
+	# Build telegraph intents
+	var telegraph_mode: String = str(Constants.get_value("TELEGRAPH_MODE", "full"))
+	if telegraph_mode != "off":
+		var intents: Array = TelegraphService.build_intents(_state, ai_plans, ai_units)
+		_sr_turn_system.set_intents(intents)
+		_overlay.show_telegraph_intents(intents, telegraph_mode)
+		_hud.append_log("[Telegraph] AI intents revealed (%d units)" % intents.size())
+
+	# Advance to player planning
+	_sr_turn_system.advance(_state)
+	_enter_sr_player_select()
+
+
+# --- Stage 2: Player Planning ---
+
+func _enter_sr_player_select() -> void:
+	_control_state = ControlState.SR_PLAYER_SELECT
+	_planning_unit = null
+	_planning_plan = null
+	_set_drag_enabled(false)
+	_hud.set_targeting_mode(false)
+	_hud.hide_action_panel()
+	_hud.hide_forecast()
+
+	# Determine which player units need plans
+	var player_team := _state.other_team(_state.ai_teams[0]) if not _state.ai_teams.is_empty() else "playerA"
+	var plannable: Array = []
+	for unit: BattleUnit in _state.living_units(player_team):
+		if not unit.is_downed:
+			plannable.append(unit)
+
+	# Check if all plannable units have plans
+	var all_planned := true
+	var planned_count := 0
+	for unit: BattleUnit in plannable:
+		if _player_plans.has(unit.character.id):
+			planned_count += 1
+		else:
+			all_planned = false
+
+	_hud.set_phase_label("Round %d - Plan Your Units (%d/%d)" % [
+		_state.round_number, planned_count, plannable.size()])
+
+	# Show commit button
+	_hud.show_commit_round_panel(all_planned and not plannable.is_empty(), false)
+
+	# Highlight plannable units and show their positions
+	var selectable_positions: Array = []
+	var selectable_ids: Array = []
+	for unit: BattleUnit in plannable:
+		selectable_positions.append(unit.position)
+		selectable_ids.append(unit.character.id)
+	_pawn_manager.highlight_selectable(plannable)
+
+	# Keep telegraph overlay visible during planning (don't clear)
+	# Show selectable unit tiles on top of telegraph
+	var mat := OverlayMaterials.selectable()
+	for pos in selectable_positions:
+		if _builder.tiles.has(pos):
+			_builder.tiles[pos].set_overlay(mat)
+
+	# Build planned_ids for roster display
+	var planned_ids: Array = []
+	for uid in _player_plans.keys():
+		planned_ids.append(uid)
+
+	_hud.update_roster(_state, null, selectable_ids, planned_ids)
+
+
+func _sr_try_select_plan_unit(coord: Vector2i) -> void:
+	## Handle tile click during SR_PLAYER_SELECT — select a unit for planning.
+	var player_team := _state.other_team(_state.ai_teams[0]) if not _state.ai_teams.is_empty() else "playerA"
+	var unit: BattleUnit = _state.unit_at(coord)
+	if not unit or unit.team != player_team:
+		return
+	if unit.current_hp <= 0 or unit.is_downed:
+		return
+	_sr_begin_plan_unit(unit)
+
+
+func _sr_select_plan_unit_by_id(character_id: String) -> void:
+	## Handle roster click during SR_PLAYER_SELECT.
+	var player_team := _state.other_team(_state.ai_teams[0]) if not _state.ai_teams.is_empty() else "playerA"
+	for unit: BattleUnit in _state.living_units(player_team):
+		if unit.character.id == character_id and not unit.is_downed:
+			_sr_begin_plan_unit(unit)
+			return
+
+
+func _sr_begin_plan_unit(unit: BattleUnit) -> void:
+	## Start planning for a specific player unit.
+	_planning_unit = unit
+	_planning_plan = AIPlan.new()
+	_planning_ap_left = unit.base_ap
+	_planning_moved = false
+	_planning_move_dest = unit.position
+
+	# If already had a plan, clear it (revision)
+	_player_plans.erase(unit.character.id)
+
+	_hud.append_log("Planning: %s" % unit.character.display_name)
+	_pawn_manager.highlight_active(unit)
+	_hud.show_unit_info(unit)
+	_enter_sr_plan_action()
+
+
+func _enter_sr_plan_action() -> void:
+	## Show the action panel for the planning unit with simulated AP.
+	_control_state = ControlState.SR_PLANNING_ACTION
+	var unit := _planning_unit
+	if not unit:
+		_enter_sr_player_select()
+		return
+
+	# Cache abilities and items for this unit
+	_current_abilities = _resolver.all_abilities(unit)
+	_current_items = _get_usable_items(unit)
+
+	# Compute WP costs for usable items
+	var item_wp_costs := {}
+	for item in _current_items:
+		if item is ItemData and not item.granted_abilities.is_empty():
+			var ability: AbilityData = _resolver.resolve(unit, item.granted_abilities[0])
+			if ability:
+				item_wp_costs[item.id] = ability.wp_cost
+
+	# Temporarily set simulated AP for the action panel display
+	var original_ap := unit.ap_remaining
+	var original_moved := unit.has_moved
+	unit.ap_remaining = _planning_ap_left
+	unit.has_moved = _planning_moved
+	_hud.show_unit_info(unit)
+	_hud.show_action_panel(unit, _current_abilities, _current_items, false, item_wp_costs)
+	unit.ap_remaining = original_ap
+	unit.has_moved = original_moved
+
+	_hud.set_targeting_mode(false)
+	_hud.show_commit_round_panel(false, _player_plans.has(unit.character.id))
+
+	# Show movement overlay from the planned position
+	var origin := _planning_move_dest if _planning_moved else unit.position
+	if _planning_ap_left > 0 and not _planning_moved:
+		_overlay.clear_telegraph()
+		_overlay.show_movement(origin, unit.stats.effective_move(), unit.stats.effective("jump"))
+	else:
+		_overlay.clear()
+
+
+func _sr_enter_plan_targeting(action: int, ability_id: String = "", item_id: String = "") -> void:
+	## Enter targeting mode for planning.
+	_control_state = ControlState.SR_PLANNING_TARGETING
+	_pending_action = action
+	_pending_ability_id = ability_id
+	_pending_item_id = item_id
+	_set_drag_enabled(false)
+
+	var unit := _planning_unit
+	if not unit:
+		return
+
+	_hud.set_targeting_mode(true)
+	_hud.hide_commit_round_panel()
+	_overlay.clear()
+
+	# Compute overlay from the planned position (after move)
+	var origin := _planning_move_dest if _planning_moved else unit.position
+
+	match action:
+		BattleHUD.ACTION_MOVE:
+			_overlay.show_movement(
+				unit.position, unit.stats.effective_move(), unit.stats.effective("jump"))
+		BattleHUD.ACTION_ATTACK:
+			var rng: int = unit.stats.effective("rng")
+			var min_rng: int = 2 if rng > 1 else 1
+			_overlay.show_targets(origin, rng, min_rng)
+		BattleHUD.ACTION_ABILITY:
+			var ability := _find_ability(ability_id)
+			if ability:
+				if str(ability.effect.get("effect_type", "")) == "revive":
+					_overlay.show_revive_targets(origin, ability.ability_range, _state, unit.team)
+				else:
+					var min_rng: int = 2 if ability.ability_range > 1 else 1
+					_overlay.show_targets(origin, ability.ability_range, min_rng)
+		BattleHUD.ACTION_ITEM:
+			var item: ItemData = GameData.get_item(item_id)
+			if item and not item.granted_abilities.is_empty():
+				var ability := _find_ability(item.granted_abilities[0])
+				if ability:
+					var min_rng: int = 2 if ability.ability_range > 1 else 1
+					_overlay.show_targets(origin, ability.ability_range, min_rng)
+
+
+func _sr_execute_plan_targeting(coord: Vector2i) -> void:
+	## Handle tile click during SR_PLANNING_TARGETING.
+	match _pending_action:
+		BattleHUD.ACTION_MOVE:
+			_sr_plan_move(coord)
+		BattleHUD.ACTION_ATTACK:
+			_sr_plan_attack(coord)
+		BattleHUD.ACTION_ABILITY:
+			_sr_plan_ability(coord, _pending_ability_id)
+		BattleHUD.ACTION_ITEM:
+			_sr_plan_use_item(coord, _pending_item_id)
+
+
+func _sr_plan_move(dest: Vector2i) -> void:
+	## Record a move step in the planning plan.
+	if _planning_ap_left < 1:
+		return
+	_planning_plan.add_step({"kind": "move", "target_pos": dest})
+	_planning_ap_left -= 1
+	_planning_moved = true
+	_planning_move_dest = dest
+	_hud.append_log("  Plan: Move to (%d,%d)" % [dest.x, dest.y], "action_move")
+
+	# If AP remains, show remaining actions from new position
+	if _planning_ap_left > 0:
+		_enter_sr_plan_action()
+	else:
+		_sr_finalize_unit_plan()
+
+
+func _sr_plan_attack(target_pos: Vector2i) -> void:
+	## Record an attack step in the planning plan.
+	if _planning_ap_left < 1:
+		return
+	_planning_plan.add_step({"kind": "attack", "target_pos": target_pos})
+	_planning_ap_left -= 1
+	var target: BattleUnit = _state.unit_at(target_pos)
+	var target_name := target.character.display_name if target else "(%d,%d)" % [target_pos.x, target_pos.y]
+
+	# Show damage forecast
+	if target and _planning_unit:
+		var origin := _planning_move_dest if _planning_moved else _planning_unit.position
+		var weapon_power: int = CombatResolver.get_weapon_power(_planning_unit, _state.item_provider)
+		var atk_elev: int = _state.graph.elevation(origin)
+		var tgt_elev: int = _state.graph.elevation(target_pos)
+		var tgt_cover: int = _state.graph.effective_cover(target_pos)
+		var is_ranged: bool = _planning_unit.stats.effective("rng") > 1
+		var proj: Dictionary = OutcomeProjection.project_attack(
+			_planning_unit, target, weapon_power, atk_elev, tgt_elev, tgt_cover, is_ranged)
+		_hud.append_log("  Plan: Attack %s [%d-%d dmg]" % [
+			target_name, proj["min"], proj["max"]], "action_attack")
+		_hud.show_forecast(proj)
+	else:
+		_hud.append_log("  Plan: Attack %s" % target_name, "action_attack")
+
+	_sr_finalize_unit_plan()
+
+
+func _sr_plan_ability(target_pos: Vector2i, ability_id: String) -> void:
+	## Record an ability step in the planning plan.
+	var ability := _find_ability(ability_id)
+	var ap_cost: int = ability.ap_cost if ability else 1
+	if _planning_ap_left < ap_cost:
+		return
+	_planning_plan.add_step({
+		"kind": "ability",
+		"ability_id": ability_id,
+		"target_pos": target_pos,
+		"ap_cost": ap_cost
+	})
+	_planning_ap_left -= ap_cost
+	var ability_name := ability.display_name if ability else ability_id
+
+	# Show damage/healing forecast
+	if ability and _planning_unit:
+		var effect_type: String = str(ability.effect.get("effect_type", ""))
+		var effect_value: int = int(ability.effect.get("value", 0))
+		var origin := _planning_move_dest if _planning_moved else _planning_unit.position
+		var caster_elev: int = _state.graph.elevation(origin)
+		var tgt_elev: int = _state.graph.elevation(target_pos)
+		var target: BattleUnit = _state.unit_at(target_pos)
+
+		if effect_type == "damage" and target:
+			var proj: Dictionary = OutcomeProjection.project_ability_damage(
+				_planning_unit, target, effect_value, ability.type,
+				caster_elev, tgt_elev, ability.mag_scaling)
+			_hud.append_log("  Plan: %s [%d-%d dmg]" % [
+				ability_name, proj["min"], proj["max"]], ability_id)
+			_hud.show_forecast(proj)
+		elif effect_type == "heal" and target:
+			var proj: Dictionary = OutcomeProjection.project_heal(
+				target, effect_value, _planning_unit, ability.mag_scaling)
+			_hud.append_log("  Plan: %s [%d heal]" % [
+				ability_name, proj["mid"]], ability_id)
+			_hud.show_forecast(proj, "Healing")
+		else:
+			_hud.append_log("  Plan: %s" % ability_name, ability_id)
+	else:
+		_hud.append_log("  Plan: %s" % ability_name, ability_id)
+
+	_sr_finalize_unit_plan()
+
+
+func _sr_plan_use_item(target_pos: Vector2i, item_id: String) -> void:
+	## Record a use_item step in the planning plan.
+	if _planning_ap_left < 1:
+		return
+	_planning_plan.add_step({
+		"kind": "use_item",
+		"item_id": item_id,
+		"target_pos": target_pos
+	})
+	_planning_ap_left -= 1
+	_hud.append_log("  Plan: Use %s" % item_id, item_id)
+	_sr_finalize_unit_plan()
+
+
+func _sr_plan_defend() -> void:
+	## Record a defend step.
+	if _planning_ap_left < 1:
+		return
+	_planning_plan.add_step({"kind": "defend"})
+	_planning_ap_left -= 1
+	_hud.append_log("  Plan: Defend", "action_defend")
+	_sr_finalize_unit_plan()
+
+
+func _sr_plan_wait() -> void:
+	## Record a wait step — immediately finalizes the plan.
+	_planning_plan.add_step({"kind": "wait"})
+	_hud.append_log("  Plan: Wait", "action_wait")
+	_sr_finalize_unit_plan()
+
+
+func _sr_finalize_unit_plan() -> void:
+	## Store the completed plan and return to unit selection.
+	if _planning_unit and _planning_plan and not _planning_plan.is_empty():
+		_player_plans[_planning_unit.character.id] = _planning_plan
+		_hud.append_log("Plan committed for %s" % _planning_unit.character.display_name)
+	_planning_unit = null
+	_planning_plan = null
+	_enter_sr_player_select()
+
+
+func _on_commit_round() -> void:
+	## Player pressed "Commit Round" — commit all plans and start resolution.
+	if _control_state != ControlState.SR_PLAYER_SELECT:
+		return
+
+	# Commit all player plans to the turn system
+	var player_team := _state.other_team(_state.ai_teams[0]) if not _state.ai_teams.is_empty() else "playerA"
+	for unit: BattleUnit in _state.living_units(player_team):
+		if not unit.is_downed:
+			var plan: AIPlan = _player_plans.get(unit.character.id)
+			if plan:
+				_sr_turn_system.commit_player_plan(unit, plan)
+
+	# Advance to resolution
+	_sr_turn_system.advance(_state)
+	_hud.append_log("--- Plans committed, resolving... ---")
+	_player_plans.clear()
+	_enter_sr_resolution()
+
+
+func _on_clear_plan() -> void:
+	## Player pressed "Clear Plan" for the current planning unit.
+	if _planning_unit:
+		_player_plans.erase(_planning_unit.character.id)
+		_hud.append_log("Plan cleared for %s" % _planning_unit.character.display_name)
+	_planning_unit = null
+	_planning_plan = null
+	_enter_sr_player_select()
+
+
+# --- Stage 3: Resolution ---
+
+func _enter_sr_resolution() -> void:
+	_control_state = ControlState.SR_RESOLUTION
+	_set_drag_enabled(false)
+	_overlay.clear_telegraph()
+	_overlay.clear()
+	_hud.hide_action_panel()
+	_hud.hide_commit_round_panel()
+	_hud.hide_forecast()
+	_pawn_manager.clear_highlight()
+	_hud.set_phase_label("Round %d - Resolving..." % _state.round_number)
+
+	# Start the resolution loop
+	_sr_resolve_loop()
+
+
+func _sr_resolve_loop() -> void:
+	## Async loop that resolves one unit at a time with animation.
+	if not _sr_turn_system.has_next_resolution():
+		_enter_sr_round_reset()
+		return
+
+	if _check_match_over():
+		return
+
+	var result: Dictionary = _sr_turn_system.resolve_next(_state)
+
+	if result.get("done", false):
+		_enter_sr_round_reset()
+		return
+
+	# Animate the resolution result, then continue
+	await _sr_animate_resolution(result)
+	_sr_resolve_loop()
+
+
+func _sr_animate_resolution(result: Dictionary) -> void:
+	## Animate one unit's resolution results.
+	var unit_id: String = str(result.get("unit_id", ""))
+
+	if result.get("fizzled", false):
+		var reason: String = str(result.get("reason", ""))
+		_hud.append_log("[Resolve] %s's plan fizzled (%s)" % [unit_id, reason])
+		# Animate terrain effects even on fizzle
+		for effect in result.get("terrain_effects", []):
+			_sr_log_terrain_effect(unit_id, effect)
+		await get_tree().create_timer(0.3).timeout
+		return
+
+	# Find the unit for visual updates
+	var unit: BattleUnit = _find_unit_by_id(unit_id)
+	if unit:
+		_pawn_manager.highlight_active(unit)
+		_hud.show_unit_info(unit)
+
+	var results: Array = result.get("results", [])
+	for step_result in results:
+		if step_result is Dictionary:
+			await _sr_animate_step(step_result, unit)
+
+	if unit:
+		_pawn_manager.update_status_markers(unit)
+
+	# Brief pause between unit resolutions
+	await get_tree().create_timer(0.4).timeout
+
+	if _check_match_over():
+		return
+
+
+func _sr_animate_step(step_result: Dictionary, unit: BattleUnit) -> void:
+	## Animate a single resolution step result.
+	var action: String = str(step_result.get("action", ""))
+
+	# Terrain damage results
+	if step_result.get("type") == "terrain_damage":
+		var target_id: String = str(step_result.get("target", ""))
+		_sr_log_terrain_effect(target_id, step_result)
+		if unit:
+			_pawn_manager.update_status_markers(unit)
+		return
+
+	# Fizzled step
+	if step_result.get("fizzled", false):
+		var reason: String = str(step_result.get("reason", ""))
+		var actor: String = str(step_result.get("actor", ""))
+		_hud.append_log("[Resolve] %s's %s fizzled (%s)" % [actor, action, reason])
+		await get_tree().create_timer(0.3).timeout
+		return
+
+	# Move
+	if step_result.has("from") and step_result.has("to"):
+		var to_pos: Vector2i = step_result["to"]
+		var actor_name: String = str(step_result.get("actor", ""))
+		_hud.append_log("[Resolve] %s moves to (%d,%d)" % [actor_name, to_pos.x, to_pos.y], "action_move")
+
+		# Log terrain effects from movement
+		for effect in step_result.get("terrain_effects", []):
+			_sr_log_terrain_effect(actor_name, effect)
+
+		# Animate pawn movement
+		if unit:
+			var tw := _pawn_manager.move_pawn(unit, to_pos)
+			if tw:
+				await tw.finished
+			_pawn_manager.update_status_markers(unit)
+		return
+
+	# Attack
+	if step_result.has("damage") or step_result.get("missed", false):
+		_log_attack_result(step_result)
+		var target_id: String = str(step_result.get("target", ""))
+		var target_unit: BattleUnit = _find_unit_by_id(target_id)
+
+		# Show dice rolls
+		if unit and step_result.has("atk_roll"):
+			_pawn_manager.show_dice_roll(unit, int(step_result["atk_roll"]), true)
+		var def_roll: int = int(step_result.get("def_roll", 0))
+		if target_unit and def_roll > 0:
+			_pawn_manager.show_dice_roll(target_unit, def_roll, false)
+
+		# Show action marker
+		if target_unit:
+			_pawn_manager.show_action_marker(target_unit, "action_attack")
+
+		# Handle downing
+		if step_result.get("is_downed", false) and target_unit:
+			_delay_down_pawn(target_unit)
+		if target_unit:
+			_pawn_manager.update_status_markers(target_unit)
+
+		await get_tree().create_timer(DiceMarker.TOTAL_DURATION).timeout
+		return
+
+	# Ability
+	if step_result.has("outcomes"):
+		_log_ability_result(step_result, str(step_result.get("ability", "")))
+		var outcomes: Array = step_result.get("outcomes", [])
+
+		for outcome in outcomes:
+			var target_id: String = str(outcome.get("target", ""))
+			var target_unit: BattleUnit = _find_unit_by_id(target_id)
+
+			if outcome.has("atk_roll") and unit:
+				_pawn_manager.show_dice_roll(unit, int(outcome["atk_roll"]), true)
+			var dv: int = int(outcome.get("def_roll", 0))
+			if target_unit and dv > 0:
+				_pawn_manager.show_dice_roll(target_unit, dv, false)
+			if target_unit:
+				_pawn_manager.show_action_marker(target_unit, str(step_result.get("ability", "")))
+			if outcome.get("is_downed", false) and target_unit:
+				_delay_down_pawn(target_unit)
+			elif outcome.get("revived", false) and target_unit:
+				_pawn_manager.revive_pawn(target_unit)
+			if target_unit:
+				_pawn_manager.update_status_markers(target_unit)
+
+		var has_dice := false
+		for outcome in outcomes:
+			if outcome.has("atk_roll"):
+				has_dice = true
+				break
+		if has_dice:
+			await get_tree().create_timer(DiceMarker.TOTAL_DURATION).timeout
+		return
+
+	# Defend
+	if step_result.has("defended") or action == "defend":
+		var actor: String = str(step_result.get("actor", ""))
+		_hud.append_log("[Resolve] %s defends" % actor, "action_defend")
+		if unit:
+			_pawn_manager.update_status_markers(unit)
+		await get_tree().create_timer(0.3).timeout
+		return
+
+	# Wait / other
+	if action == "wait":
+		var actor: String = str(step_result.get("actor", ""))
+		_hud.append_log("[Resolve] %s waits" % actor, "action_wait")
+		return
+
+
+func _sr_log_terrain_effect(who: String, effect: Dictionary) -> void:
+	if effect.get("type") == "terrain_damage":
+		var dmg: int = int(effect.get("amount", 0))
+		var hp: int = int(effect.get("target_hp_after", 0))
+		_hud.append_log("[Resolve] %s takes %d terrain damage (%d HP)" % [who, dmg, hp], "terrain_damage")
+
+
+# --- Stage 4: Round Reset ---
+
+func _enter_sr_round_reset() -> void:
+	_hud.append_log("--- Round %d complete ---" % _state.round_number)
+
+	if _check_match_over():
+		return
+
+	# Start next round
+	_start_new_round()
+
+
+# --- Speed-round helpers ---
+
+func _find_unit_by_id(unit_id: String) -> BattleUnit:
+	for team in _state.parties.keys():
+		for unit: BattleUnit in _state.parties[team]:
+			if unit.character.id == unit_id:
+				return unit
+	return null
