@@ -59,7 +59,7 @@ func _make_state() -> MatchState:
 	state.item_provider = _pipeline.get_item
 
 	Deployment.auto_deploy(state, map.deployment_zones)
-	RoundManager.start_round(state)
+	# auto_deploy now deploys and starts round 1 via DeploymentController
 
 	return state
 

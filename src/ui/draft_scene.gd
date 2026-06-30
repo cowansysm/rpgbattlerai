@@ -320,11 +320,13 @@ func _on_start_battle_pressed() -> void:
 			Log.error("DraftScene", e)
 		return
 	var state: MatchState = result["state"]
-	_start_battle(state)
+	var ctrl: DeploymentController = result["controller"]
+	_start_battle(state, ctrl)
 
 
-func _start_battle(state: MatchState) -> void:
+func _start_battle(state: MatchState, ctrl: DeploymentController) -> void:
 	MatchData.match_state = state
+	MatchData.deployment_controller = ctrl
 	MatchData.map_id = _selected_map.id
 	Log.info("DraftScene", "Match ready — transitioning to battle on %s" % _selected_map.id)
 	get_tree().change_scene_to_file("res://scenes/map/map_scene.tscn")

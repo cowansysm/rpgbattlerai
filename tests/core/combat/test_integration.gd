@@ -60,15 +60,11 @@ func _setup_match() -> MatchState:
 func test_full_round_deploy_activate_act() -> void:
 	var state := _setup_match()
 
-	# After deployment, state should be ROUND_START
-	assert_eq(state.phase, MatchState.Phase.ROUND_START)
+	# After auto_deploy (which deploys + starts round), should be in round 1
+	assert_eq(state.phase, MatchState.Phase.AWAITING_ACTIVATION)
+	assert_eq(state.round_number, 1)
 	assert_eq(state.initiative, "playerA",
 		"playerA has SPD 4, should have initiative")
-
-	# Start round 1
-	RoundManager.start_round(state)
-	assert_eq(state.round_number, 1)
-	assert_eq(state.phase, MatchState.Phase.AWAITING_ACTIVATION)
 
 	# All 4 units should be in the queue
 	assert_eq(state.activation_queue.size(), 4)
@@ -101,7 +97,7 @@ func test_full_round_deploy_activate_act() -> void:
 
 func test_move_then_wait_round() -> void:
 	var state := _setup_match()
-	RoundManager.start_round(state)
+	# Round already started by auto_deploy
 
 	# First unit: move then wait
 	var team := RoundManager.current_team(state)
@@ -131,7 +127,6 @@ func test_move_then_wait_round() -> void:
 
 func test_defend_persists_until_next_round() -> void:
 	var state := _setup_match()
-	RoundManager.start_round(state)
 
 	# Activate first unit and defend
 	var team := RoundManager.current_team(state)
@@ -177,8 +172,7 @@ func test_defend_persists_until_next_round() -> void:
 func test_two_rounds_initiative_alternates() -> void:
 	var state := _setup_match()
 
-	# Round 1
-	RoundManager.start_round(state)
+	# Round 1 (already started by auto_deploy)
 	var r1_initiative := state.initiative
 	for i in range(4):
 		var t := RoundManager.current_team(state)
@@ -207,7 +201,6 @@ func test_two_rounds_initiative_alternates() -> void:
 
 func test_occupancy_blocks_movement() -> void:
 	var state := _setup_match()
-	RoundManager.start_round(state)
 
 	# Activate first unit
 	var team := RoundManager.current_team(state)

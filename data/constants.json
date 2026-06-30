@@ -35,6 +35,15 @@
     "ability": 6.0,
     "resource": 2.0
   },
+  "DEPLOY_FIRST": "ai",
+  "DEPLOY_PACE_DELAY": 0.4,
+  "DEPLOY_WEIGHTS": {
+    "frontline": 6.0,
+    "cover": 4.0,
+    "elevation": 2.0,
+    "hazard": 8.0,
+    "spacing": 2.0
+  },
   "ROSTER_CAP": 12,
   "RECRUIT_COST": 50,
   "RECRUIT_STARTING_GOLD": 200,

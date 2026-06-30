@@ -107,6 +107,21 @@ func test_create_draft_returns_valid_draft() -> void:
 
 # --- Build match tests ---
 
+## Deploys and starts round for a freshly built match result.
+func _deploy_and_start(result: Dictionary) -> void:
+	var ctrl: DeploymentController = result["controller"]
+	if ctrl:
+		ctrl.auto_complete(_positional_planner)
+
+
+## Simple positional planner for auto_complete tests.
+static func _positional_planner(
+	_state: MatchState, _team: String, _unit: BattleUnit,
+	legal: Array[Vector2i], _enemy_zone: Array[Vector2i],
+) -> Vector2i:
+	return legal[0]
+
+
 func test_build_match_with_unconfirmed_drafts_errors() -> void:
 	var draft_a := _builder.create_draft("skirmish")
 	var draft_b := _builder.create_draft("skirmish")
@@ -141,6 +156,7 @@ func test_build_match_produces_valid_match_state() -> void:
 		"Expected no errors, got: %s" % str(result["errors"]))
 	var state: MatchState = result["state"]
 	assert_not_null(state)
+	assert_not_null(result["controller"], "should return a DeploymentController")
 
 	# Verify parties
 	assert_eq(state.parties["playerA"].size(), 3)
@@ -151,6 +167,12 @@ func test_build_match_produces_valid_match_state() -> void:
 		assert_eq(u.team, "playerA")
 	for u: BattleUnit in state.parties["playerB"]:
 		assert_eq(u.team, "playerB")
+
+	# State should be in DEPLOYMENT before auto_complete
+	assert_eq(state.phase, MatchState.Phase.DEPLOYMENT)
+
+	# Deploy and start
+	_deploy_and_start(result)
 
 	# Verify deployment (units have positions in occupancy)
 	assert_gte(state.occupancy.size(), 6,
@@ -200,6 +222,7 @@ func test_build_match_activation_possible() -> void:
 
 	var m := _builder.select_random_map("skirmish")
 	var result := _builder.build_match(draft_a, draft_b, m)
+	_deploy_and_start(result)
 	var state: MatchState = result["state"]
 
 	# Should be able to activate a unit
