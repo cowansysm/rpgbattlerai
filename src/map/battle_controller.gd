@@ -697,9 +697,9 @@ func _do_attack(target_pos: Vector2i) -> void:
 
 	_log_attack_result(result)
 
-	# Show action icon on target
+	# Show symbol pawn beside target (awaitable landing beat)
 	if target_unit_pre:
-		_pawn_manager.show_action_marker(target_unit_pre, "action_attack")
+		await _pawn_manager.show_ability_pawns([target_unit_pre], "action_attack")
 
 	# Show dice roll animations above attacker and target
 	var attacker: BattleUnit = _state.current_unit
@@ -734,13 +734,18 @@ func _do_ability(target_pos: Vector2i) -> void:
 
 	_log_ability_result(result, ability_id)
 
-	# Show ability icon on each affected target
+	# Show symbol pawn beside each affected target (awaitable landing beat)
 	var caster: BattleUnit = _state.current_unit
 	var outcomes: Array = result.get("outcomes", [])
+	var affected: Array = []
 	for outcome in outcomes:
 		var target_unit: BattleUnit = units_before.get(str(outcome.get("target", "")))
-		if target_unit:
-			_pawn_manager.show_action_marker(target_unit, ability_id)
+		if target_unit and target_unit not in affected:
+			affected.append(target_unit)
+	if not affected.is_empty():
+		var ability: AbilityData = GameData.get_ability(ability_id)
+		var icon: String = SymbolAtlas.symbol_for_ability(ability)
+		await _pawn_manager.show_ability_pawns(affected, icon)
 
 	# Show dice roll animations for damage outcomes
 	for outcome in outcomes:
@@ -788,13 +793,22 @@ func _do_use_item(target_pos: Vector2i) -> void:
 		str(result.get("actor", "")),
 		str(result.get("item", ""))], item_id)
 
-	# Show item icon on each affected target
+	# Show symbol pawn beside each affected target (awaitable landing beat)
 	var user: BattleUnit = _state.current_unit
 	var outcomes: Array = result.get("outcomes", [])
+	var affected: Array = []
 	for outcome in outcomes:
 		var target_unit: BattleUnit = units_before.get(str(outcome.get("target", "")))
-		if target_unit:
-			_pawn_manager.show_action_marker(target_unit, item_id)
+		if target_unit and target_unit not in affected:
+			affected.append(target_unit)
+	if not affected.is_empty():
+		# Resolve icon from item's granted ability, or use item_id directly
+		var icon: String = item_id
+		var item: ItemData = GameData.get_item(item_id)
+		if item and not item.granted_abilities.is_empty():
+			var ability: AbilityData = GameData.get_ability(item.granted_abilities[0])
+			icon = SymbolAtlas.symbol_for_ability(ability)
+		await _pawn_manager.show_ability_pawns(affected, icon)
 
 	# Show dice roll animations for damage outcomes
 	for outcome in outcomes:

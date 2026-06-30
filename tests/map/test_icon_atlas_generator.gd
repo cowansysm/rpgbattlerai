@@ -38,11 +38,25 @@ func test_race_class_cells_have_content() -> void:
 		assert_true(has_content, "race+class cell for '%s' should have content" % char_id)
 
 
-func test_reserved_cells_are_transparent() -> void:
-	# Row 7 should be fully transparent (reserved)
-	for col in range(8):
-		var has_content := _cell_has_content(col, 7)
-		assert_false(has_content, "reserved cell at (%d,7) should be transparent" % col)
+func test_unoccupied_cells_are_transparent() -> void:
+	# Cells not referenced by any LAYOUT or RACE_CLASS_LAYOUT entry should be transparent
+	var occupied: Dictionary = {}  # "col,row" -> true
+	for icon_id in IconAtlasGenerator.LAYOUT:
+		var info: Dictionary = IconAtlasGenerator.LAYOUT[icon_id]
+		occupied["%d,%d" % [info["col"], info["row"]]] = true
+	for char_id in IconAtlasGenerator.RACE_CLASS_LAYOUT:
+		var info: Dictionary = IconAtlasGenerator.RACE_CLASS_LAYOUT[char_id]
+		occupied["%d,%d" % [info["col"], info["row"]]] = true
+	var checked := 0
+	for row in range(8):
+		for col in range(8):
+			var key := "%d,%d" % [col, row]
+			if key in occupied:
+				continue
+			var has_content := _cell_has_content(col, row)
+			assert_false(has_content, "unoccupied cell at (%d,%d) should be transparent" % [col, row])
+			checked += 1
+	assert_true(checked > 0, "should have at least one unoccupied cell to verify")
 
 
 # --- File output ---

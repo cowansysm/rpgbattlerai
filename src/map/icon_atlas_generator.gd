@@ -17,20 +17,26 @@ const STATUS_FILL := Color(0.7, 0.2, 0.2, 0.8)
 const NEUTRAL_FILL := Color(0.6, 0.6, 0.6, 0.8)  # Race+class identity
 const ACTION_FILL := Color(0.35, 0.35, 0.4, 0.8)
 
-# Element tint overrides for spells
+# Element tint overrides for spells and element fallbacks
 const ELEMENT_TINTS := {
 	"fire": Color(0.85, 0.35, 0.15, 0.8),
 	"ice": Color(0.2, 0.55, 0.85, 0.8),
 	"lightning": Color(0.85, 0.8, 0.2, 0.8),
 	"healing": Color(0.25, 0.7, 0.35, 0.8),
+	"holy": Color(0.9, 0.85, 0.4, 0.8),
+	"dark": Color(0.3, 0.15, 0.4, 0.8),
 }
+const EFFECT_TYPE_FILL := Color(0.4, 0.4, 0.45, 0.8)
 
-# Icon-to-element mapping for spell tinting
+# Icon-to-element mapping for spell and element-fallback tinting
 const SPELL_ELEMENTS := {
 	"fire_1": "fire", "fire_2": "fire",
 	"ice_1": "ice", "thunder_1": "lightning",
 	"cure_1": "healing", "cure_2": "healing",
 	"shield_1": "",  # Base purple
+	"elem_fire": "fire", "elem_ice": "ice",
+	"elem_lightning": "lightning", "elem_holy": "holy",
+	"elem_dark": "dark",
 }
 
 # Layout: icon_id → {col, row, category, draw_func}
@@ -66,10 +72,12 @@ const LAYOUT := {
 	"shield":          {"col": 2, "row": 3, "cat": "equip", "icon": "shield_front"},
 	"bracer_of_accuracy": {"col": 3, "row": 3, "cat": "equip", "icon": "wristguard"},
 	"smoke_bomb_pouch":{"col": 4, "row": 3, "cat": "equip", "icon": "pouch"},
-	# Status effects (row 4)
+	# Status effects + effect-type fallbacks (row 4)
 	"sleep":           {"col": 0, "row": 4, "cat": "status", "icon": "crescent_zz"},
 	"blind":           {"col": 1, "row": 4, "cat": "status", "icon": "eye_crossed"},
 	"defend":          {"col": 2, "row": 4, "cat": "status", "icon": "shield_up"},
+	"fx_status":       {"col": 3, "row": 4, "cat": "fxtype", "icon": "eye_crossed"},
+	"fx_revive":       {"col": 4, "row": 4, "cat": "fxtype", "icon": "cross_thick"},
 	# Action buttons (row 5)
 	"action_move":     {"col": 0, "row": 5, "cat": "action", "icon": "boot"},
 	"action_attack":   {"col": 1, "row": 5, "cat": "action", "icon": "sword_strike"},
@@ -78,6 +86,16 @@ const LAYOUT := {
 	"action_defend":   {"col": 4, "row": 5, "cat": "action", "icon": "shield_front"},
 	"action_wait":     {"col": 5, "row": 5, "cat": "action", "icon": "hourglass"},
 	"_fallback":       {"col": 6, "row": 5, "cat": "action", "icon": "question"},
+	# Element fallbacks (row 7)
+	"elem_fire":       {"col": 0, "row": 7, "cat": "spell", "icon": "flame_small"},
+	"elem_ice":        {"col": 1, "row": 7, "cat": "spell", "icon": "snowflake"},
+	"elem_lightning":  {"col": 2, "row": 7, "cat": "spell", "icon": "bolt"},
+	"elem_holy":       {"col": 3, "row": 7, "cat": "spell", "icon": "cross"},
+	"elem_dark":       {"col": 4, "row": 7, "cat": "spell", "icon": "starburst"},
+	# Effect-type fallbacks (row 7 cont.)
+	"fx_damage":       {"col": 5, "row": 7, "cat": "fxtype", "icon": "slash_impact"},
+	"fx_heal":         {"col": 6, "row": 7, "cat": "fxtype", "icon": "cross"},
+	"fx_buff":         {"col": 7, "row": 7, "cat": "fxtype", "icon": "chevron"},
 }
 
 # Race+class identity (row 6)
@@ -144,6 +162,7 @@ static func _get_fill_color(icon_id: String, cat: String) -> Color:
 		"equip": return EQUIP_FILL
 		"status": return STATUS_FILL
 		"action": return ACTION_FILL
+		"fxtype": return EFFECT_TYPE_FILL
 	return NEUTRAL_FILL
 
 
@@ -158,6 +177,7 @@ static func _draw_category_frame(img: Image, ox: int, oy: int,
 		"equip":  _draw_equipment_frame(img, ox, oy, fill, Color.WHITE)
 		"status": _draw_status_frame(img, ox, oy, fill, Color.WHITE)
 		"action": _draw_action_frame(img, ox, oy, fill, Color.WHITE)
+		"fxtype": _draw_action_frame(img, ox, oy, fill, Color.WHITE)
 
 
 # --- Dual-overlapping-geometry category frames ---
