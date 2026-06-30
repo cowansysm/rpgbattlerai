@@ -14,6 +14,9 @@ var is_instance_battle: bool = false
 ## Deployment controller (A12) — passed to BattleController for interactive deployment
 var deployment_controller: DeploymentController = null
 
+## Turn-system mode (A15): "run" = speed-round, "skirmish" = charge-time (A20)
+var mode: String = "run"
+
 ## Run-battle fields (A8)
 var active_run: Variant = null       ## RunState or null
 var run_node_id: String = ""         ## Node being resolved
@@ -42,6 +45,7 @@ func clear() -> void:
 	fielded_ids = []
 	is_instance_battle = false
 	deployment_controller = null
+	mode = "run"
 	active_run = null
 	run_node_id = ""
 	battle_result = null

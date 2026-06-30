@@ -14,6 +14,8 @@ signal unit_clicked(character_id: String)
 signal back_to_menu_pressed()
 signal confirm_activation_pressed()
 signal cancel_activation_pressed()
+signal commit_round_pressed()
+signal clear_plan_pressed()
 
 # Action type constants matching the controller's expectations
 const ACTION_MOVE := 0
@@ -80,8 +82,17 @@ var _activation_panel: PanelContainer
 var _btn_confirm_activation: Button
 var _btn_cancel_activation: Button
 
+# Commit round (speed-round planning)
+var _commit_panel: PanelContainer
+var _btn_commit_round: Button
+var _btn_clear_plan: Button
+
 # Targeting mode indicator
 var _targeting_label: Label
+
+# Forecast panel (outcome projection during planning)
+var _forecast_panel: PanelContainer
+var _forecast_label: Label
 
 # Round banner (floating center text)
 var _round_banner: Label
@@ -455,6 +466,71 @@ func _build_floating_panels() -> void:
 	_btn_cancel_activation.pressed.connect(func() -> void: cancel_activation_pressed.emit())
 	confirm_hbox.add_child(_btn_cancel_activation)
 
+	# Commit round panel — speed-round planning (A15)
+	var commit_width := 320
+	var commit_height := 50
+	_commit_panel = PanelContainer.new()
+	_commit_panel.visible = false
+	_commit_panel.anchor_left = 0.5
+	_commit_panel.anchor_right = 0.5
+	_commit_panel.anchor_top = 1.0
+	_commit_panel.anchor_bottom = 1.0
+	_commit_panel.offset_left = -commit_width / 2
+	_commit_panel.offset_right = commit_width / 2
+	_commit_panel.offset_top = -BOTTOM_BAR_HEIGHT - commit_height - 8
+	_commit_panel.offset_bottom = -BOTTOM_BAR_HEIGHT - 8
+	var commit_style := StyleBoxFlat.new()
+	commit_style.bg_color = Color(0.0, 0.1, 0.0, 0.85)
+	commit_style.set_content_margin_all(6)
+	commit_style.set_corner_radius_all(6)
+	_commit_panel.add_theme_stylebox_override("panel", commit_style)
+	_commit_panel.mouse_filter = Control.MOUSE_FILTER_STOP
+	_root.add_child(_commit_panel)
+
+	var commit_hbox := HBoxContainer.new()
+	commit_hbox.alignment = BoxContainer.ALIGNMENT_CENTER
+	commit_hbox.add_theme_constant_override("separation", 8)
+	_commit_panel.add_child(commit_hbox)
+
+	_btn_commit_round = Button.new()
+	_btn_commit_round.text = "Commit Round"
+	_btn_commit_round.custom_minimum_size = Vector2(180, 36)
+	_btn_commit_round.disabled = true
+	_btn_commit_round.pressed.connect(func() -> void: commit_round_pressed.emit())
+	commit_hbox.add_child(_btn_commit_round)
+
+	_btn_clear_plan = Button.new()
+	_btn_clear_plan.text = "Clear Plan"
+	_btn_clear_plan.custom_minimum_size = Vector2(100, 36)
+	_btn_clear_plan.disabled = true
+	_btn_clear_plan.pressed.connect(func() -> void: clear_plan_pressed.emit())
+	commit_hbox.add_child(_btn_clear_plan)
+
+	# Forecast panel — floats above bottom bar on the right side
+	var forecast_width := 200
+	var forecast_height := 50
+	_forecast_panel = PanelContainer.new()
+	_forecast_panel.visible = false
+	_forecast_panel.anchor_left = 1.0
+	_forecast_panel.anchor_right = 1.0
+	_forecast_panel.anchor_top = 1.0
+	_forecast_panel.anchor_bottom = 1.0
+	_forecast_panel.offset_left = -LOG_WIDTH - forecast_width - 8
+	_forecast_panel.offset_right = -LOG_WIDTH - 8
+	_forecast_panel.offset_top = -BOTTOM_BAR_HEIGHT - forecast_height - 8
+	_forecast_panel.offset_bottom = -BOTTOM_BAR_HEIGHT - 8
+	var forecast_style := StyleBoxFlat.new()
+	forecast_style.bg_color = Color(0.1, 0.05, 0.15, 0.85)
+	forecast_style.set_content_margin_all(6)
+	forecast_style.set_corner_radius_all(6)
+	_forecast_panel.add_theme_stylebox_override("panel", forecast_style)
+	_forecast_panel.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	_root.add_child(_forecast_panel)
+
+	_forecast_label = Label.new()
+	_forecast_label.add_theme_font_size_override("font_size", 13)
+	_forecast_panel.add_child(_forecast_label)
+
 
 # --- Public update methods ---
 
@@ -567,11 +643,11 @@ func set_finalize_enabled(enabled: bool) -> void:
 
 
 func update_roster(state: MatchState, active_unit: BattleUnit,
-		selectable_ids: Array = []) -> void:
+		selectable_ids: Array = [], planned_ids: Array = []) -> void:
 	_update_team_list(_team_a_list, state.parties.get("playerA", []),
-		active_unit, selectable_ids)
+		active_unit, selectable_ids, planned_ids)
 	_update_team_list(_team_b_list, state.parties.get("playerB", []),
-		active_unit, selectable_ids)
+		active_unit, selectable_ids, planned_ids)
 
 
 func update_turn_order(state: MatchState) -> void:
@@ -634,6 +710,40 @@ func append_log(text: String, icon_id: String = "") -> void:
 
 	# Auto-scroll to bottom (deferred to wait for layout)
 	_log_scroll.call_deferred("set_v_scroll", 999999)
+
+
+## Set the round label to arbitrary text (for phase indicators).
+func set_phase_label(text: String) -> void:
+	_round_label.text = text
+
+
+## Show the commit round panel (speed-round planning).
+func show_commit_round_panel(can_commit: bool, has_plan: bool = false) -> void:
+	_commit_panel.visible = true
+	_btn_commit_round.disabled = not can_commit
+	_btn_clear_plan.disabled = not has_plan
+
+
+## Hide the commit round panel.
+func hide_commit_round_panel() -> void:
+	_commit_panel.visible = false
+
+
+## Show the forecast panel with damage/healing projection.
+func show_forecast(projection: Dictionary, label: String = "Damage") -> void:
+	if projection.is_empty():
+		_forecast_panel.visible = false
+		return
+	var min_v: int = int(projection.get("min", 0))
+	var mid_v: int = int(projection.get("mid", 0))
+	var max_v: int = int(projection.get("max", 0))
+	_forecast_label.text = "%s: %d - %d - %d\n(min / avg / max)" % [label, min_v, mid_v, max_v]
+	_forecast_panel.visible = true
+
+
+## Hide the forecast panel.
+func hide_forecast() -> void:
+	_forecast_panel.visible = false
 
 
 func disable_actions_below_ap(ap: int) -> void:
@@ -795,7 +905,8 @@ func _update_status_display(unit: BattleUnit) -> void:
 
 
 func _update_team_list(container: VBoxContainer, units: Array,
-		active_unit: BattleUnit, selectable_ids: Array = []) -> void:
+		active_unit: BattleUnit, selectable_ids: Array = [],
+		planned_ids: Array = []) -> void:
 	for child in container.get_children():
 		child.queue_free()
 
@@ -831,6 +942,9 @@ func _update_team_list(container: VBoxContainer, units: Array,
 		elif unit.current_hp <= 0:
 			indicator.text = "X"
 			indicator.add_theme_color_override("font_color", Color(0.8, 0.2, 0.2))
+		elif unit.character.id in planned_ids:
+			indicator.text = "PLANNED"
+			indicator.add_theme_color_override("font_color", Color(0.3, 0.9, 0.5))
 		elif unit.is_activated:
 			indicator.text = "done"
 			indicator.add_theme_color_override("font_color", Color(0.5, 0.5, 0.5))

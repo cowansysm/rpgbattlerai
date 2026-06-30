@@ -41,3 +41,23 @@ static func revive_valid() -> StandardMaterial3D:
 ## Selectable unit tile (awaiting activation) — gold/yellow.
 static func selectable() -> StandardMaterial3D:
 	return _mat(Color(1.0, 0.85, 0.2, 0.7))
+
+
+## Telegraph intent path — faded cyan (distinct from regular movement blue).
+static func telegraph_path() -> StandardMaterial3D:
+	return _mat(Color(0.4, 0.8, 0.9, 0.5))
+
+
+## Telegraph intent destination — teal.
+static func telegraph_destination() -> StandardMaterial3D:
+	return _mat(Color(0.2, 0.9, 0.8, 0.7))
+
+
+## Telegraph intent target — amber/orange (distinct from regular target red).
+static func telegraph_target() -> StandardMaterial3D:
+	return _mat(Color(1.0, 0.6, 0.15, 0.75))
+
+
+## Telegraph AoE footprint — warm orange, softer.
+static func telegraph_aoe() -> StandardMaterial3D:
+	return _mat(Color(1.0, 0.5, 0.2, 0.55))
