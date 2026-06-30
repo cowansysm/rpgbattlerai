@@ -11,6 +11,9 @@ var active_band: BattleBand = null
 var fielded_ids: Array[String] = []
 var is_instance_battle: bool = false
 
+## Deployment controller (A12) — passed to BattleController for interactive deployment
+var deployment_controller: DeploymentController = null
+
 ## Run-battle fields (A8)
 var active_run: Variant = null       ## RunState or null
 var run_node_id: String = ""         ## Node being resolved
@@ -28,6 +31,7 @@ func has_band_battle() -> bool:
 ## Clears only match-specific state; preserves band/run context for battle return.
 func clear_match() -> void:
 	match_state = null
+	deployment_controller = null
 	map_id = ""
 
 
@@ -37,6 +41,7 @@ func clear() -> void:
 	active_band = null
 	fielded_ids = []
 	is_instance_battle = false
+	deployment_controller = null
 	active_run = null
 	run_node_id = ""
 	battle_result = null

@@ -35,7 +35,8 @@ func _ready() -> void:
 	# Combat controller: BattleController with HUD and unit pawns (Phase 8).
 	var controller := BattleController.new()
 	if has_match:
-		controller.setup_from_state(builder, MatchData.match_state)
+		controller.setup_from_state(
+			builder, MatchData.match_state, MatchData.deployment_controller)
 		MatchData.clear_match()
 		Log.info("MapScene", "Loaded match from draft (map: %s)" % active_map_id)
 	else:

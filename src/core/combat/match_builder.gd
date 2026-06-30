@@ -2,8 +2,9 @@ class_name MatchBuilder
 extends RefCounted
 ## Orchestrates match construction from two confirmed PartyDrafts.
 ## Handles tier config, map selection, BattleUnit creation, and
-## wiring of MatchSetup/Deployment/RoundManager.
-## Spec reference: phase7-spec.md §5
+## wiring of MatchSetup/DeploymentController.
+## Returns {state, controller, errors} — caller drives deployment.
+## Spec reference: phase7-spec.md §5, alpha-phaseA12-spec.md §8
 
 var _character_provider: Callable		# (String) -> CharacterData
 var _stats_provider: Callable			# (String) -> StatBlock
@@ -75,12 +76,14 @@ func create_draft(tier_id: String) -> PartyDraft:
 	return PartyDraft.new(config, _character_provider)
 
 
-## Builds a complete MatchState from two confirmed drafts and a selected map.
-## Returns {state: MatchState, errors: Array[String]}.
+## Builds a MatchState from two confirmed drafts and a selected map.
+## Returns {state: MatchState, controller: DeploymentController, errors: Array[String]}.
+## The state is left in DEPLOYMENT — caller drives placement via the controller.
 func build_match(
 	draft_a: PartyDraft,
 	draft_b: PartyDraft,
 	map_data: MapData,
+	ai_teams: Array = [],
 ) -> Dictionary:
 	var errors: Array[String] = []
 
@@ -90,13 +93,13 @@ func build_match(
 	if draft_b.state() != PartyDraft.State.CONFIRMED:
 		errors.append("Player B draft is not confirmed")
 	if not errors.is_empty():
-		return {"state": null, "errors": errors}
+		return {"state": null, "controller": null, "errors": errors}
 
 	# Create BattleUnit arrays
 	var party_a: Array[BattleUnit] = _create_party(draft_a.confirmed_ids(), errors)
 	var party_b: Array[BattleUnit] = _create_party(draft_b.confirmed_ids(), errors)
 	if not errors.is_empty():
-		return {"state": null, "errors": errors}
+		return {"state": null, "controller": null, "errors": errors}
 
 	# Build MatchState via MatchSetup
 	var state := MatchSetup.create(party_a, party_b, map_data, _terrain_provider)
@@ -105,25 +108,26 @@ func build_match(
 	var resolver := AbilityResolver.new(_ability_getter, _class_getter, _item_getter)
 	state.ability_provider = resolver.resolve
 	state.item_provider = _item_getter
+	state.ai_teams = ai_teams
 
-	# Deploy
-	var deploy_errors := Deployment.auto_deploy(state, map_data.deployment_zones)
+	# Create deployment controller (leaves state in DEPLOYMENT)
+	var controller := DeploymentController.new()
+	var deploy_errors := controller.begin(state, map_data.deployment_zones, ai_teams)
 	if not deploy_errors.is_empty():
-		return {"state": null, "errors": deploy_errors}
+		return {"state": null, "controller": null, "errors": deploy_errors}
 
-	# Start round 1
-	RoundManager.start_round(state)
-
-	return {"state": state, "errors": []}
+	return {"state": state, "controller": controller, "errors": []}
 
 
-## Builds a complete MatchState from two pre-built BattleUnit arrays and a map.
+## Builds a MatchState from two pre-built BattleUnit arrays and a map.
 ## Used by the band-to-battle path (A5) where parties come from CharacterInstances.
-## Returns {state: MatchState, errors: Array[String]}.
+## Returns {state: MatchState, controller: DeploymentController, errors: Array[String]}.
+## The state is left in DEPLOYMENT — caller drives placement via the controller.
 func build_match_from_parties(
 	party_a: Array[BattleUnit],
 	party_b: Array[BattleUnit],
 	map_data: MapData,
+	ai_teams: Array = [],
 ) -> Dictionary:
 	var errors: Array[String] = []
 	if party_a.is_empty():
@@ -131,20 +135,21 @@ func build_match_from_parties(
 	if party_b.is_empty():
 		errors.append("Party B is empty")
 	if not errors.is_empty():
-		return {"state": null, "errors": errors}
+		return {"state": null, "controller": null, "errors": errors}
 
 	var state := MatchSetup.create(party_a, party_b, map_data, _terrain_provider)
 
 	var resolver := AbilityResolver.new(_ability_getter, _class_getter, _item_getter)
 	state.ability_provider = resolver.resolve
 	state.item_provider = _item_getter
+	state.ai_teams = ai_teams
 
-	var deploy_errors := Deployment.auto_deploy(state, map_data.deployment_zones)
+	var controller := DeploymentController.new()
+	var deploy_errors := controller.begin(state, map_data.deployment_zones, ai_teams)
 	if not deploy_errors.is_empty():
-		return {"state": null, "errors": deploy_errors}
+		return {"state": null, "controller": null, "errors": deploy_errors}
 
-	RoundManager.start_round(state)
-	return {"state": state, "errors": []}
+	return {"state": state, "controller": controller, "errors": []}
 
 
 func _create_party(ids: Array[String], errors: Array[String]) -> Array[BattleUnit]:

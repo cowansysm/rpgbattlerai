@@ -12,19 +12,27 @@ var _graph: HexGraph
 
 func setup(state: MatchState, graph: HexGraph) -> void:
 	_graph = graph
-	spawn_all(state)
+	# Skip spawning if in deployment phase (pawns will be spawned individually)
+	if state.phase != MatchState.Phase.DEPLOYMENT:
+		spawn_all(state)
 
 
 func spawn_all(state: MatchState) -> void:
 	for team in state.parties.keys():
 		for unit: BattleUnit in state.parties[team]:
 			if unit.current_hp > 0 or unit.is_downed:
-				var pawn := UnitPawn.new()
-				pawn.setup(unit, _graph)
-				if unit.is_downed:
-					pawn.rotation_degrees.x = 180.0
-				add_child(pawn)
-				_pawns[unit] = pawn
+				spawn_pawn(unit)
+
+
+func spawn_pawn(unit: BattleUnit) -> void:
+	if _pawns.has(unit):
+		return  # Already spawned
+	var pawn := UnitPawn.new()
+	pawn.setup(unit, _graph)
+	if unit.is_downed:
+		pawn.rotation_degrees.x = 180.0
+	add_child(pawn)
+	_pawns[unit] = pawn
 
 
 func move_pawn(unit: BattleUnit, to: Vector2i) -> Tween:

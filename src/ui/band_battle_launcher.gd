@@ -52,16 +52,18 @@ static func launch_quick_battle(
 		GameData.get_job_class,
 		GameData.get_item,
 	)
-	var result: Dictionary = builder.build_match_from_parties(player_party, opp_party, map_data)
+	var ai_teams: Array = ["playerB"]
+	var result: Dictionary = builder.build_match_from_parties(
+		player_party, opp_party, map_data, ai_teams)
 	if result["state"] == null:
 		var errors: Array = result.get("errors", [])
 		return "Match build failed: " + ", ".join(errors.map(func(e): return str(e)))
 
 	var state: MatchState = result["state"]
-	state.ai_teams = ["playerB"]
 
 	# Hand off via MatchData
 	MatchData.match_state = state
+	MatchData.deployment_controller = result["controller"] as DeploymentController
 	MatchData.map_id = map_data.id
 	MatchData.active_band = band
 	MatchData.fielded_ids = fielded_ids

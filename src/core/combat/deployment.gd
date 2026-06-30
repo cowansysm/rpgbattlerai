@@ -1,48 +1,28 @@
 class_name Deployment
 extends RefCounted
-## Auto-deploys units into deployment zones. Parses zone coordinate strings,
-## validates placement, and populates occupancy.
-## Spec reference: phase4-spec.md §6
+## Legacy shim: auto_deploy now delegates to DeploymentController + a simple
+## positional planner. Kept for backward compatibility with tests and the
+## Phase4Demo fallback. New code should use DeploymentController directly.
+## Spec reference: phase4-spec.md §6, alpha-phaseA12-spec.md §10
 
+
+## Positional auto-deploy: places units in zone tile order via DeploymentController.
+## This is the headless/test path — new interactive code should use
+## DeploymentController.begin() + place_next() or auto_complete() instead.
 static func auto_deploy(state: MatchState, zones: Dictionary) -> Array[String]:
-	var errors: Array[String] = []
-	state.phase = MatchState.Phase.DEPLOYMENT
+	var controller := DeploymentController.new()
+	var errors := controller.begin(state, zones, [])
+	if not errors.is_empty():
+		return errors
 
-	for team in ["playerA", "playerB"]:
-		var units: Array = state.parties.get(team, [])
-		var zone_strs: Array = zones.get(team, [])
-		var zone_tiles: Array[Vector2i] = _parse_zone(zone_strs)
+	# Simple positional planner: pick zone tiles in order (first legal tile)
+	var positional_planner := func(
+		s: MatchState, team: String, _unit: BattleUnit,
+		legal: Array[Vector2i], _enemy_zone: Array[Vector2i],
+	) -> Vector2i:
+		return legal[0]
 
-		if units.size() > zone_tiles.size():
-			errors.append(
-				"Team '%s' has %d units but only %d zone tiles" % [
-					team, units.size(), zone_tiles.size()])
-			continue
-
-		for i in range(units.size()):
-			var tile: Vector2i = zone_tiles[i]
-			if not state.graph.has_tile(tile):
-				errors.append(
-					"Zone tile %s not on map for team '%s'" % [str(tile), team])
-				continue
-			if state.is_occupied(tile):
-				errors.append(
-					"Zone tile %s already occupied for team '%s'" % [str(tile), team])
-				continue
-			units[i].position = tile
-			state.occupancy[tile] = units[i]
-			# Alpha A0: apply occupant modifiers from the deployment tile
-			TurnActions.apply_terrain_modifiers_on_deploy(units[i], state.graph)
-
-	if errors.is_empty():
-		state.phase = MatchState.Phase.ROUND_START
-	return errors
-
-
-static func _parse_zone(zone_strs: Array) -> Array[Vector2i]:
-	var out: Array[Vector2i] = []
-	for s in zone_strs:
-		var parts := str(s).split(",")
-		if parts.size() >= 2:
-			out.append(Vector2i(int(parts[0]), int(parts[1])))
-	return out
+	controller.auto_complete(positional_planner)
+	if not controller.is_complete():
+		return ["Deployment failed: not all units could be placed (overlapping/blocked zones?)"] as Array[String]
+	return []

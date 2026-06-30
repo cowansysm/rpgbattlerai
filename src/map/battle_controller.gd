@@ -5,6 +5,7 @@ extends Node
 ## Spec reference: phase8-spec.md §5
 
 enum ControlState {
+	DEPLOYMENT,
 	AWAITING_ACTIVATION,
 	ACTION_SELECT,
 	TARGETING,
@@ -21,6 +22,7 @@ var _resolver: AbilityResolver
 var _drag_handler: DragHandler
 
 var _ai_controller: AIController = null
+var _deployment_controller: DeploymentController = null
 
 var _control_state: int = ControlState.AWAITING_ACTIVATION
 var _pending_action: int = -1
@@ -55,24 +57,30 @@ func setup(builder: MapBuilder, map_data: MapData) -> void:
 	party_b.append(_make_unit("halfling_white_mage"))
 
 	_state = MatchSetup.create(party_a, party_b, map_data, GameData.get_terrain)
+	_state.ai_teams = ["playerB"]
 
 	_resolver = AbilityResolver.new(
 		GameData.get_ability, GameData.get_job_class, GameData.get_item)
 	_state.ability_provider = _resolver.resolve
 	_state.item_provider = GameData.get_item
 
-	var errors := Deployment.auto_deploy(_state, map_data.deployment_zones)
+	# Interactive deployment (A12)
+	_deployment_controller = DeploymentController.new()
+	var errors := _deployment_controller.begin(
+		_state, map_data.deployment_zones, _state.ai_teams)
 	if not errors.is_empty():
 		for e in errors:
 			Log.error("BattleController", e)
 		return
 
 	_init_subsystems(builder)
-	RoundManager.start_round(_state)
-	_enter_awaiting_activation()
+	_enter_deployment()
 
 
-func setup_from_state(builder: MapBuilder, state: MatchState) -> void:
+func setup_from_state(
+	builder: MapBuilder, state: MatchState,
+	controller: DeploymentController = null,
+) -> void:
 	_builder = builder
 	_state = state
 
@@ -85,7 +93,13 @@ func setup_from_state(builder: MapBuilder, state: MatchState) -> void:
 		_state.item_provider = GameData.get_item
 
 	_init_subsystems(builder)
-	_enter_awaiting_activation()
+
+	# If still in deployment phase, drive interactive deployment
+	if controller and state.phase == MatchState.Phase.DEPLOYMENT:
+		_deployment_controller = controller
+		_enter_deployment()
+	else:
+		_enter_awaiting_activation()
 
 
 func _init_subsystems(builder: MapBuilder) -> void:
@@ -127,13 +141,116 @@ func _init_subsystems(builder: MapBuilder) -> void:
 	# Initial HUD state
 	_hud.update_roster(_state, null)
 	_hud.update_turn_order(_state)
-	_hud.append_log("--- Battle begins! ---")
+	if _state.phase == MatchState.Phase.DEPLOYMENT:
+		_hud.append_log("--- Deploy your forces! ---")
+	else:
+		_hud.append_log("--- Battle begins! ---")
 
 	# Dev combat panel (cheat controls)
 	if Dev.enabled:
 		var dev_panel := DevCombatPanel.new()
 		dev_panel.setup(self)
 		add_child(dev_panel)
+
+
+# --- Deployment phase (A12) ---
+
+func _enter_deployment() -> void:
+	_control_state = ControlState.DEPLOYMENT
+	_set_drag_enabled(false)
+	_overlay.clear()
+	_hud.set_targeting_mode(false)
+	_hud.hide_action_panel()
+
+	if _deployment_controller.is_complete():
+		_finish_deployment()
+		return
+
+	var team := _deployment_controller.current_team()
+	var unit := _deployment_controller.next_unit(team)
+
+	if team in _state.ai_teams:
+		# AI places with pacing
+		_hud.append_log("[Deploy] AI placing %s..." % unit.character.display_name, "deploy_ai")
+		var delay: float = float(Constants.get_value("DEPLOY_PACE_DELAY", 0.4))
+		get_tree().create_timer(delay).timeout.connect(_do_ai_deploy_step)
+	else:
+		# Human places — highlight legal tiles
+		var legal := _deployment_controller.legal_tiles(team)
+		var positions: Array = []
+		for t: Vector2i in legal:
+			positions.append(t)
+		_overlay.show_selectable(positions)
+		_hud.show_unit_info(unit)
+		_hud.append_log("[Deploy] Place %s (click a highlighted tile)" %
+			unit.character.display_name, "deploy_player")
+
+
+func _do_ai_deploy_step() -> void:
+	if _deployment_controller.is_complete():
+		_finish_deployment()
+		return
+
+	var team := _deployment_controller.current_team()
+	var unit := _deployment_controller.next_unit(team)
+	if not unit:
+		_finish_deployment()
+		return
+
+	var legal := _deployment_controller.legal_tiles(team)
+	var enemy_team := "playerA" if team == "playerB" else "playerB"
+	var enemy_z := _deployment_controller.zone_tiles(enemy_team)
+	var weights: Dictionary = Constants.get_value("DEPLOY_WEIGHTS", {})
+	var tile := DeploymentPlanner.choose(_state, team, unit, legal, enemy_z, weights)
+
+	var errs := _deployment_controller.place_next(team, tile)
+	if not errs.is_empty():
+		Log.error("BattleController", "AI deploy error: %s" % str(errs))
+		return
+
+	# Spawn the pawn visually
+	_pawn_manager.spawn_pawn(unit)
+	_hud.append_log("[Deploy] %s placed at (%d,%d)" %
+		[unit.character.display_name, tile.x, tile.y], "deploy_ai")
+
+	_advance_deployment()
+
+
+func _advance_deployment() -> void:
+	if _deployment_controller.is_complete():
+		_finish_deployment()
+		return
+	_enter_deployment()
+
+
+func _finish_deployment() -> void:
+	_deployment_controller.finish()
+	_hud.append_log("--- Deployment complete! ---")
+	_overlay.clear()
+	_enter_awaiting_activation()
+
+
+func _handle_deployment_click(coord: Vector2i) -> void:
+	var team := _deployment_controller.current_team()
+	if team.is_empty() or team in _state.ai_teams:
+		return  # Not the human's turn during deployment
+
+	var unit := _deployment_controller.next_unit(team)
+	if not unit:
+		return
+
+	var errs := _deployment_controller.place_next(team, coord)
+	if not errs.is_empty():
+		_hud.append_log("[Deploy] Invalid tile", "deploy_error")
+		return
+
+	# Spawn the pawn visually
+	_pawn_manager.spawn_pawn(unit)
+	_hud.append_log("[Deploy] %s placed at (%d,%d)" %
+		[unit.character.display_name, coord.x, coord.y], "deploy_player")
+	_hud.hide_unit_info()
+
+	_advance_deployment()
 
 
 ## Public getters for dev tools access.
@@ -435,6 +552,10 @@ func on_tile_selected(coord: Vector2i) -> void:
 	if _control_state == ControlState.MATCH_OVER:
 		return
 	_selected_tile = coord
+
+	if _control_state == ControlState.DEPLOYMENT:
+		_handle_deployment_click(coord)
+		return
 
 	if _control_state == ControlState.AWAITING_ACTIVATION:
 		# If there's a pending activation, clear it and try selecting the new tile

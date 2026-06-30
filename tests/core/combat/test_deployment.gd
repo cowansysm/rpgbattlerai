@@ -86,7 +86,7 @@ func test_deploy_transitions_to_round_start() -> void:
 		"playerB": ["0,3"],
 	}
 	Deployment.auto_deploy(state, zones)
-	assert_eq(state.phase, MatchState.Phase.ROUND_START)
+	assert_eq(state.phase, MatchState.Phase.AWAITING_ACTIVATION)
 
 
 func test_deploy_too_many_units_returns_error() -> void:

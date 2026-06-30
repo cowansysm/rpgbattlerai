@@ -382,8 +382,9 @@ func _launch_battle(result: Dictionary) -> void:
 		GameData.get_character, GameData.get_final_stats,
 		GameData.all_maps, GameData.get_terrain,
 		GameData.get_ability, GameData.get_job_class, GameData.get_item)
+	var ai_teams: Array = ["playerB"]
 	var match_result: Dictionary = builder.build_match_from_parties(
-		player_party, enemy_party, map_data as MapData)
+		player_party, enemy_party, map_data as MapData, ai_teams)
 
 	if match_result.has("errors") and not (match_result["errors"] as Array).is_empty():
 		Log.error("RunScene", "Match build errors: %s" % str(match_result["errors"]))
@@ -391,10 +392,10 @@ func _launch_battle(result: Dictionary) -> void:
 		return
 
 	var state: MatchState = match_result["state"] as MatchState
-	state.ai_teams = ["playerB"]
 
 	# Populate MatchData
 	MatchData.match_state = state
+	MatchData.deployment_controller = match_result["controller"] as DeploymentController
 	MatchData.map_id = (map_data as MapData).id
 	MatchData.active_band = _band
 	MatchData.fielded_ids = fielded_ids
