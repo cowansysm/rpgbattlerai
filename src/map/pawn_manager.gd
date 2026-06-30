@@ -114,22 +114,64 @@ func update_status_markers(unit: BattleUnit) -> void:
 		_markers[unit] = markers
 
 
-func show_action_marker(unit: BattleUnit, icon_id: String) -> void:
-	## Spawn a drop-in icon above the unit's pawn. Fire-and-forget.
-	## The marker is added as a child of PawnManager (world space)
-	## and self-destructs after its animation completes.
-	var pawn: UnitPawn = _pawns.get(unit)
-	if not pawn:
+func show_ability_pawns(targets: Array, icon_id: String) -> void:
+	## Spawn physics-dropped symbol pawns beside each target and await landing.
+	## Blocks until all pawns land or the max-wait timeout expires.
+	## Skips silently in headless/test contexts (no scene tree).
+	if targets.is_empty():
 		return
-	var marker := ActionMarker.create(icon_id)
-	marker.position = pawn.position + Vector3(0.0, 0.35, 0.0)
-	add_child(marker)
-	marker.play()
+	if not is_inside_tree():
+		return
+
+	var offset_dist: float = float(Constants.get_value("SYMBOL_PAWN_OFFSET", 0.5))
+	var spawn_height: float = float(Constants.get_value("SYMBOL_PAWN_SPAWN_HEIGHT", 4.0))
+	var max_wait: float = float(Constants.get_value("SYMBOL_PAWN_MAX_LAND_WAIT", 0.8))
+
+	var pending_count: int = 0
+	var all_landed: bool = false
+
+	for target in targets:
+		if not target is BattleUnit:
+			continue
+		var unit: BattleUnit = target as BattleUnit
+		if not has_pawn(unit):
+			continue
+
+		# Compute world position of target's tile
+		var elev: int = _graph.elevation(unit.position)
+		var world_pos := HexWorld.hex_to_world(unit.position.x, unit.position.y, elev)
+		var surface_y: float = world_pos.y + TileMesh.TILE_HEIGHT * 0.5
+
+		# Offset beside the target (consistent +X direction)
+		var spawn_pos := Vector3(
+			world_pos.x + offset_dist,
+			surface_y + spawn_height,
+			world_pos.z)
+
+		var pawn := AbilitySymbolPawn.create(icon_id, surface_y)
+		pawn.position = spawn_pos
+		add_child(pawn)
+		pawn.setup_landing_collider(self, world_pos)
+
+		pending_count += 1
+		pawn.landed.connect(func() -> void:
+			pending_count -= 1
+			if pending_count <= 0:
+				all_landed = true)
+
+	if pending_count <= 0:
+		return
+
+	# Wait for all pawns to land or timeout
+	var elapsed: float = 0.0
+	while not all_landed and elapsed < max_wait:
+		await get_tree().create_timer(0.05).timeout
+		elapsed += 0.05
 
 
 func show_dice_roll(unit: BattleUnit, value: int, is_attack: bool) -> void:
 	## Spawn a drop-in dice above the unit's pawn. Fire-and-forget.
-	## Positioned above the ActionMarker billboard (y=0.55) so dice are
+	## Positioned above the symbol pawn drop area (y=0.55) so dice are
 	## not obscured. Attack rolls slightly left, defense rolls slightly right.
 	var pawn: UnitPawn = _pawns.get(unit)
 	if not pawn:

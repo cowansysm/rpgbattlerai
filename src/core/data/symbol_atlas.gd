@@ -10,6 +10,7 @@ const ATLAS_PATH := "res://assets/icons/symbol_atlas.png"
 
 # Maps icon ID → Vector2i(col, row) in the atlas grid.
 # Rows 0-5: entity categories. Row 6: race+class identity.
+# Row 7: element fallbacks. Row 4 cols 3-4: effect-type fallbacks.
 const ICON_MAP := {
 	# Spells (row 0)
 	"fire_1":          Vector2i(0, 0),
@@ -40,10 +41,12 @@ const ICON_MAP := {
 	"shield":          Vector2i(2, 3),
 	"bracer_of_accuracy": Vector2i(3, 3),
 	"smoke_bomb_pouch":Vector2i(4, 3),
-	# Status effects (row 4)
+	# Status effects + effect-type fallbacks (row 4)
 	"sleep":           Vector2i(0, 4),
 	"blind":           Vector2i(1, 4),
 	"defend":          Vector2i(2, 4),
+	"fx_status":       Vector2i(3, 4),
+	"fx_revive":       Vector2i(4, 4),
 	# Actions + fallback (row 5)
 	"action_move":     Vector2i(0, 5),
 	"action_attack":   Vector2i(1, 5),
@@ -61,10 +64,44 @@ const ICON_MAP := {
 	"elf_red_mage":        Vector2i(5, 6),
 	"halfling_white_mage": Vector2i(6, 6),
 	"dwarf_barbarian":     Vector2i(7, 6),
+	# Element fallbacks (row 7)
+	"elem_fire":       Vector2i(0, 7),
+	"elem_ice":        Vector2i(1, 7),
+	"elem_lightning":  Vector2i(2, 7),
+	"elem_holy":       Vector2i(3, 7),
+	"elem_dark":       Vector2i(4, 7),
+	# Effect-type fallbacks (row 7 cont.)
+	"fx_damage":       Vector2i(5, 7),
+	"fx_heal":         Vector2i(6, 7),
+	"fx_buff":         Vector2i(7, 7),
 }
 
 static var _atlas: Texture2D = null
 static var _cache: Dictionary = {}
+
+
+static func symbol_for_ability(ability: AbilityData) -> String:
+	## Resolves the best icon ID for an ability via fallback chain:
+	## 1. Exact match on ability.id
+	## 2. Element fallback ("elem_" + element)
+	## 3. Effect type fallback ("fx_" + effect_type)
+	## 4. Generic "action_ability"
+	if ability and ability.id in ICON_MAP:
+		return ability.id
+	if ability:
+		var element: String = str(ability.effect.get("element", ""))
+		if not element.is_empty():
+			var elem_key := "elem_" + element
+			if elem_key in ICON_MAP:
+				return elem_key
+		var etype: String = str(ability.effect.get("effect_type", ""))
+		if etype.is_empty():
+			etype = ability.effect_type
+		if not etype.is_empty():
+			var fx_key := "fx_" + etype
+			if fx_key in ICON_MAP:
+				return fx_key
+	return "action_ability"
 
 
 static func get_icon(id: String) -> AtlasTexture:

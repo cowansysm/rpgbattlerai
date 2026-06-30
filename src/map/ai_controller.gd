@@ -115,9 +115,9 @@ func _execute_attack(state: MatchState, unit: BattleUnit, step: Dictionary) -> D
 	# Log the attack
 	_log_attack_result(result)
 
-	# Show action icon on target
+	# Show symbol pawn beside target (awaitable landing beat)
 	if target_unit:
-		_pawn_manager.show_action_marker(target_unit, "action_attack")
+		await _pawn_manager.show_ability_pawns([target_unit], "action_attack")
 
 	# Show dice roll animations
 	if result.has("atk_roll"):
@@ -154,12 +154,17 @@ func _execute_ability(state: MatchState, unit: BattleUnit, step: Dictionary) -> 
 	# Log ability result
 	_log_ability_result(result, ability_id)
 
-	# Show ability icon on affected targets
+	# Show symbol pawn beside each affected target (awaitable landing beat)
 	var outcomes: Array = result.get("outcomes", [])
+	var affected: Array = []
 	for outcome in outcomes:
 		var target_unit: BattleUnit = units_before.get(str(outcome.get("target", "")))
-		if target_unit:
-			_pawn_manager.show_action_marker(target_unit, ability_id)
+		if target_unit and target_unit not in affected:
+			affected.append(target_unit)
+	if not affected.is_empty():
+		var ability: AbilityData = state.ability_provider.call(unit, ability_id)
+		var icon: String = SymbolAtlas.symbol_for_ability(ability)
+		await _pawn_manager.show_ability_pawns(affected, icon)
 
 	# Show dice roll animations for damage outcomes
 	for outcome in outcomes:
