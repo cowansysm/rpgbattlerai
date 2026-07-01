@@ -18,6 +18,10 @@ var deployment_controller: Variant = null
 ## Turn-system mode (A15): "run" = speed-round, "skirmish" = charge-time (A20)
 var mode: String = "run"
 
+## Skirmish fields (A20)
+var opponent_type: String = "ai"     ## "ai" or "hot_seat"
+var skirmish_squad_size: int = 3     ## Number of units per side
+
 ## Run-battle fields (A8)
 var active_run: Variant = null       ## RunState or null
 var run_node_id: String = ""         ## Node being resolved
@@ -47,6 +51,8 @@ func clear() -> void:
 	is_instance_battle = false
 	deployment_controller = null
 	mode = "run"
+	opponent_type = "ai"
+	skirmish_squad_size = 3
 	active_run = null
 	run_node_id = ""
 	battle_result = null

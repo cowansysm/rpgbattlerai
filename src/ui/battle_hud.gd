@@ -1200,6 +1200,27 @@ func set_back_button_text(text: String) -> void:
 		_btn_back_to_menu.text = text
 
 
+## Update the CT timeline display (A20). Replaces the "Pending:" list with
+## a forecast of upcoming activations.
+## timeline: Array[{unit: BattleUnit, ticks_away: int}]
+func update_ct_timeline(timeline: Array) -> void:
+	for child in _turn_order_container.get_children():
+		child.queue_free()
+
+	for entry in timeline:
+		var unit: BattleUnit = entry.get("unit")
+		if not unit:
+			continue
+		var lbl := Label.new()
+		lbl.text = unit.character.display_name.left(8)
+		lbl.add_theme_font_size_override("font_size", 12)
+		if unit.team == "playerA":
+			lbl.add_theme_color_override("font_color", Color(0.5, 0.7, 1.0))
+		else:
+			lbl.add_theme_color_override("font_color", Color(1.0, 0.5, 0.5))
+		_turn_order_container.add_child(lbl)
+
+
 func _apply_panel_bg(panel: PanelContainer) -> void:
 	var style := StyleBoxFlat.new()
 	style.bg_color = PANEL_BG
