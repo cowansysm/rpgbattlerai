@@ -12,7 +12,8 @@ var fielded_ids: Array[String] = []
 var is_instance_battle: bool = false
 
 ## Deployment controller (A12) — passed to BattleController for interactive deployment
-var deployment_controller: DeploymentController = null
+## Typed as Variant to avoid parse-time dependency on DeploymentController from autoload.
+var deployment_controller: Variant = null
 
 ## Turn-system mode (A15): "run" = speed-round, "skirmish" = charge-time (A20)
 var mode: String = "run"
