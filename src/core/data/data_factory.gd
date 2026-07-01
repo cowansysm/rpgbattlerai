@@ -28,7 +28,7 @@ static func make_class(d: Dictionary) -> ClassData:
 	c.required_classes = _parse_required_classes(d.get("required_classes", []))
 	c.archetype = str(d.get("archetype", ""))
 	c.branch = str(d.get("branch", ""))
-	c.tier = str(d.get("tier", "starting"))
+	c.tier = int(d.get("tier", 0))
 	c.growth = d.get("growth", {})
 	c.jp_costs = d.get("jp_costs", {})
 	if d.has("prerequisites"):
@@ -103,6 +103,20 @@ static func make_map(d: Dictionary) -> MapData:
 				tile_tags))
 	m.tiles = tiles
 	return m
+
+
+static func make_encounter(d: Dictionary) -> EncounterData:
+	var e := EncounterData.new()
+	e.id = str(d["id"])
+	e.name = str(d.get("name", d["id"]))
+	e.min_band_level = int(d.get("min_band_level", 1))
+	e.enemies = Array(d.get("enemies", []))
+	e.map_id = str(d.get("map_id", ""))
+	e.level_offset = int(d.get("level_offset", 0))
+	e.tags = _to_str_array(d.get("tags", []))
+	e.modifiers = d.get("modifiers", {})
+	e.weight = float(d.get("weight", 1.0))
+	return e
 
 
 static func _to_str_array(v: Variant) -> Array[String]:

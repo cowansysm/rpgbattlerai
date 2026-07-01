@@ -8,7 +8,7 @@ func _make_populated_instance() -> CharacterInstance:
 	ci.template_id = "human_fighter"
 	ci.name = "Aldric the Brave"
 	ci.race = "human"
-	ci.level = 5
+	ci.class_levels = {"vagabond": 5, "soldier": 5}
 	ci.xp = 120
 	ci.active_class = "soldier"
 	ci.unlocked_classes = ["vagabond", "soldier"] as Array[String]
@@ -29,7 +29,7 @@ func test_round_trip_preserves_all_fields() -> void:
 	assert_eq(restored.template_id, original.template_id)
 	assert_eq(restored.name, original.name)
 	assert_eq(restored.race, original.race)
-	assert_eq(restored.level, original.level)
+	assert_eq(restored.character_level(), original.character_level())
 	assert_eq(restored.xp, original.xp)
 	assert_eq(restored.active_class, original.active_class)
 	assert_eq(restored.unlocked_classes, original.unlocked_classes)
@@ -44,7 +44,7 @@ func test_round_trip_preserves_all_fields() -> void:
 func test_from_dict_defaults_on_empty() -> void:
 	var ci := CharacterInstance.from_dict({})
 	assert_eq(ci.instance_id, "")
-	assert_eq(ci.level, 1)
+	assert_eq(ci.character_level(), 1)
 	assert_eq(ci.xp, 0)
 	assert_eq(ci.active_class, "vagabond")
 	assert_eq(ci.unlocked_classes.size(), 1)
@@ -66,7 +66,7 @@ func test_to_dict_is_json_serializable() -> void:
 	assert_true(parsed is Dictionary)
 	var restored := CharacterInstance.from_dict(parsed as Dictionary)
 	assert_eq(restored.instance_id, original.instance_id)
-	assert_eq(restored.level, original.level)
+	assert_eq(restored.character_level(), original.character_level())
 	assert_eq(restored.jp, original.jp)
 	assert_eq(restored.equipment, original.equipment)
 	assert_eq(restored.growth_accumulated, original.growth_accumulated)

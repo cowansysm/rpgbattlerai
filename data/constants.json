@@ -62,5 +62,13 @@
   "SYMBOL_PAWN_BOUNCE": 0.25,
   "SYMBOL_PAWN_LINEAR_DAMP": 0.2,
   "SYMBOL_PAWN_ANGULAR_DAMP": 0.2,
-  "TELEGRAPH_MODE": "full"
+  "TELEGRAPH_MODE": "full",
+  "STARTING_GOLD": 500,
+  "GOLD_PER_BAND_LEVEL": 50,
+  "DRAFTABLE_RACES": ["human", "dwarf", "elf", "halfling"],
+  "STARTING_CLASS": "vagabond",
+  "STARTING_LEVEL": 1,
+  "BASE_SHOP_MAX_BP": 2,
+  "RUN_SHOP_SLOTS": 6,
+  "RUN_PREMIUM_CHANCE": 0.25
 }

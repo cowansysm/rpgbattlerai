@@ -83,8 +83,8 @@ func test_determinism() -> void:
 	var inst2: Array = r2["enemy_instances"] as Array
 	assert_eq(inst1.size(), inst2.size())
 	for i in range(inst1.size()):
-		assert_eq((inst1[i] as CharacterInstance).level,
-			(inst2[i] as CharacterInstance).level)
+		assert_eq((inst1[i] as CharacterInstance).character_level(),
+			(inst2[i] as CharacterInstance).character_level())
 
 
 func test_enemy_count_within_range() -> void:
@@ -104,11 +104,11 @@ func test_depth_scaling_raises_level() -> void:
 	# Higher depth should produce higher level enemies on average
 	var avg_low: float = 0.0
 	for ci: CharacterInstance in low_instances:
-		avg_low += ci.level
+		avg_low += ci.character_level()
 	avg_low /= low_instances.size()
 	var avg_high: float = 0.0
 	for ci: CharacterInstance in high_instances:
-		avg_high += ci.level
+		avg_high += ci.character_level()
 	avg_high /= high_instances.size()
 	assert_gt(avg_high, avg_low, "depth 10 should have higher level enemies than depth 0")
 
@@ -122,11 +122,11 @@ func test_boss_encounter_higher_target() -> void:
 	# Boss enemies should be higher level due to higher target BP
 	var avg_normal: float = 0.0
 	for ci: CharacterInstance in normal_inst:
-		avg_normal += ci.level
+		avg_normal += ci.character_level()
 	avg_normal /= normal_inst.size()
 	var avg_boss: float = 0.0
 	for ci: CharacterInstance in boss_inst:
-		avg_boss += ci.level
+		avg_boss += ci.character_level()
 	avg_boss /= boss_inst.size()
 	assert_gte(avg_boss, avg_normal, "boss should have >= level enemies")
 

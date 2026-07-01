@@ -32,7 +32,7 @@ func _make_instance(id: String) -> CharacterInstance:
 	ci.template_id = "human_fighter"
 	ci.name = "Hero " + id
 	ci.race = "human"
-	ci.level = 3
+	ci.class_levels = {"vagabond": 3}
 	ci.active_class = "vagabond"
 	ci.unlocked_classes = ["vagabond"] as Array[String]
 	ci.jp = {"vagabond": 15}
@@ -96,7 +96,7 @@ func test_create_band() -> void:
 	assert_eq(SaveManager.bands.size(), 1)
 	assert_eq(band.name, "My Band")
 	assert_false(band.band_id.is_empty())
-	assert_eq(band.gold, 200)  # RECRUIT_STARTING_GOLD
+	assert_eq(band.gold, 500)  # STARTING_GOLD
 
 
 func test_delete_band() -> void:

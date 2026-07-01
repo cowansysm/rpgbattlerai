@@ -193,5 +193,5 @@ func test_data_pipeline_validates_economy_cleanly() -> void:
 	# Verify accessors work
 	var std := pipeline.get_loot_table("standard_battle")
 	assert_true(not std.is_empty(), "standard_battle table accessible")
-	var weapons := pipeline.get_shop_pool("tier1_weapons")
-	assert_true(not weapons.is_empty(), "tier1_weapons pool accessible")
+	var base := pipeline.get_shop_pool("base_shop")
+	assert_true(not base.is_empty(), "base_shop pool accessible")

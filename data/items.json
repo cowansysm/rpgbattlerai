@@ -17,7 +17,7 @@
   },
   {
     "id": "greataxe", "name": "Greataxe", "slot": "weapon",
-    "bp": 3, "price": 150, "power": 8, "range": 1
+    "bp": 3, "price": 250, "power": 8, "range": 1
   },
   {
     "id": "sling", "name": "Sling", "slot": "weapon",
@@ -29,15 +29,15 @@
   },
   {
     "id": "longsword", "name": "Longsword", "slot": "weapon",
-    "bp": 3, "price": 130, "power": 7, "range": 1
+    "bp": 3, "price": 220, "power": 7, "range": 1
   },
   {
     "id": "warhammer", "name": "Warhammer", "slot": "weapon",
-    "bp": 3, "price": 160, "power": 9, "range": 1
+    "bp": 3, "price": 280, "power": 9, "range": 1
   },
   {
     "id": "halberd", "name": "Halberd", "slot": "weapon",
-    "bp": 3, "price": 140, "power": 7, "range": 1
+    "bp": 3, "price": 240, "power": 7, "range": 1
   },
   {
     "id": "crossbow", "name": "Crossbow", "slot": "weapon",
@@ -45,7 +45,7 @@
   },
   {
     "id": "longbow", "name": "Longbow", "slot": "weapon",
-    "bp": 3, "price": 150, "power": 5, "range": 4
+    "bp": 3, "price": 260, "power": 5, "range": 4
   },
   {
     "id": "rod", "name": "Rod", "slot": "weapon",
@@ -88,7 +88,7 @@
   },
   {
     "id": "heavy_armor", "name": "Heavy Armor", "slot": "armor",
-    "bp": 3, "price": 180, "passive": { "def": 5, "spd": -1 }
+    "bp": 3, "price": 300, "passive": { "def": 5, "spd": -1 }
   },
   {
     "id": "studded_leather", "name": "Studded Leather", "slot": "armor",
@@ -100,11 +100,11 @@
   },
   {
     "id": "enchanted_robe", "name": "Enchanted Robe", "slot": "armor",
-    "bp": 3, "price": 200, "passive": { "res": 3, "mag": 1, "wp": 3 }
+    "bp": 3, "price": 350, "passive": { "res": 3, "mag": 1, "wp": 3 }
   },
   {
     "id": "plate_armor", "name": "Plate Armor", "slot": "armor",
-    "bp": 4, "price": 250, "passive": { "def": 7, "spd": -2 }
+    "bp": 4, "price": 800, "passive": { "def": 7, "spd": -2 }
   },
   {
     "id": "shield", "name": "Shield", "slot": "shield",
@@ -116,11 +116,11 @@
   },
   {
     "id": "tower_shield", "name": "Tower Shield", "slot": "shield",
-    "bp": 3, "price": 150, "passive": { "def": 5, "spd": -1 }
+    "bp": 3, "price": 260, "passive": { "def": 5, "spd": -1 }
   },
   {
     "id": "crystal_shield", "name": "Crystal Shield", "slot": "shield",
-    "bp": 3, "price": 180, "passive": { "def": 2, "res": 3 }
+    "bp": 3, "price": 320, "passive": { "def": 2, "res": 3 }
   },
   {
     "id": "bracer_of_accuracy", "name": "Bracer of Accuracy", "slot": "accessory",
@@ -140,7 +140,7 @@
   },
   {
     "id": "crown_of_wisdom", "name": "Crown of Wisdom", "slot": "accessory",
-    "bp": 3, "price": 150, "passive": { "mag": 2, "wp": 2 }
+    "bp": 3, "price": 280, "passive": { "mag": 2, "wp": 2 }
   },
   {
     "id": "cloak_of_shadows", "name": "Cloak of Shadows", "slot": "accessory",

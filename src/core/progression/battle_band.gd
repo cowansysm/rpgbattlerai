@@ -20,6 +20,16 @@ static func create(band_name: String) -> BattleBand:
 	return band
 
 
+## Returns the average character level of the roster, minimum 1.
+func band_level() -> int:
+	if roster.is_empty():
+		return 1
+	var total: int = 0
+	for ci in roster:
+		total += ci.character_level()
+	return maxi(1, int(round(float(total) / roster.size())))
+
+
 func roster_size() -> int:
 	return roster.size()
 

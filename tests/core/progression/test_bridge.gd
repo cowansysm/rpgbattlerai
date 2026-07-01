@@ -33,7 +33,7 @@ func _make_instance() -> CharacterInstance:
 	ci.template_id = "tmpl_human"
 	ci.name = "Test Hero"
 	ci.race = "human"
-	ci.level = 3
+	ci.class_levels = {"vagabond": 3}
 	ci.active_class = "vagabond"
 	ci.unlocked_classes = ["vagabond"]
 	ci.ability_loadout = ["basic_strike"]

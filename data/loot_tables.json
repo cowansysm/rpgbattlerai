@@ -2,7 +2,7 @@
   "standard_battle": {
     "gold": {"min": 10, "max": 30},
     "drops": [
-      {"weight": 3, "kind": "equipment", "pool": "tier1_weapons"},
+      {"weight": 3, "kind": "equipment", "pool": "run_common"},
       {"weight": 2, "kind": "consumable", "id": "potion", "qty": 1},
       {"weight": 5, "kind": "nothing"}
     ],
@@ -11,7 +11,7 @@
   "boss_battle": {
     "gold": {"min": 30, "max": 60},
     "drops": [
-      {"weight": 4, "kind": "equipment", "pool": "tier1_gear"},
+      {"weight": 4, "kind": "equipment", "pool": "run_premium"},
       {"weight": 3, "kind": "consumable", "id": "potion", "qty": 2},
       {"weight": 3, "kind": "nothing"}
     ],

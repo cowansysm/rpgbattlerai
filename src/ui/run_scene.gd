@@ -292,7 +292,7 @@ func _refresh_sidebar() -> void:
 		# Top row: name, level, class
 		var row := HBoxContainer.new()
 		var name_label := Label.new()
-		name_label.text = "%s  Lv%d  %s" % [ci.name, ci.level, ci.active_class.capitalize()]
+		name_label.text = "%s  Lv%d  %s" % [ci.name, ci.character_level(), ci.active_class.capitalize()]
 		name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_child(name_label)
 		# Down indicator: "Lives: 2/3" style
@@ -568,11 +568,15 @@ func _build_ctx() -> Dictionary:
 			"all_maps": GameData.all_maps,
 			"all_characters": GameData.all_characters,
 			"class_provider": GameData.get_job_class,
+			"character_provider": GameData.get_character,
+			"map_provider": GameData.get_map,
 			"name_gen": func(race: String) -> String:
 				return _name_gen.generate_name(race),
 			"run_config": GameData.get_run_config(),
 			"loot_table_provider": GameData.get_loot_table,
 			"shop_pool_provider": GameData.get_shop_pool,
+			"encounters": GameData.all_encounters(),
+			"band_level": _band.band_level() if _band else 0,
 		},
 		"fielded_ids": [],  # all roster members are fielded in runs
 	}
@@ -634,14 +638,23 @@ func _refresh_shop_items() -> void:
 	for child in _shop_item_list.get_children():
 		child.queue_free()
 
-	# Merge all shop pools to get available items
+	# A11: Sample limited stock from run pools using seeded RNG
+	var slots: int = int(Constants.get_value("RUN_SHOP_SLOTS", 6))
+	var premium_chance: float = float(Constants.get_value("RUN_PREMIUM_CHANCE", 0.25))
+	var rng := RandomNumberGenerator.new()
+	rng.seed = _run.seed_value + _run.depth * 97 if _run else 0
+	var common_pool: Array = GameData.get_shop_pool("run_common")
+	var premium_pool: Array = GameData.get_shop_pool("run_premium")
 	var item_ids: Array[String] = []
-	for pool_id in GameData.all_shop_pool_ids():
-		var pool: Array = GameData.get_shop_pool(pool_id)
-		for iid in pool:
-			var sid: String = str(iid)
-			if not item_ids.has(sid):
-				item_ids.append(sid)
+	for _i in range(slots):
+		var pool: Array = common_pool
+		if rng.randf() < premium_chance and not premium_pool.is_empty():
+			pool = premium_pool
+		if pool.is_empty():
+			continue
+		var pick: String = str(pool[rng.randi_range(0, pool.size() - 1)])
+		if not item_ids.has(pick):
+			item_ids.append(pick)
 
 	if item_ids.is_empty():
 		var empty_label := Label.new()

@@ -11,7 +11,7 @@
     "required_classes": [],
     "archetype": "",
     "branch": "",
-    "tier": "starting",
+    "tier": 0,
     "growth": {},
     "jp_costs": {},
     "prerequisites": {}

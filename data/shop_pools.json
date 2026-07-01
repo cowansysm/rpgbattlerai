@@ -1,6 +1,31 @@
 {
-  "tier1_weapons": ["sword", "bow", "daggers", "rapier", "sling", "staff"],
-  "tier1_armor": ["light_armor", "medium_armor", "shield"],
-  "tier1_gear": ["sword", "bow", "daggers", "rapier", "sling", "staff", "light_armor", "medium_armor", "shield", "bracer_of_accuracy"],
-  "starter_consumables": ["potion"]
+  "base_shop": [
+    "sword", "bow", "daggers", "rapier", "sling", "staff", "short_bow",
+    "throwing_knives", "lute", "rod", "wand", "mace", "crossbow",
+    "light_armor", "medium_armor", "robe", "studded_leather", "chain_mail",
+    "shield", "buckler",
+    "bracer_of_accuracy", "smoke_bomb_pouch", "ring_of_haste",
+    "amulet_of_protection", "cloak_of_shadows", "war_horn",
+    "healers_charm", "berserker_band", "rangers_quiver",
+    "potion", "hi_potion", "ether", "antidote", "phoenix_down", "bomb"
+  ],
+  "run_common": [
+    "sword", "bow", "daggers", "rapier", "sling", "staff", "short_bow",
+    "throwing_knives", "lute", "rod", "wand", "mace", "crossbow",
+    "light_armor", "medium_armor", "robe", "studded_leather", "chain_mail",
+    "shield", "buckler",
+    "bracer_of_accuracy", "smoke_bomb_pouch", "ring_of_haste",
+    "amulet_of_protection", "cloak_of_shadows", "war_horn",
+    "healers_charm", "berserker_band", "rangers_quiver",
+    "potion", "hi_potion", "ether", "antidote", "phoenix_down", "bomb"
+  ],
+  "run_premium": [
+    "greataxe", "longsword", "warhammer", "halberd", "longbow",
+    "heavy_armor", "enchanted_robe",
+    "tower_shield", "crystal_shield",
+    "crown_of_wisdom"
+  ],
+  "run_artifact": [
+    "plate_armor"
+  ]
 }

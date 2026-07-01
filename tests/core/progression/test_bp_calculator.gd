@@ -16,9 +16,9 @@ func _item_provider(items: Dictionary) -> Callable:
 
 func test_level_contributes_to_bp() -> void:
 	var ci := CharacterInstance.new()
-	ci.level = 1
+	ci.class_levels = {"vagabond": 1}
 	var bp1 := BpCalculator.compute(ci, _item_provider({}))
-	ci.level = 5
+	ci.class_levels = {"vagabond": 5}
 	var bp5 := BpCalculator.compute(ci, _item_provider({}))
 	assert_gt(bp5, bp1)
 	assert_eq(bp1, 3)   # 1 * 3
@@ -27,7 +27,7 @@ func test_level_contributes_to_bp() -> void:
 
 func test_equipment_adds_bp() -> void:
 	var ci := CharacterInstance.new()
-	ci.level = 1
+	ci.class_levels = {"vagabond": 1}
 	ci.equipment = {"weapon": "sword"}
 	var items := {"sword": _make_item("sword", 5)}
 	var bp := BpCalculator.compute(ci, _item_provider(items))
@@ -36,7 +36,7 @@ func test_equipment_adds_bp() -> void:
 
 func test_loadout_adds_bp() -> void:
 	var ci := CharacterInstance.new()
-	ci.level = 1
+	ci.class_levels = {"vagabond": 1}
 	ci.ability_loadout = ["fire_1", "heal_1"] as Array[String]
 	var bp := BpCalculator.compute(ci, _item_provider({}))
 	assert_eq(bp, 7)  # 1*3 + 2*2
@@ -44,7 +44,7 @@ func test_loadout_adds_bp() -> void:
 
 func test_combined() -> void:
 	var ci := CharacterInstance.new()
-	ci.level = 3
+	ci.class_levels = {"vagabond": 3}
 	ci.equipment = {"weapon": "sword", "armor": "plate"}
 	ci.ability_loadout = ["fire_1"] as Array[String]
 	var items := {"sword": _make_item("sword", 2), "plate": _make_item("plate", 3)}
@@ -54,7 +54,7 @@ func test_combined() -> void:
 
 func test_missing_item_ignored() -> void:
 	var ci := CharacterInstance.new()
-	ci.level = 1
+	ci.class_levels = {"vagabond": 1}
 	ci.equipment = {"weapon": "nonexistent"}
 	var bp := BpCalculator.compute(ci, _item_provider({}))
 	assert_eq(bp, 3)  # Only level, missing item skipped

@@ -1,26 +1,563 @@
 [
   {
-    "id": "human", "name": "Human",
+    "id": "human",
+    "name": "Human",
     "stats": {},
-    "base_stats": { "spd": 5, "atk": 5, "rng": 1, "def": 5, "hp": 30, "jump": 2, "wp": 5, "mag": 3, "res": 3 },
+    "base_stats": {
+      "spd": 5,
+      "atk": 5,
+      "rng": 1,
+      "def": 5,
+      "hp": 30,
+      "jump": 2,
+      "wp": 5,
+      "mag": 3,
+      "res": 3
+    },
     "flavor": "Balanced and adaptable, humans excel through versatility rather than specialization."
   },
   {
-    "id": "dwarf", "name": "Dwarf",
-    "stats": { "spd": -2, "def": 2, "hp": 5, "wp": -2, "res": 2 },
-    "base_stats": { "spd": 3, "atk": 5, "rng": 1, "def": 7, "hp": 35, "jump": 1, "wp": 3, "mag": 1, "res": 5 },
+    "id": "dwarf",
+    "name": "Dwarf",
+    "stats": {
+      "spd": -2,
+      "def": 2,
+      "hp": 5,
+      "wp": -2,
+      "res": 2
+    },
+    "base_stats": {
+      "spd": 3,
+      "atk": 5,
+      "rng": 1,
+      "def": 7,
+      "hp": 35,
+      "jump": 1,
+      "wp": 3,
+      "mag": 1,
+      "res": 5
+    },
     "flavor": "Stout and enduring, dwarves are hard to move and harder to kill."
   },
   {
-    "id": "elf", "name": "Elf",
-    "stats": { "spd": 1, "hp": -3, "wp": 3, "mag": 2 },
-    "base_stats": { "spd": 6, "atk": 3, "rng": 1, "def": 4, "hp": 25, "jump": 2, "wp": 8, "mag": 5, "res": 3 },
+    "id": "elf",
+    "name": "Elf",
+    "stats": {
+      "spd": 1,
+      "hp": -3,
+      "wp": 3,
+      "mag": 2
+    },
+    "base_stats": {
+      "spd": 6,
+      "atk": 3,
+      "rng": 1,
+      "def": 4,
+      "hp": 25,
+      "jump": 2,
+      "wp": 8,
+      "mag": 5,
+      "res": 3
+    },
     "flavor": "Nimble and long-lived, elves trade resilience for grace and speed."
   },
   {
-    "id": "halfling", "name": "Halfling",
-    "stats": { "spd": 1, "def": -1, "hp": -2, "wp": 2, "mag": 1 },
-    "base_stats": { "spd": 6, "atk": 4, "rng": 1, "def": 4, "hp": 25, "jump": 3, "wp": 7, "mag": 4, "res": 3 },
+    "id": "halfling",
+    "name": "Halfling",
+    "stats": {
+      "spd": 1,
+      "def": -1,
+      "hp": -2,
+      "wp": 2,
+      "mag": 1
+    },
+    "base_stats": {
+      "spd": 6,
+      "atk": 4,
+      "rng": 1,
+      "def": 4,
+      "hp": 25,
+      "jump": 3,
+      "wp": 7,
+      "mag": 4,
+      "res": 3
+    },
     "flavor": "Small and quick, halflings rely on agility over armor."
+  },
+  {
+    "id": "bat",
+    "name": "Bat",
+    "stats": {},
+    "base_stats": {
+      "spd": 7,
+      "atk": 3,
+      "rng": 1,
+      "def": 2,
+      "hp": 18,
+      "jump": 3,
+      "wp": 2,
+      "mag": 1,
+      "res": 1
+    },
+    "flavor": "Darting winged vermin that attack in swarms, overwhelming foes with speed."
+  },
+  {
+    "id": "imp",
+    "name": "Imp",
+    "stats": {},
+    "base_stats": {
+      "spd": 6,
+      "atk": 3,
+      "rng": 1,
+      "def": 2,
+      "hp": 20,
+      "jump": 2,
+      "wp": 5,
+      "mag": 4,
+      "res": 2
+    },
+    "flavor": "Tiny fiendish tricksters with a penchant for fire and mischief."
+  },
+  {
+    "id": "kobold",
+    "name": "Kobold",
+    "stats": {},
+    "base_stats": {
+      "spd": 6,
+      "atk": 3,
+      "rng": 1,
+      "def": 3,
+      "hp": 20,
+      "jump": 2,
+      "wp": 3,
+      "mag": 2,
+      "res": 2
+    },
+    "flavor": "Cunning trap-setters who compensate for frailty with cleverness."
+  },
+  {
+    "id": "slime",
+    "name": "Slime",
+    "stats": {},
+    "base_stats": {
+      "spd": 3,
+      "atk": 2,
+      "rng": 1,
+      "def": 4,
+      "hp": 22,
+      "jump": 1,
+      "wp": 1,
+      "mag": 2,
+      "res": 4
+    },
+    "flavor": "Amorphous blobs of corrosive ooze that dissolve anything they engulf."
+  },
+  {
+    "id": "insectoid",
+    "name": "Insectoid",
+    "stats": {},
+    "base_stats": {
+      "spd": 5,
+      "atk": 4,
+      "rng": 1,
+      "def": 4,
+      "hp": 20,
+      "jump": 2,
+      "wp": 1,
+      "mag": 1,
+      "res": 2
+    },
+    "flavor": "Chitinous hive creatures that swarm with stingers and mandibles."
+  },
+  {
+    "id": "goblin",
+    "name": "Goblin",
+    "stats": {},
+    "base_stats": {
+      "spd": 6,
+      "atk": 4,
+      "rng": 1,
+      "def": 3,
+      "hp": 25,
+      "jump": 2,
+      "wp": 3,
+      "mag": 2,
+      "res": 2
+    },
+    "flavor": "Small but numerous, goblins rely on dirty tricks and overwhelming numbers."
+  },
+  {
+    "id": "wolf",
+    "name": "Wolf",
+    "stats": {},
+    "base_stats": {
+      "spd": 7,
+      "atk": 5,
+      "rng": 1,
+      "def": 3,
+      "hp": 26,
+      "jump": 2,
+      "wp": 1,
+      "mag": 1,
+      "res": 1
+    },
+    "flavor": "Pack hunters whose coordinated attacks bring down prey much larger than themselves."
+  },
+  {
+    "id": "spider",
+    "name": "Spider",
+    "stats": {},
+    "base_stats": {
+      "spd": 5,
+      "atk": 4,
+      "rng": 1,
+      "def": 3,
+      "hp": 25,
+      "jump": 2,
+      "wp": 2,
+      "mag": 2,
+      "res": 2
+    },
+    "flavor": "Venomous arachnids that snare prey in webs before delivering a fatal bite."
+  },
+  {
+    "id": "zombie",
+    "name": "Zombie",
+    "stats": {},
+    "base_stats": {
+      "spd": 3,
+      "atk": 5,
+      "rng": 1,
+      "def": 4,
+      "hp": 30,
+      "jump": 1,
+      "wp": 1,
+      "mag": 1,
+      "res": 1
+    },
+    "flavor": "Shambling corpses driven by dark magic, relentless but slow."
+  },
+  {
+    "id": "orc",
+    "name": "Orc",
+    "stats": {},
+    "base_stats": {
+      "spd": 5,
+      "atk": 6,
+      "rng": 1,
+      "def": 4,
+      "hp": 32,
+      "jump": 2,
+      "wp": 2,
+      "mag": 1,
+      "res": 2
+    },
+    "flavor": "Brutish warriors who prize strength above all, charging headlong into battle."
+  },
+  {
+    "id": "gnoll",
+    "name": "Gnoll",
+    "stats": {},
+    "base_stats": {
+      "spd": 5,
+      "atk": 5,
+      "rng": 1,
+      "def": 4,
+      "hp": 30,
+      "jump": 2,
+      "wp": 3,
+      "mag": 2,
+      "res": 2
+    },
+    "flavor": "Hyena-folk raiders who revel in savagery and dark rituals."
+  },
+  {
+    "id": "hobgoblin",
+    "name": "Hobgoblin",
+    "stats": {},
+    "base_stats": {
+      "spd": 5,
+      "atk": 5,
+      "rng": 1,
+      "def": 5,
+      "hp": 32,
+      "jump": 2,
+      "wp": 3,
+      "mag": 2,
+      "res": 3
+    },
+    "flavor": "Disciplined goblinoid soldiers who fight in organized formations."
+  },
+  {
+    "id": "lizardfolk",
+    "name": "Lizardfolk",
+    "stats": {},
+    "base_stats": {
+      "spd": 4,
+      "atk": 5,
+      "rng": 1,
+      "def": 5,
+      "hp": 33,
+      "jump": 2,
+      "wp": 3,
+      "mag": 2,
+      "res": 3
+    },
+    "flavor": "Cold-blooded warriors at home in swamps, armored in thick scales."
+  },
+  {
+    "id": "skeleton",
+    "name": "Skeleton",
+    "stats": {},
+    "base_stats": {
+      "spd": 4,
+      "atk": 5,
+      "rng": 1,
+      "def": 4,
+      "hp": 28,
+      "jump": 2,
+      "wp": 2,
+      "mag": 3,
+      "res": 3
+    },
+    "flavor": "Animated bones held together by necromantic energy, tireless and fearless."
+  },
+  {
+    "id": "ogre",
+    "name": "Ogre",
+    "stats": {},
+    "base_stats": {
+      "spd": 3,
+      "atk": 7,
+      "rng": 1,
+      "def": 5,
+      "hp": 40,
+      "jump": 1,
+      "wp": 1,
+      "mag": 1,
+      "res": 2
+    },
+    "flavor": "Massive brutes who crush foes with raw power and hurled boulders."
+  },
+  {
+    "id": "minotaur",
+    "name": "Minotaur",
+    "stats": {},
+    "base_stats": {
+      "spd": 4,
+      "atk": 7,
+      "rng": 1,
+      "def": 5,
+      "hp": 38,
+      "jump": 2,
+      "wp": 2,
+      "mag": 1,
+      "res": 2
+    },
+    "flavor": "Bull-headed titans who gore enemies with devastating charges."
+  },
+  {
+    "id": "troll",
+    "name": "Troll",
+    "stats": {},
+    "base_stats": {
+      "spd": 4,
+      "atk": 6,
+      "rng": 1,
+      "def": 4,
+      "hp": 42,
+      "jump": 2,
+      "wp": 3,
+      "mag": 2,
+      "res": 2
+    },
+    "flavor": "Regenerating monstrosities that shrug off wounds and keep fighting."
+  },
+  {
+    "id": "golem",
+    "name": "Golem",
+    "stats": {},
+    "base_stats": {
+      "spd": 3,
+      "atk": 6,
+      "rng": 1,
+      "def": 7,
+      "hp": 45,
+      "jump": 1,
+      "wp": 1,
+      "mag": 1,
+      "res": 5
+    },
+    "flavor": "Animated constructs of stone and metal, nearly impervious to harm."
+  },
+  {
+    "id": "treant",
+    "name": "Treant",
+    "stats": {},
+    "base_stats": {
+      "spd": 3,
+      "atk": 5,
+      "rng": 1,
+      "def": 6,
+      "hp": 42,
+      "jump": 1,
+      "wp": 4,
+      "mag": 3,
+      "res": 4
+    },
+    "flavor": "Ancient tree guardians who protect the forest with root and branch."
+  },
+  {
+    "id": "gargoyle",
+    "name": "Gargoyle",
+    "stats": {},
+    "base_stats": {
+      "spd": 4,
+      "atk": 5,
+      "rng": 1,
+      "def": 7,
+      "hp": 38,
+      "jump": 2,
+      "wp": 2,
+      "mag": 2,
+      "res": 5
+    },
+    "flavor": "Stone sentinels that blend with architecture before swooping to attack."
+  },
+  {
+    "id": "dire_beast",
+    "name": "Dire Beast",
+    "stats": {},
+    "base_stats": {
+      "spd": 5,
+      "atk": 7,
+      "rng": 1,
+      "def": 4,
+      "hp": 38,
+      "jump": 2,
+      "wp": 1,
+      "mag": 1,
+      "res": 1
+    },
+    "flavor": "Oversized predators twisted by dark energies into unstoppable killing machines."
+  },
+  {
+    "id": "elemental",
+    "name": "Elemental",
+    "stats": {},
+    "base_stats": {
+      "spd": 4,
+      "atk": 3,
+      "rng": 1,
+      "def": 5,
+      "hp": 30,
+      "jump": 2,
+      "wp": 6,
+      "mag": 6,
+      "res": 5
+    },
+    "flavor": "Manifestations of primal forces -- fire, ice, lightning, and stone."
+  },
+  {
+    "id": "wraith",
+    "name": "Wraith",
+    "stats": {},
+    "base_stats": {
+      "spd": 5,
+      "atk": 3,
+      "rng": 1,
+      "def": 3,
+      "hp": 25,
+      "jump": 2,
+      "wp": 6,
+      "mag": 6,
+      "res": 5
+    },
+    "flavor": "Spectral undead that drain the life from the living with a chilling touch."
+  },
+  {
+    "id": "naga",
+    "name": "Naga",
+    "stats": {},
+    "base_stats": {
+      "spd": 5,
+      "atk": 4,
+      "rng": 1,
+      "def": 4,
+      "hp": 30,
+      "jump": 2,
+      "wp": 5,
+      "mag": 5,
+      "res": 4
+    },
+    "flavor": "Serpentine sorcerers ruling ancient ruins with arcane mastery."
+  },
+  {
+    "id": "merfolk",
+    "name": "Merfolk",
+    "stats": {},
+    "base_stats": {
+      "spd": 5,
+      "atk": 4,
+      "rng": 1,
+      "def": 4,
+      "hp": 28,
+      "jump": 2,
+      "wp": 5,
+      "mag": 5,
+      "res": 4
+    },
+    "flavor": "Aquatic warriors and spellcasters who command the tides."
+  },
+  {
+    "id": "harpy",
+    "name": "Harpy",
+    "stats": {},
+    "base_stats": {
+      "spd": 6,
+      "atk": 4,
+      "rng": 1,
+      "def": 3,
+      "hp": 26,
+      "jump": 3,
+      "wp": 4,
+      "mag": 4,
+      "res": 3
+    },
+    "flavor": "Winged predators whose shrieks disorient and terrify their prey."
+  },
+  {
+    "id": "demon",
+    "name": "Demon",
+    "stats": {},
+    "base_stats": {
+      "spd": 5,
+      "atk": 6,
+      "rng": 1,
+      "def": 5,
+      "hp": 38,
+      "jump": 2,
+      "wp": 5,
+      "mag": 5,
+      "res": 4
+    },
+    "flavor": "Infernal beings of immense power, commanding fire and dark magic."
+  },
+  {
+    "id": "drake",
+    "name": "Drake",
+    "stats": {},
+    "base_stats": {
+      "spd": 5,
+      "atk": 6,
+      "rng": 1,
+      "def": 6,
+      "hp": 40,
+      "jump": 2,
+      "wp": 4,
+      "mag": 4,
+      "res": 5
+    },
+    "flavor": "Lesser dragons with devastating breath weapons and armored scales."
   }
 ]

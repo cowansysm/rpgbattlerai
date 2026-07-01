@@ -6,21 +6,28 @@ extends RefCounted
 
 ## Rolls a loot result from a table at the given depth.
 ## Returns {gold: int, equipment: Array, consumables: Array[{id, qty}]}.
+## When band_level > 0, gold is derived from GOLD_PER_BAND_LEVEL instead of table ranges.
 static func roll(table: Dictionary, depth: int, rng: RandomNumberGenerator,
-		shop_pool_provider: Callable) -> Dictionary:
+		shop_pool_provider: Callable, band_level: int = 0) -> Dictionary:
 	var result := {"gold": 0, "equipment": [], "consumables": []}
 	if table.is_empty():
 		return result
-	var scale: float = 1.0 + float(Constants.get_value("LOOT_DEPTH_SCALE", 0.1)) * depth
-	# Roll gold
-	var gold_range: Variant = table.get("gold", {})
-	if gold_range is Dictionary:
-		var gd: Dictionary = gold_range as Dictionary
-		var gmin: int = int(gd.get("min", 0))
-		var gmax: int = int(gd.get("max", 0))
-		if gmax >= gmin and gmax > 0:
-			var base_gold: int = rng.randi_range(gmin, gmax)
-			result["gold"] = int(round(base_gold * scale))
+	# A11: Band-level gold curve takes priority over table/depth scaling
+	if band_level > 0:
+		var gold_per_level: int = int(Constants.get_value("GOLD_PER_BAND_LEVEL", 50))
+		var center: float = float(gold_per_level * band_level)
+		var variance: float = rng.randf_range(0.7, 1.3)
+		result["gold"] = int(round(center * variance))
+	else:
+		var scale: float = 1.0 + float(Constants.get_value("LOOT_DEPTH_SCALE", 0.1)) * depth
+		var gold_range: Variant = table.get("gold", {})
+		if gold_range is Dictionary:
+			var gd: Dictionary = gold_range as Dictionary
+			var gmin: int = int(gd.get("min", 0))
+			var gmax: int = int(gd.get("max", 0))
+			if gmax >= gmin and gmax > 0:
+				var base_gold: int = rng.randi_range(gmin, gmax)
+				result["gold"] = int(round(base_gold * scale))
 	# Roll drops
 	var drops: Variant = table.get("drops", [])
 	var rolls: int = int(table.get("rolls", 1))
