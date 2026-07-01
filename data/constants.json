@@ -70,5 +70,14 @@
   "STARTING_LEVEL": 1,
   "BASE_SHOP_MAX_BP": 2,
   "RUN_SHOP_SLOTS": 6,
-  "RUN_PREMIUM_CHANCE": 0.25
+  "RUN_PREMIUM_CHANCE": 0.25,
+  "AFFINITY_MULT": {
+    "weak": 1.5,
+    "neutral": 1.0,
+    "resist": 0.5,
+    "immune": 0.0,
+    "absorb": 1.0
+  },
+  "CRIT_CHANCE": 0.0625,
+  "CRIT_MULT": 1.5
 }

@@ -3,7 +3,8 @@ extends RefCounted
 ## Pure min/mid/max damage/healing projection over CombatResolver math.
 ## Calls CombatResolver with fixed die rolls to extract projection ranges.
 ## No mutation of actual BattleUnit state.
-## Spec reference: alpha-phaseA15-spec.md §2.5
+## A16: affinity-scaled ranges and crit-inclusive max.
+## Spec reference: alpha-phaseA15-spec.md §2.5, alpha-phaseA16-spec.md §2
 
 
 ## Project a basic weapon attack's damage range.
@@ -33,12 +34,17 @@ static func project_attack(
 	if has_defend:
 		raw_max = max(1, raw_max - 1)
 
+	# A16: crit-inclusive max
+	var crit_mult: float = float(Constants.get_value("CRIT_MULT", 1.5))
+	raw_max = int(round(float(raw_max) * crit_mult))
+
 	var mid: int = (raw_min + raw_max) / 2
 	return {"min": raw_min, "mid": mid, "max": raw_max}
 
 
 ## Project a damage ability's (skill or spell) damage range.
-## Returns {min: int, mid: int, max: int}.
+## Returns {min: int, mid: int, max: int, affinity: String}.
+## A16: applies affinity multiplier and crit-inclusive max.
 static func project_ability_damage(
 	caster: BattleUnit,
 	target: BattleUnit,
@@ -47,6 +53,8 @@ static func project_ability_damage(
 	caster_elev: int,
 	target_elev: int,
 	mag_scaling: float = 1.0,
+	element: String = "",
+	terrain_affinity_weight: int = 0,
 ) -> Dictionary:
 	var has_defend: bool = target.stats.has_modifier_from_source("defend")
 	var e_bonus: int = Constants.get_value("ELEV_BONUS", 1) if caster_elev > target_elev else 0
@@ -59,18 +67,37 @@ static func project_ability_damage(
 		var mag_bonus: int = int(round(mag_scaling * caster.stats.effective("mag")))
 		base_atk = effect_value + mag_bonus + e_bonus - target.stats.effective("res")
 
-	# Min: attacker rolls 1, defender rolls 6 (if defending)
-	var raw_min: int = max(1, 1 + base_atk)
+	# A16: Affinity
+	var tier: int = target.effective_affinity(element, terrain_affinity_weight)
+	var aff_mult: float = Affinity.multiplier(tier)
+	var affinity_name: String = Affinity.tier_to_name(tier)
+
+	# IMMUNE → 0 damage
+	if tier == Affinity.Tier.IMMUNE:
+		return {"min": 0, "mid": 0, "max": 0, "affinity": affinity_name}
+
+	# ABSORB → healing (negative damage conceptually; return as positive heal values)
+	if tier == Affinity.Tier.ABSORB:
+		var heal_min: int = max(0, int(round(float(1 + base_atk) * aff_mult)))
+		var heal_max: int = max(0, int(round(float(6 + base_atk) * aff_mult)))
+		var heal_mid: int = (heal_min + heal_max) / 2
+		return {"min": heal_min, "mid": heal_mid, "max": heal_max,
+				"affinity": affinity_name, "is_heal": true}
+
+	# Min: attacker rolls 1, defender rolls 6 (if defending), no crit
+	var raw_min: int = max(1, int(round(float(1 + base_atk) * aff_mult)))
 	if has_defend:
 		raw_min = max(1, raw_min - 6)
 
-	# Max: attacker rolls 6, defender rolls 1 (if defending)
-	var raw_max: int = max(1, 6 + base_atk)
+	# Max: attacker rolls 6, defender rolls 1 (if defending), with crit
+	var crit_mult: float = float(Constants.get_value("CRIT_MULT", 1.5))
+	var raw_max: int = max(1, int(round(float(6 + base_atk) * aff_mult)))
+	raw_max = int(round(float(raw_max) * crit_mult))
 	if has_defend:
 		raw_max = max(1, raw_max - 1)
 
 	var mid: int = (raw_min + raw_max) / 2
-	return {"min": raw_min, "mid": mid, "max": raw_max}
+	return {"min": raw_min, "mid": mid, "max": raw_max, "affinity": affinity_name}
 
 
 ## Project a healing effect's range.

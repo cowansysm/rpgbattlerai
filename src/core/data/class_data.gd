@@ -18,3 +18,4 @@ extends Resource
 @export var growth: Dictionary = {}
 @export var jp_costs: Dictionary = {}
 @export var prerequisites: Dictionary = {}
+@export var affinities: Dictionary = {}  ## {element: tier_name} e.g. {"fire": "resist"}

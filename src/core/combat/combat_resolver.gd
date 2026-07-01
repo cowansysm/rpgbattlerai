@@ -9,9 +9,17 @@ extends RefCounted
 ## Tests can swap this to a fixed callable for deterministic results.
 static var dice_roller: Callable = func() -> int: return randi() % 6 + 1
 
+## Injectable crit roller for testability. Returns float in [0, 1).
+## Crit occurs when roll < CRIT_CHANCE.
+static var crit_roller: Callable = func() -> float: return randf()
+
 
 static func roll_die() -> int:
 	return dice_roller.call()
+
+
+static func roll_crit() -> float:
+	return crit_roller.call()
 
 
 ## Resolve a physical (basic weapon) attack.
@@ -64,6 +72,10 @@ static func resolve_attack(
 ## type == "spell": scales with MAG, reduced by RES (magical).
 ## Defense die only rolls when the target has used the Defend action,
 ## and applies to both spell and skill damage.
+##
+## A16: element/affinity scaling and critical hits.
+## Order of operations: base formula → affinity mult → crit mult → defend die → floor.
+## IMMUNE skips the floor (0 damage). ABSORB converts to healing and skips the floor.
 static func resolve_damage(
 	attacker: BattleUnit,
 	target: BattleUnit,
@@ -73,27 +85,69 @@ static func resolve_damage(
 	target_elev: int,
 	elev_bonus: int = -1,
 	mag_scaling: float = 1.0,
+	element: String = "",
+	terrain_affinity_weight: int = 0,
 ) -> Dictionary:
 	if elev_bonus < 0:
 		elev_bonus = Constants.get_value("ELEV_BONUS", 1)
 
 	var e_bonus: int = elev_bonus if attacker_elev > target_elev else 0
 	var atk_roll: int = roll_die()
-	var damage: int
+	var base: int
 
 	if ability_type == "skill":
 		var target_def: int = target.stats.effective("def")
-		damage = max(1, atk_roll + effect_value + e_bonus - target_def)
+		base = atk_roll + effect_value + e_bonus - target_def
 	else:
 		# Spells: scales with caster MAG, reduced by target RES
 		var mag_bonus: int = int(round(mag_scaling * attacker.stats.effective("mag")))
-		damage = max(1, atk_roll + effect_value + mag_bonus + e_bonus - target.stats.effective("res"))
+		base = atk_roll + effect_value + mag_bonus + e_bonus - target.stats.effective("res")
+
+	# A16: Affinity scaling
+	var tier: int = target.effective_affinity(element, terrain_affinity_weight)
+	var aff_mult: float = Affinity.multiplier(tier)
+	var scaled: int = int(round(float(base) * aff_mult))
+
+	# A16: Critical hit
+	var crit_chance: float = float(Constants.get_value("CRIT_CHANCE", 0.0625))
+	var crit_mult: float = float(Constants.get_value("CRIT_MULT", 1.5))
+	var is_crit: bool = roll_crit() < crit_chance
+	if is_crit:
+		scaled = int(round(float(scaled) * crit_mult))
 
 	# Defend action grants a 1d6 defense roll against all damage
 	var def_roll: int = 0
 	if target.stats.has_modifier_from_source("defend"):
 		def_roll = roll_die()
-		damage = max(1, damage - def_roll)
+		scaled = scaled - def_roll
+
+	var affinity_name: String = Affinity.tier_to_name(tier)
+
+	# ABSORB: convert to healing, skip damage floor
+	if tier == Affinity.Tier.ABSORB:
+		var heal_amount: int = max(0, scaled)
+		var max_hp: int = target.stats.effective("hp")
+		heal_amount = min(heal_amount, max_hp - target.current_hp)
+		target.current_hp = min(target.current_hp + heal_amount, max_hp)
+		return {
+			"damage": 0,
+			"healing": heal_amount,
+			"atk_roll": atk_roll,
+			"def_roll": def_roll,
+			"target_hp_after": target.current_hp,
+			"is_downed": false,
+			"element": element,
+			"affinity": affinity_name,
+			"is_crit": is_crit,
+			"pre_affinity_damage": base,
+		}
+
+	# IMMUNE: 0 damage, skip floor
+	var damage: int
+	if tier == Affinity.Tier.IMMUNE:
+		damage = 0
+	else:
+		damage = max(1, scaled)
 
 	_wake_on_damage(target)
 	target.current_hp = max(0, target.current_hp - damage)
@@ -105,6 +159,10 @@ static func resolve_damage(
 		"def_roll": def_roll,
 		"target_hp_after": target.current_hp,
 		"is_downed": is_downed,
+		"element": element,
+		"affinity": affinity_name,
+		"is_crit": is_crit,
+		"pre_affinity_damage": base,
 	}
 
 

@@ -344,9 +344,18 @@ static func _resolve_effect(
 			if target.is_downed:
 				return { "target": target.character.id, "skipped": true, "reason": "downed" }
 			var value: int = int(effect.get("value", 0))
+			var element: String = str(effect.get("element", ""))
+			# A16: Resolve terrain affinity weight at target position
+			var terrain_aff_weight: int = 0
+			if not element.is_empty() and state.graph:
+				var tprops: TerrainProps = state.graph.terrain_props(target.position)
+				if tprops:
+					terrain_aff_weight = Affinity.tier_to_weight(
+						str(tprops.affinities.get(element, "neutral")))
 			var result := CombatResolver.resolve_damage(
 				caster, target, value, ability.type,
-				attacker_elev, target_elev, -1, ability.mag_scaling)
+				attacker_elev, target_elev, -1, ability.mag_scaling,
+				element, terrain_aff_weight)
 			if result["is_downed"]:
 				_handle_downing(state, target)
 			var outcome := {
@@ -356,9 +365,12 @@ static func _resolve_effect(
 				"def_roll": result["def_roll"],
 				"target_hp_after": result["target_hp_after"],
 				"is_downed": result["is_downed"],
+				"element": result.get("element", ""),
+				"affinity": result.get("affinity", "neutral"),
+				"is_crit": result.get("is_crit", false),
 			}
-			if effect.has("element"):
-				outcome["element"] = effect["element"]
+			if result.has("healing"):
+				outcome["healing"] = result["healing"]
 			return outcome
 
 		"heal":

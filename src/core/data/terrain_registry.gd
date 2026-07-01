@@ -37,6 +37,8 @@ func load_from(path: String) -> Array[String]:
 		p.occupant_modifiers = d.get("occupant_modifiers", [])
 		p.is_water = bool(d.get("is_water", false))
 		p.terrain_tags = _to_str_array(d.get("tags", []))
+		# Alpha A16: elemental affinities (optional)
+		p.affinities = d.get("affinities", {})
 		_entries[str(id)] = p
 	return errors
 
