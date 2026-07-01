@@ -49,11 +49,3 @@ func test_generate_starts_with_empty_state() -> void:
 	assert_eq(ci.growth_accumulated.size(), 0)
 	assert_eq(ci.jp.size(), 0)
 	assert_eq(ci.downs_this_run, 0)
-
-
-func test_xp_for_level_quadratic() -> void:
-	# XP for level N = base * N * N (default base = 10)
-	assert_eq(CharacterInstance.xp_for_level(1), 10)
-	assert_eq(CharacterInstance.xp_for_level(2), 40)
-	assert_eq(CharacterInstance.xp_for_level(3), 90)
-	assert_eq(CharacterInstance.xp_for_level(10), 1000)

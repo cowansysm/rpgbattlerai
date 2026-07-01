@@ -4,15 +4,20 @@ extends GutTest
 ## sleep skip, blind miss, and round-start cleanup.
 
 var _default_roller: Callable
+var _default_crit_roller: Callable
 
 
 func before_each() -> void:
 	_default_roller = CombatResolver.dice_roller
+	_default_crit_roller = CombatResolver.crit_roller
 	CombatResolver.dice_roller = func() -> int: return 3
+	# Pin crit roll above the crit threshold so crits never fire in deterministic tests
+	CombatResolver.crit_roller = func() -> float: return 1.0
 
 
 func after_each() -> void:
 	CombatResolver.dice_roller = _default_roller
+	CombatResolver.crit_roller = _default_crit_roller
 
 
 # --- Stub terrain provider ---
