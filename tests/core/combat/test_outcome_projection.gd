@@ -102,10 +102,10 @@ func test_project_ability_damage_spell_uses_mag() -> void:
 	var result := OutcomeProjection.project_ability_damage(
 		caster, target, 5, "spell", 0, 0, 1.0)
 	# Spell damage = roll + value + round(mag_scaling * MAG) + e_bonus - RES
-	# Min (roll=1): 1 + 5 + 6 + 0 - 2 = 10
-	# Max (roll=6): 6 + 5 + 6 + 0 - 2 = 15
+	# Min (roll=1, no crit): 1 + 5 + 6 + 0 - 2 = 10
+	# Max (roll=6, with crit): (6 + 5 + 6 + 0 - 2) * 1.5 = round(22.5) = 23
 	assert_eq(result["min"], 10)
-	assert_eq(result["max"], 15)
+	assert_eq(result["max"], 23)
 
 
 func test_project_ability_damage_with_defend() -> void:

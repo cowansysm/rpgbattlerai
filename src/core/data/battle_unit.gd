@@ -18,6 +18,7 @@ var team: String = ""
 var status_effects: Array = []			## [{id: String, duration: int, source: String}, ...]
 var is_downed: bool = false				## True when HP <= 0 but not yet permanently removed
 var downed_round: int = -1				## Round number when unit was downed (-1 = never)
+var affinities: Dictionary = {}			## {element: int_weight} — cumulative from static sources (race+class+equipment)
 
 
 func is_alive() -> bool:
@@ -49,3 +50,18 @@ func has_status(status_id: String) -> bool:
 func remove_status(status_id: String) -> void:
 	status_effects = status_effects.filter(
 		func(s: Dictionary) -> bool: return s["id"] != status_id)
+
+
+## Return the effective affinity tier for an element, including an optional
+## extra weight from external sources (e.g., terrain).
+func effective_affinity(element: String, extra_weight: int = 0) -> int:
+	if element.is_empty():
+		return Affinity.Tier.NEUTRAL
+	var weight: int = int(affinities.get(element, 0)) + extra_weight
+	return Affinity.weight_to_tier(weight)
+
+
+## Populate affinities from authored source dicts.
+## Each source is {element: tier_name_string}.
+func apply_affinity_sources(sources: Array) -> void:
+	affinities = Affinity.merge_sources(sources)

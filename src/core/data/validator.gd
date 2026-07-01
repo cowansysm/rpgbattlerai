@@ -27,6 +27,19 @@ static func validate_stat_keys(d: Dictionary, entity_id: String, field_name: Str
 	return e
 
 
+## A16: Validate an affinities dict {element: tier_name}.
+## Element keys must be in Affinity.ELEMENTS, tier values in Affinity.TIER_NAMES.
+static func validate_affinities(d: Dictionary, entity_id: String, entity_type: String) -> Array[String]:
+	var e: Array[String] = []
+	for elem in d.keys():
+		if not Affinity.ELEMENTS.has(str(elem)):
+			e.append("%s '%s' affinities has unknown element '%s'" % [entity_type, entity_id, elem])
+		var tier_name: String = str(d[elem])
+		if not Affinity.TIER_NAMES.has(tier_name):
+			e.append("%s '%s' affinities element '%s' has unknown tier '%s'" % [entity_type, entity_id, elem, tier_name])
+	return e
+
+
 # --- Per-type structural validators ---
 
 static func validate_race(d: Dictionary) -> Array[String]:
@@ -43,6 +56,9 @@ static func validate_race(d: Dictionary) -> Array[String]:
 	# A4: Validate base_stats keys
 	if d.has("base_stats") and typeof(d["base_stats"]) == TYPE_DICTIONARY:
 		e.append_array(validate_stat_keys(d["base_stats"], str(d.get("id", "?")), "base_stats"))
+	# A16: Validate affinities
+	if d.has("affinities") and typeof(d["affinities"]) == TYPE_DICTIONARY:
+		e.append_array(validate_affinities(d["affinities"], str(d.get("id", "?")), "race"))
 	return e
 
 
@@ -84,6 +100,9 @@ static func validate_class(d: Dictionary) -> Array[String]:
 	# A4: Validate prerequisites structure
 	if d.has("prerequisites") and typeof(d["prerequisites"]) == TYPE_DICTIONARY:
 		e.append_array(_validate_prerequisites_structure(d))
+	# A16: Validate affinities
+	if d.has("affinities") and typeof(d["affinities"]) == TYPE_DICTIONARY:
+		e.append_array(validate_affinities(d["affinities"], str(d.get("id", "?")), "class"))
 	return e
 
 
@@ -167,6 +186,9 @@ static func validate_ability_effect(effect: Dictionary, ability_id: String) -> A
 	if not EFFECT_TYPES.has(et):
 		e.append("ability '%s' has unknown effect_type '%s'" % [ability_id, et])
 		return e
+	# A16: Validate element if present on any effect type
+	if effect.has("element") and not Affinity.ELEMENTS.has(str(effect["element"])):
+		e.append("ability '%s' effect has unknown element '%s'" % [ability_id, effect["element"]])
 	match et:
 		"damage":
 			if not effect.has("value"):
@@ -210,6 +232,9 @@ static func validate_item(d: Dictionary) -> Array[String]:
 			var pv: Variant = d["passive"][pk]
 			if typeof(pv) != TYPE_INT and typeof(pv) != TYPE_FLOAT:
 				e.append("item '%s' passive key '%s' has non-numeric value" % [d.get("id", "?"), pk])
+	# A16: Validate affinities
+	if d.has("affinities") and typeof(d["affinities"]) == TYPE_DICTIONARY:
+		e.append_array(validate_affinities(d["affinities"], str(d.get("id", "?")), "item"))
 	return e
 
 

@@ -19,3 +19,6 @@ extends Resource
 @export var occupant_modifiers: Array = []     ## [{key: String, value: int}, ...]
 @export var is_water: bool = false             ## Tags the tile as water
 @export var terrain_tags: Array[String] = []   ## Free-form classification (e.g., "hazard", "forest")
+
+# --- Alpha A16 additions ---
+@export var affinities: Dictionary = {}        ## {element: tier_name} e.g. {"holy": "weak"}

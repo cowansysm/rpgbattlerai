@@ -12,3 +12,4 @@ extends Resource
 @export var price: int = -1			## Buy price; -1 = derive from bp_value
 @export var weapon_power: int = 0
 @export var weapon_range: int = 0
+@export var affinities: Dictionary = {}  ## {element: tier_name} e.g. {"lightning": "resist"}

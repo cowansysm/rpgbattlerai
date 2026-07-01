@@ -12,6 +12,7 @@ static func make_race(d: Dictionary) -> RaceData:
 	r.stat_modifiers = d.get("stats", d.get("stat_modifiers", {}))
 	r.flavor = str(d.get("flavor", ""))
 	r.base_stats = d.get("base_stats", {})
+	r.affinities = d.get("affinities", {})
 	return r
 
 
@@ -35,6 +36,7 @@ static func make_class(d: Dictionary) -> ClassData:
 		c.prerequisites = d["prerequisites"]
 	elif c.required_classes.size() > 0:
 		c.prerequisites = {"classes": c.required_classes}
+	c.affinities = d.get("affinities", {})
 	return c
 
 
@@ -65,6 +67,7 @@ static func make_item(d: Dictionary) -> ItemData:
 	i.granted_abilities = _to_str_array(d.get("granted_abilities", []))
 	i.weapon_power = int(d.get("power", d.get("weapon_power", 0)))
 	i.weapon_range = int(d.get("range", d.get("weapon_range", 0)))
+	i.affinities = d.get("affinities", {})
 	return i
 
 

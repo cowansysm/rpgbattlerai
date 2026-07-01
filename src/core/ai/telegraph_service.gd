@@ -108,12 +108,22 @@ static func _compute_ability_intent(
 	var caster_elev: int = state.graph.elevation(intent.move_to)
 	var target_elev: int = state.graph.elevation(intent.target_pos)
 
+	# A16: element + terrain affinity for projection
+	var element: String = str(ability.effect.get("element", ""))
+	var terrain_aff_weight: int = 0
+	if not element.is_empty() and target:
+		var tprops: TerrainProps = state.graph.terrain_props(intent.target_pos)
+		if tprops:
+			terrain_aff_weight = Affinity.tier_to_weight(
+				str(tprops.affinities.get(element, "neutral")))
+
 	match effect_type:
 		"damage":
 			if target:
 				intent.projection = OutcomeProjection.project_ability_damage(
 					unit, target, effect_value, ability.type,
-					caster_elev, target_elev, ability.mag_scaling)
+					caster_elev, target_elev, ability.mag_scaling,
+					element, terrain_aff_weight)
 		"heal":
 			if target:
 				intent.projection = OutcomeProjection.project_heal(
