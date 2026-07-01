@@ -1,7 +1,7 @@
 class_name CharacterInstance
 extends RefCounted
 ## Persistent, mutable character instance generated from a template.
-## Holds all per-character progression state: level, XP, JP, learned abilities,
+## Holds all per-character progression state: class_levels, XP, JP, learned abilities,
 ## active class, equipment, and accumulated growth.
 ## Spec reference: alpha-phaseA4-spec.md §4
 
@@ -9,7 +9,7 @@ var instance_id: String = ""
 var template_id: String = ""
 var name: String = ""
 var race: String = ""
-var level: int = 1
+var class_levels: Dictionary = {}
 var xp: int = 0
 var active_class: String = "vagabond"
 var unlocked_classes: Array[String] = ["vagabond"]
@@ -21,6 +21,29 @@ var growth_accumulated: Dictionary = {}
 var downs_this_run: int = 0
 
 
+## Sum of all class levels (minimum 1).
+func character_level() -> int:
+	var total: int = 0
+	for lv in class_levels.values():
+		total += int(lv)
+	return maxi(1, total)
+
+
+## Level in the currently active class.
+func active_class_level() -> int:
+	return int(class_levels.get(active_class, 0))
+
+
+## Increments active class level by 1, applies growth. Returns true on success.
+func increment_active_class_level(class_provider: Callable, level_max: int = 10) -> bool:
+	var current: int = active_class_level()
+	if current >= level_max:
+		return false
+	class_levels[active_class] = current + 1
+	_apply_growth(class_provider)
+	return true
+
+
 static func generate(template: CharacterData, name_gen: Callable,
 		bonus_classes: Array[String] = []) -> CharacterInstance:
 	var ci := CharacterInstance.new()
@@ -28,36 +51,16 @@ static func generate(template: CharacterData, name_gen: Callable,
 	ci.template_id = template.id
 	ci.race = template.race
 	ci.name = name_gen.call(template.race)
-	ci.unlocked_classes = ["vagabond"]
+	# Use template's first class as starting class (vagabond for players, monster class for monsters)
+	var starting_class: String = template.classes[0] if not template.classes.is_empty() else "vagabond"
+	ci.unlocked_classes = [starting_class]
 	for cls_id in bonus_classes:
 		if not ci.unlocked_classes.has(cls_id):
 			ci.unlocked_classes.append(cls_id)
-	ci.active_class = "vagabond"
-	ci.level = 1
+	ci.active_class = starting_class
+	ci.class_levels = {starting_class: 1}
 	ci.xp = 0
 	return ci
-
-
-## Returns the XP threshold to reach the given level.
-static func xp_for_level(lv: int, curve_base: int = 10) -> int:
-	return curve_base * lv * lv
-
-
-## Returns XP needed for next level-up from current state.
-func xp_for_next_level(curve_base: int = 10) -> int:
-	return xp_for_level(level + 1, curve_base)
-
-
-## Adds XP, levels up when thresholds are crossed, accumulates growth.
-## Returns the number of levels gained.
-func gain_xp(amount: int, class_provider: Callable, max_level: int = 50, curve_base: int = 10) -> int:
-	xp += amount
-	var levels_gained: int = 0
-	while level < max_level and xp >= xp_for_level(level + 1, curve_base):
-		level += 1
-		levels_gained += 1
-		_apply_growth(class_provider)
-	return levels_gained
 
 
 ## Adds JP to the specified class.
@@ -93,10 +96,12 @@ func can_unlock(class_id: String, class_provider: Callable) -> bool:
 	var pre: Dictionary = cls.prerequisites
 	if pre.is_empty():
 		return true
-	if level < int(pre.get("level", 0)):
+	if character_level() < int(pre.get("level", 0)):
 		return false
 	for pair in pre.get("classes", []):
-		if not unlocked_classes.has(str(pair[0])):
+		var req_class: String = str(pair[0])
+		var req_level: int = int(pair[1]) if pair.size() > 1 else 1
+		if int(class_levels.get(req_class, 0)) < req_level:
 			return false
 	return true
 
@@ -156,7 +161,7 @@ func to_character_data(stat_block: StatBlock) -> CharacterData:
 	c.display_name = name
 	c.race = race
 	c.classes = [active_class]
-	c.level = level
+	c.level = character_level()
 	c.bp = 0
 	c.equipment = _equipment_array()
 	c.abilities = ability_loadout.duplicate()
@@ -190,7 +195,7 @@ func to_dict() -> Dictionary:
 		"template_id": template_id,
 		"name": name,
 		"race": race,
-		"level": level,
+		"class_levels": class_levels.duplicate(),
 		"xp": xp,
 		"active_class": active_class,
 		"unlocked_classes": unlocked_classes.duplicate(),
@@ -211,9 +216,15 @@ static func from_dict(d: Dictionary) -> CharacterInstance:
 	ci.template_id = str(d.get("template_id", ""))
 	ci.name = str(d.get("name", ""))
 	ci.race = str(d.get("race", ""))
-	ci.level = int(d.get("level", 1))
-	ci.xp = int(d.get("xp", 0))
 	ci.active_class = str(d.get("active_class", "vagabond"))
+	# Migration: old saves have "level" instead of "class_levels"
+	if d.has("class_levels"):
+		ci.class_levels = _to_int_dict(d["class_levels"])
+	elif d.has("level"):
+		ci.class_levels = {ci.active_class: maxi(1, int(d["level"]))}
+	else:
+		ci.class_levels = {ci.active_class: 1}
+	ci.xp = int(d.get("xp", 0))
 	ci.unlocked_classes = _to_str_array(d.get("unlocked_classes", ["vagabond"]))
 	ci.jp = _to_int_dict(d.get("jp", {}))
 	ci.learned_abilities = _to_str_array(d.get("learned_abilities", []))

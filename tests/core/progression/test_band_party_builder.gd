@@ -27,7 +27,7 @@ func _make_instance(id: String) -> CharacterInstance:
 	ci.template_id = "human_fighter"
 	ci.name = "Hero " + id
 	ci.race = "human"
-	ci.level = 3
+	ci.class_levels = {"vagabond": 3}
 	ci.active_class = "vagabond"
 	ci.unlocked_classes = ["vagabond"] as Array[String]
 	ci.ability_loadout = [] as Array[String]

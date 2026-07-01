@@ -24,16 +24,15 @@ static func recruit(band: BattleBand, template: CharacterData,
 	return {"instance": ci, "error": ""}
 
 
-## Brings a recruit up to a target level by granting XP.
+## Brings a recruit up to a target level by directly setting class levels.
 ## Useful for scaling new recruits to match a band's power level.
 static func scale_to_level(ci: CharacterInstance, target_level: int,
 		class_provider: Callable) -> void:
-	if target_level <= ci.level:
+	if target_level <= ci.character_level():
 		return
-	# Grant enough XP to reach target level
-	var xp_needed: int = CharacterInstance.xp_for_level(target_level) - ci.xp + 1
-	if xp_needed > 0:
-		ci.gain_xp(xp_needed, class_provider)
+	var levels_to_gain: int = target_level - ci.character_level()
+	for i in levels_to_gain:
+		ci.increment_active_class_level(class_provider)
 
 
 ## Returns the average level of a band's roster, or 1 if empty.
@@ -42,5 +41,5 @@ static func average_band_level(band: BattleBand) -> int:
 		return 1
 	var total: int = 0
 	for ci in band.roster:
-		total += ci.level
+		total += ci.character_level()
 	return maxi(1, total / band.roster.size())

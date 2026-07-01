@@ -9,26 +9,26 @@ extends RefCounted
 # CHARACTER INSTANCE CHEATS
 # ============================================================
 
-## Sets the character to a target level by manipulating XP directly.
+## Sets the active class level to a target by directly manipulating class_levels.
 ## Applies growth for levels gained (upleveling) but does NOT undo growth (downleveling).
 static func set_level(ci: CharacterInstance, target_level: int,
-		class_provider: Callable, max_level: int = 50, curve_base: int = 10) -> void:
+		class_provider: Callable, max_level: int = 10) -> void:
 	target_level = clampi(target_level, 1, max_level)
-	if target_level > ci.level:
-		# Grant enough XP to reach the target level
-		var xp_needed: int = CharacterInstance.xp_for_level(target_level, curve_base) - ci.xp + 1
-		if xp_needed > 0:
-			ci.gain_xp(xp_needed, class_provider, max_level, curve_base)
-	elif target_level < ci.level:
-		# Downlevel: directly set level and XP (no growth undo)
-		ci.level = target_level
-		ci.xp = CharacterInstance.xp_for_level(target_level, curve_base)
+	var current: int = ci.character_level()
+	if target_level > current:
+		var levels_to_gain: int = target_level - current
+		for i in levels_to_gain:
+			ci.increment_active_class_level(class_provider, max_level)
+	elif target_level < current:
+		# Downlevel: directly set active class level (no growth undo)
+		ci.class_levels[ci.active_class] = maxi(1, target_level)
+		ci.xp = 0
 
 
-## Adds XP via the standard gain_xp path. Returns levels gained.
+## Adds XP via the Leveling service. Returns levels gained.
 static func add_xp(ci: CharacterInstance, amount: int,
-		class_provider: Callable, max_level: int = 50, curve_base: int = 10) -> int:
-	return ci.gain_xp(amount, class_provider, max_level, curve_base)
+		class_provider: Callable, max_level: int = 10) -> int:
+	return Leveling.grant_xp(ci, amount, class_provider, max_level)
 
 
 ## Directly sets JP for a specific class.
@@ -122,6 +122,18 @@ static func add_all_items(band: BattleBand) -> void:
 static func free_recruit(band: BattleBand, template: CharacterData,
 		name_gen: Callable, cap: int = -1) -> Dictionary:
 	return Recruiter.recruit(band, template, name_gen, 0, cap)
+
+
+## Spawns a specific encounter at a chosen band level for quick-battle testing.
+## Returns the encounter result dict (same shape as EncounterSelector.select).
+static func force_encounter(encounter_id: String, band_level: int,
+		providers: Dictionary) -> Dictionary:
+	var enc: EncounterData = GameData.get_encounter(encounter_id)
+	if enc == null:
+		return {}
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 1  # Deterministic for dev
+	return EncounterSelector.select(band_level, rng, [enc], providers)
 
 
 # ============================================================

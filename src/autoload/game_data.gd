@@ -12,11 +12,11 @@ func _ready() -> void:
 			push_error("GameData: %s" % err)
 		Log.error("GameData", "Data pipeline failed with %d error(s)" % errors.size())
 		return
-	Log.info("GameData", "Loaded %d race(s), %d class(es), %d ability(ies), %d item(s), %d character(s), %d map(s), %d terrain(s)" % [
+	Log.info("GameData", "Loaded %d race(s), %d class(es), %d ability(ies), %d item(s), %d character(s), %d map(s), %d terrain(s), %d encounter(s)" % [
 		_pipeline.races.size(), _pipeline.classes.size(),
 		_pipeline.abilities.size(), _pipeline.items.size(),
 		_pipeline.characters.size(), _pipeline.maps.size(),
-		_pipeline.terrains.size()])
+		_pipeline.terrains.size(), _pipeline.encounters.size()])
 
 
 # --- Public accessors (delegate to pipeline) ---
@@ -62,6 +62,12 @@ func all_terrain_ids() -> Array:
 
 func has_terrain(id: String) -> bool:
 	return _pipeline.terrains.has(id)
+
+func get_encounter(id: String) -> EncounterData:
+	return _pipeline.get_encounter(id)
+
+func all_encounters() -> Array:
+	return _pipeline.all_encounters()
 
 func get_loot_table(table_id: String) -> Dictionary:
 	return _pipeline.get_loot_table(table_id)

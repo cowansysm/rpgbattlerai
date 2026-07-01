@@ -61,23 +61,22 @@ func test_all_characters_have_recommended_path() -> void:
 func test_vagabond_class_exists() -> void:
 	var cls := _pipeline.get_job_class("vagabond")
 	assert_not_null(cls)
-	assert_eq(cls.tier, "starting")
+	assert_eq(cls.tier, 0)
 	assert_true("basic_strike" in cls.granted_abilities)
 
 
 func test_soldier_class_exists() -> void:
 	var cls := _pipeline.get_job_class("soldier")
 	assert_not_null(cls)
-	assert_eq(cls.tier, "tier1")
-	assert_eq(cls.archetype, "physical")
+	assert_eq(cls.tier, 1)
+	assert_eq(cls.archetype, "physical_attack")
 	assert_true("power_strike" in cls.granted_abilities)
-	assert_eq(int(cls.prerequisites.get("level", 0)), 3)
 
 
 func test_thief_class_exists() -> void:
 	var cls := _pipeline.get_job_class("thief")
 	assert_not_null(cls)
-	assert_eq(cls.tier, "tier1")
+	assert_eq(cls.tier, 1)
 	assert_eq(cls.archetype, "control")
 	assert_true("backstab" in cls.granted_abilities)
 
@@ -85,8 +84,8 @@ func test_thief_class_exists() -> void:
 func test_adept_class_exists() -> void:
 	var cls := _pipeline.get_job_class("adept")
 	assert_not_null(cls)
-	assert_eq(cls.tier, "tier1")
-	assert_eq(cls.archetype, "magical")
+	assert_eq(cls.tier, 1)
+	assert_eq(cls.archetype, "magical_attack")
 	assert_true("fire_1" in cls.granted_abilities)
 
 

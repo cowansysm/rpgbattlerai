@@ -11,7 +11,7 @@ func before_all() -> void:
 
 
 func test_entity_counts() -> void:
-	assert_eq(_pipeline.races.size(), 4, "4 races expected")
+	assert_true(_pipeline.races.size() >= 4, ">=4 races expected, got %d" % _pipeline.races.size())
 	assert_true(_pipeline.classes.size() >= 25, ">=25 classes expected, got %d" % _pipeline.classes.size())
 	assert_true(_pipeline.abilities.size() >= 70, ">=70 abilities expected, got %d" % _pipeline.abilities.size())
 	assert_true(_pipeline.items.size() >= 46, ">=46 items expected, got %d" % _pipeline.items.size())

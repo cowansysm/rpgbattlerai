@@ -10,6 +10,7 @@ var abilities := EntityRegistry.new()
 var items := EntityRegistry.new()
 var characters := EntityRegistry.new()
 var maps := EntityRegistry.new()
+var encounters := EntityRegistry.new()
 var terrains := TerrainRegistry.new()
 var loot_tables: Dictionary = {}
 var shop_pools: Dictionary = {}
@@ -49,6 +50,11 @@ func _load_all(base_path: String) -> Array[String]:
 	errors.append_array(terrains.load_from(base_path.path_join("terrain.json")))
 	errors.append_array(maps.load_validated(
 		base_path.path_join("maps"), Validator.validate_map, DataFactory.make_map))
+	# A11: Encounters
+	var enc_path: String = base_path.path_join("encounters.json")
+	if FileAccess.file_exists(enc_path):
+		errors.append_array(encounters.load_validated_file(
+			enc_path, Validator.validate_encounter, DataFactory.make_encounter))
 	errors.append_array(_load_economy_data(base_path))
 	errors.append_array(_load_run_data(base_path))
 	return errors
@@ -60,7 +66,7 @@ func _validate_references() -> Array[String]:
 	e.append_array(Validator.validate_references({
 		"races": races, "classes": classes, "abilities": abilities,
 		"items": items, "characters": characters, "maps": maps,
-		"terrains": terrains,
+		"terrains": terrains, "encounters": encounters,
 	}))
 	e.append_array(Validator.validate_shop_pools(shop_pools, items))
 	e.append_array(Validator.validate_loot_tables(loot_tables, shop_pools, items))
@@ -96,6 +102,12 @@ func get_character(id: String) -> CharacterData:
 
 func get_map(id: String) -> MapData:
 	return maps.get_entry(id)
+
+func get_encounter(id: String) -> EncounterData:
+	return encounters.get_entry(id)
+
+func all_encounters() -> Array:
+	return encounters.all()
 
 func get_terrain(id: String) -> TerrainProps:
 	return terrains.get_entry(id)

@@ -536,34 +536,27 @@ func _refresh_roster() -> void:
 			var bp: int = BpCalculator.compute(ci, _item_prov)
 			var btn := Button.new()
 			btn.text = "%s  —  Lv%d %s  (%d BP)" % [
-				ci.name, ci.level, ci.active_class.capitalize(), bp]
+				ci.name, ci.character_level(), ci.active_class.capitalize(), bp]
 			btn.size_flags_horizontal = SIZE_EXPAND_FILL
 			btn.custom_minimum_size.y = 36
 			var iid: String = ci.instance_id
 			btn.pressed.connect(_on_inspect_instance.bind(iid))
 			_roster_list.add_child(btn)
 
-	# Recruit buttons (one per character template, filtered by profile unlocks)
+	# Recruit buttons (one per draftable race — each produces L1 Vagabond)
 	for child in _recruit_list.get_children():
 		child.queue_free()
 	var cost: int = Constants.get_value("RECRUIT_COST", 50)
-	var templates: Array = GameData.all_characters()
-	var skip_gate: bool = Dev.enabled and DevOverrides.get_flag("DEV_SKIP_RECRUITMENT_GATE", false)
-	var profile_has_unlocks: bool = not SaveManager.profile.unlocked_templates.is_empty()
-	for t in templates:
-		if not t is CharacterData:
-			continue
-		var td: CharacterData = t
-		# Filter by profile unlocks unless gate is bypassed or no unlocks exist yet
-		if not skip_gate and profile_has_unlocks:
-			if not SaveManager.profile.has_template(td.id):
-				continue
+	var draftable: Array = Constants.get_value("DRAFTABLE_RACES",
+		["human", "dwarf", "elf", "halfling"]) as Array
+	for race_id in draftable:
+		var race_name: String = str(race_id).capitalize()
 		var btn := Button.new()
-		btn.text = "Recruit %s (%s) — %d gold" % [td.display_name, td.race, cost]
+		btn.text = "Recruit %s Vagabond — %d gold" % [race_name, cost]
 		btn.custom_minimum_size.y = 32
 		btn.disabled = _band.gold < cost or _band.is_roster_full()
-		var tid: String = td.id
-		btn.pressed.connect(_on_recruit.bind(tid))
+		var rid: String = str(race_id)
+		btn.pressed.connect(_on_recruit_race.bind(rid))
 		_recruit_list.add_child(btn)
 
 	# Inventory summary
@@ -590,12 +583,21 @@ func _on_inspect_instance(instance_id: String) -> void:
 		_show_inspect(ci)
 
 
-func _on_recruit(template_id: String) -> void:
-	var template: CharacterData = GameData.get_character(template_id)
-	if template == null:
-		return
+func _on_recruit_race(race_id: String) -> void:
+	# A11: Race-based recruitment — builds a synthetic L1 Vagabond template
+	var starting_class: String = str(Constants.get_value("STARTING_CLASS", "vagabond"))
+	var template := CharacterData.new()
+	template.id = "%s_%s" % [race_id, starting_class]
+	template.display_name = "%s %s" % [race_id.capitalize(), starting_class.capitalize()]
+	template.race = race_id
+	template.classes = [starting_class] as Array[String]
+	template.level = 1
+	template.bp = 0
+	template.base_stats = {}
+	var race_data: RaceData = GameData.get_race(race_id)
+	if race_data != null:
+		template.base_stats = race_data.base_stats.duplicate()
 	var gen_name := func(race: String) -> String: return _name_gen.generate_name(race)
-	# Seed profile-unlocked classes on new recruits (or all classes if dev override)
 	var bonus: Array[String] = []
 	if Dev.enabled and DevOverrides.get_flag("DEV_ALL_CLASSES_UNLOCKED", false):
 		for cid in GameData.all_classes():
@@ -634,12 +636,12 @@ func _refresh_inspect() -> void:
 		return
 
 	_inspect_name.text = "%s  (Lv%d %s)" % [
-		_inspected.name, _inspected.level, _inspected.race.capitalize()]
+		_inspected.name, _inspected.character_level(), _inspected.race.capitalize()]
 	var down_limit: int = Constants.get_value("DOWN_LIMIT", 2)
 	var remaining_lives: int = maxi(0, down_limit + 1 - _inspected.downs_this_run)
 	var total_lives: int = down_limit + 1
 	_inspect_xp.text = "XP: %d / %d  |  Lives: %d/%d" % [
-		_inspected.xp, _inspected.xp_for_next_level(), remaining_lives, total_lives]
+		_inspected.xp, Leveling.next_threshold(_inspected.character_level()), remaining_lives, total_lives]
 
 	# Compute stats
 	var sb: StatBlock = InstanceStatResolver.resolve(_inspected, _race_prov, _class_prov)
@@ -887,7 +889,7 @@ func _refresh_field_select() -> void:
 		var check := CheckBox.new()
 		var bp: int = BpCalculator.compute(ci, _item_prov)
 		check.text = "%s  Lv%d %s  (%d BP)" % [
-			ci.name, ci.level, ci.active_class.capitalize(), bp]
+			ci.name, ci.character_level(), ci.active_class.capitalize(), bp]
 		var iid: String = ci.instance_id
 		check.toggled.connect(_on_field_toggled.bind(iid))
 		row.add_child(check)
@@ -942,9 +944,8 @@ func _refresh_shop() -> void:
 		child.queue_free()
 	var pool_prov := func(id: String) -> Array:
 		return GameData.get_shop_pool(id)
-	var pool_ids: Array[String] = []
-	for pid in GameData.all_shop_pool_ids():
-		pool_ids.append(str(pid))
+	# A11: Base shop only shows the base_shop pool (bp <= 2 items)
+	var pool_ids: Array[String] = ["base_shop"]
 	var buyable: Array[String] = ShopService.available_items(pool_ids, pool_prov)
 	if buyable.is_empty():
 		var empty := Label.new()
@@ -1221,7 +1222,7 @@ func _refresh_dev_inspect() -> void:
 	var level_spin := SpinBox.new()
 	level_spin.min_value = 1
 	level_spin.max_value = Constants.get_value("MAX_LEVEL", 50)
-	level_spin.value = _inspected.level
+	level_spin.value = _inspected.character_level()
 	level_spin.size_flags_horizontal = SIZE_EXPAND_FILL
 	level_row.add_child(level_spin)
 	var level_set_btn := Button.new()

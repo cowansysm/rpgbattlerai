@@ -42,5 +42,13 @@
   "SELL_RATIO": 0.5,
   "LOOT_DEPTH_SCALE": 0.1,
   "PRICE_PER_BP": 5,
-  "DOWN_LIMIT": 2
+  "DOWN_LIMIT": 2,
+  "STARTING_GOLD": 500,
+  "GOLD_PER_BAND_LEVEL": 50,
+  "DRAFTABLE_RACES": ["human", "dwarf", "elf", "halfling"],
+  "STARTING_CLASS": "vagabond",
+  "STARTING_LEVEL": 1,
+  "BASE_SHOP_MAX_BP": 2,
+  "RUN_SHOP_SLOTS": 6,
+  "RUN_PREMIUM_CHANCE": 0.25
 }

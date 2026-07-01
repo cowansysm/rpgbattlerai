@@ -1,334 +1,4999 @@
 [
   {
-    "id": "vagabond", "name": "Vagabond", "abbr": "VGB",
-    "archetype": "", "branch": "", "tier": "starting",
-    "stats": { "atk": 1, "def": 1, "hp": 5 },
-    "growth": { "hp": 1.2, "atk": 0.3, "def": 0.3, "spd": 0.2, "wp": 0.1 },
+    "id": "vagabond",
+    "name": "Vagabond",
+    "abbr": "VGB",
+    "archetype": "",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 1,
+      "def": 1,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.2,
+      "atk": 0.3,
+      "def": 0.3,
+      "spd": 0.2,
+      "wp": 0.1
+    },
     "derived_bonuses": {},
-    "equipment_access": ["sword", "daggers", "staff", "sling", "light_armor"],
-    "granted_abilities": ["basic_strike"],
-    "jp_costs": { "first_aid": 30 },
-    "level_max": 50,
+    "equipment_access": [
+      "sword",
+      "daggers",
+      "staff",
+      "sling",
+      "light_armor"
+    ],
+    "granted_abilities": [
+      "basic_strike"
+    ],
+    "jp_costs": {
+      "first_aid": 30
+    },
+    "level_max": 10,
     "required_classes": [],
     "prerequisites": {}
   },
-
   {
-    "id": "soldier", "name": "Soldier", "abbr": "SLD",
-    "archetype": "physical", "branch": "melee", "tier": "tier1",
-    "stats": { "atk": 3, "def": 2, "hp": 10 },
-    "growth": { "hp": 1.5, "atk": 0.5, "def": 0.4, "spd": 0.2 },
+    "id": "soldier",
+    "name": "Soldier",
+    "abbr": "SLD",
+    "archetype": "physical_attack",
+    "branch": "melee",
+    "tier": 1,
+    "stats": {
+      "atk": 3,
+      "def": 2,
+      "hp": 10
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.4,
+      "spd": 0.2
+    },
     "derived_bonuses": {},
-    "equipment_access": ["sword", "greataxe", "medium_armor", "shield", "light_armor"],
-    "granted_abilities": ["power_strike"],
-    "jp_costs": { "reckless_swing": 80, "rage": 60, "cleave": 100 },
-    "level_max": 50,
+    "equipment_access": [
+      "sword",
+      "greataxe",
+      "medium_armor",
+      "shield",
+      "light_armor"
+    ],
+    "granted_abilities": [
+      "power_strike"
+    ],
+    "jp_costs": {
+      "reckless_swing": 80,
+      "rage": 60,
+      "cleave": 100
+    },
+    "level_max": 10,
     "required_classes": [],
-    "prerequisites": { "level": 3 }
+    "prerequisites": {
+      "classes": [
+        [
+          "vagabond",
+          3
+        ]
+      ]
+    }
   },
   {
-    "id": "thief", "name": "Thief", "abbr": "THF",
-    "archetype": "control", "branch": "", "tier": "tier1",
-    "stats": { "spd": 2, "atk": 1, "jump": 1 },
-    "growth": { "hp": 1.0, "spd": 0.4, "atk": 0.4, "def": 0.2 },
+    "id": "thief",
+    "name": "Thief",
+    "abbr": "THF",
+    "archetype": "control",
+    "branch": "",
+    "tier": 1,
+    "stats": {
+      "spd": 2,
+      "atk": 1,
+      "jump": 1
+    },
+    "growth": {
+      "hp": 1,
+      "spd": 0.4,
+      "atk": 0.4,
+      "def": 0.2
+    },
     "derived_bonuses": {},
-    "equipment_access": ["daggers", "sling", "short_bow", "light_armor", "smoke_bomb_pouch"],
-    "granted_abilities": ["backstab"],
-    "jp_costs": { "lullaby": 80, "steal": 40, "evasion": 60 },
-    "level_max": 50,
+    "equipment_access": [
+      "daggers",
+      "sling",
+      "short_bow",
+      "light_armor",
+      "smoke_bomb_pouch"
+    ],
+    "granted_abilities": [
+      "backstab"
+    ],
+    "jp_costs": {
+      "lullaby": 80,
+      "steal": 40,
+      "evasion": 60
+    },
+    "level_max": 10,
     "required_classes": [],
-    "prerequisites": { "level": 3 }
+    "prerequisites": {
+      "classes": [
+        [
+          "vagabond",
+          3
+        ]
+      ]
+    }
   },
   {
-    "id": "adept", "name": "Adept", "abbr": "ADT",
-    "archetype": "magical", "branch": "arcane", "tier": "tier1",
-    "stats": { "mag": 3, "wp": 4, "res": 1 },
-    "growth": { "hp": 0.8, "mag": 0.5, "wp": 0.4, "res": 0.3 },
+    "id": "adept",
+    "name": "Adept",
+    "abbr": "ADT",
+    "archetype": "magical_attack",
+    "branch": "arcane",
+    "tier": 1,
+    "stats": {
+      "mag": 3,
+      "wp": 4,
+      "res": 1
+    },
+    "growth": {
+      "hp": 0.8,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
     "derived_bonuses": {},
-    "equipment_access": ["staff", "rod", "sling", "robe"],
-    "granted_abilities": ["fire_1"],
-    "jp_costs": { "cure_1": 60, "ice_1": 80, "thunder_1": 100, "shield_1": 80 },
-    "level_max": 50,
+    "equipment_access": [
+      "staff",
+      "rod",
+      "sling",
+      "robe"
+    ],
+    "granted_abilities": [
+      "fire_1"
+    ],
+    "jp_costs": {
+      "cure_1": 60,
+      "ice_1": 80,
+      "thunder_1": 100,
+      "shield_1": 80
+    },
+    "level_max": 10,
     "required_classes": [],
-    "prerequisites": { "level": 3 }
-  },
-
-  {
-    "id": "knight", "name": "Knight", "abbr": "KNT",
-    "archetype": "physical", "branch": "melee", "tier": "advanced",
-    "stats": { "atk": 4, "def": 4, "hp": 15 },
-    "growth": { "hp": 1.8, "atk": 0.5, "def": 0.6, "spd": 0.1, "res": 0.2 },
-    "derived_bonuses": {},
-    "equipment_access": ["sword", "longsword", "halberd", "heavy_armor", "medium_armor", "shield", "tower_shield"],
-    "granted_abilities": ["fortify"],
-    "jp_costs": { "shield_bash": 80, "taunt": 60, "iron_will": 100 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 6, "classes": [["soldier", 100]] }
-  },
-  {
-    "id": "berserker", "name": "Berserker", "abbr": "BRK",
-    "archetype": "physical", "branch": "melee", "tier": "advanced",
-    "stats": { "atk": 6, "hp": 12, "def": 1 },
-    "growth": { "hp": 1.6, "atk": 0.7, "def": 0.2, "spd": 0.3 },
-    "derived_bonuses": {},
-    "equipment_access": ["greataxe", "warhammer", "sword", "medium_armor", "light_armor", "berserker_band"],
-    "granted_abilities": ["reckless_swing"],
-    "jp_costs": { "rage": 60, "war_cry": 100, "charge": 120 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 6, "classes": [["soldier", 100]] }
-  },
-  {
-    "id": "archer", "name": "Archer", "abbr": "ARC",
-    "archetype": "physical", "branch": "ranged", "tier": "advanced",
-    "stats": { "atk": 3, "spd": 2, "rng": 1 },
-    "growth": { "hp": 1.1, "atk": 0.5, "spd": 0.4, "def": 0.2 },
-    "derived_bonuses": {},
-    "equipment_access": ["bow", "crossbow", "light_armor", "studded_leather", "bracer_of_accuracy"],
-    "granted_abilities": ["aimed_shot"],
-    "jp_costs": { "volley": 80, "pinning_shot": 100 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 6, "classes": [["soldier", 100]] }
+    "prerequisites": {
+      "classes": [
+        [
+          "vagabond",
+          3
+        ]
+      ]
+    }
   },
   {
-    "id": "ranger", "name": "Ranger", "abbr": "RNG",
-    "archetype": "physical", "branch": "ranged", "tier": "advanced",
-    "stats": { "atk": 2, "spd": 3, "def": 1 },
-    "growth": { "hp": 1.2, "atk": 0.4, "spd": 0.4, "def": 0.3 },
+    "id": "knight",
+    "name": "Knight",
+    "abbr": "KNT",
+    "archetype": "physical_attack",
+    "branch": "melee",
+    "tier": 2,
+    "stats": {
+      "atk": 4,
+      "def": 4,
+      "hp": 15
+    },
+    "growth": {
+      "hp": 1.8,
+      "atk": 0.5,
+      "def": 0.6,
+      "spd": 0.1,
+      "res": 0.2
+    },
     "derived_bonuses": {},
-    "equipment_access": ["bow", "longbow", "daggers", "light_armor", "studded_leather", "rangers_quiver"],
-    "granted_abilities": ["nature_salve"],
-    "jp_costs": { "camouflage": 60, "pinning_shot": 80, "aimed_shot": 100 },
-    "level_max": 50,
+    "equipment_access": [
+      "sword",
+      "longsword",
+      "halberd",
+      "heavy_armor",
+      "medium_armor",
+      "shield",
+      "tower_shield"
+    ],
+    "granted_abilities": [
+      "fortify"
+    ],
+    "jp_costs": {
+      "shield_bash": 80,
+      "taunt": 60,
+      "iron_will": 100
+    },
+    "level_max": 10,
     "required_classes": [],
-    "prerequisites": { "level": 6, "classes": [["soldier", 100]] }
-  },
-
-  {
-    "id": "rogue", "name": "Rogue", "abbr": "ROG",
-    "archetype": "control", "branch": "", "tier": "advanced",
-    "stats": { "spd": 3, "atk": 3 },
-    "growth": { "hp": 1.0, "spd": 0.5, "atk": 0.5, "def": 0.2 },
-    "derived_bonuses": {},
-    "equipment_access": ["daggers", "rapier", "throwing_knives", "light_armor", "studded_leather", "cloak_of_shadows"],
-    "granted_abilities": ["poison_strike"],
-    "jp_costs": { "blind_strike": 80, "expose_weakness": 100, "shadow_step": 120 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 6, "classes": [["thief", 100]] }
-  },
-  {
-    "id": "trickster", "name": "Trickster", "abbr": "TRK",
-    "archetype": "control", "branch": "", "tier": "advanced",
-    "stats": { "spd": 2, "atk": 1, "mag": 1, "wp": 2 },
-    "growth": { "hp": 0.9, "spd": 0.4, "atk": 0.3, "mag": 0.3, "wp": 0.3 },
-    "derived_bonuses": {},
-    "equipment_access": ["daggers", "sling", "short_bow", "light_armor", "smoke_bomb_pouch", "cloak_of_shadows"],
-    "granted_abilities": ["cripple"],
-    "jp_costs": { "lullaby": 60, "blind_strike": 80, "discord": 120 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 6, "classes": [["thief", 100]] }
-  },
-  {
-    "id": "bard", "name": "Bard", "abbr": "BRD",
-    "archetype": "support", "branch": "", "tier": "advanced",
-    "stats": { "spd": 1, "mag": 1, "wp": 3 },
-    "growth": { "hp": 1.0, "spd": 0.3, "mag": 0.3, "wp": 0.4, "res": 0.2 },
-    "derived_bonuses": {},
-    "equipment_access": ["daggers", "lute", "light_armor", "robe", "cloak_of_shadows"],
-    "granted_abilities": ["inspire"],
-    "jp_costs": { "courage": 60, "song_of_speed": 80, "soothe": 100 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 6, "classes": [["thief", 100]] }
+    "prerequisites": {
+      "classes": [
+        [
+          "soldier",
+          3
+        ]
+      ]
+    }
   },
   {
-    "id": "herald", "name": "Herald", "abbr": "HRL",
-    "archetype": "support", "branch": "", "tier": "advanced",
-    "stats": { "atk": 2, "mag": 2, "wp": 2 },
-    "growth": { "hp": 1.1, "atk": 0.3, "mag": 0.3, "wp": 0.3, "def": 0.2, "res": 0.2 },
+    "id": "berserker",
+    "name": "Berserker",
+    "abbr": "BRK",
+    "archetype": "physical_attack",
+    "branch": "melee",
+    "tier": 2,
+    "stats": {
+      "atk": 6,
+      "hp": 12,
+      "def": 1
+    },
+    "growth": {
+      "hp": 1.6,
+      "atk": 0.7,
+      "def": 0.2,
+      "spd": 0.3
+    },
     "derived_bonuses": {},
-    "equipment_access": ["sword", "mace", "light_armor", "medium_armor", "shield", "war_horn"],
-    "granted_abilities": ["courage"],
-    "jp_costs": { "inspire": 60, "first_aid": 40, "cure_1": 100, "protect": 100 },
-    "level_max": 50,
+    "equipment_access": [
+      "greataxe",
+      "warhammer",
+      "sword",
+      "medium_armor",
+      "light_armor",
+      "berserker_band"
+    ],
+    "granted_abilities": [
+      "reckless_swing"
+    ],
+    "jp_costs": {
+      "rage": 60,
+      "war_cry": 100,
+      "charge": 120
+    },
+    "level_max": 10,
     "required_classes": [],
-    "prerequisites": { "level": 6, "classes": [["thief", 100]] }
-  },
-
-  {
-    "id": "black_mage", "name": "Black Mage", "abbr": "BLM",
-    "archetype": "magical", "branch": "arcane", "tier": "advanced",
-    "stats": { "mag": 5, "wp": 5, "res": 1 },
-    "growth": { "hp": 0.7, "mag": 0.7, "wp": 0.5, "res": 0.3 },
-    "derived_bonuses": {},
-    "equipment_access": ["staff", "rod", "wand", "robe", "enchanted_robe"],
-    "granted_abilities": ["fire_2"],
-    "jp_costs": { "ice_2": 100, "thunder_2": 100, "arcane_blast": 80, "silence": 120 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 6, "classes": [["adept", 100]] }
-  },
-  {
-    "id": "elementalist", "name": "Elementalist", "abbr": "ELM",
-    "archetype": "magical", "branch": "arcane", "tier": "advanced",
-    "stats": { "mag": 4, "wp": 4, "res": 2 },
-    "growth": { "hp": 0.8, "mag": 0.6, "wp": 0.4, "res": 0.4 },
-    "derived_bonuses": {},
-    "equipment_access": ["staff", "rod", "wand", "robe", "crystal_shield"],
-    "granted_abilities": ["arcane_blast"],
-    "jp_costs": { "fire_2": 80, "ice_2": 80, "thunder_2": 80, "slow": 100, "mana_shield": 100 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 6, "classes": [["adept", 100]] }
-  },
-  {
-    "id": "white_mage", "name": "White Mage", "abbr": "WHM",
-    "archetype": "magical", "branch": "divine", "tier": "advanced",
-    "stats": { "mag": 4, "wp": 5, "res": 3 },
-    "growth": { "hp": 0.9, "mag": 0.5, "wp": 0.5, "res": 0.4 },
-    "derived_bonuses": {},
-    "equipment_access": ["staff", "mace", "robe", "enchanted_robe", "crystal_shield", "healers_charm"],
-    "granted_abilities": ["cure_2"],
-    "jp_costs": { "protect": 80, "shell": 80, "regen": 100, "revive": 150 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 6, "classes": [["adept", 100]] }
+    "prerequisites": {
+      "classes": [
+        [
+          "soldier",
+          3
+        ]
+      ]
+    }
   },
   {
-    "id": "acolyte", "name": "Acolyte", "abbr": "ACO",
-    "archetype": "magical", "branch": "divine", "tier": "advanced",
-    "stats": { "mag": 3, "wp": 4, "res": 2, "def": 1 },
-    "growth": { "hp": 1.0, "mag": 0.4, "wp": 0.4, "res": 0.4, "def": 0.2 },
+    "id": "archer",
+    "name": "Archer",
+    "abbr": "ARC",
+    "archetype": "physical_attack",
+    "branch": "ranged",
+    "tier": 2,
+    "stats": {
+      "atk": 3,
+      "spd": 2,
+      "rng": 1
+    },
+    "growth": {
+      "hp": 1.1,
+      "atk": 0.5,
+      "spd": 0.4,
+      "def": 0.2
+    },
     "derived_bonuses": {},
-    "equipment_access": ["staff", "mace", "robe", "medium_armor", "shield", "healers_charm"],
-    "granted_abilities": ["holy_1"],
-    "jp_costs": { "cure_1": 60, "bless": 80, "dispel": 80, "barrier": 120 },
-    "level_max": 50,
+    "equipment_access": [
+      "bow",
+      "crossbow",
+      "light_armor",
+      "studded_leather",
+      "bracer_of_accuracy"
+    ],
+    "granted_abilities": [
+      "aimed_shot"
+    ],
+    "jp_costs": {
+      "volley": 80,
+      "pinning_shot": 100
+    },
+    "level_max": 10,
     "required_classes": [],
-    "prerequisites": { "level": 6, "classes": [["adept", 100]] }
-  },
-
-  {
-    "id": "templar", "name": "Templar", "abbr": "TMP",
-    "archetype": "physical", "branch": "melee", "tier": "elite",
-    "stats": { "atk": 5, "def": 5, "hp": 20, "res": 2 },
-    "growth": { "hp": 2.0, "atk": 0.6, "def": 0.6, "res": 0.3, "spd": 0.1 },
-    "derived_bonuses": {},
-    "equipment_access": ["longsword", "halberd", "plate_armor", "heavy_armor", "tower_shield", "shield", "amulet_of_protection"],
-    "granted_abilities": ["iron_will"],
-    "jp_costs": { "last_stand": 150, "sanctuary": 200, "charge": 120 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 10, "classes": [["knight", 200]] }
-  },
-  {
-    "id": "warlord", "name": "Warlord", "abbr": "WRL",
-    "archetype": "physical", "branch": "melee", "tier": "elite",
-    "stats": { "atk": 8, "hp": 15, "def": 2, "spd": 1 },
-    "growth": { "hp": 1.8, "atk": 0.8, "def": 0.3, "spd": 0.3 },
-    "derived_bonuses": {},
-    "equipment_access": ["greataxe", "warhammer", "longsword", "heavy_armor", "medium_armor", "berserker_band"],
-    "granted_abilities": ["war_cry"],
-    "jp_costs": { "charge": 120, "last_stand": 150, "cleave": 100 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 10, "classes": [["berserker", 200]] }
-  },
-  {
-    "id": "sharpshooter", "name": "Sharpshooter", "abbr": "SHP",
-    "archetype": "physical", "branch": "ranged", "tier": "elite",
-    "stats": { "atk": 5, "spd": 3, "rng": 2 },
-    "growth": { "hp": 1.1, "atk": 0.6, "spd": 0.5, "def": 0.2 },
-    "derived_bonuses": {},
-    "equipment_access": ["longbow", "crossbow", "bow", "studded_leather", "light_armor", "bracer_of_accuracy", "rangers_quiver"],
-    "granted_abilities": ["snipe"],
-    "jp_costs": { "barrage": 150, "volley": 100, "pinning_shot": 100 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 10, "classes": [["archer", 200]] }
-  },
-
-  {
-    "id": "assassin", "name": "Assassin", "abbr": "ASN",
-    "archetype": "control", "branch": "", "tier": "elite",
-    "stats": { "spd": 4, "atk": 5, "jump": 1 },
-    "growth": { "hp": 1.0, "spd": 0.6, "atk": 0.6, "def": 0.2 },
-    "derived_bonuses": {},
-    "equipment_access": ["daggers", "throwing_knives", "rapier", "studded_leather", "light_armor", "cloak_of_shadows"],
-    "granted_abilities": ["assassinate"],
-    "jp_costs": { "shadow_step": 120, "poison_strike": 80, "expose_weakness": 100 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 10, "classes": [["rogue", 200]] }
+    "prerequisites": {
+      "classes": [
+        [
+          "soldier",
+          3
+        ]
+      ]
+    }
   },
   {
-    "id": "minstrel", "name": "Minstrel", "abbr": "MNS",
-    "archetype": "support", "branch": "", "tier": "elite",
-    "stats": { "spd": 2, "mag": 2, "wp": 5 },
-    "growth": { "hp": 1.0, "spd": 0.3, "mag": 0.4, "wp": 0.5, "res": 0.3 },
+    "id": "ranger",
+    "name": "Ranger",
+    "abbr": "RNG",
+    "archetype": "physical_attack",
+    "branch": "ranged",
+    "tier": 2,
+    "stats": {
+      "atk": 2,
+      "spd": 3,
+      "def": 1
+    },
+    "growth": {
+      "hp": 1.2,
+      "atk": 0.4,
+      "spd": 0.4,
+      "def": 0.3
+    },
     "derived_bonuses": {},
-    "equipment_access": ["daggers", "lute", "robe", "light_armor", "crown_of_wisdom", "cloak_of_shadows"],
-    "granted_abilities": ["battle_hymn"],
-    "jp_costs": { "discord": 120, "encore": 100, "lament": 80, "song_of_speed": 80, "haste": 150 },
-    "level_max": 50,
+    "equipment_access": [
+      "bow",
+      "longbow",
+      "daggers",
+      "light_armor",
+      "studded_leather",
+      "rangers_quiver"
+    ],
+    "granted_abilities": [
+      "nature_salve"
+    ],
+    "jp_costs": {
+      "camouflage": 60,
+      "pinning_shot": 80,
+      "aimed_shot": 100
+    },
+    "level_max": 10,
     "required_classes": [],
-    "prerequisites": { "level": 10, "classes": [["bard", 200]] }
-  },
-
-  {
-    "id": "sage", "name": "Sage", "abbr": "SAG",
-    "archetype": "magical", "branch": "arcane", "tier": "elite",
-    "stats": { "mag": 7, "wp": 7, "res": 2 },
-    "growth": { "hp": 0.7, "mag": 0.8, "wp": 0.6, "res": 0.4 },
-    "derived_bonuses": {},
-    "equipment_access": ["wand", "rod", "staff", "enchanted_robe", "robe", "crown_of_wisdom"],
-    "granted_abilities": ["meteor"],
-    "jp_costs": { "fire_3": 150, "ice_3": 150, "thunder_3": 150, "chain_lightning": 180 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 10, "classes": [["black_mage", 200]] }
-  },
-  {
-    "id": "necromancer", "name": "Necromancer", "abbr": "NEC",
-    "archetype": "magical", "branch": "arcane", "tier": "elite",
-    "stats": { "mag": 6, "wp": 5, "res": 3 },
-    "growth": { "hp": 0.8, "mag": 0.7, "wp": 0.5, "res": 0.4 },
-    "derived_bonuses": {},
-    "equipment_access": ["wand", "rod", "staff", "enchanted_robe", "robe", "crystal_shield"],
-    "granted_abilities": ["drain"],
-    "jp_costs": { "dark_pulse": 100, "death_grip": 150, "curse": 120, "silence": 100 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 10, "classes": [["elementalist", 200]] }
-  },
-  {
-    "id": "priest", "name": "Priest", "abbr": "PRI",
-    "archetype": "magical", "branch": "divine", "tier": "elite",
-    "stats": { "mag": 5, "wp": 7, "res": 4 },
-    "growth": { "hp": 1.0, "mag": 0.6, "wp": 0.6, "res": 0.5 },
-    "derived_bonuses": {},
-    "equipment_access": ["staff", "mace", "enchanted_robe", "robe", "crystal_shield", "healers_charm", "crown_of_wisdom"],
-    "granted_abilities": ["cure_3"],
-    "jp_costs": { "revive": 150, "sanctuary": 180, "haste": 150, "holy_2": 180 },
-    "level_max": 50,
-    "required_classes": [],
-    "prerequisites": { "level": 10, "classes": [["white_mage", 200]] }
+    "prerequisites": {
+      "classes": [
+        [
+          "soldier",
+          3
+        ]
+      ]
+    }
   },
   {
-    "id": "oracle", "name": "Oracle", "abbr": "ORC",
-    "archetype": "magical", "branch": "divine", "tier": "elite",
-    "stats": { "mag": 5, "wp": 6, "res": 3, "def": 2 },
-    "growth": { "hp": 1.0, "mag": 0.5, "wp": 0.5, "res": 0.5, "def": 0.2 },
+    "id": "rogue",
+    "name": "Rogue",
+    "abbr": "ROG",
+    "archetype": "control",
+    "branch": "",
+    "tier": 2,
+    "stats": {
+      "spd": 3,
+      "atk": 3
+    },
+    "growth": {
+      "hp": 1,
+      "spd": 0.5,
+      "atk": 0.5,
+      "def": 0.2
+    },
     "derived_bonuses": {},
-    "equipment_access": ["staff", "mace", "robe", "medium_armor", "crystal_shield", "healers_charm", "amulet_of_protection"],
-    "granted_abilities": ["holy_1"],
-    "jp_costs": { "divine_judgment": 180, "prophecy": 150, "barrier": 120, "dispel": 80, "bless": 100 },
-    "level_max": 50,
+    "equipment_access": [
+      "daggers",
+      "rapier",
+      "throwing_knives",
+      "light_armor",
+      "studded_leather",
+      "cloak_of_shadows"
+    ],
+    "granted_abilities": [
+      "poison_strike"
+    ],
+    "jp_costs": {
+      "blind_strike": 80,
+      "expose_weakness": 100,
+      "shadow_step": 120
+    },
+    "level_max": 10,
     "required_classes": [],
-    "prerequisites": { "level": 10, "classes": [["acolyte", 200]] }
+    "prerequisites": {
+      "classes": [
+        [
+          "thief",
+          3
+        ]
+      ]
+    }
+  },
+  {
+    "id": "trickster",
+    "name": "Trickster",
+    "abbr": "TRK",
+    "archetype": "control",
+    "branch": "",
+    "tier": 2,
+    "stats": {
+      "spd": 2,
+      "atk": 1,
+      "mag": 1,
+      "wp": 2
+    },
+    "growth": {
+      "hp": 0.9,
+      "spd": 0.4,
+      "atk": 0.3,
+      "mag": 0.3,
+      "wp": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "daggers",
+      "sling",
+      "short_bow",
+      "light_armor",
+      "smoke_bomb_pouch",
+      "cloak_of_shadows"
+    ],
+    "granted_abilities": [
+      "cripple"
+    ],
+    "jp_costs": {
+      "lullaby": 60,
+      "blind_strike": 80,
+      "discord": 120
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "thief",
+          3
+        ]
+      ]
+    }
+  },
+  {
+    "id": "bard",
+    "name": "Bard",
+    "abbr": "BRD",
+    "archetype": "support",
+    "branch": "",
+    "tier": 2,
+    "stats": {
+      "spd": 1,
+      "mag": 1,
+      "wp": 3
+    },
+    "growth": {
+      "hp": 1,
+      "spd": 0.3,
+      "mag": 0.3,
+      "wp": 0.4,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "daggers",
+      "lute",
+      "light_armor",
+      "robe",
+      "cloak_of_shadows"
+    ],
+    "granted_abilities": [
+      "inspire"
+    ],
+    "jp_costs": {
+      "courage": 60,
+      "song_of_speed": 80,
+      "soothe": 100
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "thief",
+          3
+        ]
+      ]
+    }
+  },
+  {
+    "id": "herald",
+    "name": "Herald",
+    "abbr": "HRL",
+    "archetype": "support",
+    "branch": "",
+    "tier": 2,
+    "stats": {
+      "atk": 2,
+      "mag": 2,
+      "wp": 2
+    },
+    "growth": {
+      "hp": 1.1,
+      "atk": 0.3,
+      "mag": 0.3,
+      "wp": 0.3,
+      "def": 0.2,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "sword",
+      "mace",
+      "light_armor",
+      "medium_armor",
+      "shield",
+      "war_horn"
+    ],
+    "granted_abilities": [
+      "courage"
+    ],
+    "jp_costs": {
+      "inspire": 60,
+      "first_aid": 40,
+      "cure_1": 100,
+      "protect": 100
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "thief",
+          3
+        ]
+      ]
+    }
+  },
+  {
+    "id": "black_mage",
+    "name": "Black Mage",
+    "abbr": "BLM",
+    "archetype": "magical_attack",
+    "branch": "arcane",
+    "tier": 2,
+    "stats": {
+      "mag": 5,
+      "wp": 5,
+      "res": 1
+    },
+    "growth": {
+      "hp": 0.7,
+      "mag": 0.7,
+      "wp": 0.5,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "staff",
+      "rod",
+      "wand",
+      "robe",
+      "enchanted_robe"
+    ],
+    "granted_abilities": [
+      "fire_2"
+    ],
+    "jp_costs": {
+      "ice_2": 100,
+      "thunder_2": 100,
+      "arcane_blast": 80,
+      "silence": 120
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "adept",
+          3
+        ]
+      ]
+    }
+  },
+  {
+    "id": "elementalist",
+    "name": "Elementalist",
+    "abbr": "ELM",
+    "archetype": "magical_attack",
+    "branch": "arcane",
+    "tier": 2,
+    "stats": {
+      "mag": 4,
+      "wp": 4,
+      "res": 2
+    },
+    "growth": {
+      "hp": 0.8,
+      "mag": 0.6,
+      "wp": 0.4,
+      "res": 0.4
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "staff",
+      "rod",
+      "wand",
+      "robe",
+      "crystal_shield"
+    ],
+    "granted_abilities": [
+      "arcane_blast"
+    ],
+    "jp_costs": {
+      "fire_2": 80,
+      "ice_2": 80,
+      "thunder_2": 80,
+      "slow": 100,
+      "mana_shield": 100
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "adept",
+          3
+        ]
+      ]
+    }
+  },
+  {
+    "id": "white_mage",
+    "name": "White Mage",
+    "abbr": "WHM",
+    "archetype": "magical_attack",
+    "branch": "divine",
+    "tier": 2,
+    "stats": {
+      "mag": 4,
+      "wp": 5,
+      "res": 3
+    },
+    "growth": {
+      "hp": 0.9,
+      "mag": 0.5,
+      "wp": 0.5,
+      "res": 0.4
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "staff",
+      "mace",
+      "robe",
+      "enchanted_robe",
+      "crystal_shield",
+      "healers_charm"
+    ],
+    "granted_abilities": [
+      "cure_2"
+    ],
+    "jp_costs": {
+      "protect": 80,
+      "shell": 80,
+      "regen": 100,
+      "revive": 150
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "adept",
+          3
+        ]
+      ]
+    }
+  },
+  {
+    "id": "acolyte",
+    "name": "Acolyte",
+    "abbr": "ACO",
+    "archetype": "magical_attack",
+    "branch": "divine",
+    "tier": 2,
+    "stats": {
+      "mag": 3,
+      "wp": 4,
+      "res": 2,
+      "def": 1
+    },
+    "growth": {
+      "hp": 1,
+      "mag": 0.4,
+      "wp": 0.4,
+      "res": 0.4,
+      "def": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "staff",
+      "mace",
+      "robe",
+      "medium_armor",
+      "shield",
+      "healers_charm"
+    ],
+    "granted_abilities": [
+      "holy_1"
+    ],
+    "jp_costs": {
+      "cure_1": 60,
+      "bless": 80,
+      "dispel": 80,
+      "barrier": 120
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "adept",
+          3
+        ]
+      ]
+    }
+  },
+  {
+    "id": "templar",
+    "name": "Templar",
+    "abbr": "TMP",
+    "archetype": "physical_attack",
+    "branch": "melee",
+    "tier": 3,
+    "stats": {
+      "atk": 5,
+      "def": 5,
+      "hp": 20,
+      "res": 2
+    },
+    "growth": {
+      "hp": 2,
+      "atk": 0.6,
+      "def": 0.6,
+      "res": 0.3,
+      "spd": 0.1
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "longsword",
+      "halberd",
+      "plate_armor",
+      "heavy_armor",
+      "tower_shield",
+      "shield",
+      "amulet_of_protection"
+    ],
+    "granted_abilities": [
+      "iron_will"
+    ],
+    "jp_costs": {
+      "last_stand": 150,
+      "sanctuary": 200,
+      "charge": 120
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "knight",
+          5
+        ]
+      ]
+    }
+  },
+  {
+    "id": "warlord",
+    "name": "Warlord",
+    "abbr": "WRL",
+    "archetype": "physical_attack",
+    "branch": "melee",
+    "tier": 3,
+    "stats": {
+      "atk": 8,
+      "hp": 15,
+      "def": 2,
+      "spd": 1
+    },
+    "growth": {
+      "hp": 1.8,
+      "atk": 0.8,
+      "def": 0.3,
+      "spd": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "greataxe",
+      "warhammer",
+      "longsword",
+      "heavy_armor",
+      "medium_armor",
+      "berserker_band"
+    ],
+    "granted_abilities": [
+      "war_cry"
+    ],
+    "jp_costs": {
+      "charge": 120,
+      "last_stand": 150,
+      "cleave": 100
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "berserker",
+          5
+        ]
+      ]
+    }
+  },
+  {
+    "id": "sharpshooter",
+    "name": "Sharpshooter",
+    "abbr": "SHP",
+    "archetype": "physical_attack",
+    "branch": "ranged",
+    "tier": 3,
+    "stats": {
+      "atk": 5,
+      "spd": 3,
+      "rng": 2
+    },
+    "growth": {
+      "hp": 1.1,
+      "atk": 0.6,
+      "spd": 0.5,
+      "def": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "longbow",
+      "crossbow",
+      "bow",
+      "studded_leather",
+      "light_armor",
+      "bracer_of_accuracy",
+      "rangers_quiver"
+    ],
+    "granted_abilities": [
+      "snipe"
+    ],
+    "jp_costs": {
+      "barrage": 150,
+      "volley": 100,
+      "pinning_shot": 100
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "archer",
+          5
+        ]
+      ]
+    }
+  },
+  {
+    "id": "assassin",
+    "name": "Assassin",
+    "abbr": "ASN",
+    "archetype": "control",
+    "branch": "",
+    "tier": 3,
+    "stats": {
+      "spd": 4,
+      "atk": 5,
+      "jump": 1
+    },
+    "growth": {
+      "hp": 1,
+      "spd": 0.6,
+      "atk": 0.6,
+      "def": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "daggers",
+      "throwing_knives",
+      "rapier",
+      "studded_leather",
+      "light_armor",
+      "cloak_of_shadows"
+    ],
+    "granted_abilities": [
+      "assassinate"
+    ],
+    "jp_costs": {
+      "shadow_step": 120,
+      "poison_strike": 80,
+      "expose_weakness": 100
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "rogue",
+          5
+        ]
+      ]
+    }
+  },
+  {
+    "id": "minstrel",
+    "name": "Minstrel",
+    "abbr": "MNS",
+    "archetype": "support",
+    "branch": "",
+    "tier": 3,
+    "stats": {
+      "spd": 2,
+      "mag": 2,
+      "wp": 5
+    },
+    "growth": {
+      "hp": 1,
+      "spd": 0.3,
+      "mag": 0.4,
+      "wp": 0.5,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "daggers",
+      "lute",
+      "robe",
+      "light_armor",
+      "crown_of_wisdom",
+      "cloak_of_shadows"
+    ],
+    "granted_abilities": [
+      "battle_hymn"
+    ],
+    "jp_costs": {
+      "discord": 120,
+      "encore": 100,
+      "lament": 80,
+      "song_of_speed": 80,
+      "haste": 150
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "bard",
+          5
+        ]
+      ]
+    }
+  },
+  {
+    "id": "sage",
+    "name": "Sage",
+    "abbr": "SAG",
+    "archetype": "magical_attack",
+    "branch": "arcane",
+    "tier": 3,
+    "stats": {
+      "mag": 7,
+      "wp": 7,
+      "res": 2
+    },
+    "growth": {
+      "hp": 0.7,
+      "mag": 0.8,
+      "wp": 0.6,
+      "res": 0.4
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "wand",
+      "rod",
+      "staff",
+      "enchanted_robe",
+      "robe",
+      "crown_of_wisdom"
+    ],
+    "granted_abilities": [
+      "meteor"
+    ],
+    "jp_costs": {
+      "fire_3": 150,
+      "ice_3": 150,
+      "thunder_3": 150,
+      "chain_lightning": 180
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "black_mage",
+          5
+        ]
+      ]
+    }
+  },
+  {
+    "id": "necromancer",
+    "name": "Necromancer",
+    "abbr": "NEC",
+    "archetype": "magical_attack",
+    "branch": "arcane",
+    "tier": 3,
+    "stats": {
+      "mag": 6,
+      "wp": 5,
+      "res": 3
+    },
+    "growth": {
+      "hp": 0.8,
+      "mag": 0.7,
+      "wp": 0.5,
+      "res": 0.4
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "wand",
+      "rod",
+      "staff",
+      "enchanted_robe",
+      "robe",
+      "crystal_shield"
+    ],
+    "granted_abilities": [
+      "drain"
+    ],
+    "jp_costs": {
+      "dark_pulse": 100,
+      "death_grip": 150,
+      "curse": 120,
+      "silence": 100
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "elementalist",
+          5
+        ]
+      ]
+    }
+  },
+  {
+    "id": "priest",
+    "name": "Priest",
+    "abbr": "PRI",
+    "archetype": "magical_attack",
+    "branch": "divine",
+    "tier": 3,
+    "stats": {
+      "mag": 5,
+      "wp": 7,
+      "res": 4
+    },
+    "growth": {
+      "hp": 1,
+      "mag": 0.6,
+      "wp": 0.6,
+      "res": 0.5
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "staff",
+      "mace",
+      "enchanted_robe",
+      "robe",
+      "crystal_shield",
+      "healers_charm",
+      "crown_of_wisdom"
+    ],
+    "granted_abilities": [
+      "cure_3"
+    ],
+    "jp_costs": {
+      "revive": 150,
+      "sanctuary": 180,
+      "haste": 150,
+      "holy_2": 180
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "white_mage",
+          5
+        ]
+      ]
+    }
+  },
+  {
+    "id": "oracle",
+    "name": "Oracle",
+    "abbr": "ORC",
+    "archetype": "magical_attack",
+    "branch": "divine",
+    "tier": 3,
+    "stats": {
+      "mag": 5,
+      "wp": 6,
+      "res": 3,
+      "def": 2
+    },
+    "growth": {
+      "hp": 1,
+      "mag": 0.5,
+      "wp": 0.5,
+      "res": 0.5,
+      "def": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [
+      "staff",
+      "mace",
+      "robe",
+      "medium_armor",
+      "crystal_shield",
+      "healers_charm",
+      "amulet_of_protection"
+    ],
+    "granted_abilities": [
+      "holy_1"
+    ],
+    "jp_costs": {
+      "divine_judgment": 180,
+      "prophecy": 150,
+      "barrier": 120,
+      "dispel": 80,
+      "bless": 100
+    },
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {
+      "classes": [
+        [
+          "acolyte",
+          5
+        ]
+      ]
+    }
+  },
+  {
+    "id": "bat_echocaster",
+    "name": "Bat Echocaster",
+    "abbr": "BAT",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "curse",
+      "mana_shield",
+      "chain_lightning",
+      "fire_1",
+      "fire_2"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "bat_nightstalker",
+    "name": "Bat Nightstalker",
+    "abbr": "BAT",
+    "archetype": "control",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "spd": 2,
+      "atk": 1,
+      "mag": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "spd": 0.4,
+      "atk": 0.3,
+      "mag": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cripple",
+      "poison_strike",
+      "slow",
+      "smoke_bomb",
+      "backstab"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "bat_screecher",
+    "name": "Bat Screecher",
+    "abbr": "BAT",
+    "archetype": "control",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "spd": 2,
+      "atk": 1,
+      "mag": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "spd": 0.4,
+      "atk": 0.3,
+      "mag": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cripple",
+      "poison_strike",
+      "slow",
+      "smoke_bomb",
+      "backstab"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "bat_swarm",
+    "name": "Bat Swarm",
+    "abbr": "BAT",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "backstab",
+      "poison_strike",
+      "iron_will",
+      "last_stand",
+      "expose_weakness"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "imp_firebrand",
+    "name": "Imp Firebrand",
+    "abbr": "IMP",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "chain_lightning",
+      "fire_1",
+      "fire_2",
+      "ice_1",
+      "ice_2"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "imp_flameling",
+    "name": "Imp Flameling",
+    "abbr": "IMP",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "basic_strike",
+      "power_strike",
+      "reckless_swing",
+      "cleave",
+      "charge"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "imp_tormentor",
+    "name": "Imp Tormentor",
+    "abbr": "IMP",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "ice_1",
+      "ice_2",
+      "thunder_1",
+      "thunder_2",
+      "arcane_blast"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "imp_warden",
+    "name": "Imp Warden",
+    "abbr": "IMP",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "iron_will",
+      "taunt",
+      "war_cry",
+      "last_stand",
+      "protect"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "kobold_firebrand",
+    "name": "Kobold Firebrand",
+    "abbr": "KOB",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "mana_shield",
+      "chain_lightning",
+      "fire_1",
+      "fire_2",
+      "ice_1"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "kobold_skirmisher",
+    "name": "Kobold Skirmisher",
+    "abbr": "KOB",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 1,
+      "spd": 1,
+      "hp": 3
+    },
+    "growth": {
+      "hp": 1.0,
+      "atk": 0.4,
+      "spd": 0.3,
+      "rng": 0.1
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cripple",
+      "basic_strike",
+      "aimed_shot",
+      "volley",
+      "snipe"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "kobold_trapsmith",
+    "name": "Kobold Trapsmith",
+    "abbr": "KOB",
+    "archetype": "control",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "spd": 2,
+      "atk": 1,
+      "mag": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "spd": 0.4,
+      "atk": 0.3,
+      "mag": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "lullaby",
+      "blind_strike",
+      "cripple",
+      "poison_strike",
+      "slow"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "kobold_tunneler",
+    "name": "Kobold Tunneler",
+    "abbr": "KOB",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "war_cry",
+      "shield_bash",
+      "fortify",
+      "backstab",
+      "poison_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "slime_acidic",
+    "name": "Slime Acidic",
+    "abbr": "SLI",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "poison_strike",
+      "iron_will",
+      "last_stand",
+      "expose_weakness",
+      "cripple"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "slime_corrosive",
+    "name": "Slime Corrosive",
+    "abbr": "SLI",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "charge",
+      "rage",
+      "war_cry",
+      "shield_bash",
+      "fortify"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "slime_engulfer",
+    "name": "Slime Engulfer",
+    "abbr": "SLI",
+    "archetype": "control",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "spd": 2,
+      "atk": 1,
+      "mag": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "spd": 0.4,
+      "atk": 0.3,
+      "mag": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "basic_strike",
+      "curse",
+      "lullaby",
+      "blind_strike",
+      "cripple"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "slime_splitter",
+    "name": "Slime Splitter",
+    "abbr": "SLI",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry",
+      "shield_bash"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "insectoid_carapace",
+    "name": "Insectoid Carapace",
+    "abbr": "INS",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "war_cry",
+      "last_stand",
+      "protect",
+      "charge",
+      "power_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "insectoid_drone",
+    "name": "Insectoid Drone",
+    "abbr": "INS",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry",
+      "shield_bash"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "insectoid_stinger",
+    "name": "Insectoid Stinger",
+    "abbr": "INS",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry",
+      "shield_bash"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "insectoid_swarmer",
+    "name": "Insectoid Swarmer",
+    "abbr": "INS",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry",
+      "shield_bash"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "goblin_shaman",
+    "name": "Goblin Shaman",
+    "abbr": "GOB",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "ice_2",
+      "thunder_1",
+      "thunder_2",
+      "arcane_blast",
+      "dark_pulse"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "goblin_skirmisher",
+    "name": "Goblin Skirmisher",
+    "abbr": "GOB",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 1,
+      "spd": 1,
+      "hp": 3
+    },
+    "growth": {
+      "hp": 1.0,
+      "atk": 0.4,
+      "spd": 0.3,
+      "rng": 0.1
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "poison_strike",
+      "cripple",
+      "basic_strike",
+      "aimed_shot",
+      "volley"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "goblin_soldier",
+    "name": "Goblin Soldier",
+    "abbr": "GOB",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "iron_will",
+      "last_stand",
+      "expose_weakness",
+      "cripple",
+      "basic_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "goblin_trapper",
+    "name": "Goblin Trapper",
+    "abbr": "GOB",
+    "archetype": "control",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "spd": 2,
+      "atk": 1,
+      "mag": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "spd": 0.4,
+      "atk": 0.3,
+      "mag": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "backstab",
+      "expose_weakness",
+      "silence",
+      "discord",
+      "steal"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "wolf_howler",
+    "name": "Wolf Howler",
+    "abbr": "WOL",
+    "archetype": "control",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "spd": 2,
+      "atk": 1,
+      "mag": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "spd": 0.4,
+      "atk": 0.3,
+      "mag": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cripple",
+      "poison_strike",
+      "slow",
+      "smoke_bomb",
+      "backstab"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "wolf_hunter",
+    "name": "Wolf Hunter",
+    "abbr": "WOL",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 1,
+      "spd": 1,
+      "hp": 3
+    },
+    "growth": {
+      "hp": 1.0,
+      "atk": 0.4,
+      "spd": 0.3,
+      "rng": 0.1
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "camouflage",
+      "poison_strike",
+      "cripple",
+      "basic_strike",
+      "aimed_shot"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "wolf_packleader",
+    "name": "Wolf Packleader",
+    "abbr": "WOL",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "reckless_swing",
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "wolf_savage",
+    "name": "Wolf Savage",
+    "abbr": "WOL",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "backstab",
+      "poison_strike",
+      "iron_will",
+      "last_stand",
+      "expose_weakness"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "wolf_stalker",
+    "name": "Wolf Stalker",
+    "abbr": "WOL",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "rage",
+      "war_cry",
+      "shield_bash",
+      "fortify",
+      "backstab"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "spider_ambusher",
+    "name": "Spider Ambusher",
+    "abbr": "SPI",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "rage",
+      "war_cry",
+      "shield_bash",
+      "fortify",
+      "backstab"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "spider_spinner",
+    "name": "Spider Spinner",
+    "abbr": "SPI",
+    "archetype": "control",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "spd": 2,
+      "atk": 1,
+      "mag": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "spd": 0.4,
+      "atk": 0.3,
+      "mag": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "lullaby",
+      "blind_strike",
+      "cripple",
+      "poison_strike",
+      "slow"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "spider_venomfang",
+    "name": "Spider Venomfang",
+    "abbr": "SPI",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "shield_bash",
+      "fortify",
+      "backstab",
+      "poison_strike",
+      "iron_will"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "spider_weaver",
+    "name": "Spider Weaver",
+    "abbr": "SPI",
+    "archetype": "control",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "spd": 2,
+      "atk": 1,
+      "mag": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "spd": 0.4,
+      "atk": 0.3,
+      "mag": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cripple",
+      "poison_strike",
+      "slow",
+      "smoke_bomb",
+      "backstab"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "zombie_bloated",
+    "name": "Zombie Bloated",
+    "abbr": "ZOM",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "reckless_swing",
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "zombie_devourer",
+    "name": "Zombie Devourer",
+    "abbr": "ZOM",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry",
+      "shield_bash"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "zombie_plaguebearer",
+    "name": "Zombie Plaguebearer",
+    "abbr": "ZOM",
+    "archetype": "magical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 1,
+      "wp": 3,
+      "def": 1,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.2,
+      "mag": 0.3,
+      "wp": 0.4,
+      "res": 0.3,
+      "def": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cure_1",
+      "cure_2",
+      "regen",
+      "protect",
+      "shell"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "zombie_shambler",
+    "name": "Zombie Shambler",
+    "abbr": "ZOM",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "rage",
+      "war_cry",
+      "shield_bash",
+      "fortify",
+      "backstab"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "orc_berserker",
+    "name": "Orc Berserker",
+    "abbr": "ORC",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "fortify",
+      "backstab",
+      "poison_strike",
+      "iron_will",
+      "last_stand"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "orc_hunter",
+    "name": "Orc Hunter",
+    "abbr": "ORC",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 1,
+      "spd": 1,
+      "hp": 3
+    },
+    "growth": {
+      "hp": 1.0,
+      "atk": 0.4,
+      "spd": 0.3,
+      "rng": 0.1
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "volley",
+      "snipe",
+      "pinning_shot",
+      "barrage",
+      "smoke_bomb"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "orc_raider",
+    "name": "Orc Raider",
+    "abbr": "ORC",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "expose_weakness",
+      "cripple",
+      "basic_strike",
+      "power_strike",
+      "reckless_swing"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "orc_spiritcaller",
+    "name": "Orc Spiritcaller",
+    "abbr": "ORC",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "dark_pulse",
+      "drain",
+      "silence",
+      "slow",
+      "curse"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "gnoll_demoncaller",
+    "name": "Gnoll Demoncaller",
+    "abbr": "GNO",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "ice_1",
+      "ice_2",
+      "thunder_1",
+      "thunder_2",
+      "arcane_blast"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "gnoll_hunter",
+    "name": "Gnoll Hunter",
+    "abbr": "GNO",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 1,
+      "spd": 1,
+      "hp": 3
+    },
+    "growth": {
+      "hp": 1.0,
+      "atk": 0.4,
+      "spd": 0.3,
+      "rng": 0.1
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "smoke_bomb",
+      "camouflage",
+      "poison_strike",
+      "cripple",
+      "basic_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "gnoll_painbringer",
+    "name": "Gnoll Painbringer",
+    "abbr": "GNO",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "reckless_swing",
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "gnoll_reaver",
+    "name": "Gnoll Reaver",
+    "abbr": "GNO",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "fortify",
+      "backstab",
+      "poison_strike",
+      "iron_will",
+      "last_stand"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "hobgoblin_captain",
+    "name": "Hobgoblin Captain",
+    "abbr": "HOB",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "rage",
+      "war_cry",
+      "shield_bash",
+      "fortify",
+      "backstab"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "hobgoblin_crossbowman",
+    "name": "Hobgoblin Crossbowman",
+    "abbr": "HOB",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 1,
+      "spd": 1,
+      "hp": 3
+    },
+    "growth": {
+      "hp": 1.0,
+      "atk": 0.4,
+      "spd": 0.3,
+      "rng": 0.1
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "volley",
+      "snipe",
+      "pinning_shot",
+      "barrage",
+      "smoke_bomb"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "hobgoblin_drillmaster",
+    "name": "Hobgoblin Drillmaster",
+    "abbr": "HOB",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "fortify",
+      "backstab",
+      "poison_strike",
+      "iron_will",
+      "last_stand"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "hobgoblin_legionnaire",
+    "name": "Hobgoblin Legionnaire",
+    "abbr": "HOB",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "fortify",
+      "backstab",
+      "poison_strike",
+      "iron_will",
+      "last_stand"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "hobgoblin_warcaster",
+    "name": "Hobgoblin Warcaster",
+    "abbr": "HOB",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "curse",
+      "mana_shield",
+      "chain_lightning",
+      "fire_1",
+      "fire_2"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "lizardfolk_spearfisher",
+    "name": "Lizardfolk Spearfisher",
+    "abbr": "LIZ",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "rage",
+      "war_cry",
+      "shield_bash",
+      "fortify",
+      "backstab"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "lizardfolk_stalker",
+    "name": "Lizardfolk Stalker",
+    "abbr": "LIZ",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry",
+      "shield_bash"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "lizardfolk_swampcaller",
+    "name": "Lizardfolk Swampcaller",
+    "abbr": "LIZ",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "fire_1",
+      "fire_2",
+      "ice_1",
+      "ice_2",
+      "thunder_1"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "lizardfolk_warrior",
+    "name": "Lizardfolk Warrior",
+    "abbr": "LIZ",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "fortify",
+      "backstab",
+      "poison_strike",
+      "iron_will",
+      "last_stand"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "skeleton_archer",
+    "name": "Skeleton Archer",
+    "abbr": "SKE",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 1,
+      "spd": 1,
+      "hp": 3
+    },
+    "growth": {
+      "hp": 1.0,
+      "atk": 0.4,
+      "spd": 0.3,
+      "rng": 0.1
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cripple",
+      "basic_strike",
+      "aimed_shot",
+      "volley",
+      "snipe"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "skeleton_bonecaster",
+    "name": "Skeleton Bonecaster",
+    "abbr": "SKE",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "curse",
+      "mana_shield",
+      "chain_lightning",
+      "fire_1",
+      "fire_2"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "skeleton_knight",
+    "name": "Skeleton Knight",
+    "abbr": "SKE",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "protect",
+      "charge",
+      "power_strike",
+      "shell",
+      "barrier"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "skeleton_reaper",
+    "name": "Skeleton Reaper",
+    "abbr": "SKE",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "shield_bash",
+      "fortify",
+      "backstab",
+      "poison_strike",
+      "iron_will"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "skeleton_soldier",
+    "name": "Skeleton Soldier",
+    "abbr": "SKE",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "expose_weakness",
+      "cripple",
+      "basic_strike",
+      "power_strike",
+      "reckless_swing"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "ogre_boulder_hurler",
+    "name": "Ogre Boulder Hurler",
+    "abbr": "OGR",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 1,
+      "spd": 1,
+      "hp": 3
+    },
+    "growth": {
+      "hp": 1.0,
+      "atk": 0.4,
+      "spd": 0.3,
+      "rng": 0.1
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "pinning_shot",
+      "barrage",
+      "smoke_bomb",
+      "camouflage",
+      "poison_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "ogre_bruiser",
+    "name": "Ogre Bruiser",
+    "abbr": "OGR",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "rage",
+      "war_cry",
+      "shield_bash",
+      "fortify",
+      "backstab"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "ogre_maneater",
+    "name": "Ogre Maneater",
+    "abbr": "OGR",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "fortify",
+      "backstab",
+      "poison_strike",
+      "iron_will",
+      "last_stand"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "ogre_smasher",
+    "name": "Ogre Smasher",
+    "abbr": "OGR",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry",
+      "shield_bash"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "minotaur_berserker",
+    "name": "Minotaur Berserker",
+    "abbr": "MIN",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "fortify",
+      "backstab",
+      "poison_strike",
+      "iron_will",
+      "last_stand"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "minotaur_charger",
+    "name": "Minotaur Charger",
+    "abbr": "MIN",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "last_stand",
+      "expose_weakness",
+      "cripple",
+      "basic_strike",
+      "power_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "minotaur_guardian",
+    "name": "Minotaur Guardian",
+    "abbr": "MIN",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "charge",
+      "power_strike",
+      "shell",
+      "barrier",
+      "basic_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "minotaur_labyrinth_stalker",
+    "name": "Minotaur Labyrinth Stalker",
+    "abbr": "MIN",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "basic_strike",
+      "power_strike",
+      "reckless_swing",
+      "cleave",
+      "charge"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "troll_bog_shaman",
+    "name": "Troll Bog Shaman",
+    "abbr": "TRO",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "thunder_2",
+      "arcane_blast",
+      "dark_pulse",
+      "drain",
+      "silence"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "troll_boulderhurl",
+    "name": "Troll Boulderhurl",
+    "abbr": "TRO",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 1,
+      "spd": 1,
+      "hp": 3
+    },
+    "growth": {
+      "hp": 1.0,
+      "atk": 0.4,
+      "spd": 0.3,
+      "rng": 0.1
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "barrage",
+      "smoke_bomb",
+      "camouflage",
+      "poison_strike",
+      "cripple"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "troll_feral",
+    "name": "Troll Feral",
+    "abbr": "TRO",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "expose_weakness",
+      "cripple",
+      "basic_strike",
+      "power_strike",
+      "reckless_swing"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "troll_regenerator",
+    "name": "Troll Regenerator",
+    "abbr": "TRO",
+    "archetype": "support",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 1,
+      "wp": 3,
+      "def": 1,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.2,
+      "mag": 0.3,
+      "wp": 0.4,
+      "res": 0.3,
+      "def": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "dispel",
+      "bless",
+      "inspire",
+      "poison_strike",
+      "dark_pulse"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "troll_render",
+    "name": "Troll Render",
+    "abbr": "TRO",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "shield_bash",
+      "fortify",
+      "backstab",
+      "poison_strike",
+      "iron_will"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "golem_bulwark",
+    "name": "Golem Bulwark",
+    "abbr": "GOL",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "shield_bash",
+      "iron_will",
+      "taunt",
+      "war_cry",
+      "last_stand"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "golem_colossus",
+    "name": "Golem Colossus",
+    "abbr": "GOL",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "fortify",
+      "shield_bash",
+      "iron_will",
+      "taunt",
+      "war_cry"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "golem_crusher",
+    "name": "Golem Crusher",
+    "abbr": "GOL",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "power_strike",
+      "reckless_swing",
+      "cleave",
+      "charge",
+      "rage"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "golem_runeguard",
+    "name": "Golem Runeguard",
+    "abbr": "GOL",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "taunt",
+      "war_cry",
+      "last_stand",
+      "protect",
+      "charge"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "golem_sentinel",
+    "name": "Golem Sentinel",
+    "abbr": "GOL",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "taunt",
+      "war_cry",
+      "last_stand",
+      "protect",
+      "charge"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "treant_elder",
+    "name": "Treant Elder",
+    "abbr": "TRE",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cripple",
+      "basic_strike",
+      "power_strike",
+      "reckless_swing",
+      "cleave"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "treant_grovekeeper",
+    "name": "Treant Grovekeeper",
+    "abbr": "TRE",
+    "archetype": "support",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 1,
+      "wp": 3,
+      "def": 1,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.2,
+      "mag": 0.3,
+      "wp": 0.4,
+      "res": 0.3,
+      "def": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "dispel",
+      "bless",
+      "inspire",
+      "poison_strike",
+      "dark_pulse"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "treant_thorncaster",
+    "name": "Treant Thorncaster",
+    "abbr": "TRE",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "mana_shield",
+      "chain_lightning",
+      "fire_1",
+      "fire_2",
+      "ice_1"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "treant_warden",
+    "name": "Treant Warden",
+    "abbr": "TRE",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "taunt",
+      "war_cry",
+      "last_stand",
+      "protect",
+      "charge"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "gargoyle_sentinel",
+    "name": "Gargoyle Sentinel",
+    "abbr": "GAR",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "power_strike",
+      "shell",
+      "barrier",
+      "basic_strike",
+      "fortify"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "gargoyle_skywatcher",
+    "name": "Gargoyle Skywatcher",
+    "abbr": "GAR",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 1,
+      "spd": 1,
+      "hp": 3
+    },
+    "growth": {
+      "hp": 1.0,
+      "atk": 0.4,
+      "spd": 0.3,
+      "rng": 0.1
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "smoke_bomb",
+      "camouflage",
+      "poison_strike",
+      "cripple",
+      "basic_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "gargoyle_smasher",
+    "name": "Gargoyle Smasher",
+    "abbr": "GAR",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "war_cry",
+      "shield_bash",
+      "fortify",
+      "backstab",
+      "poison_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "gargoyle_stoneguard",
+    "name": "Gargoyle Stoneguard",
+    "abbr": "GAR",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "power_strike",
+      "shell",
+      "barrier",
+      "basic_strike",
+      "fortify"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "gargoyle_wardstone",
+    "name": "Gargoyle Wardstone",
+    "abbr": "GAR",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "iron_will",
+      "taunt",
+      "war_cry",
+      "last_stand",
+      "protect"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "dire_beast_bulwark",
+    "name": "Dire Beast Bulwark",
+    "abbr": "DIR",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "basic_strike",
+      "fortify",
+      "shield_bash",
+      "iron_will",
+      "taunt"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "dire_beast_maw",
+    "name": "Dire Beast Maw",
+    "abbr": "DIR",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "power_strike",
+      "reckless_swing",
+      "cleave",
+      "charge",
+      "rage"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "dire_beast_pouncer",
+    "name": "Dire Beast Pouncer",
+    "abbr": "DIR",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "backstab",
+      "poison_strike",
+      "iron_will",
+      "last_stand",
+      "expose_weakness"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "dire_beast_ravager",
+    "name": "Dire Beast Ravager",
+    "abbr": "DIR",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "war_cry",
+      "shield_bash",
+      "fortify",
+      "backstab",
+      "poison_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "elemental_coreguard",
+    "name": "Elemental Coreguard",
+    "abbr": "ELE",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "protect",
+      "charge",
+      "power_strike",
+      "shell",
+      "barrier"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "elemental_frostform",
+    "name": "Elemental Frostform",
+    "abbr": "ELE",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "dark_pulse",
+      "drain",
+      "silence",
+      "slow",
+      "curse"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "elemental_pyre",
+    "name": "Elemental Pyre",
+    "abbr": "ELE",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "chain_lightning",
+      "fire_1",
+      "fire_2",
+      "ice_1",
+      "ice_2"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "elemental_stoneheart",
+    "name": "Elemental Stoneheart",
+    "abbr": "ELE",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "charge",
+      "power_strike",
+      "shell",
+      "barrier",
+      "basic_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "elemental_tempest",
+    "name": "Elemental Tempest",
+    "abbr": "ELE",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "drain",
+      "silence",
+      "slow",
+      "curse",
+      "mana_shield"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "wraith_hauntcaller",
+    "name": "Wraith Hauntcaller",
+    "abbr": "WRA",
+    "archetype": "magical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 1,
+      "wp": 3,
+      "def": 1,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.2,
+      "mag": 0.3,
+      "wp": 0.4,
+      "res": 0.3,
+      "def": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "silence",
+      "slow",
+      "curse",
+      "dispel",
+      "bless"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "wraith_soulrender",
+    "name": "Wraith Soulrender",
+    "abbr": "WRA",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "reckless_swing",
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "wraith_specter",
+    "name": "Wraith Specter",
+    "abbr": "WRA",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "reckless_swing",
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "wraith_veil",
+    "name": "Wraith Veil",
+    "abbr": "WRA",
+    "archetype": "control",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "spd": 2,
+      "atk": 1,
+      "mag": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "spd": 0.4,
+      "atk": 0.3,
+      "mag": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "basic_strike",
+      "curse",
+      "lullaby",
+      "blind_strike",
+      "cripple"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "naga_charmer",
+    "name": "Naga Charmer",
+    "abbr": "NAG",
+    "archetype": "support",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 1,
+      "wp": 3,
+      "def": 1,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.2,
+      "mag": 0.3,
+      "wp": 0.4,
+      "res": 0.3,
+      "def": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "inspire",
+      "poison_strike",
+      "dark_pulse",
+      "drain",
+      "cure_1"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "naga_hydromancer",
+    "name": "Naga Hydromancer",
+    "abbr": "NAG",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "dark_pulse",
+      "drain",
+      "silence",
+      "slow",
+      "curse"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "naga_spellweaver",
+    "name": "Naga Spellweaver",
+    "abbr": "NAG",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "fire_2",
+      "ice_1",
+      "ice_2",
+      "thunder_1",
+      "thunder_2"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "naga_striker",
+    "name": "Naga Striker",
+    "abbr": "NAG",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "rage",
+      "war_cry",
+      "shield_bash",
+      "fortify",
+      "backstab"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "naga_warden",
+    "name": "Naga Warden",
+    "abbr": "NAG",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "power_strike",
+      "shell",
+      "barrier",
+      "basic_strike",
+      "fortify"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "merfolk_guardian",
+    "name": "Merfolk Guardian",
+    "abbr": "MER",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "protect",
+      "charge",
+      "power_strike",
+      "shell",
+      "barrier"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "merfolk_siren",
+    "name": "Merfolk Siren",
+    "abbr": "MER",
+    "archetype": "support",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 1,
+      "wp": 3,
+      "def": 1,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.2,
+      "mag": 0.3,
+      "wp": 0.4,
+      "res": 0.3,
+      "def": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "inspire",
+      "poison_strike",
+      "dark_pulse",
+      "drain",
+      "cure_1"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "merfolk_spearfisher",
+    "name": "Merfolk Spearfisher",
+    "abbr": "MER",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "cleave",
+      "charge",
+      "rage",
+      "war_cry",
+      "shield_bash"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "merfolk_tidewarden",
+    "name": "Merfolk Tidewarden",
+    "abbr": "MER",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "power_strike",
+      "shell",
+      "barrier",
+      "basic_strike",
+      "fortify"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "merfolk_wavecaller",
+    "name": "Merfolk Wavecaller",
+    "abbr": "MER",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "ice_1",
+      "ice_2",
+      "thunder_1",
+      "thunder_2",
+      "arcane_blast"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "harpy_diver",
+    "name": "Harpy Diver",
+    "abbr": "HAR",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "war_cry",
+      "shield_bash",
+      "fortify",
+      "backstab",
+      "poison_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "harpy_screecher",
+    "name": "Harpy Screecher",
+    "abbr": "HAR",
+    "archetype": "control",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "spd": 2,
+      "atk": 1,
+      "mag": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "spd": 0.4,
+      "atk": 0.3,
+      "mag": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "discord",
+      "steal",
+      "evasion",
+      "shadow_step",
+      "basic_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "harpy_talon",
+    "name": "Harpy Talon",
+    "abbr": "HAR",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "expose_weakness",
+      "cripple",
+      "basic_strike",
+      "power_strike",
+      "reckless_swing"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "harpy_windcaller",
+    "name": "Harpy Windcaller",
+    "abbr": "HAR",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "silence",
+      "slow",
+      "curse",
+      "mana_shield",
+      "chain_lightning"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "demon_brute",
+    "name": "Demon Brute",
+    "abbr": "DEM",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "charge",
+      "rage",
+      "war_cry",
+      "shield_bash",
+      "fortify"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "demon_corruptor",
+    "name": "Demon Corruptor",
+    "abbr": "DEM",
+    "archetype": "magical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 1,
+      "wp": 3,
+      "def": 1,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.2,
+      "mag": 0.3,
+      "wp": 0.4,
+      "res": 0.3,
+      "def": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "silence",
+      "slow",
+      "curse",
+      "dispel",
+      "bless"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "demon_dreadlord",
+    "name": "Demon Dreadlord",
+    "abbr": "DEM",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "poison_strike",
+      "iron_will",
+      "last_stand",
+      "expose_weakness",
+      "cripple"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "demon_hellfire",
+    "name": "Demon Hellfire",
+    "abbr": "DEM",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "chain_lightning",
+      "fire_1",
+      "fire_2",
+      "ice_1",
+      "ice_2"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "drake_firebreather",
+    "name": "Drake Firebreather",
+    "abbr": "DRA",
+    "archetype": "magical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "mag": 3,
+      "wp": 3,
+      "res": 1
+    },
+    "growth": {
+      "hp": 1.0,
+      "mag": 0.5,
+      "wp": 0.4,
+      "res": 0.3
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "ice_2",
+      "thunder_1",
+      "thunder_2",
+      "arcane_blast",
+      "dark_pulse"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "drake_maw",
+    "name": "Drake Maw",
+    "abbr": "DRA",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 2,
+      "hp": 5
+    },
+    "growth": {
+      "hp": 1.5,
+      "atk": 0.5,
+      "def": 0.3,
+      "spd": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "poison_strike",
+      "iron_will",
+      "last_stand",
+      "expose_weakness",
+      "cripple"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "drake_scalelord",
+    "name": "Drake Scalelord",
+    "abbr": "DRA",
+    "archetype": "physical_defense",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "def": 3,
+      "hp": 10,
+      "res": 1
+    },
+    "growth": {
+      "hp": 2.0,
+      "def": 0.5,
+      "atk": 0.3,
+      "res": 0.2
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "taunt",
+      "war_cry",
+      "last_stand",
+      "protect",
+      "charge"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
+  },
+  {
+    "id": "drake_skyhunter",
+    "name": "Drake Skyhunter",
+    "abbr": "DRA",
+    "archetype": "physical_attack",
+    "branch": "",
+    "tier": 0,
+    "stats": {
+      "atk": 1,
+      "spd": 1,
+      "hp": 3
+    },
+    "growth": {
+      "hp": 1.0,
+      "atk": 0.4,
+      "spd": 0.3,
+      "rng": 0.1
+    },
+    "derived_bonuses": {},
+    "equipment_access": [],
+    "granted_abilities": [
+      "smoke_bomb",
+      "camouflage",
+      "poison_strike",
+      "cripple",
+      "basic_strike"
+    ],
+    "jp_costs": {},
+    "level_max": 10,
+    "required_classes": [],
+    "prerequisites": {}
   }
 ]

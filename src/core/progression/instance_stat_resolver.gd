@@ -3,6 +3,11 @@ extends RefCounted
 ## Computes the base StatBlock for a CharacterInstance.
 ## base(key) = race.base_stats[key] + active_class.stat_modifiers[key] + growth_accumulated[key]
 ## Spec reference: alpha-phaseA4-spec.md §7.1
+##
+## NOTE (A11): This tracks ACCUMULATED growth across class switches for player
+## instances. LevelScaler provides one-shot projection for monsters/NPCs.
+## The two are not interchangeable — InstanceStatResolver preserves the growth
+## history of multiclass characters, while LevelScaler assumes a single class.
 
 static func resolve(ci: RefCounted, race_provider: Callable, class_provider: Callable) -> StatBlock:
 	var sb := StatBlock.new()

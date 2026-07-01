@@ -78,7 +78,7 @@ static func _classes() -> Array[Dictionary]:
 		_col("abbr", "abbr", Mode.SCALAR, "str"),
 		_col("archetype", "archetype", Mode.SCALAR, "str"),
 		_col("branch", "branch", Mode.SCALAR, "str"),
-		_col("tier", "tier", Mode.SCALAR, "str"),
+		_col("tier", "tier", Mode.SCALAR, "int"),
 		_col("level_max", "level_max", Mode.SCALAR, "int"),
 	]
 	cols.append_array(_stat_columns("stats"))

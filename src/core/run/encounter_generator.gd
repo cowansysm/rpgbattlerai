@@ -6,10 +6,30 @@ extends RefCounted
 
 
 ## Returns {map: MapData, enemy_instances: Array[CharacterInstance]}.
-## providers keys: all_maps, all_characters, class_provider, name_gen, run_config
+## providers keys: all_maps, all_characters, class_provider, name_gen, run_config,
+##                 encounters (Array[EncounterData]), character_provider, band_level, map_provider
 static func generate(depth: int, rng: RandomNumberGenerator,
 		providers: Dictionary, is_boss: bool = false) -> Dictionary:
 	var cfg: Dictionary = providers.get("run_config", {}) as Dictionary
+
+	# A11: Try authored encounters first when available
+	var encounters_arr: Variant = providers.get("encounters", null)
+	var band_level: int = int(providers.get("band_level", 0))
+	if encounters_arr is Array and not (encounters_arr as Array).is_empty() and band_level > 0:
+		var result: Dictionary = EncounterSelector.select(band_level, rng,
+			encounters_arr as Array, providers)
+		if not result.is_empty():
+			var map_data: Variant = null
+			var enc_map_id: String = str(result.get("map_id", ""))
+			if not enc_map_id.is_empty():
+				var map_prov: Variant = providers.get("map_provider", null)
+				if map_prov is Callable:
+					map_data = (map_prov as Callable).call(enc_map_id)
+			if map_data == null:
+				map_data = _pick_map(depth, rng, providers, cfg)
+			return {"map": map_data, "enemy_instances": result.get("enemies", [])}
+
+	# Fallback: procedural composition
 	var map_data: Variant = _pick_map(depth, rng, providers, cfg)
 	var enemy_instances: Array[CharacterInstance] = _compose_enemy_band(
 		depth, rng, providers, cfg, is_boss)

@@ -29,21 +29,21 @@ func test_make_class() -> void:
 func test_make_class_with_a4_fields() -> void:
 	var d := {"id": "soldier", "name": "Soldier", "abbr": "SLD",
 		"stats": {"atk": 3, "def": 2, "hp": 10},
-		"archetype": "physical", "branch": "melee", "tier": "tier1",
+		"archetype": "physical_attack", "branch": "melee", "tier": 1,
 		"growth": {"hp": 1.5, "atk": 0.5},
 		"jp_costs": {"reckless_swing": 80, "rage": 60},
-		"prerequisites": {"level": 3},
+		"prerequisites": {"classes": [["vagabond", 3]]},
 		"equipment_access": ["sword"], "granted_abilities": ["power_strike"],
-		"level_max": 50, "required_classes": []}
+		"level_max": 10, "required_classes": []}
 	var c := DataFactory.make_class(d)
-	assert_eq(c.archetype, "physical")
+	assert_eq(c.archetype, "physical_attack")
 	assert_eq(c.branch, "melee")
-	assert_eq(c.tier, "tier1")
+	assert_eq(c.tier, 1)
 	assert_eq(c.growth["hp"], 1.5)
 	assert_eq(c.growth["atk"], 0.5)
 	assert_eq(int(c.jp_costs["reckless_swing"]), 80)
 	assert_eq(int(c.jp_costs["rage"]), 60)
-	assert_eq(int(c.prerequisites.get("level", 0)), 3)
+	assert_true(c.prerequisites.has("classes"), "prerequisites should have classes key")
 
 
 func test_make_class_folds_required_classes_into_prerequisites() -> void:

@@ -93,9 +93,9 @@ func _make_match_state() -> MatchState:
 func test_set_level_up() -> void:
 	var ci := _make_instance()
 	var prov := _make_class_provider()
-	assert_eq(ci.level, 1)
+	assert_eq(ci.character_level(), 1)
 	DevCheatService.set_level(ci, 5, prov)
-	assert_eq(ci.level, 5, "level should be 5 after set_level")
+	assert_eq(ci.character_level(), 5, "level should be 5 after set_level")
 	assert_true(ci.xp >= CharacterInstance.xp_for_level(5), "xp should be at or above threshold")
 
 
@@ -104,16 +104,16 @@ func test_set_level_down() -> void:
 	var prov := _make_class_provider()
 	DevCheatService.set_level(ci, 5, prov)
 	DevCheatService.set_level(ci, 2, prov)
-	assert_eq(ci.level, 2, "level should be 2 after downleveling")
+	assert_eq(ci.character_level(), 2, "level should be 2 after downleveling")
 
 
 func test_set_level_clamped() -> void:
 	var ci := _make_instance()
 	var prov := _make_class_provider()
 	DevCheatService.set_level(ci, 0, prov)
-	assert_eq(ci.level, 1, "level should be clamped to 1")
+	assert_eq(ci.character_level(), 1, "level should be clamped to 1")
 	DevCheatService.set_level(ci, 999, prov)
-	assert_eq(ci.level, 50, "level should be clamped to max_level (50)")
+	assert_eq(ci.character_level(), 50, "level should be clamped to max_level (50)")
 
 
 func test_add_xp() -> void:

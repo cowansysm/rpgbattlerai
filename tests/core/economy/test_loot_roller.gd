@@ -80,3 +80,28 @@ func test_grant_rewards_stacks_consumables() -> void:
 	var rolled := {"gold": 0, "equipment": [], "consumables": [{"id": "potion", "qty": 2}]}
 	LootRoller.grant_rewards(band, rolled)
 	assert_eq(band.consumable_qty("potion"), 5)
+
+
+func test_band_level_gold_curve() -> void:
+	# band_level=1 should center gold around GOLD_PER_BAND_LEVEL(50) * 1 = 50
+	var total: int = 0
+	for i in range(50):
+		var rng := RandomNumberGenerator.new()
+		rng.seed = i
+		var r := LootRoller.roll(_table, 0, rng, _pool_provider, 1)
+		total += int(r["gold"])
+	var avg: float = float(total) / 50.0
+	# 50 gold * 1.0 center, variance 0.7-1.3, so avg should be near 50
+	assert_true(avg > 30.0 and avg < 70.0,
+		"band_level=1 avg gold should be ~50, got %.1f" % avg)
+
+
+func test_band_level_overrides_depth_scaling() -> void:
+	# When band_level > 0, gold comes from band curve, not table
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 42
+	var r := LootRoller.roll(_table, 100, rng, _pool_provider, 3)
+	# band_level=3 => center=150, range ~105-195
+	var gold: int = int(r["gold"])
+	assert_true(gold > 50 and gold < 300,
+		"band_level=3 gold should be in range, got %d" % gold)

@@ -11,7 +11,7 @@ var _adept_cls: ClassData
 func before_all() -> void:
 	_vagabond_cls = ClassData.new()
 	_vagabond_cls.id = "vagabond"
-	_vagabond_cls.tier = "starting"
+	_vagabond_cls.tier = 0
 	_vagabond_cls.growth = {"hp": 1.2, "atk": 0.3, "def": 0.3, "spd": 0.2}
 	_vagabond_cls.jp_costs = {"first_aid": 30}
 	_vagabond_cls.prerequisites = {}
@@ -21,30 +21,30 @@ func before_all() -> void:
 
 	_soldier_cls = ClassData.new()
 	_soldier_cls.id = "soldier"
-	_soldier_cls.tier = "tier1"
+	_soldier_cls.tier = 1
 	_soldier_cls.growth = {"hp": 1.5, "atk": 0.5, "def": 0.4}
 	_soldier_cls.jp_costs = {"reckless_swing": 80, "rage": 60}
-	_soldier_cls.prerequisites = {"level": 3}
+	_soldier_cls.prerequisites = {"level": 3, "classes": [["vagabond", 3]]}
 	_soldier_cls.stat_modifiers = {"atk": 3, "def": 2, "hp": 10}
 	_soldier_cls.equipment_access = ["sword", "greataxe", "medium_armor", "shield", "light_armor"] as Array[String]
 	_soldier_cls.granted_abilities = ["power_strike"] as Array[String]
 
 	_thief_cls = ClassData.new()
 	_thief_cls.id = "thief"
-	_thief_cls.tier = "tier1"
+	_thief_cls.tier = 1
 	_thief_cls.growth = {"hp": 1.0, "spd": 0.4, "atk": 0.4}
 	_thief_cls.jp_costs = {"lullaby": 80}
-	_thief_cls.prerequisites = {"level": 3}
+	_thief_cls.prerequisites = {"level": 3, "classes": [["vagabond", 3]]}
 	_thief_cls.stat_modifiers = {"spd": 2, "atk": 1, "jump": 1}
 	_thief_cls.equipment_access = ["daggers", "sling", "light_armor"] as Array[String]
 	_thief_cls.granted_abilities = ["backstab"] as Array[String]
 
 	_adept_cls = ClassData.new()
 	_adept_cls.id = "adept"
-	_adept_cls.tier = "tier1"
+	_adept_cls.tier = 1
 	_adept_cls.growth = {"hp": 0.8, "mag": 0.5, "wp": 0.4}
 	_adept_cls.jp_costs = {"cure_1": 60, "ice_1": 80}
-	_adept_cls.prerequisites = {"level": 3}
+	_adept_cls.prerequisites = {"level": 3, "classes": [["vagabond", 3]]}
 	_adept_cls.stat_modifiers = {"mag": 3, "wp": 4, "res": 1}
 	_adept_cls.equipment_access = ["staff", "sling"] as Array[String]
 	_adept_cls.granted_abilities = ["fire_1"] as Array[String]
@@ -65,7 +65,7 @@ func _make_instance() -> CharacterInstance:
 	ci.template_id = "test_tmpl"
 	ci.name = "Test"
 	ci.race = "human"
-	ci.level = 1
+	ci.class_levels = {"vagabond": 1}
 	ci.xp = 0
 	ci.active_class = "vagabond"
 	ci.unlocked_classes = ["vagabond"]
@@ -73,33 +73,32 @@ func _make_instance() -> CharacterInstance:
 
 
 func _level_to(ci: CharacterInstance, target_level: int) -> void:
-	# Give enough XP to reach target level (quadratic curve: 10*N*N)
-	while ci.level < target_level:
-		var needed: int = ci.xp_for_next_level() - ci.xp + 1
-		ci.gain_xp(needed, _class_provider)
+	while ci.character_level() < target_level:
+		var needed: int = Leveling.next_threshold(ci.character_level()) - ci.xp + 1
+		Leveling.grant_xp(ci, needed, _class_provider)
 
 
 # --- Leveling & Growth ---
 
 func test_gain_xp_levels_up() -> void:
 	var ci := _make_instance()
-	# Level 2 threshold = 10 * 2 * 2 = 40
-	var gained := ci.gain_xp(40, _class_provider)
-	assert_eq(ci.level, 2)
+	# character_level=1, threshold = 10 * 1 * 2 = 20
+	var gained := Leveling.grant_xp(ci, 20, _class_provider)
+	assert_eq(ci.character_level(), 2)
 	assert_eq(gained, 1)
 
 
 func test_gain_xp_multiple_levels() -> void:
 	var ci := _make_instance()
-	# Level 2 = 40, Level 3 = 90. Give 100 XP to get levels 2 and 3.
-	var gained := ci.gain_xp(100, _class_provider)
-	assert_eq(ci.level, 3)
+	# L1 threshold = 20, L2 threshold = 10*2*3 = 60. Give 80 to cross both.
+	var gained := Leveling.grant_xp(ci, 80, _class_provider)
+	assert_eq(ci.character_level(), 3)
 	assert_eq(gained, 2)
 
 
 func test_level_up_accumulates_growth() -> void:
 	var ci := _make_instance()
-	ci.gain_xp(40, _class_provider)  # Level up to 2
+	Leveling.grant_xp(ci, 20, _class_provider)  # Level up to 2
 	# Vagabond growth: hp: 1.2, atk: 0.3, def: 0.3, spd: 0.2
 	# After 1 level-up: hp = floor(0 + 1.2) = 1, atk = floor(0 + 0.3) = 0
 	assert_eq(int(ci.growth_accumulated.get("hp", 0)), 1, "HP growth after 1 level-up")
@@ -120,10 +119,10 @@ func test_growth_accumulates_over_levels() -> void:
 
 func test_level_caps_at_max() -> void:
 	var ci := _make_instance()
-	ci.level = 49
+	ci.class_levels = {"vagabond": 9}
 	ci.xp = 0
-	var gained := ci.gain_xp(999999, _class_provider, 50)
-	assert_eq(ci.level, 50, "level should cap at MAX_LEVEL")
+	var gained := Leveling.grant_xp(ci, 999999, _class_provider, 10)
+	assert_eq(ci.active_class_level(), 10, "active class level should cap at max")
 	assert_eq(gained, 1)
 
 
@@ -185,7 +184,7 @@ func test_tier1_unlocks_at_level_3() -> void:
 
 func test_unlock_rejects_low_level() -> void:
 	var ci := _make_instance()
-	ci.level = 2
+	ci.class_levels = {"vagabond": 2}
 	assert_false(ci.can_unlock("soldier", _class_provider))
 	var ok := ci.unlock_class("soldier", _class_provider)
 	assert_false(ok, "unlock should fail at level 2")

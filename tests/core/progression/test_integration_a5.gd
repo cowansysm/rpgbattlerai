@@ -88,7 +88,7 @@ func test_band_to_battle_units() -> void:
 
 func test_bp_calculator_with_real_data() -> void:
 	var ci := CharacterInstance.new()
-	ci.level = 5
+	ci.class_levels = {"vagabond": 5}
 	ci.equipment = {}
 	ci.ability_loadout = []
 	# Base BP: 5 * 3 = 15
@@ -146,7 +146,7 @@ func test_recruiter_scale_to_band_average() -> void:
 	# Add a high-level member manually
 	var veteran := CharacterInstance.new()
 	veteran.instance_id = "vet_1"
-	veteran.level = 10
+	veteran.class_levels = {"vagabond": 10}
 	veteran.active_class = "vagabond"
 	veteran.unlocked_classes = ["vagabond"] as Array[String]
 	band.add_instance(veteran)
@@ -164,7 +164,7 @@ func test_recruiter_scale_to_band_average() -> void:
 	assert_eq(result["error"], "")
 	var recruit: CharacterInstance = result["instance"]
 	Recruiter.scale_to_level(recruit, avg, _class_provider)
-	assert_true(recruit.level >= 10, "Recruit should be scaled to band average")
+	assert_true(recruit.character_level() >= 10, "Recruit should be scaled to band average")
 
 
 func test_full_pipeline_create_recruit_field_build() -> void:

@@ -26,3 +26,23 @@ func show_tile(tile: HexTile) -> void:
 		tile.hex_q, tile.hex_r, tile.hex_elevation, tile.hex_terrain]
 	Log.info("Picker", "Selected tile (%d, %d) elev=%d terrain=%s" % [
 		tile.hex_q, tile.hex_r, tile.hex_elevation, tile.hex_terrain])
+
+
+## A11: Shows character scaling info (base stats, growth, level, next XP threshold).
+func show_character_scaling(ci: CharacterInstance, class_prov: Callable) -> void:
+	var cls: ClassData = class_prov.call(ci.active_class)
+	var growth_str: String = ""
+	if cls and not cls.growth.is_empty():
+		var parts: Array[String] = []
+		for k in cls.growth.keys():
+			parts.append("%s:%.1f" % [k, cls.growth[k]])
+		growth_str = " ".join(parts)
+	var threshold: int = Leveling.next_threshold(ci.character_level())
+	var lines: Array[String] = [
+		"%s  Lv%d (%s Lv%d)" % [ci.name, ci.character_level(),
+			ci.active_class, ci.active_class_level()],
+		"XP: %d / %d" % [ci.xp, threshold],
+		"Growth: %s" % growth_str,
+		"Accumulated: %s" % str(ci.growth_accumulated),
+	]
+	_label.text = "\n".join(lines)

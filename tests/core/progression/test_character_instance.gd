@@ -18,7 +18,7 @@ func test_generate_creates_vagabond_l1() -> void:
 	var t := _make_template("human")
 	var ci := CharacterInstance.generate(t, _name_gen)
 	assert_eq(ci.active_class, "vagabond")
-	assert_eq(ci.level, 1)
+	assert_eq(ci.character_level(), 1)
 	assert_eq(ci.xp, 0)
 	assert_true(ci.unlocked_classes.has("vagabond"))
 	assert_eq(ci.unlocked_classes.size(), 1)

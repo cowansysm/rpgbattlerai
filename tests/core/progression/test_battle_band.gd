@@ -2,13 +2,14 @@ extends GutTest
 ## Tests for BattleBand model: roster ops, inventory, serialization.
 
 
-func _make_instance(id: String, template: String = "human_fighter") -> CharacterInstance:
+func _make_instance(id: String, template: String = "human_fighter",
+		class_levels: Dictionary = {"vagabond": 3}) -> CharacterInstance:
 	var ci := CharacterInstance.new()
 	ci.instance_id = id
 	ci.template_id = template
 	ci.name = "Hero " + id
 	ci.race = "human"
-	ci.level = 3
+	ci.class_levels = class_levels
 	ci.active_class = "vagabond"
 	ci.unlocked_classes = ["vagabond"] as Array[String]
 	return ci
@@ -129,3 +130,23 @@ func test_from_dict_defaults_on_empty() -> void:
 	assert_eq(band.roster_size(), 0)
 	assert_true(band.inventory.has("equipment"))
 	assert_true(band.inventory.has("consumables"))
+
+
+func test_band_level_empty_roster() -> void:
+	var band := BattleBand.create("Empty")
+	assert_eq(band.band_level(), 1, "empty roster → band level 1")
+
+
+func test_band_level_single_member() -> void:
+	var band := BattleBand.create("Solo")
+	band.add_instance(_make_instance("s1", "t", {"vagabond": 5}), 12)
+	assert_eq(band.band_level(), 5)
+
+
+func test_band_level_mixed_roster() -> void:
+	var band := BattleBand.create("Mixed")
+	band.add_instance(_make_instance("m1", "t", {"vagabond": 1}), 12)
+	band.add_instance(_make_instance("m2", "t", {"vagabond": 3}), 12)
+	band.add_instance(_make_instance("m3", "t", {"vagabond": 5}), 12)
+	# Mean = (1+3+5)/3 = 3.0 → round = 3
+	assert_eq(band.band_level(), 3)

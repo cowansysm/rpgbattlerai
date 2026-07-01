@@ -82,13 +82,19 @@ func save_game() -> void:
 	Log.info("SaveManager", "Saved %d band(s) to %s" % [bands.size(), _save_path])
 
 
-func create_band(band_name: String) -> BattleBand:
+func create_band(band_name: String, name_gen: Callable = Callable()) -> BattleBand:
 	var band := BattleBand.create(band_name)
-	band.gold = Constants.get_value("RECRUIT_STARTING_GOLD", 200)
-	# Add starting inventory
-	var starting_items: Array = Constants.get_value("STARTING_INVENTORY", []) as Array
-	for item_id in starting_items:
-		band.add_to_inventory(str(item_id))
+	band.gold = int(Constants.get_value("STARTING_GOLD",
+		Constants.get_value("RECRUIT_STARTING_GOLD", 500)))
+	# A11: Seed one Human Vagabond L1 as the starter character
+	var starting_class: String = str(Constants.get_value("STARTING_CLASS", "vagabond"))
+	var starter_template: CharacterData = null
+	if GameData != null:
+		starter_template = GameData.get_character("human_fighter")
+	if starter_template != null:
+		var gen: Callable = name_gen if name_gen.is_valid() else func(_r: String) -> String: return "Starter"
+		var ci: CharacterInstance = CharacterInstance.generate(starter_template, gen)
+		band.add_instance(ci)
 	bands.append(band)
 	return band
 

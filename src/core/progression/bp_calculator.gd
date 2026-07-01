@@ -9,7 +9,7 @@ const LOADOUT_FACTOR: int = 2
 
 
 static func compute(ci: CharacterInstance, item_provider: Callable) -> int:
-	var bp: int = ci.level * LEVEL_FACTOR
+	var bp: int = ci.character_level() * LEVEL_FACTOR
 	# Equipment contribution
 	for slot in ci.equipment.keys():
 		var item: ItemData = item_provider.call(str(ci.equipment[slot]))

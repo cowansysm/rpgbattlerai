@@ -146,7 +146,7 @@ func _award_battle_rewards(run: RunState, band: BattleBand,
 	for ci in band.roster:
 		if fielded_ids.is_empty() or fielded_ids.has(ci.instance_id):
 			if class_prov is Callable:
-				ci.gain_xp(xp_amount, class_prov as Callable)
+				Leveling.grant_xp(ci, xp_amount, class_prov as Callable)
 			else:
 				ci.xp += xp_amount
 			ci.gain_jp(ci.active_class, jp_amount)
@@ -163,7 +163,8 @@ func _award_battle_rewards(run: RunState, band: BattleBand,
 		var table: Dictionary = (loot_table_fn as Callable).call(loot_table_key)
 		if not table.is_empty():
 			var rng: RandomNumberGenerator = _make_run_rng(run)
-			rolled = LootRoller.roll(table, run.depth, rng, pool_fn as Callable)
+			rolled = LootRoller.roll(table, run.depth, rng, pool_fn as Callable,
+				band.band_level())
 			LootRoller.grant_rewards(band, rolled)
 
 	rolled["xp"] = xp_amount
