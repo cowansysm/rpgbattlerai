@@ -47,10 +47,10 @@ static func do_round_start_bookkeeping(state: MatchState) -> void:
 	# 3. Reset all non-dead units for the new round (living + downed)
 	for team in state.parties.keys():
 		for u: BattleUnit in state.parties[team]:
-			if u.current_hp > 0 or u.is_downed:
+			if u.is_living():
 				u.is_activated = false
 				u.has_moved = false
-				if not u.is_downed:
+				if u.is_active():
 					u.ap_remaining = u.base_ap
 
 
@@ -96,7 +96,9 @@ static func activate_unit(state: MatchState, unit: BattleUnit) -> String:
 		return "It is %s's turn to activate, not %s's" % [team, unit.team]
 	if unit.is_activated:
 		return "Unit '%s' is already activated this round" % unit.character.id
-	if unit.current_hp <= 0 and not unit.is_downed:
+	if not unit.is_active():
+		if unit.is_downed:
+			return "Unit '%s' is downed" % unit.character.id
 		return "Unit '%s' is permanently removed" % unit.character.id
 
 	# Clear defend modifier when unit starts its activation (defend lasts until next turn)
@@ -109,15 +111,10 @@ static func activate_unit(state: MatchState, unit: BattleUnit) -> String:
 	return ""
 
 
-static func end_activation(state: MatchState) -> BattleUnit:
+static func end_activation(state: MatchState) -> void:
 	## End the current unit's activation and advance the queue.
-	## Returns the permanently removed unit if a downed unit was removed, else null.
-	var removed: BattleUnit = null
+	## Downed units stay on the board (A17); they are not removed here.
 	if state.current_unit:
-		if state.current_unit.is_downed:
-			removed = state.current_unit
-			removed.is_downed = false
-			state.occupancy.erase(removed.position)
 		state.current_unit.is_activated = true
 		state.current_unit.ap_remaining = 0
 		state.match_log.append_array(state.turn_log)
@@ -128,7 +125,6 @@ static func end_activation(state: MatchState) -> BattleUnit:
 		_end_round(state)
 	else:
 		state.phase = MatchState.Phase.AWAITING_ACTIVATION
-	return removed
 
 
 static func _end_round(state: MatchState) -> void:
@@ -150,7 +146,7 @@ static func is_sleeping(unit: BattleUnit) -> bool:
 ## Returns an array of outcome dicts (empty if no effect).
 static func on_activation_start(state: MatchState, unit: BattleUnit) -> Array:
 	var outcomes: Array = []
-	if unit.current_hp <= 0:
+	if not unit.is_active():
 		return outcomes
 	var dmg: int = state.graph.damage_per_turn(unit.position)
 	if dmg > 0:

@@ -185,16 +185,18 @@ static func resolve_heal(
 	}
 
 
-## Resolve a revive effect. Clears downed state and restores HP.
+## Resolve a revive effect. Clears downed state and restores HP to REVIVE_HP_FRACTION.
 ## Returns {healing, target_hp_after}.
 static func resolve_revive(
 	target: BattleUnit,
-	effect_value: int,
+	hp_fraction: float = -1.0,
 ) -> Dictionary:
+	if hp_fraction < 0.0:
+		hp_fraction = float(Constants.get_value("REVIVE_HP_FRACTION", 0.25))
 	target.is_downed = false
 	target.downed_round = -1
 	var max_hp: int = target.stats.effective("hp")
-	var healing: int = min(effect_value, max_hp)
+	var healing: int = mini(max(1, int(round(float(max_hp) * hp_fraction))), max_hp)
 	target.current_hp = healing
 
 	return {

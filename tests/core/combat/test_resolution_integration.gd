@@ -415,13 +415,13 @@ func test_downed_unit_excluded_from_living() -> void:
 	assert_eq(state.living_units("playerB").size(), 1)
 
 
-func test_downed_unit_included_in_activation_queue() -> void:
+func test_downed_unit_excluded_from_activation_queue() -> void:
 	var state := _setup_match()
 	state.parties["playerB"][0].current_hp = 0
 	state.parties["playerB"][0].is_downed = true
 	RoundManager.start_round(state)
-	# All 4 units (including downed) should be in queue
-	assert_eq(state.activation_queue.size(), 4)
+	# 3 units in queue (downed unit excluded from activatable_units)
+	assert_eq(state.activation_queue.size(), 3)
 
 
 # --- Round-Start Cleanup ---

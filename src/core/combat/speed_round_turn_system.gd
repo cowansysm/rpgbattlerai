@@ -103,7 +103,7 @@ func resolve_next(state: MatchState) -> Dictionary:
 	var plan: AIPlan = entry["plan"]
 
 	# Skip dead/downed units — their planned action fizzles silently
-	if unit.current_hp <= 0 or unit.is_downed:
+	if not unit.is_active():
 		return {"fizzled": true, "reason": "unit_dead", "unit_id": unit.character.id}
 
 	# Set up the unit for its resolution turn
@@ -119,7 +119,7 @@ func resolve_next(state: MatchState) -> Dictionary:
 	var terrain_outcomes: Array = RoundManager.on_activation_start(state, unit)
 
 	# If downed by terrain damage, fizzle
-	if unit.current_hp <= 0 or unit.is_downed:
+	if not unit.is_active():
 		state.match_log.append_array(state.turn_log)
 		state.current_unit = null
 		return {
@@ -218,8 +218,8 @@ func _resolve_attack(state: MatchState, unit: BattleUnit, step: Dictionary) -> D
 	var target_pos: Vector2i = step.get("target_pos", Vector2i.MAX)
 	var target: BattleUnit = state.unit_at(target_pos)
 
-	# Validity check: target must be alive, in range, and in LoS
-	if not target or target.current_hp <= 0 or target.is_downed:
+	# Validity check: target must be active, in range, and in LoS
+	if not target or not target.is_active():
 		return _fizzle_action(state, unit, "attack", 1, 0, "target_gone")
 	if target.team == unit.team:
 		return _fizzle_action(state, unit, "attack", 1, 0, "friendly_fire")
@@ -260,14 +260,14 @@ func _resolve_ability(state: MatchState, unit: BattleUnit, step: Dictionary) -> 
 		var target: BattleUnit = state.unit_at(target_pos)
 		var effect_type: String = str(ability.effect.get("effect_type", ""))
 
-		# For damage/status: target must be alive enemy
+		# For damage/status: target must be active enemy
 		if effect_type in ["damage", "status"]:
-			if not target or target.current_hp <= 0 or target.is_downed:
+			if not target or not target.is_active():
 				return _fizzle_action(state, unit, "ability", ap_cost, wp_cost, "target_gone")
 
-		# For heal/buff: target must be alive ally
+		# For heal/buff: target must be active ally
 		elif effect_type in ["heal", "buff"]:
-			if not target or target.current_hp <= 0:
+			if not target or not target.is_active():
 				return _fizzle_action(state, unit, "ability", ap_cost, wp_cost, "target_gone")
 
 		# For revive: target must be downed ally

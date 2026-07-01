@@ -199,6 +199,8 @@ func _execute_ability(state: MatchState, unit: BattleUnit, step: Dictionary) -> 
 			var revived_unit: BattleUnit = units_before.get(str(outcome["target"]))
 			if revived_unit:
 				_pawn_manager.revive_pawn(revived_unit)
+				if state.turn_system is ChargeTimeTurnSystem:
+					(state.turn_system as ChargeTimeTurnSystem).get_scheduler().requeue_unit(revived_unit)
 
 	# Update status markers
 	_pawn_manager.update_status_markers(unit)
@@ -237,10 +239,7 @@ func _execute_wait(state: MatchState, unit: BattleUnit) -> Dictionary:
 # --- End turn ---
 
 func _end_turn(state: MatchState) -> void:
-	var removed := RoundManager.end_activation(state)
-	if removed:
-		_pawn_manager.remove_pawn(removed)
-		_hud.append_log("[AI] %s has been permanently removed" % removed.character.display_name)
+	RoundManager.end_activation(state)
 	_overlay.clear()
 	turn_complete.emit()
 
@@ -258,7 +257,7 @@ func _snapshot_affected_units(state: MatchState, target_pos: Vector2i) -> Dictio
 	var result: Dictionary = {}
 	for team in state.parties.keys():
 		for unit: BattleUnit in state.parties[team]:
-			if unit.current_hp > 0 or unit.is_downed:
+			if unit.is_living():
 				result[unit.character.id] = unit
 	return result
 

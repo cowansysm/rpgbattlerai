@@ -1,6 +1,7 @@
 extends GutTest
-## Tests for downed-but-revivable mechanic: downed state, revive effect,
-## grace period expiry, untargetability, and repeated down/revive cycles.
+## Tests for the knockout & revive lifecycle (A17):
+## downed state machine, is_active/is_living predicates, queue exclusion,
+## revive legality + HP fraction, CT requeue, victory detection, permadeath.
 
 var _default_roller: Callable
 
@@ -147,7 +148,9 @@ func _skip_all_activations(state: MatchState) -> void:
 		RoundManager.end_activation(state)
 
 
-# --- BattleUnit State Model ---
+# ===================================================================
+# Predicates (A17)
+# ===================================================================
 
 func test_new_unit_not_downed() -> void:
 	var unit := _make_unit("test")
@@ -155,19 +158,42 @@ func test_new_unit_not_downed() -> void:
 	assert_eq(unit.downed_round, -1)
 
 
-func test_is_alive_true_for_healthy_unit() -> void:
+func test_is_active_true_for_healthy_unit() -> void:
 	var unit := _make_unit("test")
-	assert_true(unit.is_alive())
+	assert_true(unit.is_active())
+	assert_true(unit.is_alive())  # alias
 
 
-func test_is_alive_false_for_downed_unit() -> void:
+func test_is_active_false_for_downed_unit() -> void:
 	var unit := _make_unit("test")
 	unit.current_hp = 0
 	unit.is_downed = true
+	assert_false(unit.is_active())
 	assert_false(unit.is_alive())
 
 
-# --- Downing Mechanics ---
+func test_is_living_true_for_active_unit() -> void:
+	var unit := _make_unit("test")
+	assert_true(unit.is_living())
+
+
+func test_is_living_true_for_downed_unit() -> void:
+	var unit := _make_unit("test")
+	unit.current_hp = 0
+	unit.is_downed = true
+	assert_true(unit.is_living(), "downed unit is still living (on board)")
+
+
+func test_is_living_false_for_dead_unit() -> void:
+	var unit := _make_unit("test")
+	unit.current_hp = 0
+	unit.is_downed = false
+	assert_false(unit.is_living(), "hp=0 and not downed = permanently dead")
+
+
+# ===================================================================
+# Downing Mechanics
+# ===================================================================
 
 func test_attack_sets_downed_state() -> void:
 	var state := _setup_match()
@@ -218,7 +244,6 @@ func test_downed_unit_blocks_hex() -> void:
 	RoundManager.end_activation(state)
 
 	# Try to move another unit onto the downed unit's hex
-	# Skip b0's activation (downed, won't be in queue)
 	var team := RoundManager.current_team(state)
 	var available := state.unactivated_units(team)
 	if not available.is_empty():
@@ -264,17 +289,79 @@ func test_downed_unit_in_downed_units() -> void:
 	assert_eq(state.all_downed_units().size(), 1)
 
 
-func test_downed_unit_included_in_activation_queue() -> void:
+# ===================================================================
+# Queue Exclusion (A17)
+# ===================================================================
+
+func test_downed_unit_excluded_from_activation_queue() -> void:
 	var state := _setup_match()
 	var b0: BattleUnit = state.parties["playerB"][0]
 	b0.current_hp = 0
 	b0.is_downed = true
 	RoundManager.start_round(state)
-	# All 4 units (including downed b0) should be in queue
-	assert_eq(state.activation_queue.size(), 4)
+	# 3 active units in queue (b0 excluded)
+	assert_eq(state.activation_queue.size(), 3)
 
 
-# --- Heal Does Not Revive ---
+func test_downed_unit_stays_on_board_after_round() -> void:
+	var state := _setup_match()
+	RoundManager.start_round(state)
+
+	# Down b0 in round 1
+	var b0: BattleUnit = state.parties["playerB"][0]
+	b0.current_hp = 0
+	b0.is_downed = true
+	b0.downed_round = 1
+
+	# Complete all activations — b0 never gets a turn (excluded from queue)
+	_skip_all_activations(state)
+
+	# b0 stays downed on the board
+	assert_true(b0.is_downed, "downed unit stays downed")
+	assert_eq(b0.current_hp, 0)
+	assert_true(state.is_occupied(Vector2i(1, 0)), "downed unit stays on hex")
+
+
+func test_downed_unit_cannot_be_activated() -> void:
+	var state := _setup_match()
+	RoundManager.start_round(state)
+
+	# Down a playerA unit so the team-order check passes (it's playerA's turn)
+	var a0: BattleUnit = state.parties["playerA"][0]
+	a0.current_hp = 0
+	a0.is_downed = true
+	a0.downed_round = 1
+
+	var err := RoundManager.activate_unit(state, a0)
+	assert_string_contains(err, "downed")
+
+
+# ===================================================================
+# Victory Detection (A17)
+# ===================================================================
+
+func test_all_downed_team_loses() -> void:
+	var state := _setup_match()
+	# Down all of playerB
+	for u: BattleUnit in state.parties["playerB"]:
+		u.current_hp = 0
+		u.is_downed = true
+	var winner := state.check_winner()
+	assert_eq(winner, "playerA", "team with all units downed should lose")
+
+
+func test_mix_downed_and_active_no_winner() -> void:
+	var state := _setup_match()
+	# Down one of playerB, keep other alive
+	state.parties["playerB"][0].current_hp = 0
+	state.parties["playerB"][0].is_downed = true
+	var winner := state.check_winner()
+	assert_eq(winner, "", "team with some active units should not lose")
+
+
+# ===================================================================
+# Heal Does Not Revive
+# ===================================================================
 
 func test_heal_skips_downed_unit() -> void:
 	var state := _setup_match()
@@ -374,16 +461,18 @@ func test_status_skips_downed_unit() -> void:
 	assert_true(outcomes[0].get("skipped", false))
 
 
-# --- Revive Mechanics ---
+# ===================================================================
+# Revive Mechanics
+# ===================================================================
 
-func test_revive_restores_hp_and_clears_downed() -> void:
+func test_revive_restores_hp_fraction_and_clears_downed() -> void:
 	var unit := _make_unit("test", 3, 10)
 	unit.current_hp = 0
 	unit.is_downed = true
 	unit.downed_round = 1
 
-	var result := CombatResolver.resolve_revive(unit, 5)
-	assert_eq(result["healing"], 5)
+	var result := CombatResolver.resolve_revive(unit, 0.5)
+	assert_eq(result["healing"], 5)  # 50% of 10
 	assert_eq(unit.current_hp, 5)
 	assert_false(unit.is_downed)
 	assert_eq(unit.downed_round, -1)
@@ -394,21 +483,45 @@ func test_revive_clamped_to_max_hp() -> void:
 	unit.current_hp = 0
 	unit.is_downed = true
 
-	var result := CombatResolver.resolve_revive(unit, 999)
-	assert_eq(unit.current_hp, 10)  # max HP
+	CombatResolver.resolve_revive(unit, 2.0)  # 200% — clamp to max
+	assert_eq(unit.current_hp, 10)
+
+
+func test_revive_uses_constant_fraction() -> void:
+	## Default revive (no fraction arg) uses REVIVE_HP_FRACTION constant.
+	var unit := _make_unit("test", 3, 20)
+	unit.current_hp = 0
+	unit.is_downed = true
+
+	var result := CombatResolver.resolve_revive(unit)
+	# REVIVE_HP_FRACTION = 0.25 → round(20 * 0.25) = 5
+	assert_eq(result["healing"], 5)
+	assert_eq(unit.current_hp, 5)
+	assert_false(unit.is_downed)
+
+
+func test_revive_minimum_1_hp() -> void:
+	## Even with very low max HP, revive restores at least 1 HP.
+	var unit := _make_unit("test", 3, 2)
+	unit.current_hp = 0
+	unit.is_downed = true
+
+	var result := CombatResolver.resolve_revive(unit, 0.01)  # round(2 * 0.01) = 0 → max(1, 0) = 1
+	assert_eq(result["healing"], 1)
+	assert_eq(unit.current_hp, 1)
 
 
 func test_revive_through_turn_actions() -> void:
 	var state := _setup_match()
 	RoundManager.start_round(state)
 
-	# Down a0 manually
+	# Down a0 manually (max HP = 16)
 	var a0: BattleUnit = state.parties["playerA"][0]
 	a0.current_hp = 0
 	a0.is_downed = true
 	a0.downed_round = 1
 
-	# a1's activation (skip a0 since downed, skip b team activations)
+	# a1's activation (a0 downed so a1 is first activatable)
 	var t := RoundManager.current_team(state)
 	var u: BattleUnit = state.unactivated_units(t)[0]
 	assert_eq(u.character.id, "a1", "a0 is downed, a1 should be first")
@@ -420,12 +533,13 @@ func test_revive_through_turn_actions() -> void:
 	var outcomes: Array = result["outcomes"]
 	assert_eq(outcomes.size(), 1)
 	assert_true(outcomes[0].get("revived", false))
-	assert_eq(outcomes[0]["target_hp_after"], 5)
+	# REVIVE_HP_FRACTION = 0.25 → round(16 * 0.25) = 4
+	assert_eq(outcomes[0]["target_hp_after"], 4)
 
 	# a0 should be alive again
 	assert_false(a0.is_downed)
-	assert_eq(a0.current_hp, 5)
-	assert_true(a0.is_alive())
+	assert_eq(a0.current_hp, 4)
+	assert_true(a0.is_active())
 
 
 func test_revive_on_alive_unit_skipped() -> void:
@@ -464,97 +578,9 @@ func test_revive_on_enemy_skipped() -> void:
 	assert_eq(outcomes[0].get("reason", ""), "enemy")
 
 
-# --- Downed Turn Processing ---
-
-func test_downed_unit_removed_on_own_turn() -> void:
-	var state := _setup_match()
-	RoundManager.start_round(state)
-
-	# Down b0 in round 1
-	var b0: BattleUnit = state.parties["playerB"][0]
-	b0.current_hp = 0
-	b0.is_downed = true
-	b0.downed_round = 1
-
-	# Skip all activations — b0 will be activated as downed and permanently removed
-	_skip_all_activations(state)
-
-	# b0 should be permanently removed
-	assert_false(b0.is_downed, "should no longer be downed")
-	assert_eq(b0.current_hp, 0)
-	assert_false(state.is_occupied(Vector2i(1, 0)), "hex should be free")
-
-
-func test_downed_unit_revived_before_turn_survives() -> void:
-	var state := _setup_match()
-	RoundManager.start_round(state)
-
-	var b0: BattleUnit = state.parties["playerB"][0]
-	b0.current_hp = 0
-	b0.is_downed = true
-	b0.downed_round = 1
-
-	# Revive b0 before its turn comes
-	CombatResolver.resolve_revive(b0, 5)
-	assert_false(b0.is_downed)
-	assert_eq(b0.current_hp, 5)
-
-	_skip_all_activations(state)
-
-	# b0 was revived, should still be alive and on the board
-	assert_true(b0.is_alive())
-	assert_true(state.is_occupied(Vector2i(1, 0)), "b0 should still occupy hex")
-
-
-func test_revived_unit_not_removed() -> void:
-	var state := _setup_match()
-	RoundManager.start_round(state)  # Round 1
-
-	# Down a0 in round 1
-	var a0: BattleUnit = state.parties["playerA"][0]
-	a0.current_hp = 0
-	a0.is_downed = true
-	a0.downed_round = 1
-
-	# Revive a0 during round 1
-	CombatResolver.resolve_revive(a0, 5)
-	assert_false(a0.is_downed)
-
-	_skip_all_activations(state)
-	RoundManager.start_round(state)  # Round 2
-	_skip_all_activations(state)
-	RoundManager.start_round(state)  # Round 3
-
-	# a0 was revived, should not be removed
-	assert_true(a0.is_alive())
-
-
-# --- Repeated Down/Revive Cycles ---
-
-func test_down_revive_down_cycle() -> void:
-	var state := _setup_match()
-	RoundManager.start_round(state)  # Round 1
-
-	var a0: BattleUnit = state.parties["playerA"][0]
-
-	# Down in round 1
-	a0.current_hp = 0
-	a0.is_downed = true
-	a0.downed_round = 1
-	assert_true(a0.is_downed)
-
-	# Revive
-	CombatResolver.resolve_revive(a0, 5)
-	assert_false(a0.is_downed)
-	assert_eq(a0.current_hp, 5)
-
-	# Down again in same round
-	a0.current_hp = 0
-	a0.is_downed = true
-	a0.downed_round = 1
-	assert_true(a0.is_downed)
-	assert_eq(a0.downed_round, 1)
-
+# ===================================================================
+# Revive + Queue Reinsertion
+# ===================================================================
 
 func test_revived_unit_in_next_round_queue() -> void:
 	var state := _setup_match()
@@ -569,7 +595,7 @@ func test_revived_unit_in_next_round_queue() -> void:
 	assert_false(state.unactivated_units("playerA").has(a0))
 
 	# Revive a0
-	CombatResolver.resolve_revive(a0, 5)
+	CombatResolver.resolve_revive(a0)
 
 	_skip_all_activations(state)
 	RoundManager.start_round(state)  # Round 2
@@ -578,7 +604,79 @@ func test_revived_unit_in_next_round_queue() -> void:
 	assert_true(state.unactivated_units("playerA").has(a0))
 
 
-# --- AoE Edge Cases ---
+func test_downed_unit_revived_before_round_end_survives() -> void:
+	var state := _setup_match()
+	RoundManager.start_round(state)
+
+	var b0: BattleUnit = state.parties["playerB"][0]
+	b0.current_hp = 0
+	b0.is_downed = true
+	b0.downed_round = 1
+
+	# Revive b0 before round ends
+	CombatResolver.resolve_revive(b0)
+	assert_false(b0.is_downed)
+	assert_true(b0.current_hp > 0)
+
+	_skip_all_activations(state)
+
+	# b0 was revived, should still be alive and on the board
+	assert_true(b0.is_active())
+	assert_true(state.is_occupied(Vector2i(1, 0)), "b0 should still occupy hex")
+
+
+func test_revived_unit_persists_across_rounds() -> void:
+	var state := _setup_match()
+	RoundManager.start_round(state)  # Round 1
+
+	var a0: BattleUnit = state.parties["playerA"][0]
+	a0.current_hp = 0
+	a0.is_downed = true
+	a0.downed_round = 1
+
+	CombatResolver.resolve_revive(a0)
+	assert_false(a0.is_downed)
+
+	_skip_all_activations(state)
+	RoundManager.start_round(state)  # Round 2
+	_skip_all_activations(state)
+	RoundManager.start_round(state)  # Round 3
+
+	assert_true(a0.is_active())
+
+
+# ===================================================================
+# Repeated Down/Revive Cycles
+# ===================================================================
+
+func test_down_revive_down_cycle() -> void:
+	var a0 := _make_unit("a0", 3, 10)
+
+	# Down
+	a0.current_hp = 0
+	a0.is_downed = true
+	a0.downed_round = 1
+	assert_true(a0.is_downed)
+	assert_false(a0.is_active())
+
+	# Revive at 50%
+	CombatResolver.resolve_revive(a0, 0.5)
+	assert_false(a0.is_downed)
+	assert_eq(a0.current_hp, 5)
+	assert_true(a0.is_active())
+
+	# Down again
+	a0.current_hp = 0
+	a0.is_downed = true
+	a0.downed_round = 2
+	assert_true(a0.is_downed)
+	assert_false(a0.is_active())
+	assert_true(a0.is_living())
+
+
+# ===================================================================
+# AoE Edge Cases
+# ===================================================================
 
 func test_aoe_damage_skips_downed() -> void:
 	var state := _setup_match()
@@ -590,9 +688,6 @@ func test_aoe_damage_skips_downed() -> void:
 	b0.is_downed = true
 	b0.downed_round = 1
 
-	# a0 casts AoE damage centered on (1,0) with burst radius 1
-	# b0 at (1,0) downed — should be skipped
-	# b1 at (2,0) within radius — should take damage
 	var t := RoundManager.current_team(state)
 	var u: BattleUnit = state.unactivated_units(t)[0]
 	_activate_unit(state, u)
@@ -617,8 +712,6 @@ func test_aoe_revive_targets_downed_only() -> void:
 	var state := _setup_match()
 	RoundManager.start_round(state)
 
-	# Put a0 and a1 adjacent for AoE revive test
-	# a0 at (-1,0) downed, a1 at (-2,0) alive
 	var a0: BattleUnit = state.parties["playerA"][0]
 	a0.current_hp = 0
 	a0.is_downed = true
@@ -644,7 +737,179 @@ func test_aoe_revive_targets_downed_only() -> void:
 			a1_skipped = true
 
 	assert_true(a0_revived, "downed a0 should be revived")
-	# a1 is alive so revive should skip
-	# a1 might or might not be in the burst — only check if present
 	if outcomes.size() > 1:
 		assert_true(a1_skipped, "alive a1 should be skipped by revive")
+
+
+# ===================================================================
+# CT Scheduler Integration (A17 + A20)
+# ===================================================================
+
+func test_ct_scheduler_skips_downed_unit() -> void:
+	## Downed units don't accrue CT and are never picked by tick().
+	var a := _make_unit("a", 5, 10)
+	a.team = "playerA"
+	var b := _make_unit("b", 3, 10)
+	b.team = "playerB"
+
+	var scheduler := TurnScheduler.new()
+	scheduler.setup([a, b], 42)
+
+	# Down unit b
+	b.current_hp = 0
+	b.is_downed = true
+
+	# Tick until someone crosses threshold — should always be 'a'
+	var activated: BattleUnit = null
+	for _i in range(200):
+		activated = scheduler.tick()
+		if activated:
+			break
+
+	assert_eq(activated, a, "downed unit should never be picked")
+
+
+func test_ct_requeue_after_revive() -> void:
+	## requeue_unit resets CT to 0 so the revived unit starts accruing fresh.
+	var a := _make_unit("a", 5, 10)
+	a.team = "playerA"
+	var b := _make_unit("b", 3, 10)
+	b.team = "playerB"
+
+	var scheduler := TurnScheduler.new()
+	scheduler.setup([a, b], 42)
+
+	# Down b, then revive
+	b.current_hp = 0
+	b.is_downed = true
+	scheduler.requeue_unit(b)
+
+	assert_eq(scheduler.get_ct(b), 0.0, "requeued unit CT should be 0")
+
+	# Un-down b (simulate revive restoring state)
+	b.is_downed = false
+	b.current_hp = 5
+
+	# Now both should accrue CT — b should eventually activate
+	var b_activated := false
+	for _i in range(200):
+		var unit := scheduler.tick()
+		if unit == b:
+			b_activated = true
+			break
+		if unit:
+			scheduler.on_acted(unit, false)
+
+	assert_true(b_activated, "revived unit should eventually activate via CT")
+
+
+# ===================================================================
+# Speed-Round Fizzle (A17 + A15)
+# ===================================================================
+
+func test_speed_round_fizzle_downed_unit() -> void:
+	## A downed unit's plan fizzles during speed-round resolution.
+	var state := _setup_match()
+	var sr := SpeedRoundTurnSystem.new()
+	state.turn_system = sr
+
+	sr.begin_round(state)
+	sr.advance(state)  # AI_PLANNING → PLAYER_PLANNING
+
+	# Build plans for all units
+	var a0: BattleUnit = state.parties["playerA"][0]
+	var a1: BattleUnit = state.parties["playerA"][1]
+	var b0: BattleUnit = state.parties["playerB"][0]
+	var b1: BattleUnit = state.parties["playerB"][1]
+
+	var wait_plan := AIPlan.new()
+	wait_plan.steps.append({"kind": "wait"})
+
+	sr.commit_player_plan(a0, wait_plan)
+	sr.commit_player_plan(a1, wait_plan)
+	sr.commit_player_plan(b0, wait_plan)
+	sr.commit_player_plan(b1, wait_plan)
+
+	sr.advance(state)  # PLAYER_PLANNING → RESOLUTION
+
+	# Down b0 before resolution starts
+	b0.current_hp = 0
+	b0.is_downed = true
+
+	# Resolve all — b0's plan should fizzle
+	var b0_fizzled := false
+	while sr.has_next_resolution():
+		var result := sr.resolve_next(state)
+		if result.get("unit_id") == "b0":
+			b0_fizzled = result.get("fizzled", false)
+
+	assert_true(b0_fizzled, "downed unit's plan should fizzle in speed-round")
+
+
+# ===================================================================
+# Permadeath Handoff (A17)
+# ===================================================================
+
+func test_death_model_extract_downed_ids() -> void:
+	## extract_downed_ids returns IDs of units still downed at battle end.
+	var state := _setup_match()
+	var a0: BattleUnit = state.parties["playerA"][0]
+	var a1: BattleUnit = state.parties["playerA"][1]
+
+	# a0 downed, a1 alive
+	a0.current_hp = 0
+	a0.is_downed = true
+
+	var downed := DeathModel.extract_downed_ids(state, "playerA")
+	assert_eq(downed.size(), 1)
+	assert_eq(downed[0], "a0")
+
+
+func test_death_model_extract_excludes_revived() -> void:
+	## A revived unit (is_downed = false) is NOT in downed IDs.
+	var state := _setup_match()
+	var a0: BattleUnit = state.parties["playerA"][0]
+
+	# Down then revive
+	a0.current_hp = 0
+	a0.is_downed = true
+	CombatResolver.resolve_revive(a0)
+
+	var downed := DeathModel.extract_downed_ids(state, "playerA")
+	assert_eq(downed.size(), 0, "revived unit should not be in downed list")
+
+
+func test_death_model_permadeath_on_down_limit() -> void:
+	## downs_this_run exceeding down_limit removes the instance from the band.
+	var band := BattleBand.new()
+	band.band_id = "test_band"
+	var ci := CharacterInstance.new()
+	ci.instance_id = "hero_1"
+	ci.downs_this_run = 2  # Already downed twice
+	band.roster.append(ci)
+
+	var run := RunState.new()
+	run.down_limit = 2  # 3rd down = permadeath
+
+	var result := DeathModel.apply_post_battle(run, band, ["hero_1"] as Array[String])
+	assert_eq(result["dead_ids"].size(), 1)
+	assert_eq(result["dead_ids"][0], "hero_1")
+	assert_eq(band.roster.size(), 0, "permadead character removed from roster")
+
+
+func test_death_model_survives_within_down_limit() -> void:
+	## downs_this_run within limit keeps the instance alive.
+	var band := BattleBand.new()
+	band.band_id = "test_band"
+	var ci := CharacterInstance.new()
+	ci.instance_id = "hero_1"
+	ci.downs_this_run = 0
+	band.roster.append(ci)
+
+	var run := RunState.new()
+	run.down_limit = 2
+
+	var result := DeathModel.apply_post_battle(run, band, ["hero_1"] as Array[String])
+	assert_eq(result["dead_ids"].size(), 0)
+	assert_eq(band.roster.size(), 1, "character should survive within down limit")
+	assert_eq(ci.downs_this_run, 1)

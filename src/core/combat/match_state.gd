@@ -29,8 +29,9 @@ var turn_system: TurnSystem = null			# Active turn system (null = legacy alterna
 
 
 func living_units(team: String) -> Array:
+	## Returns active (non-downed) units. Downed units are not "living" for queue/victory.
 	return parties.get(team, []).filter(
-		func(u: BattleUnit) -> bool: return u.current_hp > 0 and not u.is_downed)
+		func(u: BattleUnit) -> bool: return u.is_active())
 
 
 func unactivated_units(team: String) -> Array:
@@ -39,10 +40,9 @@ func unactivated_units(team: String) -> Array:
 
 
 func activatable_units(team: String) -> Array:
-	## Returns units eligible for activation: living + downed (not permanently dead).
+	## Returns units eligible for activation: active (not downed, not dead), not yet activated.
 	return parties.get(team, []).filter(
-		func(u: BattleUnit) -> bool:
-			return (u.current_hp > 0 or u.is_downed) and not u.is_activated)
+		func(u: BattleUnit) -> bool: return u.is_active() and not u.is_activated)
 
 
 func all_living_units() -> Array:
@@ -78,13 +78,13 @@ func other_team(team: String) -> String:
 
 func check_winner() -> String:
 	## Returns the winning team string, or "" if no winner yet.
-	## A team loses when it has no living units AND no downed units.
+	## A team loses when it has no active units (all downed or dead).
 	for team in parties.keys():
-		var has_viable := false
+		var has_active := false
 		for unit: BattleUnit in parties[team]:
-			if unit.current_hp > 0 or unit.is_downed:
-				has_viable = true
+			if unit.is_active():
+				has_active = true
 				break
-		if not has_viable:
+		if not has_active:
 			return other_team(team)
 	return ""

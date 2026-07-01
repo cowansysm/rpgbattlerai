@@ -21,8 +21,19 @@ var downed_round: int = -1				## Round number when unit was downed (-1 = never)
 var affinities: Dictionary = {}			## {element: int_weight} — cumulative from static sources (race+class+equipment)
 
 
-func is_alive() -> bool:
+func is_active() -> bool:
+	## True when the unit can act: alive and not downed.
 	return current_hp > 0 and not is_downed
+
+
+func is_living() -> bool:
+	## True when the unit is still part of the battle (active or downed, not permanently dead).
+	return current_hp > 0 or is_downed
+
+
+func is_alive() -> bool:
+	## Alias for is_active(). Prefer is_active() in new code.
+	return is_active()
 
 
 static func from_character(c: CharacterData, final_stats: StatBlock) -> BattleUnit:

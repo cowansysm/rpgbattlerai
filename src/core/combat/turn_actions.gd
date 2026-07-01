@@ -424,8 +424,7 @@ static func _resolve_effect(
 				return { "target": target.character.id, "skipped": true, "reason": "not_downed" }
 			if target.team != caster.team:
 				return { "target": target.character.id, "skipped": true, "reason": "enemy" }
-			var value: int = int(effect.get("value", 1))
-			var result := CombatResolver.resolve_revive(target, value)
+			var result := CombatResolver.resolve_revive(target)
 			return {
 				"target": target.character.id,
 				"revived": true,

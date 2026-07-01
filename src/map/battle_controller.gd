@@ -533,7 +533,7 @@ func _handle_ai_activation(team: String, selectable: Array) -> void:
 		var hp_after: int = int(outcome.get("target_hp_after", 0))
 		_hud.append_log("[AI] %s takes %d terrain damage (%d HP)" % [
 			unit.character.display_name, dmg, hp_after], "terrain_damage")
-		if unit.current_hp <= 0:
+		if not unit.is_active() and not was_downed_before:
 			_pawn_manager.down_pawn(unit)
 			_hud.append_log("[AI] %s DOWNED by terrain!" % unit.character.display_name)
 	_pawn_manager.update_status_markers(unit)
@@ -543,10 +543,7 @@ func _handle_ai_activation(team: String, selectable: Array) -> void:
 
 	# If downed by terrain THIS activation, end immediately
 	if unit.is_downed and not was_downed_before:
-		var removed := RoundManager.end_activation(_state)
-		if removed:
-			_pawn_manager.remove_pawn(removed)
-			_hud.append_log("[AI] %s has been permanently removed" % removed.character.display_name)
+		RoundManager.end_activation(_state)
 		if _check_match_over():
 			return
 		_enter_awaiting_activation()
@@ -813,7 +810,7 @@ func _activate_chosen_unit(unit: BattleUnit) -> void:
 		var hp_after: int = int(outcome.get("target_hp_after", 0))
 		_hud.append_log("%s takes %d terrain damage (%d HP)" % [
 			unit.character.display_name, dmg, hp_after], "terrain_damage")
-		if unit.current_hp <= 0:
+		if not unit.is_active() and not was_downed_before:
 			_pawn_manager.down_pawn(unit)
 			_hud.append_log("%s DOWNED by terrain!" % unit.character.display_name)
 	_pawn_manager.update_status_markers(unit)
@@ -823,10 +820,7 @@ func _activate_chosen_unit(unit: BattleUnit) -> void:
 
 	# If the unit was downed by terrain damage THIS activation, end immediately
 	if unit.is_downed and not was_downed_before:
-		var removed := RoundManager.end_activation(_state)
-		if removed:
-			_pawn_manager.remove_pawn(removed)
-			_hud.append_log("%s has been permanently removed" % removed.character.display_name)
+		RoundManager.end_activation(_state)
 		if _check_match_over():
 			return
 		_enter_awaiting_activation()
@@ -843,7 +837,7 @@ func _try_select_unit(coord: Vector2i) -> void:
 	var unit: BattleUnit = _state.unit_at(coord)
 	if not unit or unit.team != team or unit.is_activated:
 		return
-	if unit.current_hp <= 0 and not unit.is_downed:
+	if not unit.is_active():
 		return
 	if RoundManager.is_sleeping(unit):
 		return
@@ -1000,6 +994,8 @@ func _do_ability(target_pos: Vector2i) -> void:
 			var revived_unit: BattleUnit = units_before.get(str(outcome["target"]))
 			if revived_unit:
 				_pawn_manager.revive_pawn(revived_unit)
+				if _ct_turn_system:
+					_ct_turn_system.get_scheduler().requeue_unit(revived_unit)
 
 	# Update status markers for caster and all affected units
 	if caster:
@@ -1062,6 +1058,8 @@ func _do_use_item(target_pos: Vector2i) -> void:
 			var revived_unit: BattleUnit = units_before.get(str(outcome["target"]))
 			if revived_unit:
 				_pawn_manager.revive_pawn(revived_unit)
+				if _ct_turn_system:
+					_ct_turn_system.get_scheduler().requeue_unit(revived_unit)
 
 	# Update status markers for user and affected units
 	if user:
@@ -1101,10 +1099,7 @@ func _do_wait() -> void:
 		_ct_end_activation(true)
 		return
 
-	var removed := RoundManager.end_activation(_state)
-	if removed:
-		_pawn_manager.remove_pawn(removed)
-		_hud.append_log("%s has been permanently removed" % removed.character.display_name)
+	RoundManager.end_activation(_state)
 	if _check_match_over():
 		return
 	_enter_awaiting_activation()
@@ -1123,7 +1118,7 @@ func _start_new_round() -> void:
 		# Refresh status markers for all surviving units
 		for team in _state.parties.keys():
 			for unit: BattleUnit in _state.parties[team]:
-				if unit.current_hp > 0 or unit.is_downed:
+				if unit.is_living():
 					_pawn_manager.update_status_markers(unit)
 		_hud.append_log("--- Round %d begins ---" % _state.round_number)
 		_hud.show_round_banner(_state.round_number)
@@ -1134,7 +1129,7 @@ func _start_new_round() -> void:
 	# Refresh status markers for all surviving units (durations may have expired)
 	for team in _state.parties.keys():
 		for unit: BattleUnit in _state.parties[team]:
-			if unit.current_hp > 0 or unit.is_downed:
+			if unit.is_living():
 				_pawn_manager.update_status_markers(unit)
 	_hud.append_log("--- Round %d begins ---" % _state.round_number)
 	_hud.show_round_banner(_state.round_number)
@@ -1150,10 +1145,7 @@ func _check_end_activation_or_continue() -> void:
 		if _is_charge_time():
 			_ct_end_activation(false)
 			return
-		var removed := RoundManager.end_activation(_state)
-		if removed:
-			_pawn_manager.remove_pawn(removed)
-			_hud.append_log("%s has been permanently removed" % removed.character.display_name)
+		RoundManager.end_activation(_state)
 		_enter_awaiting_activation()
 	else:
 		_enter_action_select()
@@ -1239,7 +1231,7 @@ func _snapshot_affected_units(target_pos: Vector2i) -> Dictionary:
 	var result: Dictionary = {}
 	for team in _state.parties.keys():
 		for unit: BattleUnit in _state.parties[team]:
-			if unit.current_hp > 0 or unit.is_downed:
+			if unit.is_living():
 				result[unit.character.id + ":" + str(unit.position)] = unit
 				# Also key by just character.id for simple lookup (last wins if dupes)
 				result[unit.character.id] = unit
@@ -1439,7 +1431,7 @@ func _ct_activate_unit(unit: BattleUnit) -> void:
 		var hp_after: int = int(outcome.get("target_hp_after", 0))
 		_hud.append_log("%s takes %d terrain damage (%d HP)" % [
 			unit.character.display_name, dmg, hp_after], "terrain_damage")
-		if unit.current_hp <= 0:
+		if not unit.is_active():
 			_pawn_manager.down_pawn(unit)
 			_hud.append_log("%s DOWNED by terrain!" % unit.character.display_name)
 	_pawn_manager.update_status_markers(unit)
@@ -1609,7 +1601,7 @@ func _sr_try_select_plan_unit(coord: Vector2i) -> void:
 	var unit: BattleUnit = _state.unit_at(coord)
 	if not unit or unit.team != player_team:
 		return
-	if unit.current_hp <= 0 or unit.is_downed:
+	if not unit.is_active():
 		return
 	_sr_begin_plan_unit(unit)
 
@@ -1618,7 +1610,7 @@ func _sr_select_plan_unit_by_id(character_id: String) -> void:
 	## Handle roster click during SR_PLAYER_SELECT.
 	var player_team := _state.other_team(_state.ai_teams[0]) if not _state.ai_teams.is_empty() else "playerA"
 	for unit: BattleUnit in _state.living_units(player_team):
-		if unit.character.id == character_id and not unit.is_downed:
+		if unit.character.id == character_id:
 			_sr_begin_plan_unit(unit)
 			return
 

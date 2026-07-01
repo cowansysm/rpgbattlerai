@@ -939,7 +939,7 @@ func _update_team_list(container: VBoxContainer, units: Array,
 		if unit.is_downed:
 			indicator.text = "DOWN"
 			indicator.add_theme_color_override("font_color", Color(1.0, 0.5, 0.1))
-		elif unit.current_hp <= 0:
+		elif not unit.is_living():
 			indicator.text = "X"
 			indicator.add_theme_color_override("font_color", Color(0.8, 0.2, 0.2))
 		elif unit.character.id in planned_ids:
@@ -1093,7 +1093,7 @@ func _update_team_list(container: VBoxContainer, units: Array,
 		# Dim downed/removed units
 		if unit.is_downed:
 			card.modulate.a = 0.6
-		elif unit.current_hp <= 0:
+		elif not unit.is_living():
 			card.modulate.a = 0.3
 
 		# Highlight active unit

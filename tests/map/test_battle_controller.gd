@@ -513,16 +513,16 @@ func test_match_over_when_team_eliminated() -> void:
 	assert_eq(state.check_winner(), "playerA", "playerA should win when playerB has no viable units")
 
 
-func test_no_winner_while_downed_units_remain() -> void:
+func test_winner_when_all_units_downed() -> void:
 	var state := _make_state()
 	var ctrl := _make_controller(state)
 
-	# Down all playerB units but don't eliminate them
+	# Down all playerB units — A17: all downed means team loses
 	for unit: BattleUnit in state.parties["playerB"]:
 		unit.current_hp = 0
 		unit.is_downed = true
 
-	assert_eq(state.check_winner(), "", "no winner while downed units still exist")
+	assert_eq(state.check_winner(), "playerA", "team with all units downed should lose")
 
 
 func test_check_winner_empty_when_both_alive() -> void:
@@ -530,7 +530,7 @@ func test_check_winner_empty_when_both_alive() -> void:
 	assert_eq(state.check_winner(), "", "no winner when both teams have living units")
 
 
-func test_downed_unit_can_be_activated() -> void:
+func test_downed_unit_excluded_from_activation() -> void:
 	var state := _make_state()
 	var ctrl := _make_controller(state)
 
@@ -538,49 +538,33 @@ func test_downed_unit_can_be_activated() -> void:
 
 	# Down the current team's unit
 	var team := RoundManager.current_team(state)
-	var units := state.activatable_units(team)
-	assert_false(units.is_empty())
-	var unit: BattleUnit = units[0]
+	var all_units := state.parties[team].duplicate()
+	var unit: BattleUnit = all_units[0]
 	unit.current_hp = 0
 	unit.is_downed = true
 
-	# Re-enter to pick up the downed state
-	ctrl._enter_awaiting_activation()
-
-	# Should be able to select the downed unit via tile click
-	ctrl.on_tile_selected(unit.position)
-	assert_eq(ctrl._pending_activation_unit, unit,
-		"downed unit should be selectable via tile click")
-
-	# Confirm activation
-	ctrl._on_confirm_activation()
-	assert_eq(ctrl._control_state, BattleController.ControlState.ACTION_SELECT,
-		"downed unit should enter ACTION_SELECT")
-	assert_eq(state.current_unit, unit, "downed unit should be current_unit")
+	# A17: downed unit should be excluded from activatable_units
+	var activatable := state.activatable_units(team)
+	assert_false(activatable.has(unit),
+		"downed unit should not appear in activatable_units")
 
 
-func test_downed_unit_end_turn_removes() -> void:
+func test_downed_unit_stays_on_board() -> void:
 	var state := _make_state()
 	var ctrl := _make_controller(state)
 
-	ctrl._enter_awaiting_activation()
+	RoundManager.start_round(state)
 
+	# Down a unit
 	var team := RoundManager.current_team(state)
-	var units := state.activatable_units(team)
-	var unit: BattleUnit = units[0]
+	var unit: BattleUnit = state.parties[team][0]
 	unit.current_hp = 0
 	unit.is_downed = true
 
-	ctrl._enter_awaiting_activation()
-	ctrl.on_tile_selected(unit.position)
-	ctrl._on_confirm_activation()
-
-	# End the downed unit's turn (End Turn / Wait)
-	ctrl._do_wait()
-
-	# Unit should have been removed (is_downed false, permanently dead)
-	assert_false(unit.is_downed, "downed unit should be permanently removed after end turn")
-	assert_eq(unit.current_hp, 0, "removed unit should have 0 HP")
+	# A17: downed unit stays on board (is_living) but is not activatable
+	assert_true(unit.is_living(), "downed unit should still be living (on board)")
+	assert_false(unit.is_active(), "downed unit should not be active")
+	assert_true(state.is_occupied(unit.position), "downed unit's hex should remain occupied")
 
 
 func test_activate_next_prefers_living_over_downed() -> void:

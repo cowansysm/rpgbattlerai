@@ -29,16 +29,14 @@ func setup(units: Array, seed_val: int) -> void:
 		_ct[u.character.id] = 0.0
 
 
-## Tick all living units' CT by their effective SPD (with status modifiers).
+## Tick all active units' CT by their effective SPD (with status modifiers).
 ## Returns the unit that crossed the threshold first (highest CT above threshold,
 ## with deterministic seeded tie-break), or null if nobody is ready.
 func tick() -> BattleUnit:
-	# Accrue CT for all living, non-downed units
+	# Accrue CT for active units only (not downed, not dead)
 	for u: BattleUnit in _units:
-		if u.current_hp <= 0 and not u.is_downed:
-			continue  # permanently removed
-		if u.is_downed:
-			continue  # downed units don't accrue CT
+		if not u.is_active():
+			continue
 		var spd: int = u.stats.effective("spd")
 		var accrual: float = float(spd) * _status_multiplier(u)
 		_ct[u.character.id] = _ct.get(u.character.id, 0.0) + accrual
@@ -51,9 +49,7 @@ func tick() -> BattleUnit:
 func _pick_ready_unit() -> BattleUnit:
 	var ready: Array = []
 	for u: BattleUnit in _units:
-		if u.current_hp <= 0 and not u.is_downed:
-			continue
-		if u.is_downed:
+		if not u.is_active():
 			continue
 		var ct_val: float = _ct.get(u.character.id, 0.0)
 		if ct_val >= float(_threshold):
@@ -84,8 +80,6 @@ func _pick_ready_unit() -> BattleUnit:
 func on_acted(unit: BattleUnit, did_wait: bool) -> void:
 	var surcharge: int = _wait_surcharge if did_wait else _action_surcharge
 	_ct[unit.character.id] = _ct.get(unit.character.id, 0.0) - float(_threshold) - float(surcharge)
-	# Clamp to 0 minimum — negative CT is allowed as a delay penalty
-	# but don't allow it to go below -threshold (extreme edge)
 
 
 ## Forecast the next N activations without mutating state.
@@ -103,9 +97,7 @@ func forecast(count: int) -> Array:
 		var best: BattleUnit = null
 		var best_ct: float = -999999.0
 		for u: BattleUnit in _units:
-			if u.current_hp <= 0 and not u.is_downed:
-				continue
-			if u.is_downed:
+			if not u.is_active():
 				continue
 			var cv: float = ct_snap.get(u.character.id, 0.0)
 			if cv >= float(_threshold):
@@ -122,9 +114,7 @@ func forecast(count: int) -> Array:
 
 		# Tick forward
 		for u: BattleUnit in _units:
-			if u.current_hp <= 0 and not u.is_downed:
-				continue
-			if u.is_downed:
+			if not u.is_active():
 				continue
 			var spd: int = u.stats.effective("spd")
 			var accrual: float = float(spd) * _status_multiplier(u)
@@ -163,9 +153,14 @@ func remove_unit(unit: BattleUnit) -> void:
 	_ct.erase(unit.character.id)
 
 
-## Check if any living units remain.
+## Requeue a revived unit: reset CT to 0 so they start accruing from scratch.
+func requeue_unit(unit: BattleUnit) -> void:
+	_ct[unit.character.id] = 0.0
+
+
+## Check if any active units remain.
 func has_living_units() -> bool:
 	for u: BattleUnit in _units:
-		if u.current_hp > 0 and not u.is_downed:
+		if u.is_active():
 			return true
 	return false

@@ -21,6 +21,13 @@ var growth_accumulated: Dictionary = {}
 var downs_this_run: int = 0
 
 
+## Cumulative XP threshold to reach a given character level.
+## Formula: XP_CURVE_BASE * level * level
+static func xp_for_level(level: int) -> int:
+	var base: int = int(Constants.get_value("XP_CURVE_BASE", 10))
+	return base * level * level
+
+
 ## Sum of all class levels (minimum 1).
 func character_level() -> int:
 	var total: int = 0

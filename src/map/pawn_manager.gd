@@ -20,7 +20,7 @@ func setup(state: MatchState, graph: HexGraph) -> void:
 func spawn_all(state: MatchState) -> void:
 	for team in state.parties.keys():
 		for unit: BattleUnit in state.parties[team]:
-			if unit.current_hp > 0 or unit.is_downed:
+			if unit.is_living():
 				spawn_pawn(unit)
 
 

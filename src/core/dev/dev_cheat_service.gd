@@ -241,6 +241,6 @@ static func clear_all_statuses(unit: BattleUnit) -> void:
 static func force_win(state: MatchState, winning_team: String) -> void:
 	var losing_team: String = state.other_team(winning_team)
 	for unit: BattleUnit in state.parties.get(losing_team, []):
-		if unit.current_hp > 0 or unit.is_downed:
+		if unit.is_living():
 			unit.current_hp = 0
 			unit.is_downed = false  # Permanently dead, not just downed
