@@ -88,8 +88,17 @@ func _build_ui() -> void:
 		btn.pressed.connect(_on_tier_selected.bind(tier_id))
 		tier_buttons.add_child(btn)
 
-	# Alpha A5: Band Management button
+	# Alpha A20: Skirmish button
 	_tier_panel.add_child(_spacer(24))
+	var skirmish_btn := Button.new()
+	skirmish_btn.text = "Skirmish (CT Battle)"
+	skirmish_btn.custom_minimum_size.y = 40
+	skirmish_btn.pressed.connect(func() -> void:
+		get_tree().change_scene_to_file("res://scenes/skirmish/skirmish_scene.tscn"))
+	_tier_panel.add_child(skirmish_btn)
+
+	# Alpha A5: Band Management button
+	_tier_panel.add_child(_spacer(12))
 	var band_btn := Button.new()
 	band_btn.text = "Band Management"
 	band_btn.custom_minimum_size.y = 40

@@ -17,6 +17,8 @@ enum ControlState {
 	SR_PLANNING_ACTION,
 	SR_PLANNING_TARGETING,
 	SR_RESOLUTION,
+	# Charge-time states (A20)
+	CT_TICKING,
 }
 
 var _state: MatchState
@@ -52,6 +54,11 @@ var _pending_move_coord: Vector2i = Vector2i(-999, -999)
 
 # Speed-round state (A15)
 var _sr_turn_system: SpeedRoundTurnSystem = null
+
+# Charge-time state (A20)
+var _ct_turn_system: ChargeTimeTurnSystem = null
+var _ct_tick_timer: float = 0.0
+const CT_TICK_INTERVAL: float = 0.05  # seconds between ticks (visual pacing)
 var _player_plans: Dictionary = {}  # unit_id -> AIPlan
 var _planning_unit: BattleUnit = null
 var _planning_plan: AIPlan = null
@@ -113,6 +120,18 @@ func setup_from_state(
 	if _state.turn_system is SpeedRoundTurnSystem:
 		_sr_turn_system = _state.turn_system as SpeedRoundTurnSystem
 
+	# Wire charge-time turn system for skirmish mode (A20)
+	if MatchData.mode == "skirmish" and _state.turn_system == null:
+		var ct_sys := ChargeTimeTurnSystem.new()
+		var all_units: Array = []
+		for team in _state.parties.keys():
+			all_units.append_array(_state.parties[team])
+		var seed_val: int = int(Time.get_ticks_msec())
+		ct_sys.setup(all_units, seed_val)
+		_state.turn_system = ct_sys
+	if _state.turn_system is ChargeTimeTurnSystem:
+		_ct_turn_system = _state.turn_system as ChargeTimeTurnSystem
+
 	_init_subsystems(builder)
 
 	# If still in deployment phase, drive interactive deployment
@@ -120,6 +139,8 @@ func setup_from_state(
 		_deployment_controller = controller
 		_enter_deployment()
 	elif _is_speed_round():
+		_start_new_round()
+	elif _is_charge_time():
 		_start_new_round()
 	else:
 		_enter_awaiting_activation()
@@ -160,7 +181,10 @@ func _init_subsystems(builder: MapBuilder) -> void:
 	var ai_seed: int = int(Time.get_ticks_msec())
 	var ai_diff: String = str(Constants.get_value("AI_DIFFICULTY", "normal"))
 	_ai_controller.setup(_hud, _pawn_manager, _overlay, ai_seed, ai_diff)
-	_ai_controller.turn_complete.connect(_on_ai_turn_complete)
+	if _is_charge_time():
+		_ai_controller.turn_complete.connect(_on_ai_turn_complete_ct)
+	else:
+		_ai_controller.turn_complete.connect(_on_ai_turn_complete)
 	add_child(_ai_controller)
 
 	# Initial HUD state
@@ -252,7 +276,19 @@ func _finish_deployment() -> void:
 	_deployment_controller.finish()
 	_hud.append_log("--- Deployment complete! ---")
 	_overlay.clear()
-	_enter_awaiting_activation()
+	if _is_charge_time():
+		# Initialize CT system with deployed units
+		if _ct_turn_system and not _ct_turn_system.get_scheduler():
+			var all_units: Array = []
+			for team in _state.parties.keys():
+				all_units.append_array(_state.parties[team])
+			var seed_val: int = int(Time.get_ticks_msec())
+			_ct_turn_system.setup(all_units, seed_val)
+		_start_new_round()
+	elif _is_speed_round():
+		_start_new_round()
+	else:
+		_enter_awaiting_activation()
 
 
 func _handle_deployment_click(coord: Vector2i) -> void:
@@ -555,6 +591,9 @@ func _enter_match_over(winner: String) -> void:
 func _on_back_to_menu() -> void:
 	if MatchData.active_run != null:
 		_complete_run_battle()
+	elif MatchData.mode == "skirmish":
+		MatchData.clear()
+		get_tree().change_scene_to_file("res://scenes/skirmish/skirmish_scene.tscn")
 	else:
 		get_tree().change_scene_to_file("res://scenes/draft/draft_scene.tscn")
 
@@ -1057,6 +1096,11 @@ func _do_wait() -> void:
 	var result := TurnActions.execute_wait(_state)
 	_hud.append_log("%s waits" % unit.character.display_name, "action_wait")
 	_overlay.clear()
+
+	if _is_charge_time():
+		_ct_end_activation(true)
+		return
+
 	var removed := RoundManager.end_activation(_state)
 	if removed:
 		_pawn_manager.remove_pawn(removed)
@@ -1074,6 +1118,18 @@ func _cancel_targeting() -> void:
 
 
 func _start_new_round() -> void:
+	if _is_charge_time():
+		_ct_turn_system.begin_round(_state)
+		# Refresh status markers for all surviving units
+		for team in _state.parties.keys():
+			for unit: BattleUnit in _state.parties[team]:
+				if unit.current_hp > 0 or unit.is_downed:
+					_pawn_manager.update_status_markers(unit)
+		_hud.append_log("--- Round %d begins ---" % _state.round_number)
+		_hud.show_round_banner(_state.round_number)
+		_enter_ct_ticking()
+		return
+
 	RoundManager.start_round(_state)
 	# Refresh status markers for all surviving units (durations may have expired)
 	for team in _state.parties.keys():
@@ -1091,6 +1147,9 @@ func _start_new_round() -> void:
 func _check_end_activation_or_continue() -> void:
 	var unit: BattleUnit = _state.current_unit
 	if not unit:
+		if _is_charge_time():
+			_ct_end_activation(false)
+			return
 		var removed := RoundManager.end_activation(_state)
 		if removed:
 			_pawn_manager.remove_pawn(removed)
@@ -1318,6 +1377,128 @@ func _must_reserve_move() -> bool:
 	if not unit:
 		return false
 	return unit.base_ap >= 2 and not unit.has_moved and unit.ap_remaining <= 1
+
+
+# =======================================================================
+# Charge-Time Flow (A20)
+# =======================================================================
+
+func _is_charge_time() -> bool:
+	return _ct_turn_system != null
+
+
+func _enter_ct_ticking() -> void:
+	_control_state = ControlState.CT_TICKING
+	_set_drag_enabled(false)
+	_overlay.clear()
+	_hud.hide_action_panel()
+	_hud.hide_unit_info()
+	_pawn_manager.clear_highlight()
+	_hud.set_phase_label("Round %d - CT Clock" % _state.round_number)
+	_ct_update_timeline()
+
+	# Tick immediately to check for first activation
+	_ct_do_tick()
+
+
+func _ct_do_tick() -> void:
+	## Tick the CT clock and check for an activation.
+	if _control_state == ControlState.MATCH_OVER:
+		return
+
+	_ct_turn_system.advance(_state)
+	var unit: BattleUnit = _ct_turn_system.activated_unit
+	if unit:
+		_ct_activate_unit(unit)
+	else:
+		# Continue ticking with visual pacing
+		_ct_update_timeline()
+		get_tree().create_timer(CT_TICK_INTERVAL).timeout.connect(_ct_do_tick)
+
+
+func _ct_activate_unit(unit: BattleUnit) -> void:
+	## A unit crossed the CT threshold — activate it.
+	_ct_update_timeline()
+
+	var err := RoundManager.activate_unit(_state, unit)
+	if not err.is_empty():
+		Log.error("BattleController", "CT activation failed: %s" % err)
+		_ct_turn_system.on_activation_complete(_state, false)
+		_ct_resume_after_activation()
+		return
+
+	var race_class_id := "%s_%s" % [unit.character.race,
+		unit.character.classes[0] if not unit.character.classes.is_empty() else ""]
+	_hud.append_log("%s activated (CT)" % unit.character.display_name, race_class_id)
+
+	# Apply per-turn terrain damage at activation start
+	var was_downed_before := unit.is_downed
+	var terrain_outcomes := RoundManager.on_activation_start(_state, unit)
+	for outcome in terrain_outcomes:
+		var dmg: int = int(outcome.get("amount", 0))
+		var hp_after: int = int(outcome.get("target_hp_after", 0))
+		_hud.append_log("%s takes %d terrain damage (%d HP)" % [
+			unit.character.display_name, dmg, hp_after], "terrain_damage")
+		if unit.current_hp <= 0:
+			_pawn_manager.down_pawn(unit)
+			_hud.append_log("%s DOWNED by terrain!" % unit.character.display_name)
+	_pawn_manager.update_status_markers(unit)
+
+	if _check_match_over():
+		return
+
+	# If downed by terrain THIS activation, end immediately
+	if unit.is_downed and not was_downed_before:
+		RoundManager.end_activation(_state)
+		_ct_turn_system.on_activation_complete(_state, false)
+		_ct_resume_after_activation()
+		return
+
+	# Route to AI or human
+	if unit.team in _state.ai_teams:
+		_control_state = ControlState.ANIMATING
+		_pawn_manager.highlight_active(unit)
+		_hud.update_round_info(_state.round_number, unit.team)
+		_ai_controller.take_turn(_state)
+	elif MatchData.opponent_type == "hot_seat" or unit.team not in _state.ai_teams:
+		_pawn_manager.highlight_active(unit)
+		_hud.update_round_info(_state.round_number, unit.team)
+		_enter_action_select()
+
+
+func _ct_end_activation(did_wait: bool) -> void:
+	## End a CT activation and resume ticking.
+	_state.current_unit = null
+	_ct_turn_system.on_activation_complete(_state, did_wait)
+
+	if _check_match_over():
+		return
+
+	_ct_resume_after_activation()
+
+
+func _ct_resume_after_activation() -> void:
+	## Resume the CT clock after an activation completes.
+	if _ct_turn_system.is_round_complete(_state):
+		_hud.append_log("--- Round %d complete ---" % _state.round_number)
+		_start_new_round()
+	else:
+		_enter_ct_ticking()
+
+
+func _ct_update_timeline() -> void:
+	## Update the HUD timeline with upcoming activations.
+	if not _ct_turn_system:
+		return
+	var timeline: Array = _ct_turn_system.get_timeline(6)
+	_hud.update_ct_timeline(timeline)
+
+
+func _on_ai_turn_complete_ct() -> void:
+	## CT-mode version of AI turn completion.
+	if _check_match_over():
+		return
+	_ct_end_activation(false)
 
 
 # =======================================================================
