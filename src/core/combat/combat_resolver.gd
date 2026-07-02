@@ -23,8 +23,12 @@ static func roll_crit() -> float:
 
 
 ## Resolve a physical (basic weapon) attack.
-## Returns {damage, atk_roll, def_roll, target_hp_after, is_downed}.
+## Returns {damage, atk_roll, def_roll, target_hp_after, is_downed, is_crit}.
 ## Defense die only rolls when the target has used the Defend action.
+## A18: optional ctx dict — when present (with "state" key), fires passive events
+## ON_HIT (melee) and ON_DAMAGED after resolution.
+## A19: arc (Hex.Arc enum int) adds FacingBonus to damage; non-FRONT arcs may also crit.
+##      arc defaults to FRONT so all existing callers reproduce pre-A19 numbers.
 static func resolve_attack(
 	attacker: BattleUnit,
 	target: BattleUnit,
@@ -35,6 +39,8 @@ static func resolve_attack(
 	is_ranged: bool,
 	elev_bonus: int = -1,
 	cover_def: int = -1,
+	ctx: Dictionary = {},
+	arc: int = 0,
 ) -> Dictionary:
 	if elev_bonus < 0:
 		elev_bonus = Constants.get_value("ELEV_BONUS", 1)
@@ -43,10 +49,20 @@ static func resolve_attack(
 
 	var atk: int = attacker.stats.effective("atk")
 	var e_bonus: int = elev_bonus if attacker_elev > target_elev else 0
+	var f_bonus: int = FacingBonus.damage_bonus(arc)
 	var c_bonus: int = cover_def * target_cover if is_ranged else 0
 	var target_def: int = target.stats.effective("def")
 	var atk_roll: int = roll_die()
-	var damage: int = max(1, atk_roll + atk + weapon_power + e_bonus - target_def - c_bonus)
+	var damage: int = max(1, atk_roll + atk + weapon_power + e_bonus + f_bonus - target_def - c_bonus)
+
+	# A19: arc-based crit for basic attacks — only consume a roll when arc grants crit
+	var is_crit: bool = false
+	var cc: float = FacingBonus.crit_bonus(arc)
+	if cc > 0.0:
+		var crit_mult: float = float(Constants.get_value("CRIT_MULT", 1.5))
+		if roll_crit() < cc:
+			is_crit = true
+			damage = int(round(float(damage) * crit_mult))
 
 	# Defend action grants a 1d6 defense roll against all damage
 	var def_roll: int = 0
@@ -55,16 +71,43 @@ static func resolve_attack(
 		damage = max(1, damage - def_roll)
 
 	_wake_on_damage(target)
+	var pre_hp: int = target.current_hp
 	target.current_hp = max(0, target.current_hp - damage)
 	var is_downed: bool = target.current_hp <= 0
 
-	return {
+	var result := {
 		"damage": damage,
 		"atk_roll": atk_roll,
 		"def_roll": def_roll,
 		"target_hp_after": target.current_hp,
 		"is_downed": is_downed,
+		"is_crit": is_crit,
 	}
+
+	# A18: fire passive events when state context is available
+	if not ctx.is_empty() and ctx.has("state") and damage > 0 and not is_downed:
+		var ev_ctx: Dictionary = ctx.duplicate()
+		ev_ctx["attacker"] = attacker
+		# Melee ON_HIT (range <= 1 or adjacent)
+		if not is_ranged:
+			var reactions_hit: Array = PassiveDispatch.fire(PassiveDispatch.ON_HIT, target, ev_ctx)
+			if not reactions_hit.is_empty():
+				result["reactions"] = reactions_hit
+		# ON_DAMAGED for any damage
+		var reactions_dmg: Array = PassiveDispatch.fire(PassiveDispatch.ON_DAMAGED, target, ev_ctx)
+		if not reactions_dmg.is_empty():
+			result["reactions"] = reactions_dmg
+		# ON_LOW_HP threshold crossing
+		var low_hp_pct: float = float(Constants.get_value("PASSIVE_LOW_HP_PCT", 0.25))
+		var max_hp: int = target.stats.effective("hp")
+		var pre_ratio: float = float(pre_hp) / float(max_hp) if max_hp > 0 else 1.0
+		var post_ratio: float = float(target.current_hp) / float(max_hp) if max_hp > 0 else 0.0
+		if pre_ratio > low_hp_pct and post_ratio <= low_hp_pct:
+			var reactions_lhp: Array = PassiveDispatch.fire(PassiveDispatch.ON_LOW_HP, target, ev_ctx)
+			if not reactions_lhp.is_empty():
+				result["reactions"] = reactions_lhp
+
+	return result
 
 
 ## Resolve a damage ability effect (spell or skill).
@@ -76,6 +119,9 @@ static func resolve_attack(
 ## A16: element/affinity scaling and critical hits.
 ## Order of operations: base formula → affinity mult → crit mult → defend die → floor.
 ## IMMUNE skips the floor (0 damage). ABSORB converts to healing and skips the floor.
+## A18: optional ctx dict — when present (with "state" key), fires passive events
+## ON_DAMAGED after resolution.
+## A19: arc adds FacingBonus.crit_bonus additively to CRIT_CHANCE (FRONT adds 0 → preserves seeds).
 static func resolve_damage(
 	attacker: BattleUnit,
 	target: BattleUnit,
@@ -87,29 +133,32 @@ static func resolve_damage(
 	mag_scaling: float = 1.0,
 	element: String = "",
 	terrain_affinity_weight: int = 0,
+	ctx: Dictionary = {},
+	arc: int = 0,
 ) -> Dictionary:
 	if elev_bonus < 0:
 		elev_bonus = Constants.get_value("ELEV_BONUS", 1)
 
 	var e_bonus: int = elev_bonus if attacker_elev > target_elev else 0
+	var f_bonus: int = FacingBonus.damage_bonus(arc)
 	var atk_roll: int = roll_die()
 	var base: int
 
 	if ability_type == "skill":
 		var target_def: int = target.stats.effective("def")
-		base = atk_roll + effect_value + e_bonus - target_def
+		base = atk_roll + effect_value + e_bonus + f_bonus - target_def
 	else:
 		# Spells: scales with caster MAG, reduced by target RES
 		var mag_bonus: int = int(round(mag_scaling * attacker.stats.effective("mag")))
-		base = atk_roll + effect_value + mag_bonus + e_bonus - target.stats.effective("res")
+		base = atk_roll + effect_value + mag_bonus + e_bonus + f_bonus - target.stats.effective("res")
 
 	# A16: Affinity scaling
 	var tier: int = target.effective_affinity(element, terrain_affinity_weight)
 	var aff_mult: float = Affinity.multiplier(tier)
 	var scaled: int = int(round(float(base) * aff_mult))
 
-	# A16: Critical hit
-	var crit_chance: float = float(Constants.get_value("CRIT_CHANCE", 0.0625))
+	# A16+A19: Critical hit — A19 adds arc crit_bonus additively (FRONT adds 0 → seeds preserved)
+	var crit_chance: float = float(Constants.get_value("CRIT_CHANCE", 0.0625)) + FacingBonus.crit_bonus(arc)
 	var crit_mult: float = float(Constants.get_value("CRIT_MULT", 1.5))
 	var is_crit: bool = roll_crit() < crit_chance
 	if is_crit:
@@ -150,10 +199,11 @@ static func resolve_damage(
 		damage = max(1, scaled)
 
 	_wake_on_damage(target)
+	var pre_hp_dmg: int = target.current_hp
 	target.current_hp = max(0, target.current_hp - damage)
 	var is_downed: bool = target.current_hp <= 0
 
-	return {
+	var result_dmg := {
 		"damage": damage,
 		"atk_roll": atk_roll,
 		"def_roll": def_roll,
@@ -164,6 +214,25 @@ static func resolve_damage(
 		"is_crit": is_crit,
 		"pre_affinity_damage": base,
 	}
+
+	# A18: fire passive events when state context is available and damage was dealt
+	if not ctx.is_empty() and ctx.has("state") and damage > 0 and not is_downed:
+		var ev_ctx: Dictionary = ctx.duplicate()
+		ev_ctx["attacker"] = attacker
+		var reactions_dmg: Array = PassiveDispatch.fire(PassiveDispatch.ON_DAMAGED, target, ev_ctx)
+		if not reactions_dmg.is_empty():
+			result_dmg["reactions"] = reactions_dmg
+		# ON_LOW_HP threshold crossing
+		var low_hp_pct: float = float(Constants.get_value("PASSIVE_LOW_HP_PCT", 0.25))
+		var max_hp_check: int = target.stats.effective("hp")
+		var pre_ratio: float = float(pre_hp_dmg) / float(max_hp_check) if max_hp_check > 0 else 1.0
+		var post_ratio: float = float(target.current_hp) / float(max_hp_check) if max_hp_check > 0 else 0.0
+		if pre_ratio > low_hp_pct and post_ratio <= low_hp_pct:
+			var reactions_lhp: Array = PassiveDispatch.fire(PassiveDispatch.ON_LOW_HP, target, ev_ctx)
+			if not reactions_lhp.is_empty():
+				result_dmg["reactions"] = reactions_lhp
+
+	return result_dmg
 
 
 ## Resolve a healing effect. Clamped to max HP.

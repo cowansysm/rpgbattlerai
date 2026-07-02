@@ -1,607 +1,1474 @@
 [
   {
-    "id": "basic_strike", "name": "Basic Strike", "type": "skill",
-    "ap": 1, "wp": 0, "range": 1,
+    "id": "basic_strike",
+    "name": "Basic Strike",
+    "type": "skill",
+    "ap": 1,
+    "wp": 0,
+    "range": 1,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 3 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 3
+    },
     "source": "class"
   },
   {
-    "id": "first_aid", "name": "First Aid", "type": "skill",
-    "ap": 1, "wp": 1, "range": 0,
+    "id": "first_aid",
+    "name": "First Aid",
+    "type": "skill",
+    "ap": 1,
+    "wp": 1,
+    "range": 0,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "heal", "value": 3 },
-    "source": "class"
-  },
-
-  {
-    "id": "power_strike", "name": "Power Strike", "type": "skill",
-    "ap": 1, "wp": 2, "range": 1,
-    "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 10 },
-    "source": "class"
-  },
-  {
-    "id": "reckless_swing", "name": "Reckless Swing", "type": "skill",
-    "ap": 1, "wp": 3, "range": 1,
-    "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 15 },
+    "effect": {
+      "effect_type": "heal",
+      "value": 3
+    },
     "source": "class"
   },
   {
-    "id": "rage", "name": "Rage", "type": "skill",
-    "ap": 1, "wp": 2, "range": 0,
+    "id": "power_strike",
+    "name": "Power Strike",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 1,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "atk", "value": 5, "duration": 3 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 10
+    },
     "source": "class"
   },
   {
-    "id": "cleave", "name": "Cleave", "type": "skill",
-    "ap": 1, "wp": 3, "range": 1,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "reckless_swing",
+    "name": "Reckless Swing",
+    "type": "skill",
+    "ap": 1,
+    "wp": 3,
+    "range": 1,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 6 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 15
+    },
     "source": "class"
   },
   {
-    "id": "shield_bash", "name": "Shield Bash", "type": "skill",
-    "ap": 1, "wp": 2, "range": 1,
+    "id": "rage",
+    "name": "Rage",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 0,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "stun", "duration": 1 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "atk",
+      "value": 5,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "taunt", "name": "Taunt", "type": "skill",
-    "ap": 1, "wp": 1, "range": 2,
+    "id": "cleave",
+    "name": "Cleave",
+    "type": "skill",
+    "ap": 1,
+    "wp": 3,
+    "range": 1,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "provoked", "duration": 2 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 6
+    },
     "source": "class"
   },
   {
-    "id": "fortify", "name": "Fortify", "type": "skill",
-    "ap": 1, "wp": 2, "range": 0,
+    "id": "shield_bash",
+    "name": "Shield Bash",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 1,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "def", "value": 4, "duration": 3 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "stun",
+      "duration": 1
+    },
     "source": "class"
   },
   {
-    "id": "war_cry", "name": "War Cry", "type": "skill",
-    "ap": 1, "wp": 3, "range": 0,
-    "area": { "shape": "burst", "radius": 2 },
+    "id": "taunt",
+    "name": "Taunt",
+    "type": "skill",
+    "ap": 1,
+    "wp": 1,
+    "range": 2,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "atk", "value": 3, "duration": 3 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "provoked",
+      "duration": 2
+    },
     "source": "class"
   },
   {
-    "id": "charge", "name": "Charge", "type": "skill",
-    "ap": 2, "wp": 4, "range": 1,
+    "id": "fortify",
+    "name": "Fortify",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 0,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 20 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "def",
+      "value": 4,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "iron_will", "name": "Iron Will", "type": "skill",
-    "ap": 1, "wp": 2, "range": 0,
+    "id": "war_cry",
+    "name": "War Cry",
+    "type": "skill",
+    "ap": 1,
+    "wp": 3,
+    "range": 0,
+    "area": {
+      "shape": "burst",
+      "radius": 2
+    },
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "res", "value": 4, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "atk",
+      "value": 3,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "last_stand", "name": "Last Stand", "type": "skill",
-    "ap": 1, "wp": 3, "range": 0,
+    "id": "charge",
+    "name": "Charge",
+    "type": "skill",
+    "ap": 2,
+    "wp": 4,
+    "range": 1,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "def", "value": 8, "duration": 2 },
-    "source": "class"
-  },
-
-  {
-    "id": "backstab", "name": "Backstab", "type": "skill",
-    "ap": 1, "wp": 2, "range": 1,
-    "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 12 },
-    "source": "class"
-  },
-  {
-    "id": "lullaby", "name": "Lullaby", "type": "skill",
-    "ap": 1, "wp": 3, "range": 3,
-    "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "sleep", "duration": 2 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 20
+    },
     "source": "class"
   },
   {
-    "id": "poison_strike", "name": "Poison Strike", "type": "skill",
-    "ap": 1, "wp": 2, "range": 1,
+    "id": "iron_will",
+    "name": "Iron Will",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 0,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "poison", "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "res",
+      "value": 4,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "blind_strike", "name": "Blind Strike", "type": "skill",
-    "ap": 1, "wp": 2, "range": 1,
+    "id": "last_stand",
+    "name": "Last Stand",
+    "type": "skill",
+    "ap": 1,
+    "wp": 3,
+    "range": 0,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "blind", "duration": 2 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "def",
+      "value": 8,
+      "duration": 2
+    },
     "source": "class"
   },
   {
-    "id": "steal", "name": "Steal", "type": "skill",
-    "ap": 1, "wp": 1, "range": 1,
+    "id": "backstab",
+    "name": "Backstab",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 1,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 1 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 12
+    },
     "source": "class"
   },
   {
-    "id": "evasion", "name": "Evasion", "type": "skill",
-    "ap": 1, "wp": 2, "range": 0,
+    "id": "lullaby",
+    "name": "Lullaby",
+    "type": "skill",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "spd", "value": 3, "duration": 3 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "sleep",
+      "duration": 2
+    },
     "source": "class"
   },
   {
-    "id": "shadow_step", "name": "Shadow Step", "type": "skill",
-    "ap": 1, "wp": 3, "range": 0,
+    "id": "poison_strike",
+    "name": "Poison Strike",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 1,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "spd", "value": 5, "duration": 1 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "poison",
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "cripple", "name": "Cripple", "type": "skill",
-    "ap": 1, "wp": 2, "range": 1,
+    "id": "blind_strike",
+    "name": "Blind Strike",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 1,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "slowed", "duration": 3 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "blind",
+      "duration": 2
+    },
     "source": "class"
   },
   {
-    "id": "expose_weakness", "name": "Expose Weakness", "type": "skill",
-    "ap": 1, "wp": 2, "range": 1,
+    "id": "steal",
+    "name": "Steal",
+    "type": "skill",
+    "ap": 1,
+    "wp": 1,
+    "range": 1,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "def", "value": -4, "duration": 3 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 1
+    },
     "source": "class"
   },
   {
-    "id": "assassinate", "name": "Assassinate", "type": "skill",
-    "ap": 2, "wp": 5, "range": 1,
+    "id": "evasion",
+    "name": "Evasion",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 0,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 25 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "spd",
+      "value": 3,
+      "duration": 3
+    },
     "source": "class"
   },
-
   {
-    "id": "fire_1", "name": "Fire 1", "type": "spell",
-    "ap": 1, "wp": 3, "range": 3,
+    "id": "shadow_step",
+    "name": "Shadow Step",
+    "type": "skill",
+    "ap": 1,
+    "wp": 3,
+    "range": 0,
+    "mag_scaling": 0.0,
+    "effect": {
+      "effect_type": "buff",
+      "stat": "spd",
+      "value": 5,
+      "duration": 1
+    },
+    "source": "class"
+  },
+  {
+    "id": "cripple",
+    "name": "Cripple",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 1,
+    "mag_scaling": 0.0,
+    "effect": {
+      "effect_type": "status",
+      "status_id": "slowed",
+      "duration": 3
+    },
+    "source": "class"
+  },
+  {
+    "id": "expose_weakness",
+    "name": "Expose Weakness",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 1,
+    "mag_scaling": 0.0,
+    "effect": {
+      "effect_type": "buff",
+      "stat": "def",
+      "value": -4,
+      "duration": 3
+    },
+    "source": "class"
+  },
+  {
+    "id": "assassinate",
+    "name": "Assassinate",
+    "type": "skill",
+    "ap": 2,
+    "wp": 5,
+    "range": 1,
+    "mag_scaling": 0.0,
+    "effect": {
+      "effect_type": "damage",
+      "value": 25
+    },
+    "source": "class"
+  },
+  {
+    "id": "fire_1",
+    "name": "Fire 1",
+    "type": "spell",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 4, "element": "fire" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 4,
+      "element": "fire"
+    },
     "source": "class"
   },
   {
-    "id": "fire_2", "name": "Fire 2", "type": "spell",
-    "ap": 2, "wp": 5, "range": 4,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "fire_2",
+    "name": "Fire 2",
+    "type": "spell",
+    "ap": 2,
+    "wp": 5,
+    "range": 4,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 11, "element": "fire" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 11,
+      "element": "fire"
+    },
     "source": "class"
   },
   {
-    "id": "fire_3", "name": "Fire 3", "type": "spell",
-    "ap": 2, "wp": 8, "range": 4,
+    "id": "fire_3",
+    "name": "Fire 3",
+    "type": "spell",
+    "ap": 2,
+    "wp": 8,
+    "range": 4,
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 18, "element": "fire" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 18,
+      "element": "fire"
+    },
     "source": "class"
   },
   {
-    "id": "ice_1", "name": "Ice 1", "type": "spell",
-    "ap": 1, "wp": 3, "range": 3,
+    "id": "ice_1",
+    "name": "Ice 1",
+    "type": "spell",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 4, "element": "ice" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 4,
+      "element": "ice"
+    },
     "source": "class"
   },
   {
-    "id": "ice_2", "name": "Ice 2", "type": "spell",
-    "ap": 2, "wp": 5, "range": 4,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "ice_2",
+    "name": "Ice 2",
+    "type": "spell",
+    "ap": 2,
+    "wp": 5,
+    "range": 4,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 11, "element": "ice" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 11,
+      "element": "ice"
+    },
     "source": "class"
   },
   {
-    "id": "ice_3", "name": "Ice 3", "type": "spell",
-    "ap": 2, "wp": 8, "range": 4,
+    "id": "ice_3",
+    "name": "Ice 3",
+    "type": "spell",
+    "ap": 2,
+    "wp": 8,
+    "range": 4,
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 18, "element": "ice" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 18,
+      "element": "ice"
+    },
     "source": "class"
   },
   {
-    "id": "thunder_1", "name": "Thunder 1", "type": "spell",
-    "ap": 1, "wp": 4, "range": 3,
+    "id": "thunder_1",
+    "name": "Thunder 1",
+    "type": "spell",
+    "ap": 1,
+    "wp": 4,
+    "range": 3,
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 6, "element": "lightning" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 6,
+      "element": "lightning"
+    },
     "source": "class"
   },
   {
-    "id": "thunder_2", "name": "Thunder 2", "type": "spell",
-    "ap": 2, "wp": 6, "range": 4,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "thunder_2",
+    "name": "Thunder 2",
+    "type": "spell",
+    "ap": 2,
+    "wp": 6,
+    "range": 4,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 13, "element": "lightning" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 13,
+      "element": "lightning"
+    },
     "source": "class"
   },
   {
-    "id": "thunder_3", "name": "Thunder 3", "type": "spell",
-    "ap": 2, "wp": 9, "range": 4,
+    "id": "thunder_3",
+    "name": "Thunder 3",
+    "type": "spell",
+    "ap": 2,
+    "wp": 9,
+    "range": 4,
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 20, "element": "lightning" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 20,
+      "element": "lightning"
+    },
     "source": "class"
   },
   {
-    "id": "drain", "name": "Drain", "type": "spell",
-    "ap": 1, "wp": 4, "range": 3,
+    "id": "drain",
+    "name": "Drain",
+    "type": "spell",
+    "ap": 1,
+    "wp": 4,
+    "range": 3,
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 5, "element": "dark" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 5,
+      "element": "dark"
+    },
     "source": "class"
   },
   {
-    "id": "silence", "name": "Silence", "type": "spell",
-    "ap": 1, "wp": 4, "range": 3,
+    "id": "silence",
+    "name": "Silence",
+    "type": "spell",
+    "ap": 1,
+    "wp": 4,
+    "range": 3,
     "mag_scaling": 0.5,
-    "effect": { "effect_type": "status", "status_id": "silence", "duration": 3 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "silence",
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "slow", "name": "Slow", "type": "spell",
-    "ap": 1, "wp": 3, "range": 3,
+    "id": "slow",
+    "name": "Slow",
+    "type": "spell",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
     "mag_scaling": 0.5,
-    "effect": { "effect_type": "status", "status_id": "slowed", "duration": 3 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "slowed",
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "arcane_blast", "name": "Arcane Blast", "type": "spell",
-    "ap": 1, "wp": 3, "range": 3,
+    "id": "arcane_blast",
+    "name": "Arcane Blast",
+    "type": "spell",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 6 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 6
+    },
     "source": "class"
   },
   {
-    "id": "meteor", "name": "Meteor", "type": "spell",
-    "ap": 2, "wp": 10, "range": 4,
-    "area": { "shape": "burst", "radius": 2 },
+    "id": "meteor",
+    "name": "Meteor",
+    "type": "spell",
+    "ap": 2,
+    "wp": 10,
+    "range": 4,
+    "area": {
+      "shape": "burst",
+      "radius": 2
+    },
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 22, "element": "fire" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 22,
+      "element": "fire"
+    },
     "source": "class"
   },
   {
-    "id": "chain_lightning", "name": "Chain Lightning", "type": "spell",
-    "ap": 2, "wp": 7, "range": 4,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "chain_lightning",
+    "name": "Chain Lightning",
+    "type": "spell",
+    "ap": 2,
+    "wp": 7,
+    "range": 4,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 14, "element": "lightning" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 14,
+      "element": "lightning"
+    },
     "source": "class"
   },
   {
-    "id": "mana_shield", "name": "Mana Shield", "type": "spell",
-    "ap": 1, "wp": 4, "range": 0,
+    "id": "mana_shield",
+    "name": "Mana Shield",
+    "type": "spell",
+    "ap": 1,
+    "wp": 4,
+    "range": 0,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "def", "value": 5, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "def",
+      "value": 5,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "dark_pulse", "name": "Dark Pulse", "type": "spell",
-    "ap": 1, "wp": 5, "range": 3,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "dark_pulse",
+    "name": "Dark Pulse",
+    "type": "spell",
+    "ap": 1,
+    "wp": 5,
+    "range": 3,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 8, "element": "dark" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 8,
+      "element": "dark"
+    },
     "source": "class"
   },
   {
-    "id": "death_grip", "name": "Death Grip", "type": "spell",
-    "ap": 2, "wp": 8, "range": 3,
+    "id": "death_grip",
+    "name": "Death Grip",
+    "type": "spell",
+    "ap": 2,
+    "wp": 8,
+    "range": 3,
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 16, "element": "dark" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 16,
+      "element": "dark"
+    },
     "source": "class"
   },
   {
-    "id": "curse", "name": "Curse", "type": "spell",
-    "ap": 1, "wp": 4, "range": 3,
+    "id": "curse",
+    "name": "Curse",
+    "type": "spell",
+    "ap": 1,
+    "wp": 4,
+    "range": 3,
     "mag_scaling": 0.5,
-    "effect": { "effect_type": "buff", "stat": "atk", "value": -3, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "atk",
+      "value": -3,
+      "duration": 3
+    },
     "source": "class"
   },
-
   {
-    "id": "cure_1", "name": "Cure 1", "type": "spell",
-    "ap": 1, "wp": 3, "range": 3,
+    "id": "cure_1",
+    "name": "Cure 1",
+    "type": "spell",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
     "mag_scaling": 0.8,
-    "effect": { "effect_type": "heal", "value": 4 },
+    "effect": {
+      "effect_type": "heal",
+      "value": 4
+    },
     "source": "class"
   },
   {
-    "id": "cure_2", "name": "Cure 2", "type": "spell",
-    "ap": 2, "wp": 5, "range": 4,
+    "id": "cure_2",
+    "name": "Cure 2",
+    "type": "spell",
+    "ap": 2,
+    "wp": 5,
+    "range": 4,
     "mag_scaling": 0.8,
-    "effect": { "effect_type": "heal", "value": 14 },
+    "effect": {
+      "effect_type": "heal",
+      "value": 14
+    },
     "source": "class"
   },
   {
-    "id": "cure_3", "name": "Cure 3", "type": "spell",
-    "ap": 2, "wp": 8, "range": 4,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "cure_3",
+    "name": "Cure 3",
+    "type": "spell",
+    "ap": 2,
+    "wp": 8,
+    "range": 4,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 0.8,
-    "effect": { "effect_type": "heal", "value": 10 },
+    "effect": {
+      "effect_type": "heal",
+      "value": 10
+    },
     "source": "class"
   },
   {
-    "id": "regen", "name": "Regen", "type": "spell",
-    "ap": 1, "wp": 4, "range": 3,
+    "id": "regen",
+    "name": "Regen",
+    "type": "spell",
+    "ap": 1,
+    "wp": 4,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "regen", "duration": 3 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "regen",
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "protect", "name": "Protect", "type": "spell",
-    "ap": 1, "wp": 3, "range": 3,
+    "id": "protect",
+    "name": "Protect",
+    "type": "spell",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "def", "value": 4, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "def",
+      "value": 4,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "shell", "name": "Shell", "type": "spell",
-    "ap": 1, "wp": 3, "range": 3,
+    "id": "shell",
+    "name": "Shell",
+    "type": "spell",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "res", "value": 4, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "res",
+      "value": 4,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "haste", "name": "Haste", "type": "spell",
-    "ap": 1, "wp": 4, "range": 3,
+    "id": "haste",
+    "name": "Haste",
+    "type": "spell",
+    "ap": 1,
+    "wp": 4,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "spd", "value": 3, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "spd",
+      "value": 3,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "revive", "name": "Revive", "type": "spell",
-    "ap": 2, "wp": 8, "range": 3,
+    "id": "revive",
+    "name": "Revive",
+    "type": "spell",
+    "ap": 2,
+    "wp": 8,
+    "range": 3,
     "mag_scaling": 0.8,
-    "effect": { "effect_type": "revive", "value": 25 },
+    "effect": {
+      "effect_type": "revive",
+      "value": 25
+    },
     "source": "class"
   },
   {
-    "id": "holy_1", "name": "Holy 1", "type": "spell",
-    "ap": 1, "wp": 4, "range": 3,
+    "id": "holy_1",
+    "name": "Holy 1",
+    "type": "spell",
+    "ap": 1,
+    "wp": 4,
+    "range": 3,
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 5, "element": "holy" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 5,
+      "element": "holy"
+    },
     "source": "class"
   },
   {
-    "id": "holy_2", "name": "Holy 2", "type": "spell",
-    "ap": 2, "wp": 7, "range": 4,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "holy_2",
+    "name": "Holy 2",
+    "type": "spell",
+    "ap": 2,
+    "wp": 7,
+    "range": 4,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 12, "element": "holy" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 12,
+      "element": "holy"
+    },
     "source": "class"
   },
   {
-    "id": "dispel", "name": "Dispel", "type": "spell",
-    "ap": 1, "wp": 3, "range": 3,
+    "id": "dispel",
+    "name": "Dispel",
+    "type": "spell",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "dispel", "duration": 1 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "dispel",
+      "duration": 1
+    },
     "source": "class"
   },
   {
-    "id": "barrier", "name": "Barrier", "type": "spell",
-    "ap": 1, "wp": 5, "range": 3,
+    "id": "barrier",
+    "name": "Barrier",
+    "type": "spell",
+    "ap": 1,
+    "wp": 5,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "def", "value": 6, "duration": 2 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "def",
+      "value": 6,
+      "duration": 2
+    },
     "source": "class"
   },
   {
-    "id": "bless", "name": "Bless", "type": "spell",
-    "ap": 1, "wp": 5, "range": 3,
+    "id": "bless",
+    "name": "Bless",
+    "type": "spell",
+    "ap": 1,
+    "wp": 5,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "atk", "value": 3, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "atk",
+      "value": 3,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "sanctuary", "name": "Sanctuary", "type": "spell",
-    "ap": 2, "wp": 7, "range": 0,
-    "area": { "shape": "burst", "radius": 2 },
+    "id": "sanctuary",
+    "name": "Sanctuary",
+    "type": "spell",
+    "ap": 2,
+    "wp": 7,
+    "range": 0,
+    "area": {
+      "shape": "burst",
+      "radius": 2
+    },
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "def", "value": 3, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "def",
+      "value": 3,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "divine_judgment", "name": "Divine Judgment", "type": "spell",
-    "ap": 2, "wp": 9, "range": 4,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "divine_judgment",
+    "name": "Divine Judgment",
+    "type": "spell",
+    "ap": 2,
+    "wp": 9,
+    "range": 4,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 1.0,
-    "effect": { "effect_type": "damage", "value": 16, "element": "holy" },
+    "effect": {
+      "effect_type": "damage",
+      "value": 16,
+      "element": "holy"
+    },
     "source": "class"
   },
   {
-    "id": "prophecy", "name": "Prophecy", "type": "spell",
-    "ap": 1, "wp": 6, "range": 0,
-    "area": { "shape": "burst", "radius": 2 },
+    "id": "prophecy",
+    "name": "Prophecy",
+    "type": "spell",
+    "ap": 1,
+    "wp": 6,
+    "range": 0,
+    "area": {
+      "shape": "burst",
+      "radius": 2
+    },
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "spd", "value": 2, "duration": 3 },
-    "source": "class"
-  },
-
-  {
-    "id": "shield_1", "name": "Shield 1", "type": "spell",
-    "ap": 1, "wp": 3, "range": 3,
-    "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "def", "value": 3, "duration": 3 },
-    "source": "class"
-  },
-
-  {
-    "id": "inspire", "name": "Inspire", "type": "skill",
-    "ap": 1, "wp": 3, "range": 3,
-    "area": { "shape": "burst", "radius": 1 },
-    "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "atk", "value": 3, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "spd",
+      "value": 2,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "rally", "name": "Rally", "type": "skill",
-    "ap": 1, "wp": 2, "range": 0,
-    "area": { "shape": "burst", "radius": 2 },
+    "id": "shield_1",
+    "name": "Shield 1",
+    "type": "spell",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "atk", "value": 2, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "def",
+      "value": 3,
+      "duration": 3
+    },
+    "source": "class"
+  },
+  {
+    "id": "inspire",
+    "name": "Inspire",
+    "type": "skill",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
+    "mag_scaling": 0.0,
+    "effect": {
+      "effect_type": "buff",
+      "stat": "atk",
+      "value": 3,
+      "duration": 3
+    },
+    "source": "class"
+  },
+  {
+    "id": "rally",
+    "name": "Rally",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 0,
+    "area": {
+      "shape": "burst",
+      "radius": 2
+    },
+    "mag_scaling": 0.0,
+    "effect": {
+      "effect_type": "buff",
+      "stat": "atk",
+      "value": 2,
+      "duration": 3
+    },
     "source": "item"
   },
   {
-    "id": "courage", "name": "Courage", "type": "skill",
-    "ap": 1, "wp": 2, "range": 3,
+    "id": "courage",
+    "name": "Courage",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "def", "value": 3, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "def",
+      "value": 3,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "song_of_speed", "name": "Song of Speed", "type": "skill",
-    "ap": 1, "wp": 3, "range": 0,
-    "area": { "shape": "burst", "radius": 2 },
+    "id": "song_of_speed",
+    "name": "Song of Speed",
+    "type": "skill",
+    "ap": 1,
+    "wp": 3,
+    "range": 0,
+    "area": {
+      "shape": "burst",
+      "radius": 2
+    },
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "spd", "value": 2, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "spd",
+      "value": 2,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "lament", "name": "Lament", "type": "skill",
-    "ap": 1, "wp": 3, "range": 3,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "lament",
+    "name": "Lament",
+    "type": "skill",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "atk", "value": -3, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "atk",
+      "value": -3,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "battle_hymn", "name": "Battle Hymn", "type": "skill",
-    "ap": 2, "wp": 5, "range": 0,
-    "area": { "shape": "burst", "radius": 2 },
+    "id": "battle_hymn",
+    "name": "Battle Hymn",
+    "type": "skill",
+    "ap": 2,
+    "wp": 5,
+    "range": 0,
+    "area": {
+      "shape": "burst",
+      "radius": 2
+    },
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "atk", "value": 4, "duration": 3 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "atk",
+      "value": 4,
+      "duration": 3
+    },
     "source": "class"
   },
   {
-    "id": "soothe", "name": "Soothe", "type": "skill",
-    "ap": 1, "wp": 2, "range": 3,
+    "id": "soothe",
+    "name": "Soothe",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "cleanse", "duration": 1 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "cleanse",
+      "duration": 1
+    },
     "source": "class"
   },
   {
-    "id": "encore", "name": "Encore", "type": "skill",
-    "ap": 1, "wp": 3, "range": 3,
+    "id": "encore",
+    "name": "Encore",
+    "type": "skill",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "wp", "value": 3, "duration": 2 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "wp",
+      "value": 3,
+      "duration": 2
+    },
     "source": "class"
   },
   {
-    "id": "discord", "name": "Discord", "type": "skill",
-    "ap": 1, "wp": 4, "range": 3,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "discord",
+    "name": "Discord",
+    "type": "skill",
+    "ap": 1,
+    "wp": 4,
+    "range": 3,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "confusion", "duration": 2 },
-    "source": "class"
-  },
-
-  {
-    "id": "aimed_shot", "name": "Aimed Shot", "type": "skill",
-    "ap": 1, "wp": 2, "range": 4,
-    "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 8 },
-    "source": "class"
-  },
-  {
-    "id": "volley", "name": "Volley", "type": "skill",
-    "ap": 2, "wp": 4, "range": 4,
-    "area": { "shape": "burst", "radius": 1 },
-    "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 6 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "confusion",
+      "duration": 2
+    },
     "source": "class"
   },
   {
-    "id": "snipe", "name": "Snipe", "type": "skill",
-    "ap": 2, "wp": 5, "range": 5,
+    "id": "aimed_shot",
+    "name": "Aimed Shot",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 4,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 18 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 8
+    },
     "source": "class"
   },
   {
-    "id": "pinning_shot", "name": "Pinning Shot", "type": "skill",
-    "ap": 1, "wp": 3, "range": 3,
+    "id": "volley",
+    "name": "Volley",
+    "type": "skill",
+    "ap": 2,
+    "wp": 4,
+    "range": 4,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "immobilized", "duration": 2 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 6
+    },
     "source": "class"
   },
   {
-    "id": "barrage", "name": "Barrage", "type": "skill",
-    "ap": 2, "wp": 6, "range": 4,
-    "area": { "shape": "burst", "radius": 2 },
+    "id": "snipe",
+    "name": "Snipe",
+    "type": "skill",
+    "ap": 2,
+    "wp": 5,
+    "range": 5,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 8 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 18
+    },
     "source": "class"
   },
   {
-    "id": "nature_salve", "name": "Nature's Salve", "type": "skill",
-    "ap": 1, "wp": 2, "range": 3,
+    "id": "pinning_shot",
+    "name": "Pinning Shot",
+    "type": "skill",
+    "ap": 1,
+    "wp": 3,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "heal", "value": 6 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "immobilized",
+      "duration": 2
+    },
     "source": "class"
   },
   {
-    "id": "camouflage", "name": "Camouflage", "type": "skill",
-    "ap": 1, "wp": 2, "range": 0,
+    "id": "barrage",
+    "name": "Barrage",
+    "type": "skill",
+    "ap": 2,
+    "wp": 6,
+    "range": 4,
+    "area": {
+      "shape": "burst",
+      "radius": 2
+    },
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "def", "value": 3, "duration": 3 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 8
+    },
     "source": "class"
   },
-
   {
-    "id": "smoke_bomb", "name": "Smoke Bomb", "type": "item",
-    "ap": 1, "wp": 2, "range": 2,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "nature_salve",
+    "name": "Nature's Salve",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 3,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "blind", "duration": 2 },
+    "effect": {
+      "effect_type": "heal",
+      "value": 6
+    },
+    "source": "class"
+  },
+  {
+    "id": "camouflage",
+    "name": "Camouflage",
+    "type": "skill",
+    "ap": 1,
+    "wp": 2,
+    "range": 0,
+    "mag_scaling": 0.0,
+    "effect": {
+      "effect_type": "buff",
+      "stat": "def",
+      "value": 3,
+      "duration": 3
+    },
+    "source": "class"
+  },
+  {
+    "id": "smoke_bomb",
+    "name": "Smoke Bomb",
+    "type": "item",
+    "ap": 1,
+    "wp": 2,
+    "range": 2,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
+    "mag_scaling": 0.0,
+    "effect": {
+      "effect_type": "status",
+      "status_id": "blind",
+      "duration": 2
+    },
     "source": "item"
   },
   {
-    "id": "use_potion", "name": "Use Potion", "type": "item",
-    "ap": 1, "wp": 0, "range": 0,
+    "id": "use_potion",
+    "name": "Use Potion",
+    "type": "item",
+    "ap": 1,
+    "wp": 0,
+    "range": 0,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "heal", "value": 15 },
+    "effect": {
+      "effect_type": "heal",
+      "value": 15
+    },
     "source": "item"
   },
   {
-    "id": "use_hi_potion", "name": "Use Hi-Potion", "type": "item",
-    "ap": 1, "wp": 0, "range": 0,
+    "id": "use_hi_potion",
+    "name": "Use Hi-Potion",
+    "type": "item",
+    "ap": 1,
+    "wp": 0,
+    "range": 0,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "heal", "value": 30 },
+    "effect": {
+      "effect_type": "heal",
+      "value": 30
+    },
     "source": "item"
   },
   {
-    "id": "use_ether", "name": "Use Ether", "type": "item",
-    "ap": 1, "wp": 0, "range": 0,
+    "id": "use_ether",
+    "name": "Use Ether",
+    "type": "item",
+    "ap": 1,
+    "wp": 0,
+    "range": 0,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "buff", "stat": "wp", "value": 5, "duration": 1 },
+    "effect": {
+      "effect_type": "buff",
+      "stat": "wp",
+      "value": 5,
+      "duration": 1
+    },
     "source": "item"
   },
   {
-    "id": "use_antidote", "name": "Use Antidote", "type": "item",
-    "ap": 1, "wp": 0, "range": 0,
+    "id": "use_antidote",
+    "name": "Use Antidote",
+    "type": "item",
+    "ap": 1,
+    "wp": 0,
+    "range": 0,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "status", "status_id": "cleanse", "duration": 1 },
+    "effect": {
+      "effect_type": "status",
+      "status_id": "cleanse",
+      "duration": 1
+    },
     "source": "item"
   },
   {
-    "id": "use_phoenix_down", "name": "Use Phoenix Down", "type": "item",
-    "ap": 1, "wp": 0, "range": 1,
+    "id": "use_phoenix_down",
+    "name": "Use Phoenix Down",
+    "type": "item",
+    "ap": 1,
+    "wp": 0,
+    "range": 1,
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "revive", "value": 25 },
+    "effect": {
+      "effect_type": "revive",
+      "value": 25
+    },
     "source": "item"
   },
   {
-    "id": "use_bomb", "name": "Use Bomb", "type": "item",
-    "ap": 1, "wp": 0, "range": 2,
-    "area": { "shape": "burst", "radius": 1 },
+    "id": "use_bomb",
+    "name": "Use Bomb",
+    "type": "item",
+    "ap": 1,
+    "wp": 0,
+    "range": 2,
+    "area": {
+      "shape": "burst",
+      "radius": 1
+    },
     "mag_scaling": 0.0,
-    "effect": { "effect_type": "damage", "value": 8 },
+    "effect": {
+      "effect_type": "damage",
+      "value": 8
+    },
     "source": "item"
+  },
+  {
+    "id": "counter",
+    "name": "Counter",
+    "type": "passive",
+    "ap": 0,
+    "wp": 0,
+    "range": 0,
+    "mag_scaling": 0.0,
+    "source": "class",
+    "passive_kind": "reaction",
+    "trigger": {
+      "event": "on_hit",
+      "melee_only": true
+    },
+    "modifier": {}
+  },
+  {
+    "id": "auto_potion",
+    "name": "Auto-Potion",
+    "type": "passive",
+    "ap": 0,
+    "wp": 0,
+    "range": 0,
+    "mag_scaling": 0.0,
+    "source": "class",
+    "passive_kind": "reaction",
+    "trigger": {
+      "event": "on_damaged"
+    },
+    "modifier": {}
+  },
+  {
+    "id": "defend_reflex",
+    "name": "Defend Reflex",
+    "type": "passive",
+    "ap": 0,
+    "wp": 0,
+    "range": 0,
+    "mag_scaling": 0.0,
+    "source": "class",
+    "passive_kind": "reaction",
+    "trigger": {
+      "event": "on_low_hp",
+      "hp_pct": 0.25
+    },
+    "modifier": {}
+  },
+  {
+    "id": "magic_up",
+    "name": "Magic Up",
+    "type": "passive",
+    "ap": 0,
+    "wp": 0,
+    "range": 0,
+    "mag_scaling": 0.0,
+    "source": "class",
+    "passive_kind": "support",
+    "trigger": {},
+    "modifier": {
+      "kind": "stat",
+      "stat": "mag",
+      "value": 2
+    }
+  },
+  {
+    "id": "attack_up",
+    "name": "Attack Up",
+    "type": "passive",
+    "ap": 0,
+    "wp": 0,
+    "range": 0,
+    "mag_scaling": 0.0,
+    "source": "class",
+    "passive_kind": "support",
+    "trigger": {},
+    "modifier": {
+      "kind": "stat",
+      "stat": "atk",
+      "value": 2
+    }
+  },
+  {
+    "id": "half_wp",
+    "name": "Half WP",
+    "type": "passive",
+    "ap": 0,
+    "wp": 0,
+    "range": 0,
+    "mag_scaling": 0.0,
+    "source": "class",
+    "passive_kind": "support",
+    "trigger": {},
+    "modifier": {
+      "kind": "wp_mult",
+      "value": 0.5
+    }
+  },
+  {
+    "id": "move_plus_1",
+    "name": "Move +1",
+    "type": "passive",
+    "ap": 0,
+    "wp": 0,
+    "range": 0,
+    "mag_scaling": 0.0,
+    "source": "class",
+    "passive_kind": "movement",
+    "trigger": {},
+    "modifier": {
+      "kind": "stat",
+      "stat": "spd",
+      "value": 1
+    }
+  },
+  {
+    "id": "jump_plus_1",
+    "name": "Jump +1",
+    "type": "passive",
+    "ap": 0,
+    "wp": 0,
+    "range": 0,
+    "mag_scaling": 0.0,
+    "source": "class",
+    "passive_kind": "movement",
+    "trigger": {},
+    "modifier": {
+      "kind": "stat",
+      "stat": "jump",
+      "value": 1
+    }
+  },
+  {
+    "id": "ignore_hazards",
+    "name": "Ignore Hazards",
+    "type": "passive",
+    "ap": 0,
+    "wp": 0,
+    "range": 0,
+    "mag_scaling": 0.0,
+    "source": "class",
+    "passive_kind": "movement",
+    "trigger": {},
+    "modifier": {
+      "kind": "hazard_immune"
+    }
   }
 ]

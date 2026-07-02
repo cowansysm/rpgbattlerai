@@ -730,14 +730,16 @@ func hide_commit_round_panel() -> void:
 
 
 ## Show the forecast panel with damage/healing projection.
-func show_forecast(projection: Dictionary, label: String = "Damage") -> void:
+## A19: optional arc_label appended to the label line (e.g. " (REAR +2)").
+func show_forecast(projection: Dictionary, label: String = "Damage", arc_label: String = "") -> void:
 	if projection.is_empty():
 		_forecast_panel.visible = false
 		return
 	var min_v: int = int(projection.get("min", 0))
 	var mid_v: int = int(projection.get("mid", 0))
 	var max_v: int = int(projection.get("max", 0))
-	_forecast_label.text = "%s: %d - %d - %d\n(min / avg / max)" % [label, min_v, mid_v, max_v]
+	var display_label: String = label + arc_label
+	_forecast_label.text = "%s: %d - %d - %d\n(min / avg / max)" % [display_label, min_v, mid_v, max_v]
 	_forecast_panel.visible = true
 
 

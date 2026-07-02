@@ -147,13 +147,22 @@ static func is_sleeping(unit: BattleUnit) -> bool:
 
 
 ## Alpha A0: apply damage_per_turn from terrain at the start of a unit's activation.
+## A18: skips terrain damage when unit.ignores_hazards is true; fires ON_TURN_START passive.
 ## Returns an array of outcome dicts (empty if no effect).
 static func on_activation_start(state: MatchState, unit: BattleUnit) -> Array:
 	var outcomes: Array = []
 	if unit.current_hp <= 0:
 		return outcomes
+
+	# A18: fire ON_TURN_START reaction passive
+	var turn_ctx: Dictionary = {"state": state}
+	var start_reactions: Array = PassiveDispatch.fire(PassiveDispatch.ON_TURN_START, unit, turn_ctx)
+	if not start_reactions.is_empty():
+		outcomes.append_array(start_reactions)
+
+	# A18: damage_per_turn is skipped when unit.ignores_hazards is true
 	var dmg: int = state.graph.damage_per_turn(unit.position)
-	if dmg > 0:
+	if dmg > 0 and not unit.ignores_hazards:
 		unit.current_hp = max(0, unit.current_hp - dmg)
 		outcomes.append({"target": unit.character.id, "type": "terrain_damage",
 			"amount": dmg, "target_hp_after": unit.current_hp})

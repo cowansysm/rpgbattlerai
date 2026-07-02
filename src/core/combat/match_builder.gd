@@ -163,5 +163,6 @@ func _create_party(ids: Array[String], errors: Array[String]) -> Array[BattleUni
 		if not fs:
 			errors.append("Final stats for '%s' not found" % id)
 			continue
-		party.append(BattleUnit.from_character(c, fs))
+		# A18: pass ability getter so support/movement passives are applied at build time
+		party.append(BattleUnit.from_character(c, fs, _ability_getter))
 	return party

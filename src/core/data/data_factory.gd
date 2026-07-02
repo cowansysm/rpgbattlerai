@@ -53,6 +53,10 @@ static func make_ability(d: Dictionary) -> AbilityData:
 	a.effect_type = str(d.get("effect", {}).get("effect_type", ""))
 	a.mag_scaling = float(d.get("mag_scaling", 1.0))
 	a.source = str(d.get("source", "class"))
+	# A18: passive descriptors
+	a.passive_kind = str(d.get("passive_kind", ""))
+	a.trigger = d.get("trigger", {})
+	a.modifier = d.get("modifier", {})
 	return a
 
 
@@ -83,6 +87,10 @@ static func make_character(d: Dictionary) -> CharacterData:
 	c.equipment = _to_str_array(d.get("equipment", []))
 	c.abilities = _to_str_array(d.get("abilities", []))
 	c.recommended_path = str(d.get("recommended_path", ""))
+	# A18: authored passive slots for enemy/authored characters
+	c.reaction_passive = str(d.get("reaction_passive", ""))
+	c.support_passive = str(d.get("support_passive", ""))
+	c.movement_passive = str(d.get("movement_passive", ""))
 	return c
 
 

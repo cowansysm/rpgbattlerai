@@ -96,6 +96,13 @@ func sync_pawn_position(unit: BattleUnit, coord: Vector2i) -> void:
 		pawn.place(coord, _graph)
 
 
+## A19: Update the facing chevron on a unit's pawn to match unit.facing.
+func update_facing(unit: BattleUnit) -> void:
+	var pawn: UnitPawn = _pawns.get(unit)
+	if pawn:
+		pawn.set_facing(unit.facing)
+
+
 func update_status_markers(unit: BattleUnit) -> void:
 	## Refresh status effect billboard markers above a unit's pawn.
 	## Called by the controller after any action that may change statuses.

@@ -103,14 +103,18 @@ func _setup_match(terrain_at: Dictionary = {}) -> MatchState:
 
 	var state := MatchSetup.create(party_a, party_b, map, _stub_terrain)
 
-	# Manual deploy
+	# Manual deploy; A19: set facings toward opponents so arc = FRONT for existing tests
 	a0.position = Vector2i(-1, 0)
+	a0.set_facing(Hex.direction_toward(Vector2i(-1, 0), Vector2i(1, 0)))
 	state.occupancy[Vector2i(-1, 0)] = a0
 	a1.position = Vector2i(-2, 0)
+	a1.set_facing(Hex.direction_toward(Vector2i(-2, 0), Vector2i(2, 0)))
 	state.occupancy[Vector2i(-2, 0)] = a1
 	b0.position = Vector2i(1, 0)
+	b0.set_facing(Hex.direction_toward(Vector2i(1, 0), Vector2i(-1, 0)))
 	state.occupancy[Vector2i(1, 0)] = b0
 	b1.position = Vector2i(2, 0)
+	b1.set_facing(Hex.direction_toward(Vector2i(2, 0), Vector2i(-2, 0)))
 	state.occupancy[Vector2i(2, 0)] = b1
 
 	state.phase = MatchState.Phase.ROUND_START

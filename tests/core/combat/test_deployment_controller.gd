@@ -229,3 +229,41 @@ func test_deployment_phase_set_on_begin() -> void:
 		"playerB": ["0,3"],
 	})
 	assert_eq(d.state.phase, MatchState.Phase.DEPLOYMENT)
+
+
+# --- A19: Initial facing toward enemy zone ---
+
+func test_place_next_sets_facing_toward_enemy_zone() -> void:
+	## After placing a unit, its facing should point generally toward the enemy zone.
+	var d := _begin(1, 1, {
+		"playerA": ["0,-3"],
+		"playerB": ["0,3"],
+	}, ["playerB"])
+	var ctrl: DeploymentController = d.ctrl
+	var state: MatchState = d.state
+
+	# B places first
+	ctrl.place_next("playerB", Vector2i(0, 3))
+	var unit_b: BattleUnit = state.parties["playerB"][0]
+	# playerB zone is at (0,3); playerA zone centroid is ~(0,-3)
+	# direction_toward((0,3),(0,-3)) should give a southward-ish direction (toward negative r)
+	var expected_dir: int = Hex.direction_toward(Vector2i(0, 3), Vector2i(0, -3))
+	assert_eq(unit_b.facing, expected_dir,
+		"playerB unit should face toward playerA zone")
+
+
+func test_place_next_sets_facing_for_player_a() -> void:
+	var d := _begin(1, 1, {
+		"playerA": ["0,-3"],
+		"playerB": ["0,3"],
+	}, ["playerB"])
+	var ctrl: DeploymentController = d.ctrl
+	var state: MatchState = d.state
+
+	ctrl.place_next("playerB", Vector2i(0, 3))
+	ctrl.place_next("playerA", Vector2i(0, -3))
+	var unit_a: BattleUnit = state.parties["playerA"][0]
+	# playerA zone at (0,-3); playerB zone centroid ~(0,3)
+	var expected_dir: int = Hex.direction_toward(Vector2i(0, -3), Vector2i(0, 3))
+	assert_eq(unit_a.facing, expected_dir,
+		"playerA unit should face toward playerB zone")
