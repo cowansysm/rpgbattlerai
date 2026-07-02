@@ -96,7 +96,7 @@ func test_set_level_up() -> void:
 	assert_eq(ci.character_level(), 1)
 	DevCheatService.set_level(ci, 5, prov)
 	assert_eq(ci.character_level(), 5, "level should be 5 after set_level")
-	assert_true(ci.xp >= CharacterInstance.xp_for_level(5), "xp should be at or above threshold")
+	assert_eq(ci.xp, 0, "set_level up does not grant xp")
 
 
 func test_set_level_down() -> void:
@@ -113,15 +113,16 @@ func test_set_level_clamped() -> void:
 	DevCheatService.set_level(ci, 0, prov)
 	assert_eq(ci.character_level(), 1, "level should be clamped to 1")
 	DevCheatService.set_level(ci, 999, prov)
-	assert_eq(ci.character_level(), 50, "level should be clamped to max_level (50)")
+	assert_eq(ci.character_level(), 10, "level should be clamped to max_level (10)")
 
 
 func test_add_xp() -> void:
 	var ci := _make_instance()
 	var prov := _make_class_provider()
 	var levels := DevCheatService.add_xp(ci, 100, prov)
-	assert_true(ci.xp >= 100, "xp should have increased")
-	assert_true(levels >= 0, "should return non-negative levels gained")
+	# 100 XP crosses the L1 threshold (20) and L2 threshold (60); 2 level-ups consumed most XP
+	assert_true(levels > 0, "should gain at least one level from 100 XP")
+	assert_eq(ci.character_level(), 3, "should reach level 3 with 100 XP from level 1")
 
 
 func test_set_jp() -> void:
