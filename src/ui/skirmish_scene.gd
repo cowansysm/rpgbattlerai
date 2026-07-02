@@ -87,21 +87,23 @@ func _build_ui() -> void:
 	btn_ai.custom_minimum_size = Vector2(120, 40)
 	btn_ai.toggle_mode = true
 	btn_ai.button_pressed = true
-	btn_ai.pressed.connect(func() -> void:
-		_opponent_type = "ai"
-		btn_ai.button_pressed = true
-		btn_hotseat.button_pressed = false)
 	opp_row.add_child(btn_ai)
 
 	var btn_hotseat := Button.new()
 	btn_hotseat.text = "Hot Seat"
 	btn_hotseat.custom_minimum_size = Vector2(120, 40)
 	btn_hotseat.toggle_mode = true
+	opp_row.add_child(btn_hotseat)
+
+	# Wire toggle lambdas after both buttons are declared (avoids forward-reference parse error)
+	btn_ai.pressed.connect(func() -> void:
+		_opponent_type = "ai"
+		if btn_ai: btn_ai.button_pressed = true
+		if btn_hotseat: btn_hotseat.button_pressed = false)
 	btn_hotseat.pressed.connect(func() -> void:
 		_opponent_type = "hot_seat"
-		btn_ai.button_pressed = false
-		btn_hotseat.button_pressed = true)
-	opp_row.add_child(btn_hotseat)
+		if btn_ai: btn_ai.button_pressed = false
+		if btn_hotseat: btn_hotseat.button_pressed = true)
 
 	_setup_panel.add_child(_spacer(16))
 
