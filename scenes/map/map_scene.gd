@@ -33,7 +33,9 @@ func _ready() -> void:
 	add_child(picker)
 
 	# Combat controller: BattleController with HUD and unit pawns (Phase 8).
+	# Add to tree BEFORE setup so get_tree() is available during deployment init.
 	var controller := BattleController.new()
+	add_child(controller)
 	if has_match:
 		controller.setup_from_state(
 			builder, MatchData.match_state, MatchData.deployment_controller)
@@ -41,7 +43,6 @@ func _ready() -> void:
 		Log.info("MapScene", "Loaded match from draft (map: %s)" % active_map_id)
 	else:
 		controller.setup(builder, map_data)
-	add_child(controller)
 
 	# Wire tile picker to controller for tile selection.
 	picker.tile_selected.connect(func(coord: Vector2i) -> void:
