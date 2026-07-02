@@ -11,7 +11,8 @@ func before_each() -> void:
 	_default_roller = CombatResolver.dice_roller
 	_default_crit_roller = CombatResolver.crit_roller
 	CombatResolver.dice_roller = func() -> int: return 3
-	CombatResolver.crit_roller = func() -> float: return 1.0  # never crits
+	# Pin crit roll above the crit threshold so crits never fire in deterministic tests
+	CombatResolver.crit_roller = func() -> float: return 1.0
 
 
 func after_each() -> void:
