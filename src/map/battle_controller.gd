@@ -1475,14 +1475,23 @@ func _ct_do_tick() -> void:
 
 func _ct_activate_unit(unit: BattleUnit) -> void:
 	## A unit crossed the CT threshold — activate it.
+	## CT mode bypasses RoundManager.activate_unit because that function
+	## relies on the alternating activation_queue which CT mode does not use.
 	_ct_update_timeline()
 
-	var err := RoundManager.activate_unit(_state, unit)
-	if not err.is_empty():
-		Log.error("BattleController", "CT activation failed: %s" % err)
+	# Validate unit can be activated
+	if unit.current_hp <= 0 and not unit.is_downed:
+		Log.error("BattleController", "CT activation failed: unit permanently removed")
 		_ct_turn_system.on_activation_complete(_state, false)
 		_ct_resume_after_activation()
 		return
+
+	# Direct CT activation (equivalent to RoundManager.activate_unit sans queue)
+	unit.stats.remove_modifiers_by_source("defend")
+	_state.current_unit = unit
+	unit.has_moved = false
+	_state.turn_log = []
+	_state.phase = MatchState.Phase.UNIT_TURN
 
 	var race_class_id := "%s_%s" % [unit.character.race,
 		unit.character.classes[0] if not unit.character.classes.is_empty() else ""]
@@ -1506,7 +1515,7 @@ func _ct_activate_unit(unit: BattleUnit) -> void:
 
 	# If downed by terrain THIS activation, end immediately
 	if unit.is_downed and not was_downed_before:
-		RoundManager.end_activation(_state)
+		_state.current_unit = null
 		_ct_turn_system.on_activation_complete(_state, false)
 		_ct_resume_after_activation()
 		return

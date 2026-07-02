@@ -605,6 +605,80 @@ func test_activate_next_prefers_living_over_downed() -> void:
 			"activate_next should prefer living units")
 
 
+func test_ct_activation_does_not_require_queue() -> void:
+	## Regression: CT mode must activate units without depending on activation_queue.
+	## Previously, _ct_activate_unit called RoundManager.activate_unit which checks
+	## the alternating queue — this caused all activations to fail in CT mode,
+	## triggering runaway round advancement with no actions.
+	var map := MapData.new()
+	map.id = "test_ct_queue"
+	var tiles: Array[TileRecord] = []
+	for q in range(-4, 5):
+		for r in range(-4, 5):
+			tiles.append(TileRecord.new(q, r, 0, "grass"))
+	map.tiles = tiles
+	map.deployment_zones = {
+		"playerA": ["0,0", "1,0"],
+		"playerB": ["3,0", "4,0"],
+	}
+
+	var unit_a := _make_unit("human_fighter", "playerA")
+	var unit_b := _make_unit("elf_black_mage", "playerB")
+	assert_not_null(unit_a)
+	assert_not_null(unit_b)
+
+	unit_a.position = Vector2i(0, 0)
+	unit_b.position = Vector2i(3, 0)
+
+	var party_a: Array[BattleUnit] = [unit_a]
+	var party_b: Array[BattleUnit] = [unit_b]
+	var state := MatchSetup.create(party_a, party_b, map, _stub_terrain)
+	state.ai_teams = []  # Both teams player-controlled for this test
+	state.occupancy[Vector2i(0, 0)] = unit_a
+	state.occupancy[Vector2i(3, 0)] = unit_b
+
+	# Wire CT turn system (skirmish mode)
+	var ct_sys := ChargeTimeTurnSystem.new()
+	ct_sys.setup([unit_a, unit_b], 42)
+	state.turn_system = ct_sys
+
+	var resolver := AbilityResolver.new(
+		_pipeline.get_ability, _pipeline.get_job_class, _pipeline.get_item)
+	state.ability_provider = resolver.resolve
+	state.item_provider = _pipeline.get_item
+
+	var ctrl := _make_controller(state)
+	ctrl._ct_turn_system = ct_sys
+
+	# Start the CT round — this sets phase to AWAITING_ACTIVATION
+	ct_sys.begin_round(state)
+
+	# Verify activation_queue is empty (CT mode never populates it)
+	assert_eq(state.activation_queue.size(), 0,
+		"CT mode should not use activation_queue")
+
+	# Simulate CT clock ticking until a unit is activated
+	for _i in range(200):
+		ct_sys.advance(state)
+		if ct_sys.activated_unit:
+			break
+	assert_not_null(ct_sys.activated_unit, "CT clock should produce an activation")
+
+	var activated := ct_sys.activated_unit
+	var round_before := state.round_number
+
+	# Call _ct_activate_unit directly — this MUST succeed even with empty queue
+	ctrl._ct_activate_unit(activated)
+
+	# Unit should be properly activated (current_unit set, in ACTION_SELECT)
+	assert_eq(state.current_unit, activated,
+		"CT activation should set current_unit directly (no queue dependency)")
+	assert_eq(ctrl._control_state, BattleController.ControlState.ACTION_SELECT,
+		"player unit should enter ACTION_SELECT after CT activation")
+	assert_eq(state.round_number, round_before,
+		"round should NOT advance during activation (no runaway)")
+
+
 func test_setup_from_state_null_controller_deployment_phase() -> void:
 	## Regression: boss battles could crash when _deployment_controller was null
 	## during AI deploy step. Verifies setup_from_state handles null controller
