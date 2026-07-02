@@ -55,6 +55,44 @@ func max_column() -> int:
 	return mc
 
 
+## Validates the two-edge-node invariant: start is the only source (no incoming),
+## boss is the only sink (no outgoing), and all edges flow forward (lower to higher column).
+func is_valid_run_graph() -> bool:
+	if nodes.is_empty():
+		return false
+	var start: Dictionary = start_node()
+	var boss: Dictionary = boss_node()
+	if start.is_empty() or boss.is_empty():
+		return false
+
+	var start_id: String = str(start["id"])
+	var boss_id: String = str(boss["id"])
+
+	# Check all edges flow forward (unidirectional progress)
+	for e in edges:
+		var from_n: Dictionary = node(str(e["from"]))
+		var to_n: Dictionary = node(str(e["to"]))
+		if from_n.is_empty() or to_n.is_empty():
+			return false
+		if int(from_n["column"]) >= int(to_n["column"]):
+			return false
+
+	# Check edge-node invariant: only start is a source, only boss is a sink
+	for id in nodes.keys():
+		var incoming: Array[String] = prev_nodes(id)
+		var outgoing: Array[String] = next_nodes(id)
+		if incoming.is_empty() and id != start_id:
+			return false  # extra source
+		if outgoing.is_empty() and id != boss_id:
+			return false  # extra sink
+		if not incoming.is_empty() and id == start_id:
+			return false  # start has incoming edges
+		if not outgoing.is_empty() and id == boss_id:
+			return false  # boss has outgoing edges
+
+	return true
+
+
 func to_dict() -> Dictionary:
 	var node_list: Array = []
 	for n in nodes.values():

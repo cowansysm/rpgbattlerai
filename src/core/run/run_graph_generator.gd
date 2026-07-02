@@ -3,11 +3,25 @@ extends RefCounted
 ## Seeded generator for run graphs.
 ## Produces a column-indexed DAG with width capped at MAX_PARALLEL,
 ## sporadic cross-links, reachability repair, and weighted node-kind assignment.
+## Enforces the two-edge-node invariant: start is the only source, boss is the
+## only sink, and all edges flow strictly forward.
 
 const NODE_KINDS: Array[String] = ["battle", "event", "boon", "hazard", "shop", "rest"]
+const MAX_GENERATION_ATTEMPTS: int = 10
 
 
 static func generate(rng: RandomNumberGenerator, cfg: Dictionary) -> RunGraph:
+	for attempt in range(MAX_GENERATION_ATTEMPTS):
+		var g: RunGraph = _generate_candidate(rng, cfg)
+		if g.is_valid_run_graph():
+			return g
+	# Final attempt — if we still fail, emit a warning and return the last graph.
+	# This should never happen with the current construction logic.
+	push_error("RunGraphGenerator: failed to produce a valid graph after %d attempts" % MAX_GENERATION_ATTEMPTS)
+	return _generate_candidate(rng, cfg)
+
+
+static func _generate_candidate(rng: RandomNumberGenerator, cfg: Dictionary) -> RunGraph:
 	var g := RunGraph.new()
 	var L: int = int(cfg.get("run_length", 12))
 	var maxw: int = int(cfg.get("max_parallel", 3))
