@@ -66,3 +66,40 @@ func test_hex_size_constant() -> void:
 
 func test_elev_unit_constant() -> void:
 	assert_eq(HexWorld.ELEV_UNIT, 0.25, "ELEV_UNIT = 0.25")
+
+
+# --- A19: direction_yaw helper ---
+
+func test_direction_yaw_returns_float() -> void:
+	var yaw := HexWorld.direction_yaw(0)
+	assert_true(yaw is float, "direction_yaw should return a float")
+
+
+func test_direction_yaw_opposite_directions_differ_by_180() -> void:
+	## Directions 0 and 3 are opposite; their yaws should differ by 180 degrees.
+	var yaw0 := HexWorld.direction_yaw(0)
+	var yaw3 := HexWorld.direction_yaw(3)
+	var diff := absf(yaw0 - yaw3)
+	# Account for wrap-around
+	if diff > 180.0:
+		diff = 360.0 - diff
+	assert_almost_eq(diff, 180.0, 1.0,
+		"Opposite directions should differ by ~180 degrees")
+
+
+func test_direction_yaw_all_six_unique() -> void:
+	## All six directions should give distinct yaw angles.
+	var yaws: Array[float] = []
+	for i in range(6):
+		yaws.append(HexWorld.direction_yaw(i))
+	for i in range(6):
+		for j in range(i + 1, 6):
+			assert_true(absf(yaws[i] - yaws[j]) > 0.1,
+				"Directions %d and %d should have different yaws" % [i, j])
+
+
+func test_direction_yaw_normalizes_negative() -> void:
+	## direction_yaw(-1) should behave the same as direction_yaw(5).
+	var yaw_neg := HexWorld.direction_yaw(-1)
+	var yaw_5 := HexWorld.direction_yaw(5)
+	assert_almost_eq(yaw_neg, yaw_5, 0.001, "direction_yaw(-1) == direction_yaw(5)")

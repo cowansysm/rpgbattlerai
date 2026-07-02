@@ -244,12 +244,24 @@ Each entity type is a single JSON file containing an array of objects:
 - **`TurnScheduler`** (`src/core/combat/turn_scheduler.gd`) — per-unit CT bookkeeping, next-actor query, timeline
 - Slowed/Haste statuses shift CT frequency; **skirmish container** (`scenes/skirmish/`, `src/ui/skirmish_setup.gd`) provides squad-size selection with vs-AI and local hot-seat play (no networking); telegraph is forced off in skirmish
 
-## Specified but NOT yet implemented
+## Reaction / Support / Movement Passives (A18)
 
-These phases have spec docs in `docs/` but no implementation in `src/` yet — do not assume they exist:
+- **Passive ability types:** `AbilityData` gains `passive_kind` (`reaction` | `support` | `movement` | `""` for active), plus `trigger` (reaction event + guards) and `modifier` (support/movement effect) descriptors; validated in `validator.gd`, round-tripped through the CSV schema
+- **Slots:** `CharacterInstance` has one `reaction_slot` / `support_slot` / `movement_slot`, learned via JP and equipped via `equip_passive()`; save-migration-safe serialization. Slots are carried onto `CharacterData` (`reaction_passive`/`support_passive`/`movement_passive`) so **authored enemies** get passives too, not just player instances
+- **`PassiveDispatch`** (`src/core/combat/passive_dispatch.gd`) — typed event bus: `ON_HIT`, `ON_DAMAGED`, `ON_LOW_HP`, `ON_TURN_START`, `ON_MOVE_QUERY`, `ON_HAZARD_ENTER`. Handles Counter / Auto-Potion / Defend-Reflex; `reaction_locked` prevents counter-of-counter chains; reactions route through `CombatResolver` roll seams for determinism and never un-down (respects A17)
+- **Resolution seam:** `CombatResolver.resolve_attack`/`resolve_damage` take a single trailing `ctx: Dictionary` (shared with A19) that carries state so damage events can fire passives
+- **Support/Movement** are modifiers, not events: support pushes `StatBlock` modifiers (Magic/Attack Boost) or flags (`wp_cost_mult` for Half-WP); movement uses stat mods (+1 Jump, Move +1) and an `ignores_hazards` flag
+- **AI/telegraph:** `AIScorer` weighs `counter_risk` (avoid meleeing a known Counter unit); `TelegraphService` annotates likely reactions; passive-slot assignment UI in `band_management_scene.gd`
+- **Tunables** in `constants.json`: `PASSIVE_LOW_HP_PCT`, `PASSIVE_AUTO_POTION_HEAL`, `PASSIVE_MAGIC_BOOST`, `PASSIVE_ATTACK_BOOST`, `PASSIVE_HALF_WP_MULT`, `PASSIVE_DEFEND_REFLEX_DEF`, `AI_WEIGHTS.counter_risk`
 
-- **A18: Reaction / Support / Movement Passives** — only a foundation exists (`passive: Dictionary` field on ability data + a validator exemption); no passive dispatch bus, slots, or seed passive abilities
-- **A19: Facing & Flanking** — no facing state on `BattleUnit`, no arc classification, no flanking bonuses
+## Facing & Flanking (A19)
+
+- **Facing state:** `BattleUnit.facing` is an index (0–5) into `Hex.DIRECTIONS`; **battle-scoped, not persisted** (reset on construction, set at deployment toward the enemy zone, updated to the final step on move and toward the target on a no-move action)
+- **Arc classification:** `Hex.arc_of(attacker_dir, target_facing)` / `Hex.arc_between(...)` returns `Hex.Arc.FRONT` (facing ±1), `FLANK` (sides), or `REAR` (opposite), reusing existing flat-top direction math
+- **Flanking bonuses:** `FacingBonus` (`src/core/combat/facing_bonus.gd`) reads `FLANK_HIT`/`FLANK_CRIT`/`REAR_HIT`/`REAR_CRIT`; applied additively (with elevation) in `resolve_attack`/`resolve_damage`. Front = zero (regression guard); the new basic-attack crit roll is gated behind `crit_bonus > 0` so front attacks consume no extra RNG and existing seeds hold. Only the **primary** AoE target gets an arc bonus (splash = front)
+- **AI/telegraph/forecast:** `AIScorer` seeks flank/rear and penalizes `rear_exposure`; `OutcomeProjection` and the player forecast (`battle_hud.show_forecast`) show the arc bonus pre-commit; pawns show a facing chevron
+- **A18 interaction:** Counter fires only from **defensible** arcs (front/flank), blocked from the rear; the AI's counter-risk penalty is suppressed for a rear approach
+- **Tunables** in `constants.json`: `FLANK_HIT`, `FLANK_CRIT`, `REAR_HIT`, `REAR_CRIT`, `AI_WEIGHTS.rear_exposure`
 
 ## Dev Tooling
 
@@ -297,7 +309,7 @@ Main scene: `res://scenes/draft/draft_scene.tscn` (party draft → deploy → co
 
 ## Alpha (in progress)
 
-The Alpha extends the MVP into a single-player game and, via A20, a local multiplayer/skirmish mode. Most sub-phases are **implemented and tested**; two (A18, A19) are **specified only** (see "Specified but NOT yet implemented" above), and A13 (coin flip & opening initiative) is **obsolete** — dropped, not to be implemented. Content has grown well past the original `alpha-specs.md` §12.2 targets: **82 abilities, 146 classes, 46 items, 141 character templates (incl. monster/NPC), 32 races (incl. monster races), 17 terrains, 73 encounters**; maps remain at 6.
+The Alpha extends the MVP into a single-player game and, via A20, a local multiplayer/skirmish mode. All sub-phases except the obsolete A13 are **implemented and tested**; A13 (coin flip & opening initiative) is **dropped, not to be implemented**. Content has grown well past the original `alpha-specs.md` §12.2 targets: **82 abilities, 146 classes, 46 items, 141 character templates (incl. monster/NPC), 32 races (incl. monster races), 17 terrains, 73 encounters**; maps remain at 6.
 
 Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A9 content are parallel; A7 AI joins at A8; A11+ are post-A10 extensions):
 
@@ -318,8 +330,8 @@ Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A
 - [x] A15: Telegraphed speed-round + turn-system architecture (`TurnSystem`, `SpeedRoundTurnSystem`, `TelegraphService`) — **complete**
 - [x] A16: Elemental affinities & critical hits (`Affinity`, resolver integration) — **complete**
 - [x] A17: Knockout & revive lifecycle (downed state, `resolve_revive`, `DeathModel`) — **complete**
-- [ ] A18: Reaction / support / movement passives — **spec only, foundation stub not wired**
-- [ ] A19: Facing & flanking — **spec only, not implemented**
+- [x] A18: Reaction / support / movement passives (`PassiveDispatch`, passive slots, seed passives) — **complete**
+- [x] A19: Facing & flanking (`Hex.arc_of`, `FacingBonus`, chevron visuals, Counter-vs-facing gate) — **complete**
 - [x] A20: Charge-time clock + skirmish container (`ChargeTimeTurnSystem`, `TurnScheduler`, skirmish scene) — **complete**
 
 Key Alpha decisions: dev-tool map editor (player-facing later); CSV↔JSON authoring via spreadsheets; FFT-style progression (XP + JP + job tree + gold/shop + loot); roguelike single-player; every character starts **Vagabond** → unlocks **Thief/Soldier/Adept** at level 3 → archetype branches (support / control / physical·melee·ranged / magical·arcane·divine); characters permadie on the **3rd down** per run (tunable `DOWN_LIMIT`); the attack die and Defend die persist through the A3 magic change (Defend reduces magical damage too).
@@ -334,7 +346,7 @@ Phase specs and implementation plans live in `docs/`.
 - `rpg-implementation-plan.md` — high-level phase roadmap
 - `phase<N>-spec.md` / `phase<N>-implementation-plan.md` — per-phase details (0–11)
 
-**Alpha (in progress — A0–A12, A14–A17, A20 implemented; A18/A19 spec only; A13 obsolete):**
+**Alpha (in progress — A0–A12, A14–A20 implemented; A13 obsolete):**
 
 - `alpha-specs.md` — master Alpha specification
 - `alpha-implementation-plan.md` — Alpha milestone roadmap

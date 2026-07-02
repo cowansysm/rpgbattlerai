@@ -903,6 +903,7 @@ func _do_move(destination: Vector2i) -> void:
 				unit.character.display_name, str(outcome["status_id"])], "terrain_status")
 	if unit:
 		_pawn_manager.update_status_markers(unit)
+		_pawn_manager.update_facing(unit)
 
 	# Animate pawn movement
 	_enter_animating()
@@ -949,6 +950,7 @@ func _do_attack(target_pos: Vector2i) -> void:
 		_pawn_manager.update_status_markers(target_unit_pre)
 	if attacker:
 		_pawn_manager.update_status_markers(attacker)
+		_pawn_manager.update_facing(attacker)
 
 	_overlay.clear()
 	_check_end_activation_or_continue()
@@ -1004,6 +1006,7 @@ func _do_ability(target_pos: Vector2i) -> void:
 	# Update status markers for caster and all affected units
 	if caster:
 		_pawn_manager.update_status_markers(caster)
+		_pawn_manager.update_facing(caster)
 	for key in units_before:
 		var u: BattleUnit = units_before[key]
 		_pawn_manager.update_status_markers(u)
@@ -1246,6 +1249,18 @@ func _snapshot_affected_units(target_pos: Vector2i) -> Dictionary:
 	return result
 
 
+## A19: Returns a human-readable arc label for display in the forecast panel.
+func _arc_label(arc: int) -> String:
+	match arc:
+		Hex.Arc.FLANK:
+			var bonus: int = int(Constants.get_value("FLANK_HIT", 1))
+			return " (FLANK +%d)" % bonus
+		Hex.Arc.REAR:
+			var bonus: int = int(Constants.get_value("REAR_HIT", 2))
+			return " (REAR +%d)" % bonus
+	return ""
+
+
 func _find_ability(ability_id: String) -> AbilityData:
 	for a in _current_abilities:
 		if a is AbilityData and a.id == ability_id:
@@ -1335,6 +1350,7 @@ func _on_finalize_move() -> void:
 				unit.character.display_name, str(outcome["status_id"])], "terrain_status")
 	if unit:
 		_pawn_manager.update_status_markers(unit)
+		_pawn_manager.update_facing(unit)
 
 	if _drag_handler:
 		_drag_handler.confirm_preview()
@@ -1773,11 +1789,14 @@ func _sr_plan_attack(target_pos: Vector2i) -> void:
 		var tgt_elev: int = _state.graph.elevation(target_pos)
 		var tgt_cover: int = _state.graph.effective_cover(target_pos)
 		var is_ranged: bool = _planning_unit.stats.effective("rng") > 1
+		# A19: compute arc for forecast display
+		var plan_arc: int = Hex.arc_between(origin, target_pos, target.facing)
 		var proj: Dictionary = OutcomeProjection.project_attack(
-			_planning_unit, target, weapon_power, atk_elev, tgt_elev, tgt_cover, is_ranged)
-		_hud.append_log("  Plan: Attack %s [%d-%d dmg]" % [
-			target_name, proj["min"], proj["max"]], "action_attack")
-		_hud.show_forecast(proj)
+			_planning_unit, target, weapon_power, atk_elev, tgt_elev, tgt_cover, is_ranged, plan_arc)
+		var arc_label: String = _arc_label(plan_arc)
+		_hud.append_log("  Plan: Attack %s [%d-%d dmg]%s" % [
+			target_name, proj["min"], proj["max"], arc_label], "action_attack")
+		_hud.show_forecast(proj, "Damage", arc_label)
 	else:
 		_hud.append_log("  Plan: Attack %s" % target_name, "action_attack")
 

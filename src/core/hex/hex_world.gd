@@ -14,6 +14,18 @@ static func hex_to_world(q: int, r: int, elevation: int = 0) -> Vector3:
 	return Vector3(x, y, z)
 
 
+## A19: Returns the yaw angle in degrees for a given Hex direction index (0-5).
+## Direction 0 (q+1, r=0) maps to ~30° on flat-top; computed from the DIRECTIONS vector.
+## Pure function: no scene-tree dependency. Testable without a running Godot instance.
+static func direction_yaw(dir: int) -> float:
+	var d: Vector2i = Hex.DIRECTIONS[((dir % 6) + 6) % 6]
+	# Axial d → world XZ using the same flat-top transform as hex_to_world
+	var wx: float = HEX_SIZE * (HexLayout.F0 * d.x + HexLayout.F1 * d.y)
+	var wz: float = HEX_SIZE * (HexLayout.F2 * d.x + HexLayout.F3 * d.y)
+	# atan2 in GDScript uses (x, y) convention; we want angle from +Z axis (GD forward)
+	return rad_to_deg(atan2(wx, wz))
+
+
 static func world_to_hex(world_pos: Vector3) -> Vector2i:
 	var px := world_pos.x / HEX_SIZE
 	var pz := world_pos.z / HEX_SIZE

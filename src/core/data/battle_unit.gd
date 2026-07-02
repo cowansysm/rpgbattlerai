@@ -20,6 +20,10 @@ var is_downed: bool = false				## True when HP <= 0 but not yet permanently remo
 var downed_round: int = -1				## Round number when unit was downed (-1 = never)
 var affinities: Dictionary = {}			## {element: int_weight} — cumulative from static sources (race+class+equipment)
 
+## A19: facing direction — index into Hex.DIRECTIONS (0-5). Battle-scoped, not persisted.
+## Reset to 0 on construction; set at deployment (toward enemy zone); updated on move/action.
+var facing: int = 0
+
 ## A18: per-battle passive flags (mutable, set at unit construction from passive data)
 var reaction_locked: bool = false		## Prevents counter-of-counter chains
 var wp_cost_mult: float = 1.0			## WP cost multiplier (Half WP sets to 0.5)
@@ -28,6 +32,11 @@ var ignores_hazards: bool = false		## Skip hazard damage_on_enter and damage_per
 
 func is_alive() -> bool:
 	return current_hp > 0 and not is_downed
+
+
+## A19: Set facing direction, normalizing to 0-5.
+func set_facing(dir: int) -> void:
+	facing = ((dir % 6) + 6) % 6
 
 
 ## A18: Returns the ability ID equipped in the named passive slot ("reaction"|"support"|"movement").

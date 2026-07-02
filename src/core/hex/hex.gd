@@ -167,3 +167,30 @@ static func cone_in_direction(origin: Vector2i, direction: int, depth: int) -> A
 			current = neighbor(current, (direction + 1) % 6)  # step right
 		pos = neighbor(pos, direction)
 	return out
+
+# --- A19: Facing / Arc classification ---
+
+## Arc classification relative to a target's facing.
+enum Arc { FRONT = 0, FLANK = 1, REAR = 2 }
+
+## Classify the arc of an incoming attack.
+## attacker_dir: the direction index FROM target TOWARD attacker (incoming bearing).
+## target_facing: the direction index the target is facing.
+## Returns Arc.FRONT (0/1/5 diff), Arc.FLANK (2/4 diff), Arc.REAR (3 diff).
+static func arc_of(attacker_dir: int, target_facing: int) -> int:
+	var diff: int = ((attacker_dir - target_facing) % 6 + 6) % 6
+	match diff:
+		0, 1, 5:
+			return Arc.FRONT
+		2, 4:
+			return Arc.FLANK
+		3:
+			return Arc.REAR
+	return Arc.FRONT
+
+
+## Convenience: compute the arc of an attack FROM attacker_pos TOWARD target_pos,
+## given target_pos and the target unit's facing direction index.
+static func arc_between(attacker_pos: Vector2i, target_pos: Vector2i, target_facing: int) -> int:
+	var incoming_dir: int = direction_toward(target_pos, attacker_pos)
+	return arc_of(incoming_dir, target_facing)

@@ -11,6 +11,7 @@ var unit: BattleUnit
 
 var _body: MeshInstance3D
 var _symbol_face: MeshInstance3D
+var _chevron: MeshInstance3D		## A19: facing indicator
 var _default_material: StandardMaterial3D
 var _active_material: StandardMaterial3D
 
@@ -40,7 +41,20 @@ func setup(battle_unit: BattleUnit, graph: HexGraph) -> void:
 	_symbol_face.rotation.x = 0  # PlaneMesh already faces up by default in Godot
 	add_child(_symbol_face)
 
+	# A19: facing chevron (small plane in front of the token)
+	_chevron = MeshInstance3D.new()
+	var chevron_plane := PlaneMesh.new()
+	chevron_plane.size = Vector2(0.12, 0.08)
+	_chevron.mesh = chevron_plane
+	var chevron_mat := StandardMaterial3D.new()
+	chevron_mat.albedo_color = Color(1.0, 1.0, 0.0, 0.9)
+	chevron_mat.flags_unshaded = true
+	_chevron.material_override = chevron_mat
+	_chevron.position.y = PawnFactory.TOKEN_HEIGHT * 0.5 + 0.002
+	add_child(_chevron)
+
 	place(unit.position, graph)
+	set_facing(unit.facing)
 
 
 func place(coord: Vector2i, graph: HexGraph) -> void:
@@ -74,6 +88,16 @@ func set_downed(downed: bool) -> Tween:
 		tw.tween_property(self, "rotation_degrees:x", 0.0, FLIP_DURATION)\
 			.set_ease(Tween.EASE_IN_OUT).set_trans(Tween.TRANS_CUBIC)
 	return tw
+
+
+## A19: Yaw the pawn and position the chevron in the facing direction.
+func set_facing(dir: int) -> void:
+	var yaw_deg: float = HexWorld.direction_yaw(dir)
+	rotation_degrees.y = yaw_deg
+	# Move the chevron forward in local +Z (after yaw, +Z points in the facing direction)
+	var offset: float = 0.26
+	_chevron.position.x = sin(deg_to_rad(yaw_deg)) * offset
+	_chevron.position.z = cos(deg_to_rad(yaw_deg)) * offset
 
 
 func remove() -> void:

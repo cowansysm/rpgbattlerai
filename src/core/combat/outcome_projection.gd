@@ -9,6 +9,8 @@ extends RefCounted
 
 ## Project a basic weapon attack's damage range.
 ## Returns {min: int, mid: int, max: int}.
+## A19: arc param adds FacingBonus to damage and gates the crit-inclusive max behind
+##      crit_bonus(arc) > 0 (fixes pre-existing bug where FRONT max included crit).
 static func project_attack(
 	attacker: BattleUnit,
 	target: BattleUnit,
@@ -17,26 +19,30 @@ static func project_attack(
 	target_elev: int,
 	target_cover: int,
 	is_ranged: bool,
+	arc: int = 0,
 ) -> Dictionary:
 	var has_defend: bool = target.stats.has_modifier_from_source("defend")
 	var e_bonus: int = Constants.get_value("ELEV_BONUS", 1) if attacker_elev > target_elev else 0
+	var f_bonus: int = FacingBonus.damage_bonus(arc)
 	var c_bonus: int = Constants.get_value("COVER_DEF", 1) * target_cover if is_ranged else 0
 	var atk: int = attacker.stats.effective("atk")
 	var target_def: int = target.stats.effective("def")
 
 	# Min: attacker rolls 1, defender rolls 6 (if defending)
-	var raw_min: int = max(1, 1 + atk + weapon_power + e_bonus - target_def - c_bonus)
+	var raw_min: int = max(1, 1 + atk + weapon_power + e_bonus + f_bonus - target_def - c_bonus)
 	if has_defend:
 		raw_min = max(1, raw_min - 6)
 
 	# Max: attacker rolls 6, defender rolls 1 (if defending)
-	var raw_max: int = max(1, 6 + atk + weapon_power + e_bonus - target_def - c_bonus)
+	var raw_max: int = max(1, 6 + atk + weapon_power + e_bonus + f_bonus - target_def - c_bonus)
 	if has_defend:
 		raw_max = max(1, raw_max - 1)
 
-	# A16: crit-inclusive max
-	var crit_mult: float = float(Constants.get_value("CRIT_MULT", 1.5))
-	raw_max = int(round(float(raw_max) * crit_mult))
+	# A19: crit-inclusive max gated behind crit_bonus(arc) -- FRONT (arc=0) skips crit entirely
+	var cc: float = FacingBonus.crit_bonus(arc)
+	if cc > 0.0:
+		var crit_mult: float = float(Constants.get_value("CRIT_MULT", 1.5))
+		raw_max = int(round(float(raw_max) * crit_mult))
 
 	var mid: int = (raw_min + raw_max) / 2
 	return {"min": raw_min, "mid": mid, "max": raw_max}
@@ -45,6 +51,7 @@ static func project_attack(
 ## Project a damage ability's (skill or spell) damage range.
 ## Returns {min: int, mid: int, max: int, affinity: String}.
 ## A16: applies affinity multiplier and crit-inclusive max.
+## A19: arc adds FacingBonus to base damage; total crit_chance = CRIT_CHANCE + crit_bonus(arc).
 static func project_ability_damage(
 	caster: BattleUnit,
 	target: BattleUnit,
@@ -55,17 +62,19 @@ static func project_ability_damage(
 	mag_scaling: float = 1.0,
 	element: String = "",
 	terrain_affinity_weight: int = 0,
+	arc: int = 0,
 ) -> Dictionary:
 	var has_defend: bool = target.stats.has_modifier_from_source("defend")
 	var e_bonus: int = Constants.get_value("ELEV_BONUS", 1) if caster_elev > target_elev else 0
+	var f_bonus: int = FacingBonus.damage_bonus(arc)
 
 	var base_atk: int
 	if ability_type == "skill":
-		base_atk = effect_value + e_bonus - target.stats.effective("def")
+		base_atk = effect_value + e_bonus + f_bonus - target.stats.effective("def")
 	else:
 		# Spell: scales with MAG, reduced by RES
 		var mag_bonus: int = int(round(mag_scaling * caster.stats.effective("mag")))
-		base_atk = effect_value + mag_bonus + e_bonus - target.stats.effective("res")
+		base_atk = effect_value + mag_bonus + e_bonus + f_bonus - target.stats.effective("res")
 
 	# A16: Affinity
 	var tier: int = target.effective_affinity(element, terrain_affinity_weight)
@@ -89,10 +98,13 @@ static func project_ability_damage(
 	if has_defend:
 		raw_min = max(1, raw_min - 6)
 
-	# Max: attacker rolls 6, defender rolls 1 (if defending), with crit
+	# Max: attacker rolls 6, defender rolls 1 (if defending), with crit (additive arc bonus)
+	var base_crit: float = float(Constants.get_value("CRIT_CHANCE", 0.0625))
+	var arc_crit: float = FacingBonus.crit_bonus(arc)
 	var crit_mult: float = float(Constants.get_value("CRIT_MULT", 1.5))
 	var raw_max: int = max(1, int(round(float(6 + base_atk) * aff_mult)))
-	raw_max = int(round(float(raw_max) * crit_mult))
+	if base_crit + arc_crit > 0.0:
+		raw_max = int(round(float(raw_max) * crit_mult))
 	if has_defend:
 		raw_max = max(1, raw_max - 1)
 

@@ -403,13 +403,15 @@ func test_projection_absorb_returns_heal() -> void:
 
 
 func test_projection_attack_crit_max() -> void:
+	## A19 fix: FRONT (default arc) basic-attack max no longer multiplied by CRIT_MULT.
+	## Front attacks cannot crit (crit_bonus=0), so max = raw_max without crit scaling.
+	## Pre-A19 the max was incorrectly 15; post-A19 correct value is 10.
 	var attacker := _make_unit("a", 20, 5, 2, 0, 0)
 	var target := _make_unit("b", 20, 3, 3, 0, 0)
 	var result := OutcomeProjection.project_attack(
 		attacker, target, 2, 0, 0, 0, false)
-	# Max without crit: max(1, 6 + 5 + 2 + 0 - 3 - 0) = 10
-	# Max with crit: round(10 * 1.5) = 15
-	assert_eq(result["max"], 15, "attack projection max includes crit")
+	# Max without crit (FRONT): max(1, 6 + 5 + 2 + 0 - 3 - 0) = 10 (no crit mult for FRONT)
+	assert_eq(result["max"], 10, "FRONT attack projection max excludes crit (A19 fix)")
 
 
 # =====================================================================

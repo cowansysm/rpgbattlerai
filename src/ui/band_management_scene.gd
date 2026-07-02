@@ -43,6 +43,7 @@ var _inspect_xp: Label
 var _class_buttons: VBoxContainer
 var _ability_buttons: VBoxContainer
 var _equip_buttons: VBoxContainer
+var _passive_buttons: VBoxContainer		## A18: passive slot equip/unequip buttons
 
 # --- Field select widgets ---
 var _field_checks: VBoxContainer
@@ -265,6 +266,15 @@ func _build_inspect_panel(root: VBoxContainer) -> void:
 
 	_ability_buttons = VBoxContainer.new()
 	_inspect_panel.add_child(_ability_buttons)
+
+	# A18: passive slot section
+	var passive_header := Label.new()
+	passive_header.text = "Passive Slots"
+	passive_header.add_theme_font_size_override("font_size", 16)
+	_inspect_panel.add_child(passive_header)
+
+	_passive_buttons = VBoxContainer.new()
+	_inspect_panel.add_child(_passive_buttons)
 
 	_inspect_panel.add_child(_spacer(8))
 
@@ -678,6 +688,7 @@ func _refresh_inspect() -> void:
 
 	_refresh_class_buttons()
 	_refresh_ability_buttons()
+	_refresh_passive_buttons()
 	_refresh_equip_buttons()
 
 	if Dev.enabled:
@@ -759,6 +770,62 @@ func _refresh_ability_buttons() -> void:
 			btn.pressed.connect(_on_toggle_loadout.bind(aid))
 			btn.custom_minimum_size.y = 28
 			_ability_buttons.add_child(btn)
+
+
+func _refresh_passive_buttons() -> void:
+	## A18: Show equipped passive slots and allow equip/unequip of learned passives.
+	for child in _passive_buttons.get_children():
+		child.queue_free()
+
+	var ab_prov: Callable = func(ab_id: String) -> AbilityData: return GameData.get_ability(ab_id)
+
+	# Show current slots with unequip buttons
+	for kind in ["reaction", "support", "movement"]:
+		var equipped_id: String = str(_inspected.get(kind + "_slot") if _inspected.get(kind + "_slot") != null else "")
+		var row := HBoxContainer.new()
+		var slot_label := Label.new()
+		slot_label.text = kind.capitalize() + ": " + (equipped_id if not equipped_id.is_empty() else "(none)")
+		slot_label.size_flags_horizontal = SIZE_EXPAND_FILL
+		row.add_child(slot_label)
+		if not equipped_id.is_empty():
+			var unequip_btn := Button.new()
+			unequip_btn.text = "Unequip"
+			unequip_btn.custom_minimum_size.y = 28
+			var k: String = kind
+			unequip_btn.pressed.connect(_on_unequip_passive.bind(k))
+			row.add_child(unequip_btn)
+		_passive_buttons.add_child(row)
+
+	# List learned passives that can be equipped
+	var has_passives: bool = false
+	for ab_id: String in _inspected.learned_abilities:
+		var ab: AbilityData = GameData.get_ability(ab_id)
+		if ab == null or ab.type != "passive":
+			continue
+		if not has_passives:
+			var equip_label := Label.new()
+			equip_label.text = "Equip passive:"
+			_passive_buttons.add_child(equip_label)
+			has_passives = true
+		var btn := Button.new()
+		btn.text = "Equip %s (%s)" % [ab_id, ab.passive_kind]
+		btn.custom_minimum_size.y = 28
+		var aid: String = ab_id
+		btn.pressed.connect(_on_equip_passive.bind(aid))
+		_passive_buttons.add_child(btn)
+
+
+func _on_equip_passive(ability_id: String) -> void:
+	var ab_prov: Callable = func(ab_id: String) -> AbilityData: return GameData.get_ability(ab_id)
+	_inspected.equip_passive(ability_id, ab_prov)
+	SaveManager.save_game()
+	_refresh_inspect()
+
+
+func _on_unequip_passive(kind: String) -> void:
+	_inspected.unequip_passive(kind)
+	SaveManager.save_game()
+	_refresh_inspect()
 
 
 func _refresh_equip_buttons() -> void:

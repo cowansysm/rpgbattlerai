@@ -37,12 +37,20 @@ static func execute_move(state: MatchState, destination: Vector2i) -> Dictionary
 	_apply_terrain_modifiers(unit, state.graph, destination)
 	var terrain_outcomes: Array = _apply_enter_effects(state, unit, destination)
 
+	# A19: update facing toward final step of the path
+	var move_path: Array = Movement.path(state.graph, old_pos, destination, unit.stats.effective("jump"))
+	if move_path.size() >= 2:
+		unit.set_facing(Hex.direction_toward(move_path[-2], move_path[-1]))
+	elif old_pos != destination:
+		unit.set_facing(Hex.direction_toward(old_pos, destination))
+
 	var record := {
 		"action": "move",
 		"actor": unit.character.id,
 		"from": old_pos,
 		"to": destination,
 		"cost": int(reach[destination]),
+		"facing": unit.facing,
 	}
 	if not terrain_outcomes.is_empty():
 		record["terrain_effects"] = terrain_outcomes
@@ -96,15 +104,21 @@ static func execute_attack(state: MatchState, target_pos: Vector2i) -> Dictionar
 	var target_cover: int = state.graph.effective_cover(target_pos)
 	var is_ranged: bool = rng > 1
 
+	# A19: compute arc from attacker position vs target facing, BEFORE any mutation
+	var arc: int = Hex.arc_between(unit.position, target_pos, target.facing)
+
 	unit.ap_remaining -= 1
 
-	# A18: build dispatch context for passive reactions
-	var attack_ctx := {"state": state}
+	# A19: attacker faces their target (skip self-target; not applicable for attacks)
+	unit.set_facing(Hex.direction_toward(unit.position, target_pos))
+
+	# A18: build dispatch context for passive reactions; include arc for A18×A19 Counter gate
+	var attack_ctx := {"state": state, "arc": arc}
 
 	var result := CombatResolver.resolve_attack(
 		unit, target, weapon_power,
 		attacker_elev, target_elev, target_cover, is_ranged,
-		-1, -1, attack_ctx)
+		-1, -1, attack_ctx, arc)
 
 	var record := {
 		"action": "attack",
@@ -116,6 +130,9 @@ static func execute_attack(state: MatchState, target_pos: Vector2i) -> Dictionar
 		"def_roll": result["def_roll"],
 		"target_hp_after": result["target_hp_after"],
 		"is_downed": result["is_downed"],
+		"is_crit": result.get("is_crit", false),
+		"arc": arc,
+		"facing": unit.facing,
 	}
 	if result.has("reactions"):
 		record["reactions"] = result["reactions"]
@@ -160,6 +177,10 @@ static func execute_ability(
 	unit.ap_remaining -= ability.ap_cost
 	unit.current_wp -= effective_wp_cost
 
+	# A19: attacker faces their target for offensive abilities (skip self-target at range 0)
+	if ability.ability_range > 0 and target_pos != unit.position:
+		unit.set_facing(Hex.direction_toward(unit.position, target_pos))
+
 	# Resolve effect on affected units
 	var effect: Dictionary = ability.effect
 	var effect_type: String = str(effect.get("effect_type", ""))
@@ -167,8 +188,12 @@ static func execute_ability(
 
 	var outcomes: Array = []
 	for affected_unit: BattleUnit in affected:
+		# A19: arc applies to the primary target only; splash targets use FRONT
+		var ability_arc: int = Hex.Arc.FRONT
+		if affected_unit.position == target_pos:
+			ability_arc = Hex.arc_between(unit.position, target_pos, affected_unit.facing)
 		var outcome := _resolve_effect(
-			state, unit, affected_unit, effect, effect_type, ability)
+			state, unit, affected_unit, effect, effect_type, ability, ability_arc)
 		outcomes.append(outcome)
 
 	var record := {
@@ -342,8 +367,10 @@ static func _resolve_effect(
 	effect: Dictionary,
 	effect_type: String,
 	ability: AbilityData,
+	arc: int = 0,
 ) -> Dictionary:
 	## Dispatch to the correct CombatResolver method based on effect_type.
+	## A19: arc param threads facing bonuses into damage resolution.
 	var attacker_elev: int = state.graph.elevation(caster.position)
 	var target_elev: int = state.graph.elevation(target.position)
 
@@ -363,7 +390,7 @@ static func _resolve_effect(
 			var result := CombatResolver.resolve_damage(
 				caster, target, value, ability.type,
 				attacker_elev, target_elev, -1, ability.mag_scaling,
-				element, terrain_aff_weight)
+				element, terrain_aff_weight, {}, arc)
 			if result["is_downed"]:
 				_handle_downing(state, target)
 			var outcome := {

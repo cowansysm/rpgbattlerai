@@ -250,7 +250,8 @@ func _resolve_ability(state: MatchState, unit: BattleUnit, step: Dictionary) -> 
 	if not ability:
 		return _fizzle_action(state, unit, "ability", ap_cost, 0, "ability_not_found")
 
-	var wp_cost: int = ability.wp_cost
+	# A18: apply Half WP multiplier (mirrors TurnActions._effective_wp_cost)
+	var wp_cost: int = TurnActions._effective_wp_cost(unit, ability.wp_cost)
 
 	# Check if it's an AoE (ground-targeted) vs single-target
 	var is_aoe: bool = not ability.area.is_empty() and ability.area.has("shape")

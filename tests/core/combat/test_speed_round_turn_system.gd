@@ -440,3 +440,115 @@ func test_round_complete_flag() -> void:
 		sys.resolve_next(state)
 
 	assert_true(sys.is_round_complete(state))
+
+
+# --- A18 deferred item B: Half-WP in speed-round path ---
+
+func _make_unit_with_wp(id: String, team: String, spd: int = 3, hp: int = 20, wp: int = 10) -> BattleUnit:
+	var c := CharacterData.new()
+	c.id = id
+	c.display_name = id
+	c.classes = []
+	c.equipment = []
+	c.abilities = []
+	var sb := StatBlock.new()
+	sb.set_base("spd", spd)
+	sb.set_base("hp", hp)
+	sb.set_base("def", 2)
+	sb.set_base("atk", 4)
+	sb.set_base("rng", 1)
+	sb.set_base("jump", 2)
+	sb.set_base("mag", 0)
+	sb.set_base("wp", wp)
+	var u := BattleUnit.from_character(c, sb)
+	u.team = team
+	return u
+
+
+func test_half_wp_halves_cost_in_speed_round_path() -> void:
+	## Unit with wp_cost_mult=0.5 should spend floor(wp_cost * 0.5) WP in speed-round resolution.
+	## Base wp_cost=4; Half-WP should deduct floor(4 * 0.5) = 2.
+	var attacker := _make_unit_with_wp("a0", "playerA", 5, 20, 10)
+	var target := _make_unit_with_wp("b0", "playerB", 3, 20, 10)
+	var state := _deployed_state([attacker], [target])
+
+	# Set Half-WP multiplier on the attacker
+	attacker.wp_cost_mult = 0.5
+
+	# Build a heal ability with wp_cost=4 so attacker can cast on self
+	var ab := AbilityData.new()
+	ab.id = "test_heal"
+	ab.ability_range = 0
+	ab.ap_cost = 1
+	ab.wp_cost = 4
+	ab.type = "spell"
+	ab.mag_scaling = 0.0
+	ab.area = {}
+	ab.effect = {"effect_type": "heal", "value": 5}
+	state.ability_provider = func(_u: BattleUnit, ab_id: String) -> AbilityData:
+		if ab_id == "test_heal":
+			return ab
+		return null
+
+	var sys := _make_speed_system()
+	state.turn_system = sys
+	sys.begin_round(state)
+
+	var plan := AIPlan.new()
+	plan.steps = [{"kind": "ability", "ability_id": "test_heal",
+		"target_pos": attacker.position, "ap_cost": 1}]
+
+	sys.commit_ai_plans({"b0": AIPlan.make_defend()}, [target])
+	sys.advance(state)
+	sys.commit_player_plan(attacker, plan)
+	sys.advance(state)
+
+	var wp_before: int = attacker.current_wp
+	while sys.has_next_resolution():
+		sys.resolve_next(state)
+
+	var wp_spent: int = wp_before - attacker.current_wp
+	assert_eq(wp_spent, 2, "Half-WP unit should spend floor(4 * 0.5) = 2 WP in speed-round")
+
+
+func test_full_wp_cost_in_speed_round_without_half_wp() -> void:
+	## Without Half-WP, unit spends full wp_cost=4.
+	var attacker := _make_unit_with_wp("a0", "playerA", 5, 20, 10)
+	var target := _make_unit_with_wp("b0", "playerB", 3, 20, 10)
+	var state := _deployed_state([attacker], [target])
+
+	# wp_cost_mult is 1.0 by default (full cost)
+
+	var ab := AbilityData.new()
+	ab.id = "test_heal"
+	ab.ability_range = 0
+	ab.ap_cost = 1
+	ab.wp_cost = 4
+	ab.type = "spell"
+	ab.mag_scaling = 0.0
+	ab.area = {}
+	ab.effect = {"effect_type": "heal", "value": 5}
+	state.ability_provider = func(_u: BattleUnit, ab_id: String) -> AbilityData:
+		if ab_id == "test_heal":
+			return ab
+		return null
+
+	var sys := _make_speed_system()
+	state.turn_system = sys
+	sys.begin_round(state)
+
+	var plan := AIPlan.new()
+	plan.steps = [{"kind": "ability", "ability_id": "test_heal",
+		"target_pos": attacker.position, "ap_cost": 1}]
+
+	sys.commit_ai_plans({"b0": AIPlan.make_defend()}, [target])
+	sys.advance(state)
+	sys.commit_player_plan(attacker, plan)
+	sys.advance(state)
+
+	var wp_before: int = attacker.current_wp
+	while sys.has_next_resolution():
+		sys.resolve_next(state)
+
+	var wp_spent: int = wp_before - attacker.current_wp
+	assert_eq(wp_spent, 4, "Without Half-WP, should spend full wp_cost=4")

@@ -57,9 +57,17 @@ static func _build_one(state: MatchState, unit: BattleUnit, plan: AIPlan) -> Int
 					var target_elev: int = state.graph.elevation(intent.target_pos)
 					var target_cover: int = state.graph.effective_cover(intent.target_pos)
 					var is_ranged: bool = unit.stats.effective("rng") > 1
+					# A19: compute arc from planned attack position vs target facing
+					var attack_arc: int = Hex.arc_between(intent.move_to, intent.target_pos, target.facing)
+					intent.arc = attack_arc
 					intent.projection = OutcomeProjection.project_attack(
 						unit, target, weapon_power,
-						attacker_elev, target_elev, target_cover, is_ranged)
+						attacker_elev, target_elev, target_cover, is_ranged, attack_arc)
+					# A18/A19: annotate likely reactions -- Counter only fires from defensible arcs
+					var target_reaction: String = target.equipped_passive("reaction")
+					if target_reaction == "counter" and not is_ranged:
+						if attack_arc != Hex.Arc.REAR:
+							intent.likely_reactions = ["counter"]
 
 			"ability":
 				intent.action_kind = "ability"
@@ -120,10 +128,12 @@ static func _compute_ability_intent(
 	match effect_type:
 		"damage":
 			if target:
+				# A19: arc from planned move position vs target facing
+				var ability_arc: int = Hex.arc_between(intent.move_to, intent.target_pos, target.facing)
 				intent.projection = OutcomeProjection.project_ability_damage(
 					unit, target, effect_value, ability.type,
 					caster_elev, target_elev, ability.mag_scaling,
-					element, terrain_aff_weight)
+					element, terrain_aff_weight, ability_arc)
 		"heal":
 			if target:
 				intent.projection = OutcomeProjection.project_heal(

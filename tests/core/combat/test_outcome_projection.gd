@@ -142,3 +142,48 @@ func test_project_heal_with_mag_scaling() -> void:
 	var result := OutcomeProjection.project_heal(target, 5, caster, 1.0)
 	# Heal = min(5 + round(1.0 * 4), 15) = 9
 	assert_eq(result["min"], 9)
+
+
+# --- A19: arc-aware projection ---
+
+func test_project_attack_front_max_excludes_crit() -> void:
+	## Post-A19 fix: FRONT arc should NOT multiply max by CRIT_MULT.
+	## raw_max = max(1, 6 + atk(5) + weapon(2) + e_bonus(0) - def(3) - c_bonus(0)) = max(1,10) = 10
+	## With FRONT arc: no crit multiplication -> max stays 10
+	var attacker := _make_unit("a", "playerA", 5, 2)
+	var target := _make_unit("b", "playerB", 3, 3)
+	var result := OutcomeProjection.project_attack(attacker, target, 2, 0, 0, 0, false, Hex.Arc.FRONT)
+	var crit_mult: float = float(Constants.get_value("CRIT_MULT", 1.5))
+	# raw_max without crit = max(1, 6+5+2+0-3-0) = 10
+	assert_eq(result["max"], 10, "FRONT attack max should NOT include crit (post-A19 fix)")
+
+
+func test_project_attack_rear_max_includes_crit() -> void:
+	## REAR arc should multiply max by CRIT_MULT.
+	var attacker := _make_unit("a", "playerA", 5, 2)
+	var target := _make_unit("b", "playerB", 3, 3)
+	var front := OutcomeProjection.project_attack(attacker, target, 2, 0, 0, 0, false, Hex.Arc.FRONT)
+	var rear := OutcomeProjection.project_attack(attacker, target, 2, 0, 0, 0, false, Hex.Arc.REAR)
+	# REAR adds REAR_HIT=2 to damage base and multiplies max by crit_mult
+	assert_true(rear["max"] > front["max"],
+		"REAR max should exceed FRONT max (crit + damage bonus)")
+
+
+func test_project_attack_flank_damage_bonus() -> void:
+	## FLANK min should be greater than FRONT min by FLANK_HIT.
+	var attacker := _make_unit("a", "playerA", 5, 2)
+	var target := _make_unit("b", "playerB", 3, 3)
+	var front := OutcomeProjection.project_attack(attacker, target, 2, 0, 0, 0, false, Hex.Arc.FRONT)
+	var flank := OutcomeProjection.project_attack(attacker, target, 2, 0, 0, 0, false, Hex.Arc.FLANK)
+	assert_eq(flank["min"], front["min"] + 1, "FLANK min should exceed FRONT min by FLANK_HIT=1")
+
+
+func test_project_ability_damage_rear_bonus() -> void:
+	## REAR arc adds REAR_HIT=2 to ability damage.
+	var caster := _make_unit("a", "playerA", 5, 2)
+	var target := _make_unit("b", "playerB", 3, 4)
+	var front := OutcomeProjection.project_ability_damage(
+		caster, target, 8, "skill", 0, 0, 0.0, "", 0, Hex.Arc.FRONT)
+	var rear := OutcomeProjection.project_ability_damage(
+		caster, target, 8, "skill", 0, 0, 0.0, "", 0, Hex.Arc.REAR)
+	assert_eq(rear["min"], front["min"] + 2, "REAR ability min should exceed FRONT by REAR_HIT=2")

@@ -23,8 +23,10 @@ static func score(
 	s += float(w.get("target", 0.0))       * _target_value(state, unit, plan)
 	s += float(w.get("ability", 0.0))      * _ability_value(state, unit, plan)
 	s -= float(w.get("resource", 0.0))     * _resource_cost(unit, plan)
-	# A18: penalise meleeing a unit with Counter equipped
+	# A18: penalise meleeing a unit with Counter equipped (suppressed when approach is REAR — safe)
 	s -= float(w.get("counter_risk", 5.0)) * _counter_risk(state, unit, plan)
+	# A19: penalise plans that leave own rear exposed to enemies
+	s -= float(w.get("rear_exposure", 4.0)) * _rear_exposure(state, unit, plan)
 	return s
 
 
@@ -84,7 +86,10 @@ static func _estimate_attack_damage(
 	var elev_bonus := 0.0
 	if state.graph.elevation(origin) > state.graph.elevation(target.position):
 		elev_bonus = float(Constants.get_value("ELEV_BONUS", 2))
-	var raw := AVG_DIE + float(atk) + float(weapon_power) + elev_bonus - float(target_def)
+	# A19: arc-based damage bonus from plan end position vs target current facing
+	var arc: int = Hex.arc_between(origin, target.position, target.facing)
+	var f_bonus: float = float(FacingBonus.damage_bonus(arc))
+	var raw := AVG_DIE + float(atk) + float(weapon_power) + elev_bonus + f_bonus - float(target_def)
 	return maxf(1.0, raw)
 
 
@@ -104,17 +109,21 @@ static func _estimate_ability_damage(
 	if state.graph.elevation(origin) > state.graph.elevation(target_pos):
 		elev_bonus = float(Constants.get_value("ELEV_BONUS", 2))
 
-	var raw := AVG_DIE + float(effect_value) + elev_bonus
+	# A19: arc-based damage bonus from plan end position vs target current facing
+	var target_unit: BattleUnit = state.unit_at(target_pos)
+	var arc: int = Hex.Arc.FRONT
+	if target_unit:
+		arc = Hex.arc_between(origin, target_pos, target_unit.facing)
+	var f_bonus: float = float(FacingBonus.damage_bonus(arc))
+	var raw := AVG_DIE + float(effect_value) + elev_bonus + f_bonus
 	if ability.type == "skill":
-		var target: BattleUnit = state.unit_at(target_pos)
-		var target_def: int = target.stats.effective("def") if target else 0
+		var target_def: int = target_unit.stats.effective("def") if target_unit else 0
 		raw -= float(target_def)
 	else:
 		# Spell: scales with MAG, reduced by RES
 		var mag_bonus: float = ability.mag_scaling * float(unit.stats.effective("mag"))
 		raw += mag_bonus
-		var target: BattleUnit = state.unit_at(target_pos)
-		var target_res: int = target.stats.effective("res") if target else 0
+		var target_res: int = target_unit.stats.effective("res") if target_unit else 0
 		raw -= float(target_res)
 	return maxf(1.0, raw)
 
@@ -244,8 +253,9 @@ static func _get_ability(_state: MatchState, step: Dictionary) -> AbilityData:
 
 # --- A18: Reaction risk ---
 
-## Returns 1.0 if this plan contains a melee attack against a unit with Counter equipped.
-## Returns 0.0 otherwise. Used to penalise plans via the counter_risk weight.
+## Returns 1.0 if this plan contains a melee attack against a unit with Counter equipped,
+## from a FRONT or FLANK arc. Returns 0.0 if the approach is REAR (counter is blocked)
+## or if the target has no Counter reaction.
 static func _counter_risk(state: MatchState, unit: BattleUnit, plan: AIPlan) -> float:
 	for step in plan.steps:
 		var kind: String = str(step.get("kind", ""))
@@ -260,6 +270,40 @@ static func _counter_risk(state: MatchState, unit: BattleUnit, plan: AIPlan) -> 
 			continue
 		# Check if target has Counter in their reaction slot
 		var target_reaction: String = target.equipped_passive("reaction")
-		if target_reaction == "counter":
+		if target_reaction != "counter":
+			continue
+		# A19: REAR approach is safe -- Counter is blocked from REAR
+		var origin: Vector2i = _end_position(unit, plan)
+		var arc: int = Hex.arc_between(origin, target.position, target.facing)
+		if arc == Hex.Arc.REAR:
+			continue
+		return 1.0
+	return 0.0
+
+
+## A19: Returns 1.0 if the plan's resulting facing would expose own rear to any enemy
+## that could reach the unit. Used to penalise plans via the rear_exposure weight.
+static func _rear_exposure(state: MatchState, unit: BattleUnit, plan: AIPlan) -> float:
+	var end_pos: Vector2i = _end_position(unit, plan)
+	# Estimate resulting facing: toward attack target if plan has one, else current facing
+	var result_facing: int = unit.facing
+	for step in plan.steps:
+		var kind: String = str(step.get("kind", ""))
+		if kind == "attack" or kind == "ability":
+			var tpos: Vector2i = step.get("target_pos", end_pos) as Vector2i
+			if tpos != end_pos:
+				result_facing = Hex.direction_toward(end_pos, tpos)
+			break
+
+	var enemy_team: String = state.other_team(unit.team)
+	for enemy: BattleUnit in state.living_units(enemy_team):
+		var dist: int = RangeQuery.effective_range(enemy.position, end_pos, state.graph)
+		var enemy_rng: int = enemy.stats.effective("rng")
+		if dist > enemy_rng + enemy.stats.effective_move():
+			continue
+		# Is this enemy approaching from the unit's rear?
+		var incoming_dir: int = Hex.direction_toward(end_pos, enemy.position)
+		var arc: int = Hex.arc_of(incoming_dir, result_facing)
+		if arc == Hex.Arc.REAR:
 			return 1.0
 	return 0.0

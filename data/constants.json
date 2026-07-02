@@ -34,7 +34,8 @@
     "target": 8.0,
     "ability": 6.0,
     "resource": 2.0,
-    "counter_risk": 5.0
+    "counter_risk": 5.0,
+    "rear_exposure": 4.0
   },
   "PASSIVE_LOW_HP_PCT": 0.25,
   "PASSIVE_COUNTER_DMG_MULT": 1.0,
@@ -96,5 +97,9 @@
   "CT_WAIT_SURCHARGE": 0,
   "CT_HASTE_MULTIPLIER": 1.5,
   "CT_SLOW_MULTIPLIER": 0.5,
-  "SKIRMISH_SQUAD_SIZES": [2, 3, 4, 5]
+  "SKIRMISH_SQUAD_SIZES": [2, 3, 4, 5],
+  "FLANK_HIT": 1,
+  "FLANK_CRIT": 0.0625,
+  "REAR_HIT": 2,
+  "REAR_CRIT": 0.125
 }

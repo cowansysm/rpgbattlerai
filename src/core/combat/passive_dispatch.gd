@@ -85,10 +85,20 @@ static func fire(event: String, subject: BattleUnit, ctx: Dictionary) -> Array:
 
 # --- Reaction handlers ---
 
+## A19: Arc values from which a Counter can fire. Rear attacks are not defensible.
+const COUNTER_DEFENSIBLE_ARCS: Array = [0, 1]  # Hex.Arc.FRONT, Hex.Arc.FLANK
+
+
 static func _fire_counter(subject: BattleUnit, ctx: Dictionary, state: MatchState) -> Array:
 	## Counter: subject retaliates against the attacker with a basic weapon attack.
+	## A19: blocked from REAR arc — you cannot counter an attack you did not see coming.
 	var attacker: BattleUnit = ctx.get("attacker", null) as BattleUnit
 	if attacker == null or not attacker.is_alive():
+		return []
+
+	# A19: check arc; skip Counter if attack came from REAR
+	var attack_arc: int = int(ctx.get("arc", Hex.Arc.FRONT))
+	if not COUNTER_DEFENSIBLE_ARCS.has(attack_arc):
 		return []
 
 	# Lock to prevent counter-chains

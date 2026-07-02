@@ -56,6 +56,9 @@ func _make_state(attacker: BattleUnit, target: BattleUnit) -> MatchState:
 	target.position = Vector2i(1, 0)
 	state.occupancy[attacker.position] = attacker
 	state.occupancy[target.position] = target
+	# A19: set facings so approach is FRONT (target faces toward attacker)
+	attacker.set_facing(Hex.direction_toward(Vector2i(0, 0), Vector2i(1, 0)))
+	target.set_facing(Hex.direction_toward(Vector2i(1, 0), Vector2i(0, 0)))
 	return state
 
 

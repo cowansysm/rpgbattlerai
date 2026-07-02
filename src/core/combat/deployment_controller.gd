@@ -91,6 +91,11 @@ func place_next(team: String, tile: Vector2i) -> Array[String]:
 	unit.position = tile
 	_state.occupancy[tile] = unit
 	TurnActions.apply_terrain_modifiers_on_deploy(unit, _state.graph)
+	# A19: set initial facing toward the enemy zone centroid
+	var enemy_team: String = _other_team(team)
+	var enemy_zone: Array[Vector2i] = zone_tiles(enemy_team)
+	if not enemy_zone.is_empty():
+		unit.set_facing(Hex.direction_toward(tile, _zone_centroid(enemy_zone)))
 	_advance_turn()
 	return []
 
@@ -170,3 +175,13 @@ static func _parse_zone(zone_strs: Array) -> Array[Vector2i]:
 		if parts.size() >= 2:
 			out.append(Vector2i(int(parts[0]), int(parts[1])))
 	return out
+
+
+## A19: Returns the approximate centroid of a zone as a Vector2i (truncated average).
+static func _zone_centroid(zone: Array[Vector2i]) -> Vector2i:
+	if zone.is_empty():
+		return Vector2i.ZERO
+	var sum := Vector2i.ZERO
+	for t: Vector2i in zone:
+		sum += t
+	return Vector2i(sum.x / zone.size(), sum.y / zone.size())

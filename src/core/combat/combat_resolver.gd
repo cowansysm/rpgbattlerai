@@ -23,10 +23,12 @@ static func roll_crit() -> float:
 
 
 ## Resolve a physical (basic weapon) attack.
-## Returns {damage, atk_roll, def_roll, target_hp_after, is_downed}.
+## Returns {damage, atk_roll, def_roll, target_hp_after, is_downed, is_crit}.
 ## Defense die only rolls when the target has used the Defend action.
 ## A18: optional ctx dict — when present (with "state" key), fires passive events
-## ON_HIT (melee) and ON_DAMAGED after resolution. A19 will extend the same ctx.
+## ON_HIT (melee) and ON_DAMAGED after resolution.
+## A19: arc (Hex.Arc enum int) adds FacingBonus to damage; non-FRONT arcs may also crit.
+##      arc defaults to FRONT so all existing callers reproduce pre-A19 numbers.
 static func resolve_attack(
 	attacker: BattleUnit,
 	target: BattleUnit,
@@ -38,6 +40,7 @@ static func resolve_attack(
 	elev_bonus: int = -1,
 	cover_def: int = -1,
 	ctx: Dictionary = {},
+	arc: int = 0,
 ) -> Dictionary:
 	if elev_bonus < 0:
 		elev_bonus = Constants.get_value("ELEV_BONUS", 1)
@@ -46,10 +49,20 @@ static func resolve_attack(
 
 	var atk: int = attacker.stats.effective("atk")
 	var e_bonus: int = elev_bonus if attacker_elev > target_elev else 0
+	var f_bonus: int = FacingBonus.damage_bonus(arc)
 	var c_bonus: int = cover_def * target_cover if is_ranged else 0
 	var target_def: int = target.stats.effective("def")
 	var atk_roll: int = roll_die()
-	var damage: int = max(1, atk_roll + atk + weapon_power + e_bonus - target_def - c_bonus)
+	var damage: int = max(1, atk_roll + atk + weapon_power + e_bonus + f_bonus - target_def - c_bonus)
+
+	# A19: arc-based crit for basic attacks — only consume a roll when arc grants crit
+	var is_crit: bool = false
+	var cc: float = FacingBonus.crit_bonus(arc)
+	if cc > 0.0:
+		var crit_mult: float = float(Constants.get_value("CRIT_MULT", 1.5))
+		if roll_crit() < cc:
+			is_crit = true
+			damage = int(round(float(damage) * crit_mult))
 
 	# Defend action grants a 1d6 defense roll against all damage
 	var def_roll: int = 0
@@ -68,6 +81,7 @@ static func resolve_attack(
 		"def_roll": def_roll,
 		"target_hp_after": target.current_hp,
 		"is_downed": is_downed,
+		"is_crit": is_crit,
 	}
 
 	# A18: fire passive events when state context is available
@@ -106,7 +120,8 @@ static func resolve_attack(
 ## Order of operations: base formula → affinity mult → crit mult → defend die → floor.
 ## IMMUNE skips the floor (0 damage). ABSORB converts to healing and skips the floor.
 ## A18: optional ctx dict — when present (with "state" key), fires passive events
-## ON_DAMAGED after resolution. A19 will extend the same ctx.
+## ON_DAMAGED after resolution.
+## A19: arc adds FacingBonus.crit_bonus additively to CRIT_CHANCE (FRONT adds 0 → preserves seeds).
 static func resolve_damage(
 	attacker: BattleUnit,
 	target: BattleUnit,
@@ -119,29 +134,31 @@ static func resolve_damage(
 	element: String = "",
 	terrain_affinity_weight: int = 0,
 	ctx: Dictionary = {},
+	arc: int = 0,
 ) -> Dictionary:
 	if elev_bonus < 0:
 		elev_bonus = Constants.get_value("ELEV_BONUS", 1)
 
 	var e_bonus: int = elev_bonus if attacker_elev > target_elev else 0
+	var f_bonus: int = FacingBonus.damage_bonus(arc)
 	var atk_roll: int = roll_die()
 	var base: int
 
 	if ability_type == "skill":
 		var target_def: int = target.stats.effective("def")
-		base = atk_roll + effect_value + e_bonus - target_def
+		base = atk_roll + effect_value + e_bonus + f_bonus - target_def
 	else:
 		# Spells: scales with caster MAG, reduced by target RES
 		var mag_bonus: int = int(round(mag_scaling * attacker.stats.effective("mag")))
-		base = atk_roll + effect_value + mag_bonus + e_bonus - target.stats.effective("res")
+		base = atk_roll + effect_value + mag_bonus + e_bonus + f_bonus - target.stats.effective("res")
 
 	# A16: Affinity scaling
 	var tier: int = target.effective_affinity(element, terrain_affinity_weight)
 	var aff_mult: float = Affinity.multiplier(tier)
 	var scaled: int = int(round(float(base) * aff_mult))
 
-	# A16: Critical hit
-	var crit_chance: float = float(Constants.get_value("CRIT_CHANCE", 0.0625))
+	# A16+A19: Critical hit — A19 adds arc crit_bonus additively (FRONT adds 0 → seeds preserved)
+	var crit_chance: float = float(Constants.get_value("CRIT_CHANCE", 0.0625)) + FacingBonus.crit_bonus(arc)
 	var crit_mult: float = float(Constants.get_value("CRIT_MULT", 1.5))
 	var is_crit: bool = roll_crit() < crit_chance
 	if is_crit:
