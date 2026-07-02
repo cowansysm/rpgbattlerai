@@ -233,7 +233,11 @@ func _enter_deployment() -> void:
 		# AI places with pacing
 		_hud.append_log("[Deploy] AI placing %s..." % unit.character.display_name, "deploy_ai")
 		var delay: float = float(Constants.get_value("DEPLOY_PACE_DELAY", 0.4))
-		get_tree().create_timer(delay).timeout.connect(_do_ai_deploy_step)
+		var tree := get_tree()
+		if not tree:
+			Log.error("BattleController", "get_tree() null in _enter_deployment — node not in scene tree")
+			return
+		tree.create_timer(delay).timeout.connect(_do_ai_deploy_step)
 	else:
 		# Human places — highlight legal tiles
 		var legal := _deployment_controller.legal_tiles(team)
