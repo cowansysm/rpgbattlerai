@@ -67,6 +67,10 @@ static func _abilities() -> Array[Dictionary]:
 		_col("effect.duration", "effect.duration", Mode.DOTTED, "int"),
 		_col("effect.stat", "effect.stat", Mode.DOTTED, "str"),
 		_col("source", "source", Mode.SCALAR, "str"),
+		# A18: passive descriptor columns
+		_col("passive_kind", "passive_kind", Mode.SCALAR, "str"),
+		_col("trigger", "trigger", Mode.JSON, "str"),
+		_col("modifier", "modifier", Mode.JSON, "str"),
 	]
 	return cols
 

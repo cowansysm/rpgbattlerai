@@ -20,6 +20,11 @@ var equipment: Dictionary = {}
 var growth_accumulated: Dictionary = {}
 var downs_this_run: int = 0
 
+## A18: equipped passive slots (one per category)
+var reaction_slot: String = ""
+var support_slot: String = ""
+var movement_slot: String = ""
+
 
 ## Sum of all class levels (minimum 1).
 func character_level() -> int:
@@ -122,6 +127,41 @@ func set_active_class(class_id: String) -> bool:
 	return true
 
 
+## A18: Equips a learned passive ability into its matching slot by passive_kind.
+## Requires the ability to be learned and have the matching passive_kind.
+## Returns true on success, false on rejection.
+func equip_passive(ability_id: String, ability_provider: Callable) -> bool:
+	if not learned_abilities.has(ability_id):
+		return false
+	if not ability_provider.is_valid():
+		return false
+	var ab: AbilityData = ability_provider.call(ability_id)
+	if ab == null:
+		return false
+	match ab.passive_kind:
+		"reaction":
+			reaction_slot = ability_id
+			return true
+		"support":
+			support_slot = ability_id
+			return true
+		"movement":
+			movement_slot = ability_id
+			return true
+	return false
+
+
+## A18: Clears the passive slot for the given kind ("reaction"|"support"|"movement").
+func unequip_passive(kind: String) -> void:
+	match kind:
+		"reaction":
+			reaction_slot = ""
+		"support":
+			support_slot = ""
+		"movement":
+			movement_slot = ""
+
+
 ## Sets the ability loadout. Must be a subset of learned_abilities and within slot cap.
 func set_loadout(abilities: Array[String], max_slots: int = 6) -> bool:
 	if abilities.size() > max_slots:
@@ -155,6 +195,7 @@ func unequip(slot: String) -> void:
 
 
 ## Builds a transient read-only CharacterData snapshot for the combat layer.
+## A18: copies passive slots so the combat layer can read them via BattleUnit.
 func to_character_data(stat_block: StatBlock) -> CharacterData:
 	var c := CharacterData.new()
 	c.id = instance_id
@@ -168,6 +209,10 @@ func to_character_data(stat_block: StatBlock) -> CharacterData:
 	c.base_stats = {}
 	for k in StatKey.all_strings():
 		c.base_stats[k] = stat_block.base(k)
+	# A18: carry passive slot selections into the combat snapshot
+	c.reaction_passive = reaction_slot
+	c.support_passive = support_slot
+	c.movement_passive = movement_slot
 	return c
 
 
@@ -205,6 +250,10 @@ func to_dict() -> Dictionary:
 		"equipment": equipment.duplicate(),
 		"growth_accumulated": growth_accumulated.duplicate(),
 		"downs_this_run": downs_this_run,
+		# A18: passive slots
+		"reaction_slot": reaction_slot,
+		"support_slot": support_slot,
+		"movement_slot": movement_slot,
 	}
 
 
@@ -232,6 +281,10 @@ static func from_dict(d: Dictionary) -> CharacterInstance:
 	ci.equipment = _to_str_dict(d.get("equipment", {}))
 	ci.growth_accumulated = _to_int_dict(d.get("growth_accumulated", {}))
 	ci.downs_this_run = int(d.get("downs_this_run", 0))
+	# A18: passive slots — default "" for save migration safety
+	ci.reaction_slot = str(d.get("reaction_slot", ""))
+	ci.support_slot = str(d.get("support_slot", ""))
+	ci.movement_slot = str(d.get("movement_slot", ""))
 	return ci
 
 

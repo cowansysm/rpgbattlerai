@@ -155,6 +155,11 @@ static func _validate_prerequisites_structure(d: Dictionary) -> Array[String]:
 	return e
 
 
+const PASSIVE_KINDS := ["reaction", "support", "movement"]
+const REACTION_EVENTS := ["on_hit", "on_damaged", "on_low_hp", "on_turn_start",
+	"on_move_query", "on_hazard_enter"]
+
+
 static func validate_ability(d: Dictionary) -> Array[String]:
 	var e: Array[String] = []
 	if not d.has("id"):
@@ -163,8 +168,10 @@ static func validate_ability(d: Dictionary) -> Array[String]:
 		e.append("ability '%s' missing required field 'type'" % d.get("id", "?"))
 	elif not ABILITY_TYPES.has(str(d["type"])):
 		e.append("ability '%s' has unknown type '%s'" % [d.get("id", "?"), d["type"]])
-	# Passive abilities are exempt from effect validation
-	if d.has("type") and str(d["type"]) != "passive":
+	# Passive abilities are exempt from effect validation but have their own rules
+	if d.has("type") and str(d["type"]) == "passive":
+		e.append_array(_validate_passive_descriptors(d))
+	elif d.has("type") and str(d["type"]) != "passive":
 		if d.has("effect") and typeof(d["effect"]) == TYPE_DICTIONARY and not d["effect"].is_empty():
 			e.append_array(validate_ability_effect(d["effect"], str(d.get("id", "?"))))
 	# Accept "ap" or "ap_cost"
@@ -174,6 +181,38 @@ static func validate_ability(d: Dictionary) -> Array[String]:
 	var wp_val: Variant = d.get("wp", d.get("wp_cost", null))
 	if wp_val != null and int(wp_val) < 0:
 		e.append("ability '%s' has negative wp cost" % d.get("id", "?"))
+	return e
+
+
+static func _validate_passive_descriptors(d: Dictionary) -> Array[String]:
+	var e: Array[String] = []
+	var ab_id: String = str(d.get("id", "?"))
+	# passive_kind is optional (empty = un-categorised passive, still valid in data)
+	# but if present, must be one of the known kinds
+	var pk: String = str(d.get("passive_kind", ""))
+	if not pk.is_empty() and not PASSIVE_KINDS.has(pk):
+		e.append("ability '%s' has unknown passive_kind '%s'" % [ab_id, pk])
+		return e
+	# Reaction: trigger.event must be known
+	if pk == "reaction":
+		var trigger: Variant = d.get("trigger", {})
+		if typeof(trigger) != TYPE_DICTIONARY:
+			e.append("ability '%s' reaction passive trigger must be a Dictionary" % ab_id)
+		else:
+			var td: Dictionary = trigger as Dictionary
+			if not td.has("event"):
+				e.append("ability '%s' reaction passive missing trigger.event" % ab_id)
+			elif not REACTION_EVENTS.has(str(td["event"])):
+				e.append("ability '%s' reaction passive has unknown trigger.event '%s'" % [ab_id, td["event"]])
+	# Support/movement: modifier.kind must be present
+	if pk == "support" or pk == "movement":
+		var mod: Variant = d.get("modifier", {})
+		if typeof(mod) != TYPE_DICTIONARY:
+			e.append("ability '%s' %s passive modifier must be a Dictionary" % [ab_id, pk])
+		else:
+			var md: Dictionary = mod as Dictionary
+			if not md.has("kind"):
+				e.append("ability '%s' %s passive missing modifier.kind" % [ab_id, pk])
 	return e
 
 

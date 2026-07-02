@@ -98,9 +98,13 @@ static func execute_attack(state: MatchState, target_pos: Vector2i) -> Dictionar
 
 	unit.ap_remaining -= 1
 
+	# A18: build dispatch context for passive reactions
+	var attack_ctx := {"state": state}
+
 	var result := CombatResolver.resolve_attack(
 		unit, target, weapon_power,
-		attacker_elev, target_elev, target_cover, is_ranged)
+		attacker_elev, target_elev, target_cover, is_ranged,
+		-1, -1, attack_ctx)
 
 	var record := {
 		"action": "attack",
@@ -113,6 +117,8 @@ static func execute_attack(state: MatchState, target_pos: Vector2i) -> Dictionar
 		"target_hp_after": result["target_hp_after"],
 		"is_downed": result["is_downed"],
 	}
+	if result.has("reactions"):
+		record["reactions"] = result["reactions"]
 
 	if result["is_downed"]:
 		_handle_downing(state, target)
@@ -134,9 +140,11 @@ static func execute_ability(
 	if unit.ap_remaining < ability.ap_cost:
 		return { "error": "Not enough AP (need %d, have %d)" % [
 			ability.ap_cost, unit.ap_remaining] }
-	if ability.wp_cost > 0 and unit.current_wp < ability.wp_cost:
+	# A18: apply Half WP multiplier (rounds up, min 0)
+	var effective_wp_cost: int = _effective_wp_cost(unit, ability.wp_cost)
+	if effective_wp_cost > 0 and unit.current_wp < effective_wp_cost:
 		return { "error": "Not enough WP (need %d, have %d)" % [
-			ability.wp_cost, unit.current_wp] }
+			effective_wp_cost, unit.current_wp] }
 
 	# Self-targeted abilities (range 0): target_pos must be caster position
 	if ability.ability_range == 0:
@@ -150,7 +158,7 @@ static func execute_ability(
 			return { "error": "No line of sight to target" }
 
 	unit.ap_remaining -= ability.ap_cost
-	unit.current_wp -= ability.wp_cost
+	unit.current_wp -= effective_wp_cost
 
 	# Resolve effect on affected units
 	var effect: Dictionary = ability.effect
@@ -448,12 +456,13 @@ static func _apply_terrain_modifiers(unit: BattleUnit, g: HexGraph, c: Vector2i)
 
 static func _apply_enter_effects(state: MatchState, unit: BattleUnit, c: Vector2i) -> Array:
 	## Apply damage_on_enter and status_on_enter from the destination tile.
+	## A18: damage_on_enter is skipped when unit.ignores_hazards is true.
 	## Returns an array of outcome dicts for the action record.
 	var outcomes: Array = []
 	var g: HexGraph = state.graph
 
 	var dmg: int = g.damage_on_enter(c)
-	if dmg > 0 and unit.current_hp > 0:
+	if dmg > 0 and unit.current_hp > 0 and not unit.ignores_hazards:
 		unit.current_hp = max(0, unit.current_hp - dmg)
 		outcomes.append({"target": unit.character.id, "type": "terrain_damage", "amount": dmg,
 			"target_hp_after": unit.current_hp})
@@ -475,3 +484,11 @@ static func _apply_enter_effects(state: MatchState, unit: BattleUnit, c: Vector2
 static func apply_terrain_modifiers_on_deploy(unit: BattleUnit, g: HexGraph) -> void:
 	## Apply occupant modifiers for the unit's current position at deployment.
 	_apply_terrain_modifiers(unit, g, unit.position)
+
+
+## A18: Apply wp_cost_mult from a support passive (Half WP = 0.5).
+## Rounds down, minimum 0.
+static func _effective_wp_cost(unit: BattleUnit, base_cost: int) -> int:
+	if base_cost <= 0:
+		return 0
+	return maxi(0, int(floor(float(base_cost) * unit.wp_cost_mult)))

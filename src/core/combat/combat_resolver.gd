@@ -25,6 +25,8 @@ static func roll_crit() -> float:
 ## Resolve a physical (basic weapon) attack.
 ## Returns {damage, atk_roll, def_roll, target_hp_after, is_downed}.
 ## Defense die only rolls when the target has used the Defend action.
+## A18: optional ctx dict — when present (with "state" key), fires passive events
+## ON_HIT (melee) and ON_DAMAGED after resolution. A19 will extend the same ctx.
 static func resolve_attack(
 	attacker: BattleUnit,
 	target: BattleUnit,
@@ -35,6 +37,7 @@ static func resolve_attack(
 	is_ranged: bool,
 	elev_bonus: int = -1,
 	cover_def: int = -1,
+	ctx: Dictionary = {},
 ) -> Dictionary:
 	if elev_bonus < 0:
 		elev_bonus = Constants.get_value("ELEV_BONUS", 1)
@@ -55,16 +58,42 @@ static func resolve_attack(
 		damage = max(1, damage - def_roll)
 
 	_wake_on_damage(target)
+	var pre_hp: int = target.current_hp
 	target.current_hp = max(0, target.current_hp - damage)
 	var is_downed: bool = target.current_hp <= 0
 
-	return {
+	var result := {
 		"damage": damage,
 		"atk_roll": atk_roll,
 		"def_roll": def_roll,
 		"target_hp_after": target.current_hp,
 		"is_downed": is_downed,
 	}
+
+	# A18: fire passive events when state context is available
+	if not ctx.is_empty() and ctx.has("state") and damage > 0 and not is_downed:
+		var ev_ctx: Dictionary = ctx.duplicate()
+		ev_ctx["attacker"] = attacker
+		# Melee ON_HIT (range <= 1 or adjacent)
+		if not is_ranged:
+			var reactions_hit: Array = PassiveDispatch.fire(PassiveDispatch.ON_HIT, target, ev_ctx)
+			if not reactions_hit.is_empty():
+				result["reactions"] = reactions_hit
+		# ON_DAMAGED for any damage
+		var reactions_dmg: Array = PassiveDispatch.fire(PassiveDispatch.ON_DAMAGED, target, ev_ctx)
+		if not reactions_dmg.is_empty():
+			result["reactions"] = reactions_dmg
+		# ON_LOW_HP threshold crossing
+		var low_hp_pct: float = float(Constants.get_value("PASSIVE_LOW_HP_PCT", 0.25))
+		var max_hp: int = target.stats.effective("hp")
+		var pre_ratio: float = float(pre_hp) / float(max_hp) if max_hp > 0 else 1.0
+		var post_ratio: float = float(target.current_hp) / float(max_hp) if max_hp > 0 else 0.0
+		if pre_ratio > low_hp_pct and post_ratio <= low_hp_pct:
+			var reactions_lhp: Array = PassiveDispatch.fire(PassiveDispatch.ON_LOW_HP, target, ev_ctx)
+			if not reactions_lhp.is_empty():
+				result["reactions"] = reactions_lhp
+
+	return result
 
 
 ## Resolve a damage ability effect (spell or skill).
@@ -76,6 +105,8 @@ static func resolve_attack(
 ## A16: element/affinity scaling and critical hits.
 ## Order of operations: base formula → affinity mult → crit mult → defend die → floor.
 ## IMMUNE skips the floor (0 damage). ABSORB converts to healing and skips the floor.
+## A18: optional ctx dict — when present (with "state" key), fires passive events
+## ON_DAMAGED after resolution. A19 will extend the same ctx.
 static func resolve_damage(
 	attacker: BattleUnit,
 	target: BattleUnit,
@@ -87,6 +118,7 @@ static func resolve_damage(
 	mag_scaling: float = 1.0,
 	element: String = "",
 	terrain_affinity_weight: int = 0,
+	ctx: Dictionary = {},
 ) -> Dictionary:
 	if elev_bonus < 0:
 		elev_bonus = Constants.get_value("ELEV_BONUS", 1)
@@ -150,10 +182,11 @@ static func resolve_damage(
 		damage = max(1, scaled)
 
 	_wake_on_damage(target)
+	var pre_hp_dmg: int = target.current_hp
 	target.current_hp = max(0, target.current_hp - damage)
 	var is_downed: bool = target.current_hp <= 0
 
-	return {
+	var result_dmg := {
 		"damage": damage,
 		"atk_roll": atk_roll,
 		"def_roll": def_roll,
@@ -164,6 +197,25 @@ static func resolve_damage(
 		"is_crit": is_crit,
 		"pre_affinity_damage": base,
 	}
+
+	# A18: fire passive events when state context is available and damage was dealt
+	if not ctx.is_empty() and ctx.has("state") and damage > 0 and not is_downed:
+		var ev_ctx: Dictionary = ctx.duplicate()
+		ev_ctx["attacker"] = attacker
+		var reactions_dmg: Array = PassiveDispatch.fire(PassiveDispatch.ON_DAMAGED, target, ev_ctx)
+		if not reactions_dmg.is_empty():
+			result_dmg["reactions"] = reactions_dmg
+		# ON_LOW_HP threshold crossing
+		var low_hp_pct: float = float(Constants.get_value("PASSIVE_LOW_HP_PCT", 0.25))
+		var max_hp_check: int = target.stats.effective("hp")
+		var pre_ratio: float = float(pre_hp_dmg) / float(max_hp_check) if max_hp_check > 0 else 1.0
+		var post_ratio: float = float(target.current_hp) / float(max_hp_check) if max_hp_check > 0 else 0.0
+		if pre_ratio > low_hp_pct and post_ratio <= low_hp_pct:
+			var reactions_lhp: Array = PassiveDispatch.fire(PassiveDispatch.ON_LOW_HP, target, ev_ctx)
+			if not reactions_lhp.is_empty():
+				result_dmg["reactions"] = reactions_lhp
+
+	return result_dmg
 
 
 ## Resolve a healing effect. Clamped to max HP.

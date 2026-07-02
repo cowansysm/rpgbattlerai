@@ -4,6 +4,7 @@ extends Resource
 ## Spec reference: rpg-specs.md §9.3
 ## Note: field is "ability_range" not "range" to avoid shadowing GDScript builtin.
 ## JSON key "range" maps to this field in the factory.
+## A18: passive_kind / trigger / modifier added for reaction, support, movement passives.
 
 @export var id: String = ""
 @export var display_name: String = ""
@@ -16,3 +17,16 @@ extends Resource
 @export var effect_type: String = ""
 @export var mag_scaling: float = 1.0
 @export var source: String = ""
+
+## A18: passive category — "reaction" | "support" | "movement" | "" (active)
+@export var passive_kind: String = ""
+
+## A18: trigger descriptor for reaction passives.
+## Keys: event (String), melee_only (bool), hp_pct (float).
+## Populated only when passive_kind == "reaction".
+@export var trigger: Dictionary = {}
+
+## A18: modifier descriptor for support/movement passives.
+## Keys: kind (String), stat (String), value (int/float), etc.
+## Populated only when passive_kind in ["support", "movement"].
+@export var modifier: Dictionary = {}

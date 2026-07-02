@@ -5,11 +5,13 @@ extends RefCounted
 
 
 ## Builds an Array[BattleUnit] from a list of CharacterInstances.
+## A18: optional ability_provider enables support/movement passive application.
 static func build_party(fielded: Array[CharacterInstance],
-		race_provider: Callable, class_provider: Callable) -> Array[BattleUnit]:
+		race_provider: Callable, class_provider: Callable,
+		ability_provider: Callable = Callable()) -> Array[BattleUnit]:
 	var party: Array[BattleUnit] = []
 	for ci in fielded:
-		party.append(BattleUnit.from_instance(ci, race_provider, class_provider))
+		party.append(BattleUnit.from_instance(ci, race_provider, class_provider, ability_provider))
 	return party
 
 

@@ -14,15 +14,17 @@ static func score(
 	var s := 0.0
 	var end_pos: Vector2i = _end_position(unit, plan)
 
-	s += float(w.get("damage", 0.0))   * _expected_damage(state, unit, plan)
-	s += float(w.get("kill", 0.0))     * _expected_kills(state, unit, plan)
-	s -= float(w.get("exposure", 0.0)) * _exposure(state, unit, end_pos)
-	s += float(w.get("cover", 0.0))    * float(state.graph.effective_cover(end_pos))
-	s += float(w.get("elev", 0.0))     * float(state.graph.elevation(end_pos))
-	s -= float(w.get("hazard", 0.0))   * float(state.graph.damage_per_turn(end_pos))
-	s += float(w.get("target", 0.0))   * _target_value(state, unit, plan)
-	s += float(w.get("ability", 0.0))  * _ability_value(state, unit, plan)
-	s -= float(w.get("resource", 0.0)) * _resource_cost(unit, plan)
+	s += float(w.get("damage", 0.0))       * _expected_damage(state, unit, plan)
+	s += float(w.get("kill", 0.0))         * _expected_kills(state, unit, plan)
+	s -= float(w.get("exposure", 0.0))     * _exposure(state, unit, end_pos)
+	s += float(w.get("cover", 0.0))        * float(state.graph.effective_cover(end_pos))
+	s += float(w.get("elev", 0.0))         * float(state.graph.elevation(end_pos))
+	s -= float(w.get("hazard", 0.0))       * float(state.graph.damage_per_turn(end_pos))
+	s += float(w.get("target", 0.0))       * _target_value(state, unit, plan)
+	s += float(w.get("ability", 0.0))      * _ability_value(state, unit, plan)
+	s -= float(w.get("resource", 0.0))     * _resource_cost(unit, plan)
+	# A18: penalise meleeing a unit with Counter equipped
+	s -= float(w.get("counter_risk", 5.0)) * _counter_risk(state, unit, plan)
 	return s
 
 
@@ -238,3 +240,26 @@ static func _get_ability(_state: MatchState, step: Dictionary) -> AbilityData:
 	if ability_id.is_empty():
 		return null
 	return GameData.get_ability(ability_id)
+
+
+# --- A18: Reaction risk ---
+
+## Returns 1.0 if this plan contains a melee attack against a unit with Counter equipped.
+## Returns 0.0 otherwise. Used to penalise plans via the counter_risk weight.
+static func _counter_risk(state: MatchState, unit: BattleUnit, plan: AIPlan) -> float:
+	for step in plan.steps:
+		var kind: String = str(step.get("kind", ""))
+		if kind != "attack":
+			continue
+		var target: BattleUnit = state.unit_at(step.get("target_pos", Vector2i.ZERO) as Vector2i)
+		if target == null or not target.is_alive():
+			continue
+		# Only melee attacks trigger Counter
+		var attacker_rng: int = unit.stats.effective("rng")
+		if attacker_rng > 1:
+			continue
+		# Check if target has Counter in their reaction slot
+		var target_reaction: String = target.equipped_passive("reaction")
+		if target_reaction == "counter":
+			return 1.0
+	return 0.0

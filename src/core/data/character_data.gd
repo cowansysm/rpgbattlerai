@@ -15,4 +15,9 @@ extends Resource
 @export var abilities: Array[String] = []
 @export var recommended_path: String = ""
 
+## A18: authored passive slots (set by authored enemies or copied from CharacterInstance).
+@export var reaction_passive: String = ""
+@export var support_passive: String = ""
+@export var movement_passive: String = ""
+
 var final_stats: StatBlock = null

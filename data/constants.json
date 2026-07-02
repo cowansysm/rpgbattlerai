@@ -33,8 +33,19 @@
     "hazard": 8.0,
     "target": 8.0,
     "ability": 6.0,
-    "resource": 2.0
+    "resource": 2.0,
+    "counter_risk": 5.0
   },
+  "PASSIVE_LOW_HP_PCT": 0.25,
+  "PASSIVE_COUNTER_DMG_MULT": 1.0,
+  "PASSIVE_AUTO_POTION_HEAL": 8,
+  "PASSIVE_AUTO_POTION_ITEM": "potion",
+  "PASSIVE_MAGIC_BOOST": 2,
+  "PASSIVE_ATTACK_BOOST": 2,
+  "PASSIVE_JUMP_BONUS": 1,
+  "PASSIVE_MOVE_BONUS": 1,
+  "PASSIVE_HALF_WP_MULT": 0.5,
+  "PASSIVE_DEFEND_REFLEX_DEF": 3,
   "DEPLOY_FIRST": "ai",
   "DEPLOY_PACE_DELAY": 0.4,
   "DEPLOY_WEIGHTS": {
