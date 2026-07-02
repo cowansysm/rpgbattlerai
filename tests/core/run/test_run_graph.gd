@@ -235,3 +235,162 @@ func test_generated_graph_round_trips_through_json() -> void:
 	# Verify start and boss survive
 	assert_eq(str(restored.start_node()["kind"]), "start")
 	assert_eq(str(restored.boss_node()["kind"]), "boss")
+
+
+# --- Edge-node invariant tests ---
+
+func test_start_is_source_no_incoming() -> void:
+	for s in range(20):
+		var g: RunGraph = RunGraphGenerator.generate(_seeded(s), _cfg())
+		var start_id: String = str(g.start_node()["id"])
+		assert_true(g.prev_nodes(start_id).is_empty(),
+			"seed %d: start node has incoming edges" % s)
+
+
+func test_boss_is_sink_no_outgoing() -> void:
+	for s in range(20):
+		var g: RunGraph = RunGraphGenerator.generate(_seeded(s), _cfg())
+		var boss_id: String = str(g.boss_node()["id"])
+		assert_true(g.next_nodes(boss_id).is_empty(),
+			"seed %d: boss node has outgoing edges" % s)
+
+
+func test_no_extra_sources() -> void:
+	for s in range(20):
+		var g: RunGraph = RunGraphGenerator.generate(_seeded(s), _cfg())
+		var start_id: String = str(g.start_node()["id"])
+		for id in g.nodes.keys():
+			if id != start_id:
+				assert_false(g.prev_nodes(id).is_empty(),
+					"seed %d: node %s is an extra source (no incoming)" % [s, id])
+
+
+func test_no_extra_sinks() -> void:
+	for s in range(20):
+		var g: RunGraph = RunGraphGenerator.generate(_seeded(s), _cfg())
+		var boss_id: String = str(g.boss_node()["id"])
+		for id in g.nodes.keys():
+			if id != boss_id:
+				assert_false(g.next_nodes(id).is_empty(),
+					"seed %d: node %s is an extra sink (no outgoing)" % [s, id])
+
+
+func test_all_edges_flow_forward() -> void:
+	for s in range(20):
+		var g: RunGraph = RunGraphGenerator.generate(_seeded(s), _cfg())
+		for e in g.edges:
+			var from_node: Dictionary = g.node(str(e["from"]))
+			var to_node: Dictionary = g.node(str(e["to"]))
+			assert_lt(int(from_node["column"]), int(to_node["column"]),
+				"seed %d: edge %s->%s does not flow forward" % [s, str(e["from"]), str(e["to"])])
+
+
+func test_generated_graph_passes_validation() -> void:
+	for s in range(20):
+		var g: RunGraph = RunGraphGenerator.generate(_seeded(s), _cfg())
+		assert_true(g.is_valid_run_graph(),
+			"seed %d: generated graph fails is_valid_run_graph()" % s)
+
+
+func test_validation_rejects_empty_graph() -> void:
+	var g := RunGraph.new()
+	assert_false(g.is_valid_run_graph())
+
+
+func test_validation_rejects_start_with_incoming() -> void:
+	var g := RunGraph.new()
+	g.nodes["s"] = {"id": "s", "column": 0, "row": 0, "kind": "start"}
+	g.nodes["a"] = {"id": "a", "column": 1, "row": 0, "kind": "battle"}
+	g.nodes["b"] = {"id": "b", "column": 2, "row": 0, "kind": "boss"}
+	g.edges = [
+		{"from": "s", "to": "a"}, {"from": "a", "to": "b"},
+		{"from": "a", "to": "s"},  # backward edge into start
+	]
+	assert_false(g.is_valid_run_graph())
+
+
+func test_validation_rejects_boss_with_outgoing() -> void:
+	var g := RunGraph.new()
+	g.nodes["s"] = {"id": "s", "column": 0, "row": 0, "kind": "start"}
+	g.nodes["a"] = {"id": "a", "column": 1, "row": 0, "kind": "battle"}
+	g.nodes["b"] = {"id": "b", "column": 2, "row": 0, "kind": "boss"}
+	g.edges = [
+		{"from": "s", "to": "a"}, {"from": "a", "to": "b"},
+		{"from": "b", "to": "a"},  # boss has outgoing (backward edge)
+	]
+	assert_false(g.is_valid_run_graph())
+
+
+func test_validation_rejects_extra_source() -> void:
+	var g := RunGraph.new()
+	g.nodes["s"] = {"id": "s", "column": 0, "row": 0, "kind": "start"}
+	g.nodes["orphan"] = {"id": "orphan", "column": 1, "row": 0, "kind": "battle"}
+	g.nodes["a"] = {"id": "a", "column": 1, "row": 1, "kind": "battle"}
+	g.nodes["b"] = {"id": "b", "column": 2, "row": 0, "kind": "boss"}
+	g.edges = [
+		{"from": "s", "to": "a"}, {"from": "a", "to": "b"},
+		{"from": "orphan", "to": "b"},  # orphan has no incoming — extra source
+	]
+	assert_false(g.is_valid_run_graph())
+
+
+func test_validation_rejects_extra_sink() -> void:
+	var g := RunGraph.new()
+	g.nodes["s"] = {"id": "s", "column": 0, "row": 0, "kind": "start"}
+	g.nodes["a"] = {"id": "a", "column": 1, "row": 0, "kind": "battle"}
+	g.nodes["dead"] = {"id": "dead", "column": 1, "row": 1, "kind": "battle"}
+	g.nodes["b"] = {"id": "b", "column": 2, "row": 0, "kind": "boss"}
+	g.edges = [
+		{"from": "s", "to": "a"}, {"from": "s", "to": "dead"},
+		{"from": "a", "to": "b"},
+		# dead has incoming from s but no outgoing — extra sink
+	]
+	assert_false(g.is_valid_run_graph())
+
+
+func test_validation_rejects_backward_edge() -> void:
+	var g := RunGraph.new()
+	g.nodes["s"] = {"id": "s", "column": 0, "row": 0, "kind": "start"}
+	g.nodes["a"] = {"id": "a", "column": 1, "row": 0, "kind": "battle"}
+	g.nodes["b"] = {"id": "b", "column": 2, "row": 0, "kind": "boss"}
+	g.edges = [
+		{"from": "s", "to": "a"}, {"from": "a", "to": "b"},
+		{"from": "b", "to": "a"},  # backward edge
+	]
+	assert_false(g.is_valid_run_graph())
+
+
+func test_validation_rejects_same_column_edge() -> void:
+	var g := RunGraph.new()
+	g.nodes["s"] = {"id": "s", "column": 0, "row": 0, "kind": "start"}
+	g.nodes["a"] = {"id": "a", "column": 1, "row": 0, "kind": "battle"}
+	g.nodes["a2"] = {"id": "a2", "column": 1, "row": 1, "kind": "battle"}
+	g.nodes["b"] = {"id": "b", "column": 2, "row": 0, "kind": "boss"}
+	g.edges = [
+		{"from": "s", "to": "a"}, {"from": "s", "to": "a2"},
+		{"from": "a", "to": "b"}, {"from": "a2", "to": "b"},
+		{"from": "a", "to": "a2"},  # same-column edge
+	]
+	assert_false(g.is_valid_run_graph())
+
+
+func test_validation_accepts_valid_linear_graph() -> void:
+	var g := RunGraph.new()
+	g.nodes["s"] = {"id": "s", "column": 0, "row": 0, "kind": "start"}
+	g.nodes["a"] = {"id": "a", "column": 1, "row": 0, "kind": "battle"}
+	g.nodes["b"] = {"id": "b", "column": 2, "row": 0, "kind": "boss"}
+	g.edges = [{"from": "s", "to": "a"}, {"from": "a", "to": "b"}]
+	assert_true(g.is_valid_run_graph())
+
+
+func test_validation_accepts_valid_branching_graph() -> void:
+	var g := RunGraph.new()
+	g.nodes["s"] = {"id": "s", "column": 0, "row": 0, "kind": "start"}
+	g.nodes["a"] = {"id": "a", "column": 1, "row": 0, "kind": "battle"}
+	g.nodes["a2"] = {"id": "a2", "column": 1, "row": 1, "kind": "event"}
+	g.nodes["b"] = {"id": "b", "column": 2, "row": 0, "kind": "boss"}
+	g.edges = [
+		{"from": "s", "to": "a"}, {"from": "s", "to": "a2"},
+		{"from": "a", "to": "b"}, {"from": "a2", "to": "b"},
+	]
+	assert_true(g.is_valid_run_graph())
