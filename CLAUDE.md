@@ -12,14 +12,19 @@ res://
 ├── assets/icons/            # Status effect and ability icons
 ├── data/
 │   ├── abilities.json       # 82 abilities (39 skills, 36 spells, 7 item-bound)
-│   ├── characters.json      # 20 character templates (7 human, 5 elf, 4 dwarf, 4 halfling)
-│   ├── classes.json         # 25 class/job definitions (1 starting, 3 tier-1, 12 advanced, 9 elite)
+│   ├── characters.json      # 141 character templates (playable roster + monster/NPC templates for encounters)
+│   ├── classes.json         # 146 class/job definitions (Vagabond root → tier-1 → advanced → elite + monster classes)
 │   ├── items.json           # 46 items (40 equipment + 6 consumables)
-│   ├── races.json           # 4 race definitions (with base_stats)
-│   ├── constants.json       # Game balance tuning (incl. AI presets, economy tunables)
+│   ├── races.json           # 32 race definitions (4 playable + monster races: bat, imp, kobold, slime, goblin, wolf, …)
+│   ├── constants.json       # Game balance tuning (incl. AI presets, economy, affinity/crit, turn-system tunables)
 │   ├── terrain.json         # 17 terrain type definitions
 │   ├── loot_tables.json     # 2 loot tables (standard_battle, boss_battle)
 │   ├── shop_pools.json      # 4 shop pools (tier1_weapons, tier1_armor, tier1_gear, starter_consumables)
+│   ├── encounters.json      # 73 encounter definitions (A11: level-gated enemy compositions, map + scaling)
+│   ├── events.json          # Run event definitions (A8 roguelike run)
+│   ├── meta_unlocks.json    # Meta unlock rules + starting boons (A10)
+│   ├── run_config.json      # Roguelike run tuning (A8)
+│   ├── csv/                 # CSV working copies for the CSV↔JSON content pipeline (A2)
 │   ├── maps/                # 6 map files (condensed format)
 │   └── names/               # Per-race name tables (human, elf, dwarf, halfling; 20 given + 15 surname each)
 ├── scenes/
@@ -28,14 +33,16 @@ res://
 │   ├── main/                # Entry point scene
 │   └── map/                 # Battle map / combat scene
 ├── src/
-│   ├── autoload/            # Singletons: Log, Constants, Dev, GameData, MatchData, SaveManager
+│   ├── autoload/            # Singletons: Log, Constants, Dev, DevOverrides, GameData, MatchData, SaveManager
 │   ├── core/
-│   │   ├── ai/              # AI planner, scorer, plan model
-│   │   ├── combat/          # Match state, turns, resolution, abilities, deployment
-│   │   ├── data/            # Entity Resources, loader, validator, pipeline, stats
-│   │   ├── economy/         # Pricing, LootRoller, ShopService
+│   │   ├── ai/              # AI planner, scorer, plan model, telegraph & deployment planners
+│   │   ├── combat/          # Match state, turns, resolution, deployment; turn systems, affinity, downed/revive
+│   │   ├── data/            # Entity Resources, loader, validator, pipeline, stats, symbol atlas
+│   │   ├── dev/             # Dev-mode flag support & dev override helpers
+│   │   ├── economy/         # Pricing, LootRoller, ShopService, LevelScaler
 │   │   ├── hex/             # Hex math, pathfinding, LOS, range queries
-│   │   └── progression/     # Character instances, name generation, stat resolver
+│   │   ├── progression/     # Character instances, name generation, stat resolver, profile/meta
+│   │   └── run/             # Roguelike run container, encounters, events, death model
 │   ├── debug/               # Debug readout
 │   ├── map/                 # 3D map rendering, pawns, overlays, markers, camera, AI controller
 │   ├── tools/               # Map editor model, CSV exporter/importer, entity schema, content pipeline
@@ -47,7 +54,8 @@ res://
     ├── core/hex/            # Hex math tests
     ├── core/economy/        # Economy tests (pricing, shop, loot, validation, integration)
     ├── core/progression/    # Character instance & bridge tests
-    ├── map/                 # Map/visual tests
+    ├── core/run/            # Run framework, encounter selector/generator tests
+    ├── map/                 # Map/visual tests (incl. ability symbol pawns)
     └── fixtures/            # Test data sets (valid_set, dangling_ref, bad_effect)
 ```
 
@@ -110,10 +118,11 @@ Each entity type is a single JSON file containing an array of objects:
 1. **Log** — `src/autoload/logger.gd` — levels: DEBUG, INFO, WARN, ERROR
 2. **Constants** — `src/autoload/constants.gd` — loads `data/constants.json`
 3. **Dev** — `src/autoload/dev.gd` — dev mode flag (`--dev`/`--no-dev`/`user://dev.cfg`/`OS.is_debug_build()`)
-4. **GameData** — `src/autoload/game_data.gd` — facade over `DataPipeline`
-5. **DebugReadout** — `src/debug/debug_readout.gd` — debug overlay (gated by `Dev.enabled`)
-6. **MatchData** — `src/autoload/match_data.gd` — per-match state transfer between scenes
-7. **SaveManager** — `src/autoload/save_manager.gd` — versioned JSON persistence for bands, profile, runs
+4. **DevOverrides** — `src/autoload/dev_overrides.gd` — dev cheat/override flags (A10; e.g. `DEV_SKIP_RECRUITMENT_GATE`, `DEV_ALL_CLASSES_UNLOCKED`)
+5. **GameData** — `src/autoload/game_data.gd` — facade over `DataPipeline`
+6. **DebugReadout** — `src/debug/debug_readout.gd` — debug overlay (gated by `Dev.enabled`)
+7. **MatchData** — `src/autoload/match_data.gd` — per-match state transfer between scenes (incl. `mode` for turn-system selection)
+8. **SaveManager** — `src/autoload/save_manager.gd` — versioned JSON persistence for bands, profile, runs
 
 ## Combat System
 
@@ -189,6 +198,59 @@ Each entity type is a single JSON file containing an array of objects:
 - **SaveManager** stores `profile: Profile` (not Dictionary); loads via `Profile.from_dict()`
 - **Dev tools:** profile cheats (grant templates/classes, reset, set completed_runs), DevOverrides flags (`DEV_SKIP_RECRUITMENT_GATE`, `DEV_ALL_CLASSES_UNLOCKED`), run dev panel (Win Run, Add Gold, Reset Downs)
 
+## Encounters, Level Scaling & Economy Refinement (A11)
+
+- **`EncounterData`** (`src/core/run/encounter_data.gd`) — resource: `id`, `min_band_level`, `enemies`, `map_id`, `level_offset`, `tags`, `modifiers`, `weight`
+- **`EncounterSelector`** / **`EncounterGenerator`** (`src/core/run/`) — pick eligible encounters by band level and spawn level-scaled enemy instances into the run
+- **`LevelScaler`** (`src/core/progression/level_scaler.gd`) — scales stats via `base_stats[k] + growth[k] × (level − 1)`
+- **Data file:** `data/encounters.json` — 73 authored encounters, level-gated by `min_band_level`
+- Band economy constants refined in `constants.json` (starting gold, recruit cost, gold-per-band-level)
+
+## Interactive Deployment Zones (A12)
+
+- **`DeploymentController`** (`src/core/combat/deployment_controller.gd`) — replaces hardcoded auto-deploy: AI deploys first, teams alternate placing one pawn each into legal deployment tiles; player clicks to place; completion advances to `ROUND_START`
+- **`DeploymentPlanner`** (`src/core/ai/deployment_planner.gd`) — role/terrain heuristic: front/back by range, cover, elevation, hazard avoidance, anti-clustering
+
+## Ability Symbol Pawns (A14)
+
+- **`AbilitySymbolPawn`** (`src/map/ability_symbol_pawn.gd`) — `RigidBody3D` token that spawns, falls under real physics, lands on the target tile, dwells (~2.5s), then sinks; one per affected target. Replaces the old billboard action marker
+- **`SymbolAtlas`** (`src/core/data/symbol_atlas.gd`) — resolves a symbol via fallback chain: ability id → element → effect type → default
+- Brief blocking beat (max ~0.8s) before resolution continues
+
+## Turn Systems & Telegraphed Speed-Round (A15)
+
+- **`TurnSystem`** (`src/core/combat/turn_system.gd`) — abstract seam so combat can swap turn models; `MatchData.mode` selects the concrete system
+- **`SpeedRoundTurnSystem`** (`src/core/combat/speed_round_turn_system.gd`) — single-player four-stage round: AI_PLANNING → PLAYER_PLANNING → RESOLUTION → ROUND_RESET; plans lock at commit, resolve in SPD order (seeded tie-break) with a validity policy (moves stop short, single-target fizzles, ground AoE hits current occupants)
+- **`TelegraphService`** / **`IntentPlan`** (`src/core/ai/`) — build a telegraph of the AI's committed `AIPlan`; disclosure dial via `TELEGRAPH_MODE`
+- **`RoundPlan`** (`src/core/combat/round_plan.gd`) — merges committed plans, SPD-sorted iteration
+- **`OutcomeProjection`** (`src/core/combat/outcome_projection.gd`) — min/mid/max outcome ranges from `CombatResolver`
+
+## Elemental Affinities & Critical Hits (A16)
+
+- **`Affinity`** (`src/core/combat/affinity.gd`) — tier enum (ABSORB / IMMUNE / RESIST / NEUTRAL / WEAK), multiplier lookup, additive stacking across sources (race/class/item/terrain)
+- **`CombatResolver`** applies element/affinity scaling post-formula and rolls crits; absorb routes to a heal; crit flagged in the result
+- Abilities carry `effect.element` (fire/ice/lightning/dark/holy/earth/wind/water); `BattleUnit.effective_affinity(element)` resolves the stack
+- Tunables in `constants.json`: `AFFINITY_MULT` table, `CRIT_CHANCE`, `CRIT_MULT`; neutral-default keeps pre-A16 content backward compatible
+
+## Knockout & Revive Lifecycle (A17)
+
+- **`BattleUnit`** gains `is_downed` / `downed_round` state and `is_active()` / `is_living()` predicates; a unit at HP ≤ 0 enters DOWNED, leaves the activation queue, and stays on the board
+- **`CombatResolver.resolve_revive`** restores a downed ally to `REVIVE_HP_FRACTION` and re-enters the queue; revive is legal only on downed allies
+- Victory is decided by living count; a still-downed unit at battle-end increments `downs_this_run`, and reaching `DOWN_LIMIT+1` permadeaths the character (`src/core/run/death_model.gd`)
+
+## Multiplayer / Skirmish Charge-Time Clock (A20)
+
+- **`ChargeTimeTurnSystem`** (`src/core/combat/charge_time_turn_system.gd`) — continuous clock: units accrue `ct += effective_SPD` per tick and act at threshold; acting resets CT with a surcharge (full action costs more than Wait); faster units act more often; seeded tie-break
+- **`TurnScheduler`** (`src/core/combat/turn_scheduler.gd`) — per-unit CT bookkeeping, next-actor query, timeline
+- Slowed/Haste statuses shift CT frequency; **skirmish container** (`scenes/skirmish/`, `src/ui/skirmish_setup.gd`) provides squad-size selection with vs-AI and local hot-seat play (no networking); telegraph is forced off in skirmish
+
+## Specified but NOT yet implemented
+
+These phases have spec docs in `docs/` but no implementation in `src/` yet — do not assume they exist:
+
+- **A18: Reaction / Support / Movement Passives** — only a foundation exists (`passive: Dictionary` field on ability data + a validator exemption); no passive dispatch bus, slots, or seed passive abilities
+- **A19: Facing & Flanking** — no facing state on `BattleUnit`, no arc classification, no flanking bonuses
+
 ## Dev Tooling
 
 - **Dev flag** (`src/autoload/dev.gd`): resolved from CLI args (`--dev`/`--no-dev`) → `user://dev.cfg` → `OS.is_debug_build()`; gates all dev tools
@@ -235,9 +297,9 @@ Main scene: `res://scenes/draft/draft_scene.tscn` (party draft → deploy → co
 
 ## Alpha (in progress)
 
-The Alpha extends the MVP into a single-player game. Its specs and implementation plans are complete (see Documentation). A0–A8 and A10 are **implemented and tested**. **A9 content is substantially authored** — the class/ability/item/character/terrain libraries are at or beyond their `alpha-specs.md` §12.2 targets (25 classes, 82 abilities, 46 items, 20 templates, 17 terrains); maps (6) and economy tables (loot/shops) remain below target.
+The Alpha extends the MVP into a single-player game and, via A20, a local multiplayer/skirmish mode. Most sub-phases are **implemented and tested**; two (A18, A19) are **specified only** (see "Specified but NOT yet implemented" above), and A13 (coin flip & opening initiative) is **obsolete** — dropped, not to be implemented. Content has grown well past the original `alpha-specs.md` §12.2 targets: **82 abilities, 146 classes, 46 items, 141 character templates (incl. monster/NPC), 32 races (incl. monster races), 17 terrains, 73 encounters**; maps remain at 6.
 
-Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A9 content are parallel; A7 AI joins at A8):
+Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A9 content are parallel; A7 AI joins at A8; A11+ are post-A10 extensions):
 
 - [x] A0: Terrain effects, condensed map format, dev flag & dev tools menu — **complete**
 - [x] A1: Map editor (dev tool, gated by the dev flag) — **complete**
@@ -248,8 +310,17 @@ Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A
 - [x] A6: Economy — gold, shops & loot — **complete**
 - [x] A7: AI opponent (`AIController` over `TurnActions`) — **complete**
 - [x] A8: Roguelike run (branching node graph, ≤3 parallel paths, down-limit death) — **complete**
-- [~] A9: Content expansion (authored via A1/A2) — **core libraries authored** (classes/abilities/items/characters/terrain at target); **maps + economy tables still below target**
+- [~] A9: Content expansion (authored via A1/A2) — **libraries well beyond target** (classes/abilities/items/characters/races/terrain/encounters); **maps (6) still below target**
 - [x] A10: Polish & meta-progression (Profile, MetaUnlockEngine, recruitment gating, class seeding, starting boons, run shop, UX polish, seam audit) — **complete**
+- [x] A11: Encounters, level scaling & economy refinement (`EncounterData`, `EncounterSelector`, `LevelScaler` in `progression/`, `data/encounters.json`) — **complete**
+- [x] A12: Interactive deployment zones (`DeploymentController`, `DeploymentPlanner`) — **complete**
+- [x] A14: Ability symbol pawns / physics drop feedback (`AbilitySymbolPawn`, `SymbolAtlas`) — **complete**
+- [x] A15: Telegraphed speed-round + turn-system architecture (`TurnSystem`, `SpeedRoundTurnSystem`, `TelegraphService`) — **complete**
+- [x] A16: Elemental affinities & critical hits (`Affinity`, resolver integration) — **complete**
+- [x] A17: Knockout & revive lifecycle (downed state, `resolve_revive`, `DeathModel`) — **complete**
+- [ ] A18: Reaction / support / movement passives — **spec only, foundation stub not wired**
+- [ ] A19: Facing & flanking — **spec only, not implemented**
+- [x] A20: Charge-time clock + skirmish container (`ChargeTimeTurnSystem`, `TurnScheduler`, skirmish scene) — **complete**
 
 Key Alpha decisions: dev-tool map editor (player-facing later); CSV↔JSON authoring via spreadsheets; FFT-style progression (XP + JP + job tree + gold/shop + loot); roguelike single-player; every character starts **Vagabond** → unlocks **Thief/Soldier/Adept** at level 3 → archetype branches (support / control / physical·melee·ranged / magical·arcane·divine); characters permadie on the **3rd down** per run (tunable `DOWN_LIMIT`); the attack die and Defend die persist through the A3 magic change (Defend reduces magical damage too).
 
@@ -263,11 +334,11 @@ Phase specs and implementation plans live in `docs/`.
 - `rpg-implementation-plan.md` — high-level phase roadmap
 - `phase<N>-spec.md` / `phase<N>-implementation-plan.md` — per-phase details (0–11)
 
-**Alpha (in progress — A0–A7 complete; A9 content largely authored; A8 & A10 planned):**
+**Alpha (in progress — A0–A12, A14–A17, A20 implemented; A18/A19 spec only; A13 obsolete):**
 
 - `alpha-specs.md` — master Alpha specification
-- `alpha-implementation-plan.md` — Alpha milestone roadmap (A0–A10)
-- `alpha-phaseA<N>-spec.md` / `alpha-phaseA<N>-implementation-plan.md` — per-sub-phase details (A0–A10)
+- `alpha-implementation-plan.md` — Alpha milestone roadmap
+- `alpha-phaseA<N>-spec.md` / `alpha-phaseA<N>-implementation-plan.md` — per-sub-phase details (A0–A20; A16–A20 are spec-only docs, no separate implementation-plan file)
 
 ## Development Workflow
 
