@@ -135,9 +135,15 @@ func setup_from_state(
 	_init_subsystems(builder)
 
 	# If still in deployment phase, drive interactive deployment
-	if controller and state.phase == MatchState.Phase.DEPLOYMENT:
-		_deployment_controller = controller
-		_enter_deployment()
+	if state.phase == MatchState.Phase.DEPLOYMENT:
+		if controller:
+			_deployment_controller = controller
+			_enter_deployment()
+		else:
+			# Controller missing (e.g. lost during scene transition) — skip deployment
+			Log.warn("BattleController",
+				"Deployment phase active but no controller provided; skipping to round start")
+			_skip_deployment_to_round_start()
 	elif _is_speed_round():
 		_start_new_round()
 	elif _is_charge_time():
@@ -211,6 +217,11 @@ func _enter_deployment() -> void:
 	_hud.set_targeting_mode(false)
 	_hud.hide_action_panel()
 
+	if not _deployment_controller:
+		Log.error("BattleController", "_enter_deployment called with null controller")
+		_skip_deployment_to_round_start()
+		return
+
 	if _deployment_controller.is_complete():
 		_finish_deployment()
 		return
@@ -236,6 +247,11 @@ func _enter_deployment() -> void:
 
 
 func _do_ai_deploy_step() -> void:
+	if not _deployment_controller:
+		Log.error("BattleController", "_do_ai_deploy_step called with null controller")
+		_skip_deployment_to_round_start()
+		return
+
 	if _deployment_controller.is_complete():
 		_finish_deployment()
 		return
@@ -266,6 +282,9 @@ func _do_ai_deploy_step() -> void:
 
 
 func _advance_deployment() -> void:
+	if not _deployment_controller:
+		_skip_deployment_to_round_start()
+		return
 	if _deployment_controller.is_complete():
 		_finish_deployment()
 		return
@@ -273,7 +292,10 @@ func _advance_deployment() -> void:
 
 
 func _finish_deployment() -> void:
-	_deployment_controller.finish()
+	if _deployment_controller:
+		_deployment_controller.finish()
+	else:
+		RoundManager.start_round(_state)
 	_hud.append_log("--- Deployment complete! ---")
 	_overlay.clear()
 	if _is_charge_time():
@@ -291,7 +313,22 @@ func _finish_deployment() -> void:
 		_enter_awaiting_activation()
 
 
+func _skip_deployment_to_round_start() -> void:
+	## Fallback when deployment cannot proceed (null controller). Starts round 1 directly.
+	_hud.append_log("--- Deployment skipped (fallback) ---")
+	_overlay.clear()
+	if _is_charge_time() and _ct_turn_system and not _ct_turn_system.get_scheduler():
+		var all_units: Array = []
+		for team in _state.parties.keys():
+			all_units.append_array(_state.parties[team])
+		var seed_val: int = int(Time.get_ticks_msec())
+		_ct_turn_system.setup(all_units, seed_val)
+	_start_new_round()
+
+
 func _handle_deployment_click(coord: Vector2i) -> void:
+	if not _deployment_controller:
+		return
 	var team := _deployment_controller.current_team()
 	if team.is_empty() or team in _state.ai_teams:
 		return  # Not the human's turn during deployment

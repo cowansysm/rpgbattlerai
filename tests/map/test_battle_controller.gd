@@ -603,3 +603,62 @@ func test_activate_next_prefers_living_over_downed() -> void:
 		assert_not_null(ctrl._pending_activation_unit)
 		assert_false(ctrl._pending_activation_unit.is_downed,
 			"activate_next should prefer living units")
+
+
+func test_setup_from_state_null_controller_deployment_phase() -> void:
+	## Regression: boss battles could crash when _deployment_controller was null
+	## during AI deploy step. Verifies setup_from_state handles null controller
+	## gracefully when state.phase is DEPLOYMENT.
+	var map := MapData.new()
+	map.id = "test_null_deploy"
+	var tiles: Array[TileRecord] = []
+	for q in range(-4, 5):
+		for r in range(-4, 5):
+			tiles.append(TileRecord.new(q, r, 0, "grass"))
+	map.tiles = tiles
+	map.deployment_zones = {
+		"playerA": ["0,0", "1,0"],
+		"playerB": ["3,0", "4,0"],
+	}
+
+	var unit_a := _make_unit("human_fighter", "playerA")
+	var unit_b := _make_unit("elf_black_mage", "playerB")
+	assert_not_null(unit_a)
+	assert_not_null(unit_b)
+
+	# Pre-place units so round start can proceed
+	unit_a.position = Vector2i(0, 0)
+	unit_b.position = Vector2i(3, 0)
+
+	var party_a: Array[BattleUnit] = [unit_a]
+	var party_b: Array[BattleUnit] = [unit_b]
+	var state := MatchSetup.create(party_a, party_b, map, _stub_terrain)
+	state.ai_teams = ["playerB"]
+	state.occupancy[Vector2i(0, 0)] = unit_a
+	state.occupancy[Vector2i(3, 0)] = unit_b
+
+	# Set phase to DEPLOYMENT to simulate the boss-battle entry path
+	state.phase = MatchState.Phase.DEPLOYMENT
+
+	var resolver := AbilityResolver.new(
+		_pipeline.get_ability, _pipeline.get_job_class, _pipeline.get_item)
+	state.ability_provider = resolver.resolve
+	state.item_provider = _pipeline.get_item
+
+	# Build controller via setup_from_state with null deployment controller
+	var builder := MapBuilder.new()
+	add_child_autofree(builder)
+	var all_maps: Array = _pipeline.maps.all()
+	if not all_maps.is_empty():
+		builder.build(all_maps.front() as MapData)
+
+	var ctrl := BattleController.new()
+	add_child_autofree(ctrl)
+	# This must not crash — previously would NPE on _deployment_controller.current_team()
+	ctrl.setup_from_state(builder, state, null)
+
+	# Should have recovered to a playable state (not stuck in DEPLOYMENT)
+	assert_ne(ctrl._control_state, BattleController.ControlState.DEPLOYMENT,
+		"should not remain in DEPLOYMENT state when controller is null")
+	assert_null(ctrl._deployment_controller,
+		"_deployment_controller should remain null (no phantom assignment)")
