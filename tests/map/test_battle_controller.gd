@@ -736,3 +736,163 @@ func test_setup_from_state_null_controller_deployment_phase() -> void:
 		"should not remain in DEPLOYMENT state when controller is null")
 	assert_null(ctrl._deployment_controller,
 		"_deployment_controller should remain null (no phantom assignment)")
+
+
+func test_sr_click_move_plans_move() -> void:
+	## Tile click on a reachable tile during SR_PLANNING_ACTION records a move plan.
+	var state := _make_state()
+	state.turn_system = SpeedRoundTurnSystem.new()
+	var ctrl := _make_controller(state)
+	ctrl._sr_turn_system = state.turn_system as SpeedRoundTurnSystem
+
+	# Start the SR round (increments round, sets stage to AI_PLANNING)
+	state.turn_system.begin_round(state)
+
+	# Enter player planning directly (skip AI planning for unit test)
+	ctrl._control_state = BattleController.ControlState.SR_PLAYER_SELECT
+
+	# Pick a player unit and begin planning
+	var player_team := state.other_team(state.ai_teams[0]) if not state.ai_teams.is_empty() else "playerA"
+	var plannable: Array = []
+	for unit: BattleUnit in state.living_units(player_team):
+		if not unit.is_downed:
+			plannable.append(unit)
+	assert_false(plannable.is_empty(), "should have plannable units")
+
+	var unit: BattleUnit = plannable[0]
+	ctrl._sr_begin_plan_unit(unit)
+	assert_eq(ctrl._control_state, BattleController.ControlState.SR_PLANNING_ACTION)
+	assert_eq(ctrl._planning_unit, unit)
+	assert_eq(ctrl._planning_ap_left, unit.base_ap)
+	assert_false(ctrl._planning_moved)
+
+	# Find a reachable tile
+	var reach := Movement.reachable(
+		state.graph, unit.position, unit.stats.effective_move(), unit.stats.effective("jump"))
+	var dest := Vector2i.MAX
+	for tile: Vector2i in reach.keys():
+		if tile != unit.position and not state.is_occupied(tile):
+			dest = tile
+			break
+	assert_ne(dest, Vector2i.MAX, "should find a reachable unoccupied tile")
+
+	# Click the tile — should record a move plan
+	ctrl.on_tile_selected(dest)
+
+	assert_true(ctrl._planning_moved, "should mark planning_moved after click-to-move")
+	assert_eq(ctrl._planning_move_dest, dest, "should record move destination")
+	assert_eq(ctrl._planning_ap_left, unit.base_ap - 1, "should deduct 1 AP for move")
+
+
+func test_sr_click_unreachable_tile_ignored() -> void:
+	## Tile click on an unreachable tile during SR_PLANNING_ACTION does nothing.
+	var state := _make_state()
+	state.turn_system = SpeedRoundTurnSystem.new()
+	var ctrl := _make_controller(state)
+	ctrl._sr_turn_system = state.turn_system as SpeedRoundTurnSystem
+
+	state.turn_system.begin_round(state)
+	ctrl._control_state = BattleController.ControlState.SR_PLAYER_SELECT
+
+	var player_team := state.other_team(state.ai_teams[0]) if not state.ai_teams.is_empty() else "playerA"
+	var plannable: Array = []
+	for unit: BattleUnit in state.living_units(player_team):
+		if not unit.is_downed:
+			plannable.append(unit)
+	assert_false(plannable.is_empty())
+
+	var unit: BattleUnit = plannable[0]
+	ctrl._sr_begin_plan_unit(unit)
+
+	# Click a distant tile outside movement range
+	var far_tile := Vector2i(99, 99)
+	var ap_before := ctrl._planning_ap_left
+	ctrl.on_tile_selected(far_tile)
+
+	assert_false(ctrl._planning_moved, "should NOT move to unreachable tile")
+	assert_eq(ctrl._planning_ap_left, ap_before, "AP should not change")
+
+
+func test_sr_click_own_position_ignored() -> void:
+	## Clicking the planning unit's own tile does not record a move.
+	var state := _make_state()
+	state.turn_system = SpeedRoundTurnSystem.new()
+	var ctrl := _make_controller(state)
+	ctrl._sr_turn_system = state.turn_system as SpeedRoundTurnSystem
+
+	state.turn_system.begin_round(state)
+	ctrl._control_state = BattleController.ControlState.SR_PLAYER_SELECT
+
+	var player_team := state.other_team(state.ai_teams[0]) if not state.ai_teams.is_empty() else "playerA"
+	var plannable: Array = []
+	for unit: BattleUnit in state.living_units(player_team):
+		if not unit.is_downed:
+			plannable.append(unit)
+	var unit: BattleUnit = plannable[0]
+	ctrl._sr_begin_plan_unit(unit)
+
+	ctrl.on_tile_selected(unit.position)
+
+	assert_false(ctrl._planning_moved, "clicking own position should not move")
+	assert_eq(ctrl._planning_ap_left, unit.base_ap, "AP should not change")
+
+
+func test_finish_deployment_single_round_start_sr() -> void:
+	## _finish_deployment should result in exactly one round start (round 1, not 2).
+	var map := MapData.new()
+	map.id = "test_deploy_sr"
+	var tiles: Array[TileRecord] = []
+	for q in range(-4, 5):
+		for r in range(-4, 5):
+			tiles.append(TileRecord.new(q, r, 0, "grass"))
+	map.tiles = tiles
+	map.deployment_zones = {
+		"playerA": ["0,0"],
+		"playerB": ["3,0"],
+	}
+
+	var unit_a := _make_unit("human_fighter", "playerA")
+	var unit_b := _make_unit("elf_black_mage", "playerB")
+	assert_not_null(unit_a)
+	assert_not_null(unit_b)
+
+	var party_a: Array[BattleUnit] = [unit_a]
+	var party_b: Array[BattleUnit] = [unit_b]
+	var state := MatchSetup.create(party_a, party_b, map, _stub_terrain)
+	state.ai_teams = ["playerB"]
+
+	# Wire SR turn system
+	state.turn_system = SpeedRoundTurnSystem.new()
+
+	var resolver := AbilityResolver.new(
+		_pipeline.get_ability, _pipeline.get_job_class, _pipeline.get_item)
+	state.ability_provider = resolver.resolve
+	state.item_provider = _pipeline.get_item
+
+	# Set up deployment controller and deploy both units
+	var deploy_ctrl := DeploymentController.new()
+	var errors := deploy_ctrl.begin(state, map.deployment_zones, state.ai_teams)
+	assert_eq(errors.size(), 0)
+	deploy_ctrl.place_next("playerB", Vector2i(3, 0))
+	deploy_ctrl.place_next("playerA", Vector2i(0, 0))
+	assert_true(deploy_ctrl.is_complete())
+
+	# Build controller with SR turn system
+	var ctrl := _make_controller(state)
+	ctrl._sr_turn_system = state.turn_system as SpeedRoundTurnSystem
+	ctrl._deployment_controller = deploy_ctrl
+
+	# Wire AI controller (needed by _enter_ai_planning)
+	var ai_ctrl := AIController.new()
+	ai_ctrl.setup(ctrl._hud, ctrl._pawn_manager, ctrl._overlay, 42, "normal")
+	ctrl._ai_controller = ai_ctrl
+	ctrl.add_child(ai_ctrl)
+
+	# Round should be 0 before _finish_deployment
+	assert_eq(state.round_number, 0, "round should be 0 before finish_deployment")
+
+	ctrl._finish_deployment()
+
+	# Should be exactly round 1 (one start_round call, not double)
+	assert_eq(state.round_number, 1,
+		"round should be 1 after finish_deployment (not 2 from double start)")
