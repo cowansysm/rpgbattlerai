@@ -34,7 +34,7 @@ func setup(battle_unit: BattleUnit, graph: HexGraph) -> void:
 	# Symbol face on top (PlaneMesh facing up)
 	_symbol_face = MeshInstance3D.new()
 	var plane := PlaneMesh.new()
-	plane.size = Vector2(0.35, 0.35)
+	plane.size = Vector2(0.175, 0.175)
 	_symbol_face.mesh = plane
 	_symbol_face.material_override = PawnFactory.symbol_material(race, job_class, team)
 	_symbol_face.position.y = PawnFactory.TOKEN_HEIGHT * 0.5 + 0.001
@@ -44,7 +44,7 @@ func setup(battle_unit: BattleUnit, graph: HexGraph) -> void:
 	# A19: facing chevron (small plane in front of the token)
 	_chevron = MeshInstance3D.new()
 	var chevron_plane := PlaneMesh.new()
-	chevron_plane.size = Vector2(0.12, 0.08)
+	chevron_plane.size = Vector2(0.06, 0.04)
 	_chevron.mesh = chevron_plane
 	var chevron_mat := StandardMaterial3D.new()
 	chevron_mat.albedo_color = Color(1.0, 1.0, 0.0, 0.9)
@@ -95,7 +95,7 @@ func set_facing(dir: int) -> void:
 	var yaw_deg: float = HexWorld.direction_yaw(dir)
 	rotation_degrees.y = yaw_deg
 	# Move the chevron forward in local +Z (after yaw, +Z points in the facing direction)
-	var offset: float = 0.26
+	var offset: float = 0.13
 	_chevron.position.x = sin(deg_to_rad(yaw_deg)) * offset
 	_chevron.position.z = cos(deg_to_rad(yaw_deg)) * offset
 
