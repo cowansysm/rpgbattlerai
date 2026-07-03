@@ -142,7 +142,7 @@ func _build_ui() -> void:
 	back_btn.text = "Back to Main Menu"
 	back_btn.custom_minimum_size = Vector2(160, 40)
 	back_btn.pressed.connect(func() -> void:
-		get_tree().change_scene_to_file("res://scenes/draft/draft_scene.tscn"))
+		get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn"))
 	_setup_panel.add_child(back_btn)
 
 	# --- Draft panel (reused flow) ---
