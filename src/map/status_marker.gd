@@ -13,7 +13,7 @@ static func create(id: String) -> StatusMarker:
 	marker.status_id = id
 
 	var quad := QuadMesh.new()
-	quad.size = Vector2(0.1125, 0.1125)
+	quad.size = Vector2(0.225, 0.225)
 	marker.mesh = quad
 
 	var mat := SymbolAtlas.make_3d_material(id)

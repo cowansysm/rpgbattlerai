@@ -114,7 +114,7 @@ func update_status_markers(unit: BattleUnit) -> void:
 	for i in range(unit.status_effects.size()):
 		var s: Dictionary = unit.status_effects[i]
 		var marker := StatusMarker.create(s["id"])
-		marker.position = Vector3(float(i) * 0.135, 0.125, 0.0)
+		marker.position = Vector3(float(i) * 0.27, 0.25, 0.0)
 		pawn.add_child(marker)
 		markers.append(marker)
 	if not markers.is_empty():
@@ -184,8 +184,8 @@ func show_dice_roll(unit: BattleUnit, value: int, is_attack: bool) -> void:
 	if not pawn:
 		return
 	var marker := DiceMarker.create(value, is_attack)
-	var x_offset := -0.06 if is_attack else 0.06
-	marker.position = pawn.position + Vector3(x_offset, 0.275, 0.0)
+	var x_offset := -0.12 if is_attack else 0.12
+	marker.position = pawn.position + Vector3(x_offset, 0.55, 0.0)
 	add_child(marker)
 	marker.play()
 

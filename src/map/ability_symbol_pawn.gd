@@ -8,7 +8,7 @@ signal landed
 
 enum State { FALL, DWELL, SINK }
 
-const PAWN_SIZE := 0.1
+const PAWN_SIZE := 0.2
 
 var _state: int = State.FALL
 var _land_y: float = 0.0
@@ -81,7 +81,7 @@ func setup_landing_collider(parent: Node, world_pos: Vector3) -> void:
 	_collider.collision_mask = 1 << 7
 	var col_shape := CollisionShape3D.new()
 	var shape := BoxShape3D.new()
-	shape.size = Vector3(0.3, 0.01, 0.3)
+	shape.size = Vector3(0.6, 0.02, 0.6)
 	col_shape.shape = shape
 	_collider.add_child(col_shape)
 	_collider.position = Vector3(world_pos.x, _land_y, world_pos.z)
