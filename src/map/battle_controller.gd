@@ -297,22 +297,34 @@ func _advance_deployment() -> void:
 
 func _finish_deployment() -> void:
 	if _deployment_controller:
+		# finish() asserts completion; it also calls RoundManager.start_round()
+		# which handles the legacy (alternating) path. For CT/SR modes the turn
+		# system begin_round was already triggered by that start_round call, so we
+		# enter the correct phase directly without calling _start_new_round() again
+		# (which would double-increment the round counter).
 		_deployment_controller.finish()
 	else:
 		RoundManager.start_round(_state)
 	_hud.append_log("--- Deployment complete! ---")
 	_overlay.clear()
+	# Refresh status markers for all surviving units
+	for team in _state.parties.keys():
+		for unit: BattleUnit in _state.parties[team]:
+			if unit.current_hp > 0 or unit.is_downed:
+				_pawn_manager.update_status_markers(unit)
+	_hud.append_log("--- Round %d begins ---" % _state.round_number)
+	_hud.show_round_banner(_state.round_number)
 	if _is_charge_time():
-		# Initialize CT system with deployed units
+		# Initialize CT system with deployed units if not already set up
 		if _ct_turn_system and not _ct_turn_system.get_scheduler():
 			var all_units: Array = []
 			for team in _state.parties.keys():
 				all_units.append_array(_state.parties[team])
 			var seed_val: int = int(Time.get_ticks_msec())
 			_ct_turn_system.setup(all_units, seed_val)
-		_start_new_round()
+		_enter_ct_ticking()
 	elif _is_speed_round():
-		_start_new_round()
+		_enter_ai_planning()
 	else:
 		_enter_awaiting_activation()
 
@@ -672,6 +684,8 @@ func on_tile_selected(coord: Vector2i) -> void:
 	# Speed-round planning states
 	elif _control_state == ControlState.SR_PLAYER_SELECT:
 		_sr_try_select_plan_unit(coord)
+	elif _control_state == ControlState.SR_PLANNING_ACTION:
+		_sr_try_click_move(coord)
 	elif _control_state == ControlState.SR_PLANNING_TARGETING:
 		_sr_execute_plan_targeting(coord)
 
@@ -1746,6 +1760,26 @@ func _enter_sr_plan_action() -> void:
 		_overlay.show_movement(origin, unit.stats.effective_move(), unit.stats.effective("jump"))
 	else:
 		_overlay.clear()
+
+
+func _sr_try_click_move(coord: Vector2i) -> void:
+	## Handle tile click during SR_PLANNING_ACTION — direct click-to-move.
+	## If the clicked tile is within movement range, record a move plan step.
+	var unit := _planning_unit
+	if not unit:
+		return
+	if _planning_ap_left < 1 or _planning_moved:
+		return
+	if coord == unit.position:
+		return
+
+	# Validate tile is reachable (matches the displayed movement overlay)
+	var reach := Movement.reachable(
+		_state.graph, unit.position, unit.stats.effective_move(), unit.stats.effective("jump"))
+	if not reach.has(coord):
+		return
+
+	_sr_plan_move(coord)
 
 
 func _sr_enter_plan_targeting(action: int, ability_id: String = "", item_id: String = "") -> void:
