@@ -521,7 +521,7 @@ func _on_delete_band(band_id: String) -> void:
 
 
 func _on_back_to_menu() -> void:
-	get_tree().change_scene_to_file("res://scenes/draft/draft_scene.tscn")
+	get_tree().change_scene_to_file("res://scenes/main_menu/main_menu.tscn")
 
 
 # ============================================================
