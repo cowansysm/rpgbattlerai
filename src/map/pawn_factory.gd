@@ -5,8 +5,8 @@ extends RefCounted
 ## Symbol textures now delegate to SymbolAtlas (Phase 9).
 ## Spec reference: phase8-spec.md §3.1, §3.4; phase9-spec.md §7.10
 
-const TOKEN_RADIUS := 0.105
-const TOKEN_HEIGHT := 0.0525
+const TOKEN_RADIUS := 0.21
+const TOKEN_HEIGHT := 0.105
 const SYMBOL_SIZE := 128
 
 const TEAM_COLORS := {

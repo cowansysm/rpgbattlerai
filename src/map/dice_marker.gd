@@ -5,7 +5,7 @@ extends Node3D
 ## and self-destructs. Fire-and-forget visual feedback for combat dice rolls.
 ## Attack dice are tinted gold, defense dice light blue.
 
-const CUBE_SIZE := 0.06
+const CUBE_SIZE := 0.12
 const HALF := CUBE_SIZE / 2.0
 const FACE_OFFSET := HALF + 0.001
 const QUAD_SIZE := CUBE_SIZE * 0.95
