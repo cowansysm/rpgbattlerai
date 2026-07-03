@@ -195,6 +195,34 @@ func test_confirm_when_below_min_fails() -> void:
 	assert_ne(draft.state(), PartyDraft.State.CONFIRMED)
 
 
+func test_skirmish_min_2_party_confirms_successfully() -> void:
+	# Boundary: a 2-character party is valid when tier min = 2 (skirmish)
+	var draft := _make_draft(100, 2, 5)
+	draft.add_character("cheap_a")
+	draft.add_character("cheap_b")
+	var err := draft.confirm()
+	assert_eq(err, "")
+	assert_eq(draft.state(), PartyDraft.State.CONFIRMED)
+
+
+func test_skirmish_min_2_single_character_rejected() -> void:
+	# Boundary: a 1-character party is invalid when tier min = 2
+	var draft := _make_draft(100, 2, 5)
+	draft.add_character("cheap_a")
+	var err := draft.confirm()
+	assert_ne(err, "")
+	assert_true(err.contains("at least 2"))
+	assert_ne(draft.state(), PartyDraft.State.CONFIRMED)
+
+
+func test_skirmish_min_2_empty_party_rejected() -> void:
+	# Boundary: a 0-character party is invalid when tier min = 2
+	var draft := _make_draft(100, 2, 5)
+	var err := draft.confirm()
+	assert_ne(err, "")
+	assert_ne(draft.state(), PartyDraft.State.CONFIRMED)
+
+
 func test_confirm_twice_fails() -> void:
 	var draft := _make_draft(100, 1, 5)
 	draft.add_character("cheap_a")

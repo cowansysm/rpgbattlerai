@@ -434,7 +434,7 @@ func _update_roster_grid() -> void:
 func _update_info_bar() -> void:
 	_bp_label.text = "BP: %d / %d" % [_current_draft.total_bp(), _current_draft.bp_cap()]
 	_count_label.text = "Units: %d / %d" % [_current_draft.party_size(), _squad_size]
-	_confirm_btn.disabled = _current_draft.party_size() < 1
+	_confirm_btn.disabled = not _current_draft.is_valid()
 
 
 func _populate_summary(container: VBoxContainer, title: String, draft: PartyDraft) -> void:
