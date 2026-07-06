@@ -10,6 +10,15 @@
 > implemented, tested, and merged** (A13 was dropped, not implemented). The only remaining
 > Alpha gap is A9 content — maps are still below target (6). Phases **A21+** below remain
 > proposed/deferred backlog. See `CLAUDE.md` "Phase Progress" for the authoritative status.
+>
+> **CONTENT REDESIGN ADOPTED (2026-07-06):** the expanded `data/csv/` library described below
+> as "authored, blocked on engine changes" has since been **adopted** (Phases 0–3): a **10-tier,
+> level-gated** vagabond-rooted class tree with **790 abilities, 268 classes (128 player + 140
+> monster), 160 characters, 128 items** (races/terrains/encounters/maps unchanged). This
+> replaces the old 4-tier / Thief-Soldier-Adept model and moves ability acquisition to
+> learn-via-JP. The `class-tree-engine-changes.md` / `content-pipeline-pending-changes.md`
+> notes below are historical (their engine changes have landed). See
+> `docs/content-redesign-spec.md` for the authoritative design.
 
 This roadmap picks up where `alpha-implementation-plan.md` stops (A10). Phases **A11–A14**
 already have detailed specs and implementation plans (currently *Draft*, not yet built);

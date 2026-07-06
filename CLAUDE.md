@@ -11,10 +11,10 @@ res://
 ├── addons/gut/              # GUT v9.6.0 test framework (vendored)
 ├── assets/icons/            # Status effect and ability icons
 ├── data/
-│   ├── abilities.json       # 91 abilities (39 skills, 36 spells, 7 item-bound, 9 passive)
-│   ├── characters.json      # 141 character templates (playable roster + monster/NPC templates for encounters)
-│   ├── classes.json         # 146 class/job definitions (Vagabond root → tier-1 → advanced → elite + monster classes)
-│   ├── items.json           # 46 items (40 equipment + 6 consumables)
+│   ├── abilities.json       # 790 abilities (learned via JP; skills, spells, item-bound, passives)
+│   ├── characters.json      # 160 character templates (20 playable + monster/NPC templates for encounters)
+│   ├── classes.json         # 268 class/job definitions (128 player + 140 monster; single vagabond root → 10-tier level-gated DAG)
+│   ├── items.json           # 128 items (equipment + consumables)
 │   ├── races.json           # 32 race definitions (4 playable + monster races: bat, imp, kobold, slime, goblin, wolf, …)
 │   ├── constants.json       # Game balance tuning (incl. AI presets, economy, affinity/crit, turn-system tunables)
 │   ├── terrain.json         # 17 terrain type definitions
@@ -143,11 +143,19 @@ Each entity type is a single JSON file containing an array of objects:
 - Elevation-aware pathfinding with jump/climb limits
 - LOS blocked by terrain; higher attacker can see over obstacles
 
-## Progression System (A4)
+## Progression System (A4, redesigned by the content overhaul)
+
+> The content redesign (Phases 0–3, adopted) replaced the old 4-tier
+> (starting/tier-1/advanced/elite) tree with a **10-tier** model. See
+> `docs/content-redesign-spec.md` and `docs/content-redesign-phase3-plan.md` for the
+> authoritative design.
 
 - **`CharacterInstance`** — persistent character with generated identity (name from race tables), level/XP, JP per class, unlocked classes, learned abilities, equipment loadout
-- **Job tree:** every character starts as **Vagabond** → unlocks **Thief/Soldier/Adept** at level 3 → advanced and elite classes branch out across all archetypes (the full tree is authored: 25 classes spanning physical, magical, control, and support — see `data/classes.json`)
-- **`ClassData`** extended with: `archetype`, `branch`, `tier`, `growth`, `jp_costs`, `prerequisites`
+- **10-tier job tree:** `tier` is a **non-negative integer (0–9)** measuring unlock depth (the count of a class's transitive prerequisites); tiers grant no inherent bonus. A single root **`vagabond`** (tier 0) unlocks **8 tier-1 classes** at vagabond level 3: `squire, footman, apprentice, acolyte, page, cutpurse, tinker, slinger`. From there the tree chains through 10 tiers as a valid DAG (multi-parent merges allowed). `soldier`/`thief` are now **tier 2**; the old `adept` class is **removed**. The full authored tree spans **268 classes (128 player + 140 monster)** across 6 archetypes (`physical_attack`, `physical_defense`, `magical_attack`, `magical_defense`, `support`, `control`) — see `data/classes.json`.
+- **Level-gated class unlocks:** `prerequisites: {"classes": [["<prereq_class>", <level>]]}` — reach the required level in a prerequisite class to unlock the next. No prerequisite references an equal- or higher-tier class.
+- **Learn-via-JP:** player classes have **empty `granted_abilities`**; every skill/spell is learned by spending JP (`jp_costs`) and then equipped into the loadout. Passives are equipped into reaction/support/movement slots, not usable as actions. Core combat actions (move/attack/defend/wait/item) are intrinsic to the action economy, so a skill-less unit is still fully combat-functional.
+- **Recruits start skill-less:** new recruits carry only intrinsic actions and receive a small random **starting-JP pool** on their starting class (tunables `RECRUIT_STARTING_JP_MIN=20` / `RECRUIT_STARTING_JP_MAX=50` in `constants.json`) so they can immediately buy 1–2 baseline skills.
+- **`ClassData`** extended with: `archetype`, `branch`, `tier` (int), `growth`, `jp_costs`, `prerequisites`
 - **`RaceData`** extended with: `base_stats` (StatKey→int)
 - **`InstanceStatResolver`** computes base stats: race base_stats + active class modifiers + accumulated growth
 - **`NameGenerator`** draws from `data/names/<race>.json` with seeded RNG
@@ -164,7 +172,8 @@ Each entity type is a single JSON file containing an array of objects:
 - **`BandManagementScene`** — full-screen UI with 4-panel state machine: band select → roster view → instance inspect (stats, class switch, JP/abilities, equipment, dismiss) → field select → quick battle
 - **MatchData** extended with: `active_band`, `fielded_ids`, `is_instance_battle`
 - **CharacterInstance** extended with: `to_dict()`/`from_dict()` serialization (defensive defaults, type coercion for JSON)
-- **Tunables** in `constants.json`: `ROSTER_CAP`, `RECRUIT_COST`, `RECRUIT_STARTING_GOLD`, `STARTING_INVENTORY`
+- **Save version 3 (content redesign):** `SaveManager` bumped to v3 with a **clean-slate reset** — incompatible pre-v3 saves (which reference removed IDs like `adept`) are discarded/reset on load rather than migrated. Recruits now start **skill-less** with a small random starting-JP pool (see Progression System).
+- **Tunables** in `constants.json`: `ROSTER_CAP`, `RECRUIT_COST`, `RECRUIT_STARTING_GOLD`, `STARTING_INVENTORY`, `RECRUIT_STARTING_JP_MIN`/`RECRUIT_STARTING_JP_MAX`
 
 ## Economy System (A6)
 
@@ -309,7 +318,7 @@ Main scene: `res://scenes/draft/draft_scene.tscn` (party draft → deploy → co
 
 ## Alpha (in progress)
 
-The Alpha extends the MVP into a single-player game and, via A20, a local multiplayer/skirmish mode. All sub-phases except the obsolete A13 are **implemented and tested**; A13 (coin flip & opening initiative) is **dropped, not to be implemented**. Content has grown well past the original `alpha-specs.md` §12.2 targets: **91 abilities, 146 classes, 46 items, 141 character templates (incl. monster/NPC), 32 races (incl. monster races), 17 terrains, 73 encounters**; maps remain at 6.
+The Alpha extends the MVP into a single-player game and, via A20, a local multiplayer/skirmish mode. All sub-phases except the obsolete A13 are **implemented and tested**; A13 (coin flip & opening initiative) is **dropped, not to be implemented**. Content has grown well past the original `alpha-specs.md` §12.2 targets and was further overhauled by the content redesign (Phases 0–3, adopted; see `docs/content-redesign-spec.md`): **790 abilities, 268 classes (128 player + 140 monster), 128 items, 160 character templates (20 playable + monster/NPC), 32 races (incl. monster races), 17 terrains, 73 encounters**; maps remain at 6.
 
 Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A9 content are parallel; A7 AI joins at A8; A11+ are post-A10 extensions):
 
@@ -334,7 +343,7 @@ Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A
 - [x] A19: Facing & flanking (`Hex.arc_of`, `FacingBonus`, chevron visuals, Counter-vs-facing gate) — **complete**
 - [x] A20: Charge-time clock + skirmish container (`ChargeTimeTurnSystem`, `TurnScheduler`, skirmish scene) — **complete**
 
-Key Alpha decisions: dev-tool map editor (player-facing later); CSV↔JSON authoring via spreadsheets; FFT-style progression (XP + JP + job tree + gold/shop + loot); roguelike single-player; every character starts **Vagabond** → unlocks **Thief/Soldier/Adept** at level 3 → archetype branches (support / control / physical·melee·ranged / magical·arcane·divine); characters permadie on the **3rd down** per run (tunable `DOWN_LIMIT`); the attack die and Defend die persist through the A3 magic change (Defend reduces magical damage too).
+Key Alpha decisions: dev-tool map editor (player-facing later); CSV↔JSON authoring via spreadsheets; FFT-style progression (XP + JP + job tree + gold/shop + loot); roguelike single-player; every character starts **`vagabond`** (tier 0) → at vagabond level 3 unlocks **8 tier-1 classes** (`squire, footman, apprentice, acolyte, page, cutpurse, tinker, slinger`) → a level-gated 10-tier class-unlock DAG across 6 archetypes (physical_attack/physical_defense, magical_attack/magical_defense, control, support); abilities are learned via JP (empty `granted_abilities`); characters permadie on the **3rd down** per run (tunable `DOWN_LIMIT`); the attack die and Defend die persist through the A3 magic change (Defend reduces magical damage too).
 
 ## Documentation
 
