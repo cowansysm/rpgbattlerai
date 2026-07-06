@@ -127,8 +127,11 @@ Rewrite against the new design, not to silence:
   relying on class-granted `power_strike`.
 - Add a positive guard: a fresh unit from each playable template yields a legal move/attack/defend/wait plan.
 
-**Phase 3 — Combat/AI validation.** Playtest or scripted-sim a few encounters with the new balance;
-confirm the AI uses `jp_costs`-learned abilities via loadout and that fights resolve sensibly.
+**Phase 3 — Combat/AI validation. ✅ COMPLETE (lean; see `content-redesign-phase3-plan.md`).**
+Headless AI-vs-AI sim (`tests/helpers/battle_sim.gd` + `tests/core/combat/test_encounter_sim.gd`):
+low/mid/high encounters resolve within the round cap, AI uses abilities, all 4 AoE shapes + 6
+restored elements resolve, and a passive-hygiene bug was fixed (passives were enumerable/usable as
+actions — now filtered in `AbilityResolver` + `AIPlanner`). Balance-metrics sweep deferred to Phase 6.
 
 **Phase 4 — Economy / encounter / meta wiring.** Reconcile shop pools, loot tables, encounter
 compositions, and meta-unlock references to the new class/character/item IDs; add/adjust tests.
