@@ -163,10 +163,11 @@ func test_enumeration_includes_attack_plans() -> void:
 
 
 func test_enumeration_includes_ability_plans() -> void:
-	## A soldier with power_strike should have ability plans.
+	## A unit with power_strike slotted in its loadout should have ability plans.
+	## (Learn-via-JP: abilities reach combat through the loadout, not class grants.)
 	var graph := _flat_graph(2)
 	var unit_a := _make_unit("a", "playerA", Vector2i(0, 0), 2, 1, 20, 1, 3, 0, 0, 5,
-		["soldier"] as Array[String])
+		["squire"] as Array[String], [] as Array[String], ["power_strike"] as Array[String])
 	var unit_b := _make_unit("b", "playerB", Vector2i(1, 0), 2, 1, 20, 1)
 	var state := _make_state(graph, [unit_a], [unit_b])
 	state.current_unit = unit_a
@@ -181,6 +182,30 @@ func test_enumeration_includes_ability_plans() -> void:
 					has_ability = true
 					break
 	assert_true(has_ability, "Soldier should have ability plans (power_strike)")
+
+
+func test_fresh_vagabond_is_combat_functional() -> void:
+	## Content-redesign guard: a fresh player unit (empty loadout, and vagabond grants
+	## nothing) must still enumerate intrinsic actions so it can act in combat.
+	var graph := _flat_graph(2)
+	var unit_a := _make_unit("a", "playerA", Vector2i(0, 0), 3, 1, 20, 1, 3, 0, 0, 5,
+		["vagabond"] as Array[String])
+	var unit_b := _make_unit("b", "playerB", Vector2i(1, 0), 2, 1, 20, 1)
+	var state := _make_state(graph, [unit_a], [unit_b])
+	state.current_unit = unit_a
+	unit_a.ap_remaining = 2
+
+	var plans := AIPlanner.enumerate(state, unit_a, 12)
+	assert_gt(plans.size(), 0, "fresh vagabond should still have legal plans")
+	var kinds: Dictionary = {}
+	for plan in plans:
+		if plan is AIPlan:
+			for step in plan.steps:
+				kinds[step["kind"]] = true
+	assert_true(kinds.has("attack"),
+		"fresh vagabond adjacent to an enemy should have an intrinsic attack plan")
+	assert_true(kinds.has("defend") or kinds.has("wait"),
+		"should always have a defend/wait fallback")
 
 
 func test_enumeration_respects_min_range() -> void:

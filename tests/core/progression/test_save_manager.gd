@@ -144,3 +144,20 @@ func test_migration_unknown_version() -> void:
 	f.close()
 	SaveManager.load_game()
 	assert_eq(SaveManager.bands.size(), 0)
+
+
+func test_current_save_version_is_v3() -> void:
+	assert_eq(SaveManager.CURRENT_SAVE_VERSION, 3)
+
+
+func test_pre_v3_save_resets_clean() -> void:
+	# Content redesign: pre-v3 saves reference removed class IDs and are reset on load.
+	DirAccess.make_dir_recursive_absolute("user://saves")
+	var doc := {"save_version": 2,
+		"bands": [{"band_id": "x", "name": "Old", "roster": [], "gold": 999}],
+		"profile": {}, "active_run": null}
+	var f := FileAccess.open(_test_path, FileAccess.WRITE)
+	f.store_string(JSON.stringify(doc))
+	f.close()
+	SaveManager.load_game()
+	assert_eq(SaveManager.bands.size(), 0, "pre-v3 save should reset to empty")

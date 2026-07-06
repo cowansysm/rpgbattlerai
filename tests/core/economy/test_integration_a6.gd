@@ -1,4 +1,5 @@
 extends GutTest
+const SharedPipeline = preload("res://tests/helpers/shared_pipeline.gd")
 ## Integration test for Phase A6 economy: full pipeline exercises Pricing,
 ## ShopService, LootRoller, and BattleBand consumable helpers together.
 
@@ -184,8 +185,8 @@ func test_buy_sell_net_loss() -> void:
 
 func test_data_pipeline_validates_economy_cleanly() -> void:
 	# Full pipeline load should pass with no economy validation errors
-	var pipeline := DataPipeline.new()
-	var errors := pipeline.run("res://data")
+	var pipeline := SharedPipeline.get_pipeline()
+	var errors := SharedPipeline.load_errors()
 	assert_eq(errors.size(), 0, "full pipeline validates cleanly: %s" % str(errors))
 	# Verify loot tables and shop pools loaded
 	assert_true(not pipeline.loot_tables.is_empty(), "loot tables loaded")

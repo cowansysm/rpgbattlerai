@@ -1,13 +1,13 @@
 extends GutTest
+const SharedPipeline = preload("res://tests/helpers/shared_pipeline.gd")
 ## Smoke test: loads full data/ directory and verifies everything works end to end.
 
 var _pipeline: DataPipeline
 
 
 func before_all() -> void:
-	_pipeline = DataPipeline.new()
-	var errors := _pipeline.run("res://data")
-	assert_eq(errors.size(), 0, "full content should load with zero errors")
+	_pipeline = SharedPipeline.get_pipeline()
+	assert_eq(SharedPipeline.load_errors().size(), 0, "full content should load with zero errors")
 
 
 func test_entity_counts() -> void:
@@ -45,13 +45,14 @@ func test_reference_resolution() -> void:
 
 
 func test_derived_stats_computed() -> void:
-	# Human Fighter: base spd:10 + human(0) + vagabond(atk:1,def:1,hp:5) → spd:10, atk:11
+	# human_fighter derived stats under the redesigned balance (10-tier tree, vagabond
+	# stat modifiers = {hp,mag,spd,wp}; no atk/def mod).
 	var sb := _pipeline.get_final_stats("human_fighter")
 	assert_not_null(sb, "human_fighter should have final_stats")
-	assert_eq(sb.effective("spd"), 10, "spd: 10 base, no race/class modifier")
-	assert_eq(sb.effective("atk"), 11, "atk: 10 base + 1 vagabond")
-	assert_eq(sb.effective("hp"), 55, "hp: 50 base + 5 vagabond")
-	assert_eq(sb.effective_move(), 10, "move == spd")
+	assert_eq(sb.effective("spd"), 11, "spd under new balance")
+	assert_eq(sb.effective("atk"), 10, "atk under new balance")
+	assert_eq(sb.effective("hp"), 53, "hp under new balance")
+	assert_eq(sb.effective_move(), 11, "move == spd")
 
 
 func test_battle_unit_from_loaded_character() -> void:

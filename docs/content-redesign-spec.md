@@ -93,7 +93,17 @@ discard/reset incompatible saves on load (acceptable for in-dev alpha). No ID-mi
 **Phase 0 — Design review. ✅ COMPLETE (2026-07-06).** Five gates resolved (see "Design review —
 SIGNED OFF" above); canonical job tree captured. Ready for Phase 1.
 
-**Phase 1 — Import + boot + start-state wiring.** On a feature branch: rebuild `abilities.csv`
+**Phase 1 — Import + boot + start-state wiring. ✅ IMPLEMENTED (branch `feature/content-redesign-phase1`).**
+Content imported (790/268/128/160, 0 pipeline errors, boots clean per `test_smoke`); recruit
+starting-JP grant + skill-less start wired (`Recruiter`, `RECRUIT_STARTING_JP_MIN/MAX` in
+constants.json); save version bumped to v3 with clean-slate reset (`SaveManager`, dead
+`_migrate_v1_to_v2` removed). New tests pass (progression suite 136/136, exit 0). **Known issue:**
+the full GUT suite hits a pre-existing native heap-corruption abort (glibc "corrupted size vs.
+prev_size") at full-content load — previously seen only at process exit, now firing mid-run due to
+the larger content footprint. Workaround: **run tests per-directory** (each batch completes clean).
+Phase 2 must use batched runs. Original Phase 1 note follows.
+
+**Phase 1 (original) — Import + boot + start-state wiring.** On a feature branch: rebuild `abilities.csv`
 (live 91 + 699 historical), `import all`, confirm 0 errors and clean boot (`790 / 268 / 128 / 160`).
 Then land the two Phase-0 decisions: (a) add `RECRUIT_STARTING_JP_MIN`/`_MAX` to `constants.json`
 and grant a random JP pool to the starting class in `Recruiter.recruit()` /
@@ -101,7 +111,11 @@ and grant a random JP pool to the starting class in `Recruiter.recruit()` /
 version and reset incompatible saves on load. Add tests for both. Exit: clean boot + a fresh recruit
 has starting JP and zero learned skills.
 
-**Phase 2 — Test reconciliation (~148 failures).** Rewrite against the new design, not to silence:
+**Phase 2 — Test reconciliation. ✅ COMPLETE.** All legacy tests reconciled to the new design;
+full suite green when run per-directory: ai 39, combat 432, data 201, dev 41, economy 44, hex 89,
+progression 136, run 87, map 86, tools 67 = **1222/1222, 0 failures**. Details below.
+
+Rewrite against the new design, not to silence:
 - `tests/core/data/test_full_library.gd` (128): `test_every_class_has_granted_abilities` →
   assert each class provides an ability path (`granted_abilities` **or** `jp_costs`) + refs resolve.
 - `tests/core/data/test_roster.gd` (14): update signature-ability checks from `granted_abilities`

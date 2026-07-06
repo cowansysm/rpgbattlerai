@@ -1,189 +1,1392 @@
 [
   {
-    "id": "sword", "name": "Sword", "slot": "weapon",
-    "bp": 2, "price": 80, "power": 5, "range": 1
+    "bp": 2,
+    "id": "sword",
+    "name": "Sword",
+    "power": 5,
+    "price": 80,
+    "range": 1,
+    "slot": "weapon"
   },
   {
-    "id": "bow", "name": "Bow", "slot": "weapon",
-    "bp": 2, "price": 100, "power": 4, "range": 3
+    "bp": 2,
+    "id": "bow",
+    "name": "Bow",
+    "power": 4,
+    "price": 100,
+    "range": 3,
+    "slot": "weapon"
   },
   {
-    "id": "daggers", "name": "Daggers", "slot": "weapon",
-    "bp": 1, "price": 50, "power": 3, "range": 1
+    "bp": 1,
+    "id": "daggers",
+    "name": "Daggers",
+    "power": 3,
+    "price": 50,
+    "range": 1,
+    "slot": "weapon"
   },
   {
-    "id": "rapier", "name": "Rapier", "slot": "weapon",
-    "bp": 2, "price": 90, "power": 5, "range": 1
+    "bp": 2,
+    "id": "rapier",
+    "name": "Rapier",
+    "power": 5,
+    "price": 90,
+    "range": 1,
+    "slot": "weapon"
   },
   {
-    "id": "greataxe", "name": "Greataxe", "slot": "weapon",
-    "bp": 3, "price": 250, "power": 8, "range": 1
+    "bp": 3,
+    "id": "greataxe",
+    "name": "Greataxe",
+    "power": 8,
+    "price": 150,
+    "range": 1,
+    "slot": "weapon"
   },
   {
-    "id": "sling", "name": "Sling", "slot": "weapon",
-    "bp": 1, "price": 30, "power": 2, "range": 2
+    "bp": 1,
+    "id": "sling",
+    "name": "Sling",
+    "power": 2,
+    "price": 30,
+    "range": 2,
+    "slot": "weapon"
   },
   {
-    "id": "staff", "name": "Staff", "slot": "weapon",
-    "bp": 1, "price": 40, "power": 2, "range": 1
+    "bp": 1,
+    "id": "staff",
+    "name": "Staff",
+    "power": 2,
+    "price": 40,
+    "range": 1,
+    "slot": "weapon"
   },
   {
-    "id": "longsword", "name": "Longsword", "slot": "weapon",
-    "bp": 3, "price": 220, "power": 7, "range": 1
+    "bp": 3,
+    "id": "longsword",
+    "name": "Longsword",
+    "power": 7,
+    "price": 130,
+    "range": 1,
+    "slot": "weapon"
   },
   {
-    "id": "warhammer", "name": "Warhammer", "slot": "weapon",
-    "bp": 3, "price": 280, "power": 9, "range": 1
+    "bp": 3,
+    "id": "warhammer",
+    "name": "Warhammer",
+    "power": 9,
+    "price": 160,
+    "range": 1,
+    "slot": "weapon"
   },
   {
-    "id": "halberd", "name": "Halberd", "slot": "weapon",
-    "bp": 3, "price": 240, "power": 7, "range": 1
+    "bp": 3,
+    "id": "halberd",
+    "name": "Halberd",
+    "power": 7,
+    "price": 140,
+    "range": 1,
+    "slot": "weapon"
   },
   {
-    "id": "crossbow", "name": "Crossbow", "slot": "weapon",
-    "bp": 2, "price": 120, "power": 6, "range": 3
+    "bp": 2,
+    "id": "crossbow",
+    "name": "Crossbow",
+    "power": 6,
+    "price": 120,
+    "range": 3,
+    "slot": "weapon"
   },
   {
-    "id": "longbow", "name": "Longbow", "slot": "weapon",
-    "bp": 3, "price": 260, "power": 5, "range": 4
+    "bp": 3,
+    "id": "longbow",
+    "name": "Longbow",
+    "power": 5,
+    "price": 150,
+    "range": 4,
+    "slot": "weapon"
   },
   {
-    "id": "rod", "name": "Rod", "slot": "weapon",
-    "bp": 2, "price": 70, "power": 3, "range": 1,
-    "passive": { "mag": 2 }
+    "bp": 2,
+    "id": "rod",
+    "name": "Rod",
+    "passive": {
+      "mag": 2.0
+    },
+    "power": 3,
+    "price": 70,
+    "range": 1,
+    "slot": "weapon"
   },
   {
-    "id": "wand", "name": "Wand", "slot": "weapon",
-    "bp": 2, "price": 60, "power": 2, "range": 1,
-    "passive": { "mag": 3 }
+    "bp": 2,
+    "id": "wand",
+    "name": "Wand",
+    "passive": {
+      "mag": 3.0
+    },
+    "power": 2,
+    "price": 60,
+    "range": 1,
+    "slot": "weapon"
   },
   {
-    "id": "mace", "name": "Mace", "slot": "weapon",
-    "bp": 2, "price": 80, "power": 4, "range": 1
+    "bp": 2,
+    "id": "mace",
+    "name": "Mace",
+    "power": 4,
+    "price": 80,
+    "range": 1,
+    "slot": "weapon"
   },
   {
-    "id": "short_bow", "name": "Short Bow", "slot": "weapon",
-    "bp": 1, "price": 60, "power": 3, "range": 2
+    "bp": 1,
+    "id": "short_bow",
+    "name": "Short Bow",
+    "power": 3,
+    "price": 60,
+    "range": 2,
+    "slot": "weapon"
   },
   {
-    "id": "throwing_knives", "name": "Throwing Knives", "slot": "weapon",
-    "bp": 1, "price": 70, "power": 3, "range": 2
+    "bp": 1,
+    "id": "throwing_knives",
+    "name": "Throwing Knives",
+    "power": 3,
+    "price": 70,
+    "range": 2,
+    "slot": "weapon"
   },
   {
-    "id": "lute", "name": "Lute", "slot": "weapon",
-    "bp": 1, "price": 50, "power": 1, "range": 1,
-    "granted_abilities": ["inspire"]
+    "bp": 1,
+    "granted_abilities": [
+      "inspire"
+    ],
+    "id": "lute",
+    "name": "Lute",
+    "power": 1,
+    "price": 50,
+    "range": 1,
+    "slot": "weapon"
   },
   {
-    "id": "light_armor", "name": "Light Armor", "slot": "armor",
-    "bp": 1, "price": 60, "passive": { "def": 2 }
+    "bp": 1,
+    "id": "light_armor",
+    "name": "Light Armor",
+    "passive": {
+      "def": 2.0
+    },
+    "price": 60,
+    "slot": "armor"
   },
   {
-    "id": "medium_armor", "name": "Medium Armor", "slot": "armor",
-    "bp": 2, "price": 100, "passive": { "def": 3, "res": 1 }
+    "bp": 2,
+    "id": "medium_armor",
+    "name": "Medium Armor",
+    "passive": {
+      "def": 3.0,
+      "res": 1.0
+    },
+    "price": 100,
+    "slot": "armor"
   },
   {
-    "id": "robe", "name": "Robe", "slot": "armor",
-    "bp": 1, "price": 80, "passive": { "res": 2, "wp": 2 }
+    "bp": 1,
+    "id": "robe",
+    "name": "Robe",
+    "passive": {
+      "res": 2.0,
+      "wp": 2.0
+    },
+    "price": 80,
+    "slot": "armor"
   },
   {
-    "id": "heavy_armor", "name": "Heavy Armor", "slot": "armor",
-    "bp": 3, "price": 300, "passive": { "def": 5, "spd": -1 }
+    "bp": 3,
+    "id": "heavy_armor",
+    "name": "Heavy Armor",
+    "passive": {
+      "def": 5.0,
+      "spd": -1.0
+    },
+    "price": 180,
+    "slot": "armor"
   },
   {
-    "id": "studded_leather", "name": "Studded Leather", "slot": "armor",
-    "bp": 2, "price": 90, "passive": { "def": 3 }
+    "bp": 2,
+    "id": "studded_leather",
+    "name": "Studded Leather",
+    "passive": {
+      "def": 3.0
+    },
+    "price": 90,
+    "slot": "armor"
   },
   {
-    "id": "chain_mail", "name": "Chain Mail", "slot": "armor",
-    "bp": 2, "price": 130, "passive": { "def": 4, "spd": -1 }
+    "bp": 2,
+    "id": "chain_mail",
+    "name": "Chain Mail",
+    "passive": {
+      "def": 4.0,
+      "spd": -1.0
+    },
+    "price": 130,
+    "slot": "armor"
   },
   {
-    "id": "enchanted_robe", "name": "Enchanted Robe", "slot": "armor",
-    "bp": 3, "price": 350, "passive": { "res": 3, "mag": 1, "wp": 3 }
+    "bp": 3,
+    "id": "enchanted_robe",
+    "name": "Enchanted Robe",
+    "passive": {
+      "mag": 1.0,
+      "res": 3.0,
+      "wp": 3.0
+    },
+    "price": 200,
+    "slot": "armor"
   },
   {
-    "id": "plate_armor", "name": "Plate Armor", "slot": "armor",
-    "bp": 4, "price": 800, "passive": { "def": 7, "spd": -2 }
+    "bp": 4,
+    "id": "plate_armor",
+    "name": "Plate Armor",
+    "passive": {
+      "def": 7.0,
+      "spd": -2.0
+    },
+    "price": 250,
+    "slot": "armor"
   },
   {
-    "id": "shield", "name": "Shield", "slot": "shield",
-    "bp": 2, "price": 80, "passive": { "def": 3, "res": 1 }
+    "bp": 2,
+    "id": "shield",
+    "name": "Shield",
+    "passive": {
+      "def": 3.0,
+      "res": 1.0
+    },
+    "price": 80,
+    "slot": "shield"
   },
   {
-    "id": "buckler", "name": "Buckler", "slot": "shield",
-    "bp": 1, "price": 40, "passive": { "def": 1 }
+    "bp": 1,
+    "id": "buckler",
+    "name": "Buckler",
+    "passive": {
+      "def": 1.0
+    },
+    "price": 40,
+    "slot": "shield"
   },
   {
-    "id": "tower_shield", "name": "Tower Shield", "slot": "shield",
-    "bp": 3, "price": 260, "passive": { "def": 5, "spd": -1 }
+    "bp": 3,
+    "id": "tower_shield",
+    "name": "Tower Shield",
+    "passive": {
+      "def": 5.0,
+      "spd": -1.0
+    },
+    "price": 150,
+    "slot": "shield"
   },
   {
-    "id": "crystal_shield", "name": "Crystal Shield", "slot": "shield",
-    "bp": 3, "price": 320, "passive": { "def": 2, "res": 3 }
+    "bp": 3,
+    "id": "crystal_shield",
+    "name": "Crystal Shield",
+    "passive": {
+      "def": 2.0,
+      "res": 3.0
+    },
+    "price": 180,
+    "slot": "shield"
   },
   {
-    "id": "bracer_of_accuracy", "name": "Bracer of Accuracy", "slot": "accessory",
-    "bp": 2, "price": 80, "passive": { "accuracy": 1 }
+    "bp": 2,
+    "id": "bracer_of_accuracy",
+    "name": "Bracer of Accuracy",
+    "passive": {
+      "accuracy": 1.0
+    },
+    "price": 80,
+    "slot": "accessory"
   },
   {
-    "id": "smoke_bomb_pouch", "name": "Smoke Bomb Pouch", "slot": "accessory",
-    "bp": 2, "price": 100, "granted_abilities": ["smoke_bomb"]
+    "bp": 2,
+    "granted_abilities": [
+      "smoke_bomb"
+    ],
+    "id": "smoke_bomb_pouch",
+    "name": "Smoke Bomb Pouch",
+    "price": 100,
+    "slot": "accessory"
   },
   {
-    "id": "ring_of_haste", "name": "Ring of Haste", "slot": "accessory",
-    "bp": 2, "price": 120, "passive": { "spd": 2 }
+    "bp": 2,
+    "id": "ring_of_haste",
+    "name": "Ring of Haste",
+    "passive": {
+      "spd": 2.0
+    },
+    "price": 120,
+    "slot": "accessory"
   },
   {
-    "id": "amulet_of_protection", "name": "Amulet of Protection", "slot": "accessory",
-    "bp": 2, "price": 100, "passive": { "def": 2, "res": 1 }
+    "bp": 2,
+    "id": "amulet_of_protection",
+    "name": "Amulet of Protection",
+    "passive": {
+      "def": 2.0,
+      "res": 1.0
+    },
+    "price": 100,
+    "slot": "accessory"
   },
   {
-    "id": "crown_of_wisdom", "name": "Crown of Wisdom", "slot": "accessory",
-    "bp": 3, "price": 280, "passive": { "mag": 2, "wp": 2 }
+    "bp": 3,
+    "id": "crown_of_wisdom",
+    "name": "Crown of Wisdom",
+    "passive": {
+      "mag": 2.0,
+      "wp": 2.0
+    },
+    "price": 150,
+    "slot": "accessory"
   },
   {
-    "id": "cloak_of_shadows", "name": "Cloak of Shadows", "slot": "accessory",
-    "bp": 2, "price": 110, "passive": { "spd": 1 }
+    "bp": 2,
+    "id": "cloak_of_shadows",
+    "name": "Cloak of Shadows",
+    "passive": {
+      "spd": 1.0
+    },
+    "price": 110,
+    "slot": "accessory"
   },
   {
-    "id": "war_horn", "name": "War Horn", "slot": "accessory",
-    "bp": 2, "price": 130, "granted_abilities": ["rally"]
+    "bp": 2,
+    "granted_abilities": [
+      "rally"
+    ],
+    "id": "war_horn",
+    "name": "War Horn",
+    "price": 130,
+    "slot": "accessory"
   },
   {
-    "id": "healers_charm", "name": "Healer's Charm", "slot": "accessory",
-    "bp": 2, "price": 100, "passive": { "res": 2, "wp": 1 }
+    "bp": 2,
+    "id": "healers_charm",
+    "name": "Healer's Charm",
+    "passive": {
+      "res": 2.0,
+      "wp": 1.0
+    },
+    "price": 100,
+    "slot": "accessory"
   },
   {
-    "id": "berserker_band", "name": "Berserker Band", "slot": "accessory",
-    "bp": 2, "price": 90, "passive": { "atk": 3, "def": -1 }
+    "bp": 2,
+    "id": "berserker_band",
+    "name": "Berserker Band",
+    "passive": {
+      "atk": 3.0,
+      "def": -1.0
+    },
+    "price": 90,
+    "slot": "accessory"
   },
   {
-    "id": "rangers_quiver", "name": "Ranger's Quiver", "slot": "accessory",
-    "bp": 2, "price": 110, "passive": { "rng": 1 }
+    "bp": 2,
+    "id": "rangers_quiver",
+    "name": "Ranger's Quiver",
+    "passive": {
+      "rng": 1.0
+    },
+    "price": 110,
+    "slot": "accessory"
   },
   {
-    "id": "potion", "name": "Potion", "slot": "",
-    "bp": 0, "price": 30, "granted_abilities": ["use_potion"]
+    "bp": 0,
+    "granted_abilities": [
+      "use_potion"
+    ],
+    "id": "potion",
+    "name": "Potion",
+    "price": 30
   },
   {
-    "id": "hi_potion", "name": "Hi-Potion", "slot": "",
-    "bp": 0, "price": 60, "granted_abilities": ["use_hi_potion"]
+    "bp": 0,
+    "granted_abilities": [
+      "use_hi_potion"
+    ],
+    "id": "hi_potion",
+    "name": "Hi-Potion",
+    "price": 60
   },
   {
-    "id": "ether", "name": "Ether", "slot": "",
-    "bp": 0, "price": 40, "granted_abilities": ["use_ether"]
+    "bp": 0,
+    "granted_abilities": [
+      "use_ether"
+    ],
+    "id": "ether",
+    "name": "Ether",
+    "price": 40
   },
   {
-    "id": "antidote", "name": "Antidote", "slot": "",
-    "bp": 0, "price": 20, "granted_abilities": ["use_antidote"]
+    "bp": 0,
+    "granted_abilities": [
+      "use_antidote"
+    ],
+    "id": "antidote",
+    "name": "Antidote",
+    "price": 20
   },
   {
-    "id": "phoenix_down", "name": "Phoenix Down", "slot": "",
-    "bp": 0, "price": 100, "granted_abilities": ["use_phoenix_down"]
+    "bp": 0,
+    "granted_abilities": [
+      "use_phoenix_down"
+    ],
+    "id": "phoenix_down",
+    "name": "Phoenix Down",
+    "price": 100
   },
   {
-    "id": "bomb", "name": "Bomb", "slot": "",
-    "bp": 0, "price": 50, "granted_abilities": ["use_bomb"]
+    "bp": 0,
+    "granted_abilities": [
+      "use_bomb"
+    ],
+    "id": "bomb",
+    "name": "Bomb",
+    "price": 50
+  },
+  {
+    "bp": 1,
+    "id": "iron_sword",
+    "name": "Iron Sword",
+    "power": 4,
+    "price": 40,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 2,
+    "id": "steel_sword",
+    "name": "Steel Sword",
+    "power": 6,
+    "price": 110,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 3,
+    "id": "knight_sword",
+    "name": "Knight Sword",
+    "passive": {
+      "def": 1.0
+    },
+    "power": 8,
+    "price": 170,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 4,
+    "granted_abilities": [
+      "rune_fire"
+    ],
+    "id": "flametongue",
+    "name": "Flametongue",
+    "passive": {
+      "mag": 2.0
+    },
+    "power": 9,
+    "price": 420,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 4,
+    "granted_abilities": [
+      "rune_ice"
+    ],
+    "id": "frost_brand",
+    "name": "Frost Brand",
+    "passive": {
+      "mag": 2.0
+    },
+    "power": 9,
+    "price": 420,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 4,
+    "id": "rune_blade",
+    "name": "Rune Blade",
+    "passive": {
+      "mag": 3.0
+    },
+    "power": 8,
+    "price": 460,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 6,
+    "granted_abilities": [
+      "holy_3"
+    ],
+    "id": "excalibur",
+    "name": "Excalibur",
+    "passive": {
+      "atk": 2.0,
+      "res": 2.0
+    },
+    "power": 14,
+    "price": 1200,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 3,
+    "id": "claymore",
+    "name": "Claymore",
+    "passive": {
+      "spd": -1.0
+    },
+    "power": 10,
+    "price": 180,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 4,
+    "id": "zweihander",
+    "name": "Zweihander",
+    "passive": {
+      "spd": -2.0
+    },
+    "power": 13,
+    "price": 300,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 5,
+    "id": "dragon_slayer",
+    "name": "Dragon Slayer",
+    "passive": {
+      "atk": 2.0,
+      "spd": -1.0
+    },
+    "power": 16,
+    "price": 650,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 1,
+    "id": "hatchet",
+    "name": "Hatchet",
+    "power": 5,
+    "price": 45,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 2,
+    "id": "battle_axe",
+    "name": "Battle Axe",
+    "power": 8,
+    "price": 130,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 3,
+    "id": "maul",
+    "name": "Maul",
+    "passive": {
+      "spd": -1.0
+    },
+    "power": 11,
+    "price": 190,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 6,
+    "granted_abilities": [
+      "thundaga"
+    ],
+    "id": "mjolnir",
+    "name": "Mjolnir",
+    "passive": {
+      "mag": 3.0
+    },
+    "power": 13,
+    "price": 1100,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 2,
+    "id": "spear",
+    "name": "Spear",
+    "power": 6,
+    "price": 100,
+    "range": 2,
+    "slot": "weapon"
+  },
+  {
+    "bp": 3,
+    "id": "pike",
+    "name": "Pike",
+    "power": 8,
+    "price": 160,
+    "range": 2,
+    "slot": "weapon"
+  },
+  {
+    "bp": 4,
+    "granted_abilities": [
+      "jump"
+    ],
+    "id": "dragoon_lance",
+    "name": "Dragoon Lance",
+    "power": 10,
+    "price": 380,
+    "range": 2,
+    "slot": "weapon"
+  },
+  {
+    "bp": 6,
+    "granted_abilities": [
+      "wyvern_strike"
+    ],
+    "id": "gungnir",
+    "name": "Gungnir",
+    "passive": {
+      "spd": 2.0
+    },
+    "power": 14,
+    "price": 1000,
+    "range": 2,
+    "slot": "weapon"
+  },
+  {
+    "bp": 3,
+    "id": "katana",
+    "name": "Katana",
+    "passive": {
+      "spd": 1.0
+    },
+    "power": 9,
+    "price": 200,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 5,
+    "id": "masamune_blade",
+    "name": "Masamune",
+    "passive": {
+      "spd": 3.0
+    },
+    "power": 12,
+    "price": 700,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 4,
+    "granted_abilities": [
+      "backstab"
+    ],
+    "id": "assassins_blade",
+    "name": "Assassin's Blade",
+    "passive": {
+      "spd": 2.0
+    },
+    "power": 7,
+    "price": 400,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 1,
+    "id": "hunting_bow",
+    "name": "Hunting Bow",
+    "power": 3,
+    "price": 55,
+    "range": 3,
+    "slot": "weapon"
+  },
+  {
+    "bp": 3,
+    "id": "war_bow",
+    "name": "War Bow",
+    "power": 6,
+    "price": 170,
+    "range": 4,
+    "slot": "weapon"
+  },
+  {
+    "bp": 4,
+    "granted_abilities": [
+      "multi_shot"
+    ],
+    "id": "elven_bow",
+    "name": "Elven Bow",
+    "passive": {
+      "rng": 1.0,
+      "spd": 1.0
+    },
+    "power": 7,
+    "price": 440,
+    "range": 4,
+    "slot": "weapon"
+  },
+  {
+    "bp": 3,
+    "id": "heavy_crossbow",
+    "name": "Heavy Crossbow",
+    "passive": {
+      "spd": -1.0
+    },
+    "power": 8,
+    "price": 180,
+    "range": 3,
+    "slot": "weapon"
+  },
+  {
+    "bp": 1,
+    "id": "oak_staff",
+    "name": "Oak Staff",
+    "passive": {
+      "mag": 1.0
+    },
+    "power": 2,
+    "price": 45,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 2,
+    "id": "war_staff",
+    "name": "War Staff",
+    "passive": {
+      "mag": 2.0,
+      "res": 1.0
+    },
+    "power": 4,
+    "price": 120,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 5,
+    "granted_abilities": [
+      "divine_judgment"
+    ],
+    "id": "staff_of_judgment",
+    "name": "Staff of Judgment",
+    "passive": {
+      "mag": 5.0,
+      "wp": 2.0
+    },
+    "power": 4,
+    "price": 620,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 3,
+    "granted_abilities": [
+      "fire_2"
+    ],
+    "id": "wand_of_flames",
+    "name": "Wand of Flames",
+    "passive": {
+      "mag": 4.0
+    },
+    "power": 3,
+    "price": 210,
+    "range": 1,
+    "slot": "weapon"
+  },
+  {
+    "bp": 2,
+    "granted_abilities": [
+      "pistol_shot"
+    ],
+    "id": "flintlock_pistol",
+    "name": "Flintlock Pistol",
+    "power": 6,
+    "price": 140,
+    "range": 4,
+    "slot": "weapon"
+  },
+  {
+    "bp": 3,
+    "granted_abilities": [
+      "rifle_shot"
+    ],
+    "id": "hunting_rifle",
+    "name": "Hunting Rifle",
+    "passive": {
+      "spd": -1.0
+    },
+    "power": 9,
+    "price": 220,
+    "range": 5,
+    "slot": "weapon"
+  },
+  {
+    "bp": 5,
+    "granted_abilities": [
+      "gatling_burst"
+    ],
+    "id": "gatling_gun",
+    "name": "Gatling Gun",
+    "passive": {
+      "spd": -2.0
+    },
+    "power": 11,
+    "price": 720,
+    "range": 4,
+    "slot": "weapon"
+  },
+  {
+    "bp": 1,
+    "id": "padded_armor",
+    "name": "Padded Armor",
+    "passive": {
+      "def": 1.0
+    },
+    "price": 30,
+    "slot": "armor"
+  },
+  {
+    "bp": 1,
+    "id": "leather_armor",
+    "name": "Leather Armor",
+    "passive": {
+      "def": 2.0,
+      "spd": 0.0
+    },
+    "price": 55,
+    "slot": "armor"
+  },
+  {
+    "bp": 2,
+    "id": "brigandine",
+    "name": "Brigandine",
+    "passive": {
+      "def": 4.0
+    },
+    "price": 110,
+    "slot": "armor"
+  },
+  {
+    "bp": 2,
+    "id": "scale_mail",
+    "name": "Scale Mail",
+    "passive": {
+      "def": 5.0,
+      "spd": -1.0
+    },
+    "price": 140,
+    "slot": "armor"
+  },
+  {
+    "bp": 3,
+    "id": "banded_mail",
+    "name": "Banded Mail",
+    "passive": {
+      "def": 6.0,
+      "spd": -1.0
+    },
+    "price": 190,
+    "slot": "armor"
+  },
+  {
+    "bp": 4,
+    "id": "full_plate",
+    "name": "Full Plate",
+    "passive": {
+      "def": 8.0,
+      "spd": -2.0
+    },
+    "price": 290,
+    "slot": "armor"
+  },
+  {
+    "bp": 4,
+    "id": "mythril_mail",
+    "name": "Mythril Mail",
+    "passive": {
+      "def": 7.0,
+      "res": 2.0
+    },
+    "price": 360,
+    "slot": "armor"
+  },
+  {
+    "bp": 5,
+    "id": "adamant_armor",
+    "name": "Adamant Armor",
+    "passive": {
+      "def": 9.0,
+      "res": 2.0,
+      "spd": -1.0
+    },
+    "price": 520,
+    "slot": "armor"
+  },
+  {
+    "bp": 6,
+    "id": "dragon_plate",
+    "name": "Dragon Plate",
+    "passive": {
+      "def": 11.0,
+      "res": 4.0,
+      "spd": -1.0
+    },
+    "price": 950,
+    "slot": "armor"
+  },
+  {
+    "bp": 1,
+    "id": "cloth_robe",
+    "name": "Cloth Robe",
+    "passive": {
+      "res": 1.0,
+      "wp": 1.0
+    },
+    "price": 40,
+    "slot": "armor"
+  },
+  {
+    "bp": 2,
+    "id": "mage_robe",
+    "name": "Mage Robe",
+    "passive": {
+      "mag": 1.0,
+      "res": 2.0,
+      "wp": 2.0
+    },
+    "price": 120,
+    "slot": "armor"
+  },
+  {
+    "bp": 3,
+    "id": "sorcerers_robe",
+    "name": "Sorcerer's Robe",
+    "passive": {
+      "mag": 3.0,
+      "res": 3.0,
+      "wp": 3.0
+    },
+    "price": 220,
+    "slot": "armor"
+  },
+  {
+    "bp": 5,
+    "id": "archmage_robe",
+    "name": "Archmage Robe",
+    "passive": {
+      "mag": 5.0,
+      "res": 4.0,
+      "wp": 4.0
+    },
+    "price": 560,
+    "slot": "armor"
+  },
+  {
+    "bp": 3,
+    "id": "shadow_garb",
+    "name": "Shadow Garb",
+    "passive": {
+      "def": 2.0,
+      "spd": 3.0
+    },
+    "price": 240,
+    "slot": "armor"
+  },
+  {
+    "bp": 4,
+    "id": "clockwork_plate",
+    "name": "Clockwork Plate",
+    "passive": {
+      "def": 7.0,
+      "spd": 1.0
+    },
+    "price": 400,
+    "slot": "armor"
+  },
+  {
+    "bp": 5,
+    "id": "vestments_of_light",
+    "name": "Vestments of Light",
+    "passive": {
+      "hp": 5.0,
+      "mag": 3.0,
+      "res": 6.0
+    },
+    "price": 600,
+    "slot": "armor"
+  },
+  {
+    "bp": 1,
+    "id": "wooden_shield",
+    "name": "Wooden Shield",
+    "passive": {
+      "def": 1.0
+    },
+    "price": 25,
+    "slot": "shield"
+  },
+  {
+    "bp": 1,
+    "id": "round_shield",
+    "name": "Round Shield",
+    "passive": {
+      "def": 2.0
+    },
+    "price": 55,
+    "slot": "shield"
+  },
+  {
+    "bp": 2,
+    "id": "kite_shield",
+    "name": "Kite Shield",
+    "passive": {
+      "def": 4.0
+    },
+    "price": 100,
+    "slot": "shield"
+  },
+  {
+    "bp": 2,
+    "id": "heater_shield",
+    "name": "Heater Shield",
+    "passive": {
+      "def": 4.0,
+      "res": 1.0
+    },
+    "price": 120,
+    "slot": "shield"
+  },
+  {
+    "bp": 3,
+    "id": "spiked_shield",
+    "name": "Spiked Shield",
+    "passive": {
+      "atk": 1.0,
+      "def": 4.0
+    },
+    "price": 170,
+    "slot": "shield"
+  },
+  {
+    "bp": 4,
+    "id": "dragon_shield",
+    "name": "Dragon Shield",
+    "passive": {
+      "def": 6.0,
+      "res": 3.0
+    },
+    "price": 360,
+    "slot": "shield"
+  },
+  {
+    "bp": 5,
+    "granted_abilities": [
+      "protect"
+    ],
+    "id": "aegis_shield",
+    "name": "Aegis Shield",
+    "passive": {
+      "def": 7.0,
+      "res": 5.0
+    },
+    "price": 560,
+    "slot": "shield"
+  },
+  {
+    "bp": 6,
+    "id": "runic_bulwark",
+    "name": "Runic Bulwark",
+    "passive": {
+      "def": 8.0,
+      "mag": 2.0,
+      "res": 6.0
+    },
+    "price": 820,
+    "slot": "shield"
+  },
+  {
+    "bp": 2,
+    "id": "ring_of_power",
+    "name": "Ring of Power",
+    "passive": {
+      "atk": 2.0
+    },
+    "price": 120,
+    "slot": "accessory"
+  },
+  {
+    "bp": 2,
+    "id": "ring_of_protection",
+    "name": "Ring of Protection",
+    "passive": {
+      "def": 2.0
+    },
+    "price": 120,
+    "slot": "accessory"
+  },
+  {
+    "bp": 2,
+    "id": "ring_of_wizardry",
+    "name": "Ring of Wizardry",
+    "passive": {
+      "mag": 2.0
+    },
+    "price": 130,
+    "slot": "accessory"
+  },
+  {
+    "bp": 2,
+    "id": "ring_of_resistance",
+    "name": "Ring of Resistance",
+    "passive": {
+      "res": 2.0
+    },
+    "price": 120,
+    "slot": "accessory"
+  },
+  {
+    "bp": 2,
+    "id": "ring_of_evasion",
+    "name": "Ring of Evasion",
+    "passive": {
+      "spd": 2.0
+    },
+    "price": 130,
+    "slot": "accessory"
+  },
+  {
+    "bp": 2,
+    "id": "amulet_of_health",
+    "name": "Amulet of Health",
+    "passive": {
+      "hp": 8.0
+    },
+    "price": 140,
+    "slot": "accessory"
+  },
+  {
+    "bp": 2,
+    "id": "amulet_of_focus",
+    "name": "Amulet of Focus",
+    "passive": {
+      "wp": 3.0
+    },
+    "price": 110,
+    "slot": "accessory"
+  },
+  {
+    "bp": 2,
+    "id": "boots_of_speed",
+    "name": "Boots of Speed",
+    "passive": {
+      "spd": 2.0
+    },
+    "price": 130,
+    "slot": "accessory"
+  },
+  {
+    "bp": 2,
+    "id": "boots_of_leaping",
+    "name": "Boots of Leaping",
+    "passive": {
+      "jump": 2.0
+    },
+    "price": 110,
+    "slot": "accessory"
+  },
+  {
+    "bp": 3,
+    "id": "winged_boots",
+    "name": "Winged Boots",
+    "passive": {
+      "jump": 2.0,
+      "spd": 2.0
+    },
+    "price": 260,
+    "slot": "accessory"
+  },
+  {
+    "bp": 3,
+    "id": "gauntlets_of_might",
+    "name": "Gauntlets of Might",
+    "passive": {
+      "atk": 3.0,
+      "def": 1.0
+    },
+    "price": 240,
+    "slot": "accessory"
+  },
+  {
+    "bp": 2,
+    "id": "targeting_monocle",
+    "name": "Targeting Monocle",
+    "passive": {
+      "atk": 1.0,
+      "rng": 1.0
+    },
+    "price": 150,
+    "slot": "accessory"
+  },
+  {
+    "bp": 3,
+    "id": "aether_battery",
+    "name": "Aether Battery",
+    "passive": {
+      "mag": 3.0,
+      "wp": 2.0
+    },
+    "price": 260,
+    "slot": "accessory"
+  },
+  {
+    "bp": 3,
+    "id": "clockwork_core",
+    "name": "Clockwork Core",
+    "passive": {
+      "hp": 6.0,
+      "spd": 1.0
+    },
+    "price": 280,
+    "slot": "accessory"
+  },
+  {
+    "bp": 1,
+    "id": "lucky_charm",
+    "name": "Lucky Charm",
+    "passive": {
+      "spd": 1.0
+    },
+    "price": 80,
+    "slot": "accessory"
+  },
+  {
+    "bp": 5,
+    "id": "genji_gloves",
+    "name": "Genji Gloves",
+    "passive": {
+      "atk": 3.0,
+      "def": 1.0,
+      "spd": 2.0
+    },
+    "price": 640,
+    "slot": "accessory"
+  },
+  {
+    "bp": 5,
+    "id": "ribbon",
+    "name": "Ribbon",
+    "passive": {
+      "res": 4.0,
+      "wp": 3.0
+    },
+    "price": 700,
+    "slot": "accessory"
+  },
+  {
+    "bp": 6,
+    "id": "zodiac_stone",
+    "name": "Zodiac Stone",
+    "passive": {
+      "atk": 2.0,
+      "def": 2.0,
+      "mag": 2.0,
+      "res": 2.0,
+      "spd": 1.0
+    },
+    "price": 1100,
+    "slot": "accessory"
+  },
+  {
+    "bp": 0,
+    "granted_abilities": [
+      "use_potion"
+    ],
+    "id": "tonic",
+    "name": "Tonic",
+    "price": 20
+  },
+  {
+    "bp": 0,
+    "granted_abilities": [
+      "use_hi_potion"
+    ],
+    "id": "mega_potion",
+    "name": "Mega-Potion",
+    "price": 120
+  },
+  {
+    "bp": 0,
+    "granted_abilities": [
+      "use_ether"
+    ],
+    "id": "mana_tonic",
+    "name": "Mana Tonic",
+    "price": 50
+  },
+  {
+    "bp": 0,
+    "granted_abilities": [
+      "panacea"
+    ],
+    "id": "remedy",
+    "name": "Remedy",
+    "price": 60
+  },
+  {
+    "bp": 0,
+    "granted_abilities": [
+      "fire_bomb"
+    ],
+    "id": "fire_flask",
+    "name": "Fire Flask",
+    "price": 70
+  },
+  {
+    "bp": 0,
+    "granted_abilities": [
+      "frost_vial"
+    ],
+    "id": "frost_flask",
+    "name": "Frost Flask",
+    "price": 70
+  },
+  {
+    "bp": 0,
+    "granted_abilities": [
+      "smoke_screen"
+    ],
+    "id": "smoke_grenade",
+    "name": "Smoke Grenade",
+    "price": 60
+  },
+  {
+    "bp": 0,
+    "granted_abilities": [
+      "stim_pack"
+    ],
+    "id": "stimulant",
+    "name": "Stimulant",
+    "price": 80
   }
 ]
