@@ -208,3 +208,31 @@ rm -f gutcfg.json
 ```
 
 Judge success by "Passing Tests == Tests" / "0 failures" in the summary, not the exit code.
+
+---
+
+## 7. Applied balance tuning (R1 + R2) — 2026-07-06
+
+The critical finding (F1: player party lost 100% of level-matched fights) was resolved by two
+uniform levers, applied to the CSV working copies and re-imported to JSON:
+
+- **Monster stats ×0.70** — all 140 monster templates' combat stats (`stats.hp/atk/def/spd/mag/res/wp`;
+  positional `rng`/`jump` left alone). Brings the authored monster economy to the player scale and,
+  because it scales SPD (9–11 → 6–8), also resolves **R2** (the initiative gap). Monster-vs-monster
+  balance is preserved because both sides scale equally.
+- **Player-class growth ×2.5** — all 128 player classes' `growth.*` rates. Makes leveling scale
+  players so they keep pace across bands (fixes the high-band falloff where a flat monster nerf alone
+  left band-8 at 0%).
+
+**Win-rate movement (player party vs level-matched encounters):**
+
+| band (party lvl) | baseline | monster×0.65 only | **applied: monster×0.70 + growth×2.5** |
+|---|---|---|---|
+| 1 (L3) | 0.00 | 0.75 | **0.69** |
+| 4 (L6) | 0.00 | 0.20 | **0.46** |
+| 8 (L10) | 0.00 | 0.00 | **0.47** |
+
+(Applied-column figures from the CSV-driven content, 32/80/32 matches per band, seed base 100.)
+Bands 4/8 land on the ~0.5 target; band 1 is intentionally forgiving. No test regressions
+(data/combat/ai/progression green). These are uniform first-pass multipliers — per-archetype
+refinement remains available as future polish.

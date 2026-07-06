@@ -556,15 +556,15 @@
     "race": "goblin",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 50,
+      "atk": 8,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -586,15 +586,15 @@
     "race": "goblin",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 46,
+      "atk": 7,
+      "def": 6,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -616,15 +616,15 @@
     "race": "goblin",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 38,
+      "atk": 3,
+      "def": 4,
+      "hp": 27,
       "jump": 2,
-      "mag": 10,
-      "res": 5,
+      "mag": 7,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -646,15 +646,15 @@
     "race": "goblin",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 50,
+      "atk": 6,
+      "def": 5,
+      "hp": 35,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -676,15 +676,15 @@
     "race": "goblin",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 50,
+      "atk": 4,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -706,15 +706,15 @@
     "race": "hobgoblin",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 46,
+      "atk": 7,
+      "def": 6,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -736,15 +736,15 @@
     "race": "hobgoblin",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 56,
+      "atk": 5,
+      "def": 8,
+      "hp": 39,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -766,15 +766,15 @@
     "race": "hobgoblin",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 46,
+      "atk": 7,
+      "def": 6,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -796,15 +796,15 @@
     "race": "hobgoblin",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 50,
+      "atk": 3,
+      "def": 4,
+      "hp": 35,
       "jump": 2,
-      "mag": 11,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -826,15 +826,15 @@
     "race": "hobgoblin",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 50,
+      "atk": 4,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -856,15 +856,15 @@
     "race": "orc",
     "recommended_path": "physical",
     "stats": {
-      "atk": 12,
-      "def": 8,
-      "hp": 58,
+      "atk": 8,
+      "def": 6,
+      "hp": 41,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -886,15 +886,15 @@
     "race": "orc",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 54,
+      "atk": 6,
+      "def": 5,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -916,15 +916,15 @@
     "race": "orc",
     "recommended_path": "physical",
     "stats": {
-      "atk": 12,
-      "def": 8,
-      "hp": 58,
+      "atk": 8,
+      "def": 6,
+      "hp": 41,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -946,15 +946,15 @@
     "race": "orc",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 64,
+      "atk": 5,
+      "def": 8,
+      "hp": 45,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -976,15 +976,15 @@
     "race": "orc",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 50,
+      "atk": 3,
+      "def": 4,
+      "hp": 35,
       "jump": 2,
-      "mag": 11,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -1006,15 +1006,15 @@
     "race": "ogre",
     "recommended_path": "physical",
     "stats": {
-      "atk": 12,
-      "def": 8,
-      "hp": 58,
+      "atk": 8,
+      "def": 6,
+      "hp": 41,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1036,15 +1036,15 @@
     "race": "ogre",
     "recommended_path": "physical",
     "stats": {
-      "atk": 12,
-      "def": 8,
-      "hp": 58,
+      "atk": 8,
+      "def": 6,
+      "hp": 41,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1066,15 +1066,15 @@
     "race": "ogre",
     "recommended_path": "physical",
     "stats": {
-      "atk": 12,
-      "def": 8,
-      "hp": 58,
+      "atk": 8,
+      "def": 6,
+      "hp": 41,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -1096,15 +1096,15 @@
     "race": "ogre",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 64,
+      "atk": 5,
+      "def": 8,
+      "hp": 45,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1126,15 +1126,15 @@
     "race": "ogre",
     "recommended_path": "control",
     "stats": {
-      "atk": 10,
-      "def": 7,
-      "hp": 58,
+      "atk": 7,
+      "def": 5,
+      "hp": 41,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -1156,15 +1156,15 @@
     "race": "minotaur",
     "recommended_path": "physical",
     "stats": {
-      "atk": 12,
-      "def": 8,
-      "hp": 62,
+      "atk": 8,
+      "def": 6,
+      "hp": 43,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1186,15 +1186,15 @@
     "race": "minotaur",
     "recommended_path": "physical",
     "stats": {
-      "atk": 13,
-      "def": 8,
-      "hp": 66,
+      "atk": 9,
+      "def": 6,
+      "hp": 46,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1216,15 +1216,15 @@
     "race": "minotaur",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 76,
+      "atk": 5,
+      "def": 8,
+      "hp": 53,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1246,15 +1246,15 @@
     "race": "minotaur",
     "recommended_path": "control",
     "stats": {
-      "atk": 10,
-      "def": 7,
-      "hp": 62,
+      "atk": 7,
+      "def": 5,
+      "hp": 43,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -1276,15 +1276,15 @@
     "race": "minotaur",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 62,
+      "atk": 4,
+      "def": 6,
+      "hp": 43,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -1306,15 +1306,15 @@
     "race": "troll",
     "recommended_path": "physical",
     "stats": {
-      "atk": 13,
-      "def": 8,
-      "hp": 66,
+      "atk": 9,
+      "def": 6,
+      "hp": 46,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1336,15 +1336,15 @@
     "race": "troll",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 72,
+      "atk": 5,
+      "def": 8,
+      "hp": 50,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1366,15 +1366,15 @@
     "race": "troll",
     "recommended_path": "physical",
     "stats": {
-      "atk": 13,
-      "def": 8,
-      "hp": 66,
+      "atk": 9,
+      "def": 6,
+      "hp": 46,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -1396,15 +1396,15 @@
     "race": "troll",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 62,
+      "atk": 3,
+      "def": 4,
+      "hp": 43,
       "jump": 2,
-      "mag": 13,
-      "res": 5,
+      "mag": 9,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -1426,15 +1426,15 @@
     "race": "troll",
     "recommended_path": "control",
     "stats": {
-      "atk": 10,
-      "def": 7,
-      "hp": 62,
+      "atk": 7,
+      "def": 5,
+      "hp": 43,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -1456,15 +1456,15 @@
     "race": "kobold",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 46,
+      "atk": 7,
+      "def": 6,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -1486,15 +1486,15 @@
     "race": "kobold",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 50,
+      "atk": 6,
+      "def": 5,
+      "hp": 35,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -1516,15 +1516,15 @@
     "race": "kobold",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 50,
+      "atk": 8,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1546,15 +1546,15 @@
     "race": "kobold",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 38,
+      "atk": 3,
+      "def": 4,
+      "hp": 27,
       "jump": 2,
-      "mag": 10,
-      "res": 5,
+      "mag": 7,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -1576,15 +1576,15 @@
     "race": "kobold",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 50,
+      "atk": 4,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -1606,15 +1606,15 @@
     "race": "gnoll",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 54,
+      "atk": 8,
+      "def": 6,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1636,15 +1636,15 @@
     "race": "gnoll",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 50,
+      "atk": 8,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -1666,15 +1666,15 @@
     "race": "gnoll",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 54,
+      "atk": 8,
+      "def": 6,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1696,15 +1696,15 @@
     "race": "gnoll",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 50,
+      "atk": 6,
+      "def": 5,
+      "hp": 35,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -1726,15 +1726,15 @@
     "race": "gnoll",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 50,
+      "atk": 3,
+      "def": 4,
+      "hp": 35,
       "jump": 2,
-      "mag": 11,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -1756,15 +1756,15 @@
     "race": "lizardfolk",
     "recommended_path": "physical",
     "stats": {
-      "atk": 12,
-      "def": 8,
-      "hp": 58,
+      "atk": 8,
+      "def": 6,
+      "hp": 41,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1786,15 +1786,15 @@
     "race": "lizardfolk",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 50,
+      "atk": 8,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -1816,15 +1816,15 @@
     "race": "lizardfolk",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 60,
+      "atk": 5,
+      "def": 8,
+      "hp": 42,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1846,15 +1846,15 @@
     "race": "lizardfolk",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 54,
+      "atk": 3,
+      "def": 4,
+      "hp": 38,
       "jump": 2,
-      "mag": 12,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -1876,15 +1876,15 @@
     "race": "lizardfolk",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 54,
+      "atk": 6,
+      "def": 5,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -1906,15 +1906,15 @@
     "race": "naga",
     "recommended_path": "physical",
     "stats": {
-      "atk": 12,
-      "def": 8,
-      "hp": 62,
+      "atk": 8,
+      "def": 6,
+      "hp": 43,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -1936,15 +1936,15 @@
     "race": "naga",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 54,
+      "atk": 3,
+      "def": 4,
+      "hp": 38,
       "jump": 2,
-      "mag": 12,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -1966,15 +1966,15 @@
     "race": "naga",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 58,
+      "atk": 3,
+      "def": 4,
+      "hp": 41,
       "jump": 2,
-      "mag": 12,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -1996,15 +1996,15 @@
     "race": "naga",
     "recommended_path": "magical",
     "stats": {
-      "atk": 5,
-      "def": 8,
-      "hp": 54,
+      "atk": 4,
+      "def": 6,
+      "hp": 38,
       "jump": 2,
-      "mag": 8,
-      "res": 10,
+      "mag": 6,
+      "res": 7,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -2026,15 +2026,15 @@
     "race": "naga",
     "recommended_path": "control",
     "stats": {
-      "atk": 10,
-      "def": 7,
-      "hp": 58,
+      "atk": 7,
+      "def": 5,
+      "hp": 41,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -2056,15 +2056,15 @@
     "race": "merfolk",
     "recommended_path": "magical",
     "stats": {
-      "atk": 5,
-      "def": 8,
-      "hp": 58,
+      "atk": 4,
+      "def": 6,
+      "hp": 41,
       "jump": 2,
-      "mag": 8,
-      "res": 10,
+      "mag": 6,
+      "res": 7,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -2086,15 +2086,15 @@
     "race": "merfolk",
     "recommended_path": "physical",
     "stats": {
-      "atk": 12,
-      "def": 8,
-      "hp": 58,
+      "atk": 8,
+      "def": 6,
+      "hp": 41,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -2116,15 +2116,15 @@
     "race": "merfolk",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 50,
+      "atk": 3,
+      "def": 4,
+      "hp": 35,
       "jump": 2,
-      "mag": 11,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -2146,15 +2146,15 @@
     "race": "merfolk",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 64,
+      "atk": 5,
+      "def": 8,
+      "hp": 45,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -2176,15 +2176,15 @@
     "race": "merfolk",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 50,
+      "atk": 4,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -2206,15 +2206,15 @@
     "race": "bat",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 42,
+      "atk": 7,
+      "def": 6,
+      "hp": 29,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -2236,15 +2236,15 @@
     "race": "bat",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 46,
+      "atk": 4,
+      "def": 6,
+      "hp": 32,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -2266,15 +2266,15 @@
     "race": "bat",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 50,
+      "atk": 6,
+      "def": 5,
+      "hp": 35,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -2296,15 +2296,15 @@
     "race": "bat",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 46,
+      "atk": 7,
+      "def": 6,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -2326,15 +2326,15 @@
     "race": "bat",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 46,
+      "atk": 3,
+      "def": 4,
+      "hp": 32,
       "jump": 2,
-      "mag": 11,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -2356,15 +2356,15 @@
     "race": "wolf",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 46,
+      "atk": 7,
+      "def": 6,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -2386,15 +2386,15 @@
     "race": "wolf",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 54,
+      "atk": 4,
+      "def": 6,
+      "hp": 38,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -2416,15 +2416,15 @@
     "race": "wolf",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 46,
+      "atk": 6,
+      "def": 5,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -2446,15 +2446,15 @@
     "race": "wolf",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 50,
+      "atk": 4,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -2476,15 +2476,15 @@
     "race": "wolf",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 54,
+      "atk": 8,
+      "def": 6,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -2506,15 +2506,15 @@
     "race": "dire_beast",
     "recommended_path": "physical",
     "stats": {
-      "atk": 12,
-      "def": 8,
-      "hp": 62,
+      "atk": 8,
+      "def": 6,
+      "hp": 43,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -2536,15 +2536,15 @@
     "race": "dire_beast",
     "recommended_path": "physical",
     "stats": {
-      "atk": 13,
-      "def": 8,
-      "hp": 66,
+      "atk": 9,
+      "def": 6,
+      "hp": 46,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -2566,15 +2566,15 @@
     "race": "dire_beast",
     "recommended_path": "control",
     "stats": {
-      "atk": 10,
-      "def": 7,
-      "hp": 58,
+      "atk": 7,
+      "def": 5,
+      "hp": 41,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -2596,15 +2596,15 @@
     "race": "dire_beast",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 72,
+      "atk": 5,
+      "def": 8,
+      "hp": 50,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -2626,15 +2626,15 @@
     "race": "dire_beast",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 58,
+      "atk": 4,
+      "def": 6,
+      "hp": 41,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -2656,15 +2656,15 @@
     "race": "spider",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 54,
+      "atk": 6,
+      "def": 5,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -2686,15 +2686,15 @@
     "race": "spider",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 46,
+      "atk": 6,
+      "def": 5,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -2716,15 +2716,15 @@
     "race": "spider",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 50,
+      "atk": 8,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -2746,15 +2746,15 @@
     "race": "spider",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 46,
+      "atk": 7,
+      "def": 6,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -2776,15 +2776,15 @@
     "race": "spider",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 54,
+      "atk": 4,
+      "def": 6,
+      "hp": 38,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -2806,15 +2806,15 @@
     "race": "insectoid",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 42,
+      "atk": 7,
+      "def": 6,
+      "hp": 29,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -2836,15 +2836,15 @@
     "race": "insectoid",
     "recommended_path": "control",
     "stats": {
-      "atk": 8,
-      "def": 7,
-      "hp": 42,
+      "atk": 6,
+      "def": 5,
+      "hp": 29,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -2866,15 +2866,15 @@
     "race": "insectoid",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 50,
+      "atk": 8,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -2896,15 +2896,15 @@
     "race": "insectoid",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 56,
+      "atk": 5,
+      "def": 8,
+      "hp": 39,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -2926,15 +2926,15 @@
     "race": "insectoid",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 42,
+      "atk": 4,
+      "def": 6,
+      "hp": 29,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -2956,15 +2956,15 @@
     "race": "slime",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 50,
+      "atk": 8,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -2986,15 +2986,15 @@
     "race": "slime",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 54,
+      "atk": 6,
+      "def": 5,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -3016,15 +3016,15 @@
     "race": "slime",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 54,
+      "atk": 4,
+      "def": 6,
+      "hp": 38,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -3046,15 +3046,15 @@
     "race": "slime",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 46,
+      "atk": 3,
+      "def": 4,
+      "hp": 32,
       "jump": 2,
-      "mag": 11,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -3076,15 +3076,15 @@
     "race": "slime",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 56,
+      "atk": 5,
+      "def": 8,
+      "hp": 39,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -3106,15 +3106,15 @@
     "race": "skeleton",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 54,
+      "atk": 8,
+      "def": 6,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -3136,15 +3136,15 @@
     "race": "skeleton",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 46,
+      "atk": 7,
+      "def": 6,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -3166,15 +3166,15 @@
     "race": "skeleton",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 60,
+      "atk": 5,
+      "def": 8,
+      "hp": 42,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -3196,15 +3196,15 @@
     "race": "skeleton",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 46,
+      "atk": 3,
+      "def": 4,
+      "hp": 32,
       "jump": 2,
-      "mag": 11,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -3226,15 +3226,15 @@
     "race": "skeleton",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 50,
+      "atk": 6,
+      "def": 5,
+      "hp": 35,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -3256,15 +3256,15 @@
     "race": "zombie",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 46,
+      "atk": 7,
+      "def": 6,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -3286,15 +3286,15 @@
     "race": "zombie",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 46,
+      "atk": 6,
+      "def": 5,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -3316,15 +3316,15 @@
     "race": "zombie",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 64,
+      "atk": 5,
+      "def": 8,
+      "hp": 45,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -3346,15 +3346,15 @@
     "race": "zombie",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 46,
+      "atk": 7,
+      "def": 6,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -3376,15 +3376,15 @@
     "race": "zombie",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 54,
+      "atk": 4,
+      "def": 6,
+      "hp": 38,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -3406,15 +3406,15 @@
     "race": "wraith",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 58,
+      "atk": 3,
+      "def": 4,
+      "hp": 41,
       "jump": 2,
-      "mag": 12,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -3436,15 +3436,15 @@
     "race": "wraith",
     "recommended_path": "control",
     "stats": {
-      "atk": 10,
-      "def": 7,
-      "hp": 62,
+      "atk": 7,
+      "def": 5,
+      "hp": 43,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -3466,15 +3466,15 @@
     "race": "wraith",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 54,
+      "atk": 3,
+      "def": 4,
+      "hp": 38,
       "jump": 2,
-      "mag": 12,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -3496,15 +3496,15 @@
     "race": "wraith",
     "recommended_path": "magical",
     "stats": {
-      "atk": 5,
-      "def": 8,
-      "hp": 54,
+      "atk": 4,
+      "def": 6,
+      "hp": 38,
       "jump": 2,
-      "mag": 8,
-      "res": 10,
+      "mag": 6,
+      "res": 7,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -3526,15 +3526,15 @@
     "race": "wraith",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 54,
+      "atk": 6,
+      "def": 5,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -3556,15 +3556,15 @@
     "race": "imp",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 46,
+      "atk": 3,
+      "def": 4,
+      "hp": 32,
       "jump": 2,
-      "mag": 11,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -3586,15 +3586,15 @@
     "race": "imp",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 54,
+      "atk": 6,
+      "def": 5,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -3616,15 +3616,15 @@
     "race": "imp",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 54,
+      "atk": 6,
+      "def": 5,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -3646,15 +3646,15 @@
     "race": "imp",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 54,
+      "atk": 3,
+      "def": 4,
+      "hp": 38,
       "jump": 2,
-      "mag": 12,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -3676,15 +3676,15 @@
     "race": "imp",
     "recommended_path": "magical",
     "stats": {
-      "atk": 5,
-      "def": 8,
-      "hp": 50,
+      "atk": 4,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
-      "mag": 8,
-      "res": 10,
+      "mag": 6,
+      "res": 7,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -3706,15 +3706,15 @@
     "race": "demon",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 70,
+      "atk": 3,
+      "def": 4,
+      "hp": 49,
       "jump": 2,
-      "mag": 14,
-      "res": 5,
+      "mag": 10,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -3736,15 +3736,15 @@
     "race": "demon",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 70,
+      "atk": 3,
+      "def": 4,
+      "hp": 49,
       "jump": 2,
-      "mag": 14,
-      "res": 5,
+      "mag": 10,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -3766,15 +3766,15 @@
     "race": "demon",
     "recommended_path": "physical",
     "stats": {
-      "atk": 14,
-      "def": 8,
-      "hp": 74,
+      "atk": 10,
+      "def": 6,
+      "hp": 52,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -3796,15 +3796,15 @@
     "race": "demon",
     "recommended_path": "control",
     "stats": {
-      "atk": 11,
-      "def": 7,
-      "hp": 74,
+      "atk": 8,
+      "def": 5,
+      "hp": 52,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -3826,15 +3826,15 @@
     "race": "demon",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 80,
+      "atk": 5,
+      "def": 8,
+      "hp": 56,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -3856,15 +3856,15 @@
     "race": "gargoyle",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 68,
+      "atk": 5,
+      "def": 8,
+      "hp": 48,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -3886,15 +3886,15 @@
     "race": "gargoyle",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 64,
+      "atk": 5,
+      "def": 8,
+      "hp": 45,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -3916,15 +3916,15 @@
     "race": "gargoyle",
     "recommended_path": "physical",
     "stats": {
-      "atk": 12,
-      "def": 8,
-      "hp": 58,
+      "atk": 8,
+      "def": 6,
+      "hp": 41,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -3946,15 +3946,15 @@
     "race": "gargoyle",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 54,
+      "atk": 8,
+      "def": 6,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -3976,15 +3976,15 @@
     "race": "gargoyle",
     "recommended_path": "magical",
     "stats": {
-      "atk": 5,
-      "def": 8,
-      "hp": 58,
+      "atk": 4,
+      "def": 6,
+      "hp": 41,
       "jump": 2,
-      "mag": 8,
-      "res": 10,
+      "mag": 6,
+      "res": 7,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -4006,15 +4006,15 @@
     "race": "golem",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 72,
+      "atk": 5,
+      "def": 8,
+      "hp": 50,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -4036,15 +4036,15 @@
     "race": "golem",
     "recommended_path": "physical",
     "stats": {
-      "atk": 13,
-      "def": 8,
-      "hp": 70,
+      "atk": 9,
+      "def": 6,
+      "hp": 49,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -4066,15 +4066,15 @@
     "race": "golem",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 76,
+      "atk": 5,
+      "def": 8,
+      "hp": 53,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -4096,15 +4096,15 @@
     "race": "golem",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 80,
+      "atk": 5,
+      "def": 8,
+      "hp": 56,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -4126,15 +4126,15 @@
     "race": "golem",
     "recommended_path": "magical",
     "stats": {
-      "atk": 5,
-      "def": 8,
-      "hp": 66,
+      "atk": 4,
+      "def": 6,
+      "hp": 46,
       "jump": 2,
-      "mag": 8,
-      "res": 10,
+      "mag": 6,
+      "res": 7,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -4156,15 +4156,15 @@
     "race": "harpy",
     "recommended_path": "physical",
     "stats": {
-      "atk": 11,
-      "def": 8,
-      "hp": 54,
+      "atk": 8,
+      "def": 6,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -4186,15 +4186,15 @@
     "race": "harpy",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 50,
+      "atk": 4,
+      "def": 6,
+      "hp": 35,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -4216,15 +4216,15 @@
     "race": "harpy",
     "recommended_path": "physical",
     "stats": {
-      "atk": 10,
-      "def": 8,
-      "hp": 46,
+      "atk": 7,
+      "def": 6,
+      "hp": 32,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -4246,15 +4246,15 @@
     "race": "harpy",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 42,
+      "atk": 3,
+      "def": 4,
+      "hp": 29,
       "jump": 2,
-      "mag": 10,
-      "res": 5,
+      "mag": 7,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -4276,15 +4276,15 @@
     "race": "harpy",
     "recommended_path": "control",
     "stats": {
-      "atk": 9,
-      "def": 7,
-      "hp": 54,
+      "atk": 6,
+      "def": 5,
+      "hp": 38,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -4306,15 +4306,15 @@
     "race": "treant",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 72,
+      "atk": 5,
+      "def": 8,
+      "hp": 50,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -4336,15 +4336,15 @@
     "race": "treant",
     "recommended_path": "support",
     "stats": {
-      "atk": 6,
-      "def": 8,
-      "hp": 58,
+      "atk": 4,
+      "def": 6,
+      "hp": 41,
       "jump": 2,
-      "mag": 7,
-      "res": 5,
+      "mag": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 10,
-      "wp": 12
+      "spd": 7,
+      "wp": 8
     }
   },
   {
@@ -4366,15 +4366,15 @@
     "race": "treant",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 62,
+      "atk": 3,
+      "def": 4,
+      "hp": 43,
       "jump": 2,
-      "mag": 13,
-      "res": 5,
+      "mag": 9,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -4396,15 +4396,15 @@
     "race": "treant",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 68,
+      "atk": 5,
+      "def": 8,
+      "hp": 48,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -4426,15 +4426,15 @@
     "race": "treant",
     "recommended_path": "magical",
     "stats": {
-      "atk": 5,
-      "def": 8,
-      "hp": 62,
+      "atk": 4,
+      "def": 6,
+      "hp": 43,
       "jump": 2,
-      "mag": 8,
-      "res": 10,
+      "mag": 6,
+      "res": 7,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -4456,15 +4456,15 @@
     "race": "elemental",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 58,
+      "atk": 3,
+      "def": 4,
+      "hp": 41,
       "jump": 2,
-      "mag": 12,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -4486,15 +4486,15 @@
     "race": "elemental",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 58,
+      "atk": 3,
+      "def": 4,
+      "hp": 41,
       "jump": 2,
-      "mag": 12,
-      "res": 5,
+      "mag": 8,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -4516,15 +4516,15 @@
     "race": "elemental",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 62,
+      "atk": 3,
+      "def": 4,
+      "hp": 43,
       "jump": 2,
-      "mag": 13,
-      "res": 5,
+      "mag": 9,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -4546,15 +4546,15 @@
     "race": "elemental",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 76,
+      "atk": 5,
+      "def": 8,
+      "hp": 53,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -4576,15 +4576,15 @@
     "race": "elemental",
     "recommended_path": "magical",
     "stats": {
-      "atk": 5,
-      "def": 8,
-      "hp": 66,
+      "atk": 4,
+      "def": 6,
+      "hp": 46,
       "jump": 2,
-      "mag": 8,
-      "res": 10,
+      "mag": 6,
+      "res": 7,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -4606,15 +4606,15 @@
     "race": "drake",
     "recommended_path": "physical",
     "stats": {
-      "atk": 13,
-      "def": 8,
-      "hp": 66,
+      "atk": 9,
+      "def": 6,
+      "hp": 46,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 1,
-      "spd": 9,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -4636,15 +4636,15 @@
     "race": "drake",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 62,
+      "atk": 3,
+      "def": 4,
+      "hp": 43,
       "jump": 2,
-      "mag": 13,
-      "res": 5,
+      "mag": 9,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   },
   {
@@ -4666,15 +4666,15 @@
     "race": "drake",
     "recommended_path": "physical",
     "stats": {
-      "atk": 14,
-      "def": 8,
-      "hp": 74,
+      "atk": 10,
+      "def": 6,
+      "hp": 52,
       "jump": 2,
       "mag": 0,
-      "res": 4,
+      "res": 3,
       "rng": 2,
-      "spd": 11,
-      "wp": 9
+      "spd": 8,
+      "wp": 6
     }
   },
   {
@@ -4696,15 +4696,15 @@
     "race": "drake",
     "recommended_path": "physical",
     "stats": {
-      "atk": 7,
-      "def": 11,
-      "hp": 80,
+      "atk": 5,
+      "def": 8,
+      "hp": 56,
       "jump": 2,
       "mag": 0,
-      "res": 5,
+      "res": 4,
       "rng": 1,
-      "spd": 8,
-      "wp": 9
+      "spd": 6,
+      "wp": 6
     }
   },
   {
@@ -4726,15 +4726,15 @@
     "race": "drake",
     "recommended_path": "magical",
     "stats": {
-      "atk": 4,
-      "def": 6,
-      "hp": 62,
+      "atk": 3,
+      "def": 4,
+      "hp": 43,
       "jump": 2,
-      "mag": 13,
-      "res": 5,
+      "mag": 9,
+      "res": 4,
       "rng": 1,
-      "spd": 9,
-      "wp": 12
+      "spd": 6,
+      "wp": 8
     }
   }
 ]

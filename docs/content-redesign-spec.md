@@ -140,8 +140,12 @@ compositions, and meta-unlock references to the new class/character/item IDs; ad
 remove Thief/Soldier/Adept@3 language), refresh all content counts, update README + roadmap, and
 retire the now-historical `class-tree-engine-changes.md` / `content-pipeline-pending-changes.md`.
 
-**Phase 6 — Balance pass.** Iterative tuning of JP/WP costs, growth, tier gating across 790 abilities
-/ 268 classes. Largest and most iterative; gated on Phase 3 findings.
+**Phase 6 — Balance pass. ✅ FIRST PASS APPLIED.** Metrics harness (`balance_metrics.gd`) + report
+found players lost 100% of level-matched fights (structural: monsters use high authored stats, players
+the low race+class+growth economy). Fixed with two uniform levers — **monster stats ×0.70** (also
+closes the SPD/initiative gap, R2) and **player-class growth ×2.5** — lifting PvE win rate to ~0.69/0.46/0.47
+across bands 1/4/8. See `content-redesign-phase6-balance-report.md` §7. Per-archetype refinement (JP/WP
+costs, tier gating) remains available as future polish.
 
 ## Risks
 
