@@ -24,7 +24,7 @@ func resolve(unit: BattleUnit, ability_id: String) -> AbilityData:
 	## (passive_kind == ""), or null. Passives are equipped into slots, not used
 	## as actions, so they are never resolvable as an activatable ability.
 	var ab: AbilityData = _ability_getter.call(ability_id)
-	if ab == null or ab.passive_kind != "":
+	if ab == null or not ab.is_active():
 		return null
 
 	# Direct character abilities (loadout)
@@ -53,7 +53,7 @@ func all_abilities(unit: BattleUnit) -> Array:
 	for ability_id in unit.character.abilities:
 		if not seen.has(ability_id):
 			var a: AbilityData = _ability_getter.call(ability_id)
-			if a and a.passive_kind == "":
+			if a and a.is_active():
 				result.append(a)
 				seen[ability_id] = true
 
@@ -64,7 +64,7 @@ func all_abilities(unit: BattleUnit) -> Array:
 			for ability_id in cls.granted_abilities:
 				if not seen.has(ability_id):
 					var a: AbilityData = _ability_getter.call(ability_id)
-					if a:
+					if a and a.is_active():
 						result.append(a)
 						seen[ability_id] = true
 
@@ -75,7 +75,7 @@ func all_abilities(unit: BattleUnit) -> Array:
 			for ability_id in item.granted_abilities:
 				if not seen.has(ability_id):
 					var a: AbilityData = _ability_getter.call(ability_id)
-					if a:
+					if a and a.is_active():
 						result.append(a)
 						seen[ability_id] = true
 
