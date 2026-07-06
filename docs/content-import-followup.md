@@ -1,7 +1,15 @@
 # Staged CSV Content — Import Findings & Follow-up
 
 **Date:** 2026-07-06
-**Status:** import mechanically solved; **full adoption deferred pending a gameplay-model decision.**
+**Status:** import mechanically solved. Adoption scoped as a design project —
+see **`docs/content-redesign-spec.md`**.
+
+> **Correction (2026-07-06):** an earlier revision of this doc claimed fresh characters would have
+> "no basic attack" under the staged content. That is **wrong** — attack/move/defend/wait/use-item
+> are intrinsic to the action economy (`TurnActions`), so an empty `granted_abilities` is fully
+> combat-functional. The real reason adoption is non-trivial is that the staged content is a
+> **wholesale redesign** (10-tier job tree, `adept` removed, full stat rebalance), not an expansion.
+> The resolver analysis below remains accurate; treat the "no baseline attack" framing as superseded.
 
 ## Summary
 
