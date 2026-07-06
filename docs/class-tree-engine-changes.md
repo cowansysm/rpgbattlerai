@@ -1,8 +1,8 @@
 # Class Tree — Required Engine Changes (n-tier model)
 
-**Status:** required before `import classes` will validate/import the new 128-class `classes.csv`.
+**Status:** ✅ ENGINE CHANGES DONE (2026-07-06). The n-tier model has landed — `class_data.gd` uses `tier: int`, `entity_schema.gd` declares `tier` as `int`, and the validator accepts numeric tiers. However, `import classes` still **fails** for a different reason: the staged 268-class `classes.csv` references ~hundreds of abilities that were never authored (`abilities.csv` is only 91), yielding ~1959 dangling-reference errors at boot. The blocker was **missing ability content**, not the engine. That library has since been located (the 787-ability set in commit `3cc9c9d`) and a spike confirmed the full surplus imports and boots clean once it is restored and 6 elements are re-added — see `docs/content-import-followup.md`. Adoption is deferred pending an ability-acquisition-model decision. Retained for historical context.
 **Owner:** code changes in `validator.gd`, `entity_schema.gd`, `class_data.gd`, and the progression/unlock layer (planner cannot edit code).
-**Date:** 2026-06-24
+**Date:** 2026-06-24 (engine changes completed 2026-07-06)
 
 The new `data/csv/classes.csv` authors **128 classes** under a redesigned model that the
 current A4/A9 validator does **not** accept. Importing it today will fail validation. The

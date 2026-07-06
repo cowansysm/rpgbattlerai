@@ -1,6 +1,6 @@
 # RPG Battle Simulator
 
-A tactical battle simulator in the style of Final Fantasy Tactics, built with Godot and GDScript. All MVP phases (0–11) are complete: draft a party, deploy, and play a full tactical battle to a victory screen. **Alpha** development is underway — sub-phases A0–A7 are implemented and tested (effectful terrain, map editor, CSV↔JSON pipeline, MAG/RES magic, character instances and the Vagabond-rooted job tree, Battle Bands with saves, economy, and a tactical AI opponent), and the A9 content libraries are largely authored. The roguelike run (A8) and polish/meta-progression (A10) are still planned.
+A tactical battle simulator in the style of Final Fantasy Tactics, built with Godot and GDScript. All MVP phases (0–11) are complete: draft a party, deploy, and play a full tactical battle to a victory screen. **Alpha** development is well advanced — sub-phases A0–A20 are implemented and tested (the only exceptions: A13 was dropped, and A9 content authoring has maps still below target). This spans effectful terrain, tooling, MAG/RES magic, the job tree, Battle Bands/saves, economy, AI, the roguelike run, meta-progression, encounters & level scaling, interactive deployment, multiple turn systems (speed-round, charge-time), elemental affinities & crits, knockout/revive, passives, facing/flanking, and a local skirmish mode.
 
 ## Engine Version
 
@@ -167,11 +167,11 @@ Phase specs and implementation plans live in `docs/`.
 - `rpg-implementation-plan.md` — high-level phase roadmap
 - `phase<N>-spec.md` / `phase<N>-implementation-plan.md` — per-phase details (0–11)
 
-**Alpha (in progress — A0–A7 implemented, A9 content largely authored, A8 & A10 planned):**
+**Alpha (in progress — A0–A20 implemented and tested except the dropped A13; A9 content authored, maps still below target):**
 
 - `alpha-specs.md` — master Alpha specification
-- `alpha-implementation-plan.md` — Alpha milestone roadmap (A0–A10)
-- `alpha-phaseA<N>-spec.md` / `alpha-phaseA<N>-implementation-plan.md` — per-sub-phase details (A0–A10)
+- `alpha-implementation-plan.md` — Alpha milestone roadmap (A0–A20)
+- `alpha-phaseA<N>-spec.md` / `alpha-phaseA<N>-implementation-plan.md` — per-sub-phase details (A0–A20; A16–A20 are spec-only)
 
 ## Phase Status
 
@@ -192,7 +192,7 @@ All MVP phases are complete:
 
 ### Alpha (in progress)
 
-The current milestone, **Alpha**, extends the MVP into a single-player game. Status by sub-phase:
+The current milestone, **Alpha**, extends the MVP into a single-player game and, via A20, a local multiplayer/skirmish mode. All sub-phases are implemented and tested except A13, which was dropped. Status by sub-phase:
 
 - [x] A0 — Terrain effects, condensed map format & dev flag
 - [x] A1 — Map editor (dev tool)
@@ -202,11 +202,23 @@ The current milestone, **Alpha**, extends the MVP into a single-player game. Sta
 - [x] A5 — Battle Bands & save system (`user://`)
 - [x] A6 — Economy: gold, shops & loot
 - [x] A7 — AI opponent (`AIController` over `TurnActions`)
-- [ ] A8 — Roguelike run (branching node graph, down-limit death) — **not built**
-- [~] A9 — Content expansion: core libraries authored (classes/abilities/items/characters/terrain at target); **maps and economy tables still below target**
-- [ ] A10 — Polish & meta-progression — **not built**
+- [x] A8 — Roguelike run (branching node graph, down-limit death)
+- [~] A9 — Content expansion: libraries well beyond target (91 abilities, 146 classes, 46 items, 141 characters, 32 races, 17 terrains, 73 encounters); **maps (6) still below target**
+- [x] A10 — Polish & meta-progression (Profile, MetaUnlockEngine, recruitment gating, run shop)
+- [x] A11 — Encounters, level scaling & economy refinement
+- [x] A12 — Interactive deployment zones
+- [ ] A13 — Coin flip & opening initiative — **dropped, not to be implemented**
+- [x] A14 — Ability symbol pawns / physics drop feedback
+- [x] A15 — Telegraphed speed-round + turn-system architecture
+- [x] A16 — Elemental affinities & critical hits
+- [x] A17 — Knockout & revive lifecycle
+- [x] A18 — Reaction / support / movement passives
+- [x] A19 — Facing & flanking
+- [x] A20 — Charge-time clock + skirmish container
 
-For A8 and A10, the `alpha-*` docs are the plan of record, not a description of existing code. Each sub-phase has a spec + implementation plan in `docs/`.
+Only A9's maps remain below target; everything else on the Alpha path is shipped and green under the GUT suite. Each sub-phase has a spec (and, through A15, an implementation plan) in `docs/`.
+
+> **Note on staged CSV content:** `data/csv/` holds a larger draft library (268 classes, 160 characters, 128 items). It is **not adopted yet**: it references a 787-ability set that was reduced to 91 during A18. A spike confirmed the surplus imports and boots clean once that ability library is restored (+6 elements re-added), but the content uses a learn-via-JP model that would leave fresh characters with no baseline attack and breaks 148 tests. Adoption is deferred pending a gameplay-model decision — see `docs/content-import-followup.md`.
 
 ### Deferred (beyond Alpha)
 
