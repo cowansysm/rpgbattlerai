@@ -1,4 +1,5 @@
 extends GutTest
+const SharedPipeline = preload("res://tests/helpers/shared_pipeline.gd")
 ## Phase 6: Verify all maps load, have correct deployment zones, and meet tier sizing.
 
 var _pipeline: DataPipeline
@@ -17,9 +18,8 @@ var _map_ids: Array[String] = [
 
 
 func before_all() -> void:
-	_pipeline = DataPipeline.new()
-	var errors := _pipeline.run("res://data")
-	assert_eq(errors.size(), 0, "data should load with zero errors")
+	_pipeline = SharedPipeline.get_pipeline()
+	assert_eq(SharedPipeline.load_errors().size(), 0, "data should load with zero errors")
 
 
 # --- Map Loading ---

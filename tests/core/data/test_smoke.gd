@@ -1,13 +1,13 @@
 extends GutTest
+const SharedPipeline = preload("res://tests/helpers/shared_pipeline.gd")
 ## Smoke test: loads full data/ directory and verifies everything works end to end.
 
 var _pipeline: DataPipeline
 
 
 func before_all() -> void:
-	_pipeline = DataPipeline.new()
-	var errors := _pipeline.run("res://data")
-	assert_eq(errors.size(), 0, "full content should load with zero errors")
+	_pipeline = SharedPipeline.get_pipeline()
+	assert_eq(SharedPipeline.load_errors().size(), 0, "full content should load with zero errors")
 
 
 func test_entity_counts() -> void:

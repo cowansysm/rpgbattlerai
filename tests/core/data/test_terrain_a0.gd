@@ -1,13 +1,13 @@
 extends GutTest
+const SharedPipeline = preload("res://tests/helpers/shared_pipeline.gd")
 ## Alpha A0: tests for new terrain types and effect fields loaded from data/terrain.json.
 
 var _pipeline: DataPipeline
 
 
 func before_all() -> void:
-	_pipeline = DataPipeline.new()
-	var errors := _pipeline.run("res://data")
-	assert_eq(errors.size(), 0, "data pipeline should load without errors")
+	_pipeline = SharedPipeline.get_pipeline()
+	assert_eq(SharedPipeline.load_errors().size(), 0, "data pipeline should load without errors")
 
 
 # --- New A0 terrains exist ---

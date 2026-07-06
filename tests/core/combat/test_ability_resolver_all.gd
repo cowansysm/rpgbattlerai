@@ -1,4 +1,5 @@
 extends GutTest
+const SharedPipeline = preload("res://tests/helpers/shared_pipeline.gd")
 ## Tests for AbilityResolver.all_abilities() method.
 ## Uses DataPipeline for real character/ability/class/item data.
 ## Spec reference: phase8-spec.md §6.1
@@ -8,9 +9,8 @@ var _resolver: AbilityResolver
 
 
 func before_all() -> void:
-	_pipeline = DataPipeline.new()
-	var errors := _pipeline.run("res://data")
-	assert_eq(errors.size(), 0, "data should load with zero errors")
+	_pipeline = SharedPipeline.get_pipeline()
+	assert_eq(SharedPipeline.load_errors().size(), 0, "data should load with zero errors")
 
 
 func before_each() -> void:

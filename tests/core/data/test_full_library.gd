@@ -1,4 +1,5 @@
 extends GutTest
+const SharedPipeline = preload("res://tests/helpers/shared_pipeline.gd")
 ## A9: Full-library smoke test.
 ## Boots the entire data pipeline with the real content library and asserts
 ## structural invariants: clean load, content counts, cross-references, and
@@ -6,8 +7,8 @@ extends GutTest
 
 
 func test_full_library_boots_clean() -> void:
-	var pipeline := DataPipeline.new()
-	var errors := pipeline.run("res://data")
+	var pipeline := SharedPipeline.get_pipeline()
+	var errors := SharedPipeline.load_errors()
 	assert_eq(errors.size(), 0, "full library should produce zero errors: %s" % str(errors))
 	# Content count thresholds (per A9 targets)
 	assert_true(pipeline.classes.size() >= 25,
@@ -26,8 +27,8 @@ func test_every_class_provides_ability_access() -> void:
 	# Every class must expose an ability path: innate granted_abilities (monster/authored
 	# kits) or a learnable jp_costs catalog (player learn-via-JP). Core actions
 	# (attack/move/defend/wait) are intrinsic, so an empty granted set is still functional.
-	var pipeline := DataPipeline.new()
-	var errors := pipeline.run("res://data")
+	var pipeline := SharedPipeline.get_pipeline()
+	var errors := SharedPipeline.load_errors()
 	assert_eq(errors.size(), 0, "pipeline should boot clean")
 	for cls in pipeline.classes.all():
 		assert_true(cls.granted_abilities.size() > 0 or cls.jp_costs.size() > 0,
@@ -38,8 +39,8 @@ func test_every_class_provides_ability_access() -> void:
 
 
 func test_every_class_jp_costs_resolve() -> void:
-	var pipeline := DataPipeline.new()
-	var errors := pipeline.run("res://data")
+	var pipeline := SharedPipeline.get_pipeline()
+	var errors := SharedPipeline.load_errors()
 	assert_eq(errors.size(), 0, "pipeline should boot clean")
 	for cls in pipeline.classes.all():
 		for ab_id in cls.jp_costs.keys():
@@ -48,8 +49,8 @@ func test_every_class_jp_costs_resolve() -> void:
 
 
 func test_equipment_access_resolves() -> void:
-	var pipeline := DataPipeline.new()
-	var errors := pipeline.run("res://data")
+	var pipeline := SharedPipeline.get_pipeline()
+	var errors := SharedPipeline.load_errors()
 	assert_eq(errors.size(), 0, "pipeline should boot clean")
 	for cls in pipeline.classes.all():
 		for item_id in cls.equipment_access:
@@ -58,8 +59,8 @@ func test_equipment_access_resolves() -> void:
 
 
 func test_job_tree_acyclic_and_rooted() -> void:
-	var pipeline := DataPipeline.new()
-	var errors := pipeline.run("res://data")
+	var pipeline := SharedPipeline.get_pipeline()
+	var errors := SharedPipeline.load_errors()
 	assert_eq(errors.size(), 0, "pipeline should boot clean")
 	var tree_errors := Validator.validate_job_tree(pipeline.classes)
 	assert_eq(tree_errors.size(), 0,
@@ -67,8 +68,8 @@ func test_job_tree_acyclic_and_rooted() -> void:
 
 
 func test_no_physical_skill_has_mag_scaling() -> void:
-	var pipeline := DataPipeline.new()
-	var errors := pipeline.run("res://data")
+	var pipeline := SharedPipeline.get_pipeline()
+	var errors := SharedPipeline.load_errors()
 	assert_eq(errors.size(), 0, "pipeline should boot clean")
 	for ab in pipeline.abilities.all():
 		if ab.type == "skill":
@@ -77,8 +78,8 @@ func test_no_physical_skill_has_mag_scaling() -> void:
 
 
 func test_all_damage_spells_have_mag_scaling() -> void:
-	var pipeline := DataPipeline.new()
-	var errors := pipeline.run("res://data")
+	var pipeline := SharedPipeline.get_pipeline()
+	var errors := SharedPipeline.load_errors()
 	assert_eq(errors.size(), 0, "pipeline should boot clean")
 	for ab in pipeline.abilities.all():
 		if ab.type == "spell" and ab.effect_type == "damage":
@@ -87,8 +88,8 @@ func test_all_damage_spells_have_mag_scaling() -> void:
 
 
 func test_item_abilities_resolve() -> void:
-	var pipeline := DataPipeline.new()
-	var errors := pipeline.run("res://data")
+	var pipeline := SharedPipeline.get_pipeline()
+	var errors := SharedPipeline.load_errors()
 	assert_eq(errors.size(), 0, "pipeline should boot clean")
 	for it in pipeline.items.all():
 		for ab_id in it.granted_abilities:

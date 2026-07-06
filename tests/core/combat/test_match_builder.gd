@@ -1,4 +1,5 @@
 extends GutTest
+const SharedPipeline = preload("res://tests/helpers/shared_pipeline.gd")
 ## Tests for MatchBuilder orchestration.
 ## Uses DataPipeline for real character/map data (integration test).
 ## Spec reference: phase7-spec.md §5
@@ -8,9 +9,8 @@ var _builder: MatchBuilder
 
 
 func before_all() -> void:
-	_pipeline = DataPipeline.new()
-	var errors := _pipeline.run("res://data")
-	assert_eq(errors.size(), 0, "data should load with zero errors")
+	_pipeline = SharedPipeline.get_pipeline()
+	assert_eq(SharedPipeline.load_errors().size(), 0, "data should load with zero errors")
 
 
 func before_each() -> void:

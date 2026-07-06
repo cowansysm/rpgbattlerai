@@ -1,4 +1,5 @@
 extends GutTest
+const SharedPipeline = preload("res://tests/helpers/shared_pipeline.gd")
 ## Phase 6 / A4 + content redesign: verify playable templates instantiate with the
 ## vagabond root class under the 10-tier job tree (tier-1: squire/apprentice/acolyte/
 ## cutpurse/footman/page/slinger/tinker; abilities learned via jp_costs, not granted).
@@ -12,9 +13,8 @@ var _character_ids: Array[String] = [
 
 
 func before_all() -> void:
-	_pipeline = DataPipeline.new()
-	var errors := _pipeline.run("res://data")
-	assert_eq(errors.size(), 0, "data should load with zero errors")
+	_pipeline = SharedPipeline.get_pipeline()
+	assert_eq(SharedPipeline.load_errors().size(), 0, "data should load with zero errors")
 
 
 # --- Character Loading ---
