@@ -1,6 +1,7 @@
 extends GutTest
-## Phase 6 / A4: Verify all 8 templates instantiate correctly with vagabond class.
-## Tests updated for A4 job-tree classes (vagabond, soldier, thief, adept).
+## Phase 6 / A4 + content redesign: verify playable templates instantiate with the
+## vagabond root class under the 10-tier job tree (tier-1: squire/apprentice/acolyte/
+## cutpurse/footman/page/slinger/tinker; abilities learned via jp_costs, not granted).
 
 var _pipeline: DataPipeline
 
@@ -62,31 +63,33 @@ func test_vagabond_class_exists() -> void:
 	var cls := _pipeline.get_job_class("vagabond")
 	assert_not_null(cls)
 	assert_eq(cls.tier, 0)
-	assert_true("basic_strike" in cls.granted_abilities)
+	# Learn-via-JP: player classes teach through jp_costs, not granted_abilities.
+	assert_true("basic_strike" in cls.jp_costs)
 
 
 func test_soldier_class_exists() -> void:
 	var cls := _pipeline.get_job_class("soldier")
 	assert_not_null(cls)
-	assert_eq(cls.tier, 1)
+	assert_eq(cls.tier, 2)
 	assert_eq(cls.archetype, "physical_attack")
-	assert_true("power_strike" in cls.granted_abilities)
+	assert_true("backstab" in cls.jp_costs)
 
 
 func test_thief_class_exists() -> void:
 	var cls := _pipeline.get_job_class("thief")
 	assert_not_null(cls)
-	assert_eq(cls.tier, 1)
+	assert_eq(cls.tier, 2)
 	assert_eq(cls.archetype, "control")
-	assert_true("backstab" in cls.granted_abilities)
+	assert_true("poison_strike" in cls.jp_costs)
 
 
-func test_adept_class_exists() -> void:
-	var cls := _pipeline.get_job_class("adept")
+func test_apprentice_class_exists() -> void:
+	# Replaces the removed "adept": apprentice is the tier-1 magical_attack root.
+	var cls := _pipeline.get_job_class("apprentice")
 	assert_not_null(cls)
 	assert_eq(cls.tier, 1)
 	assert_eq(cls.archetype, "magical_attack")
-	assert_true("fire_1" in cls.granted_abilities)
+	assert_true("fire_1" in cls.jp_costs)
 
 
 # --- Weapon Power ---
@@ -131,41 +134,43 @@ func test_caster_weapon_power() -> void:
 # --- Vagabond Stat Modifiers ---
 
 func test_fighter_def_includes_vagabond() -> void:
-	# Human Fighter: base def=10, vagabond def+1, human +0 = 11
+	# human_fighter derived DEF under the redesigned balance (vagabond adds no def mod).
 	var fs := _pipeline.get_final_stats("human_fighter")
-	assert_eq(fs.effective("def"), 11, "Fighter DEF should include vagabond modifier")
+	assert_eq(fs.effective("def"), 10, "Fighter DEF under new balance")
 
 
 func test_fighter_atk_includes_vagabond() -> void:
-	# Human Fighter: base atk=10, vagabond atk+1, human +0 = 11
+	# human_fighter derived ATK under the redesigned balance (vagabond adds no atk mod).
 	var fs := _pipeline.get_final_stats("human_fighter")
-	assert_eq(fs.effective("atk"), 11, "Fighter ATK should include vagabond modifier")
+	assert_eq(fs.effective("atk"), 10, "Fighter ATK under new balance")
 
 
 # --- Ability Access ---
 
-func test_vagabond_has_basic_strike() -> void:
+func test_vagabond_teaches_basic_strike() -> void:
 	var cls := _pipeline.get_job_class("vagabond")
-	assert_true("basic_strike" in cls.granted_abilities,
-		"Vagabond class should grant basic_strike")
+	assert_true("basic_strike" in cls.jp_costs,
+		"Vagabond should teach basic_strike via JP")
 
 
-func test_soldier_has_power_strike() -> void:
+func test_squire_teaches_power_strike() -> void:
+	# power_strike moved to the tier-1 squire under the new tree.
+	var cls := _pipeline.get_job_class("squire")
+	assert_true("power_strike" in cls.jp_costs,
+		"Squire should teach power_strike via JP")
+
+
+func test_apprentice_teaches_fire_1() -> void:
+	var cls := _pipeline.get_job_class("apprentice")
+	assert_true("fire_1" in cls.jp_costs,
+		"Apprentice should teach fire_1 via JP")
+
+
+func test_soldier_teaches_backstab() -> void:
+	# backstab lives on the tier-2 soldier under the new tree.
 	var cls := _pipeline.get_job_class("soldier")
-	assert_true("power_strike" in cls.granted_abilities,
-		"Soldier class should grant power_strike")
-
-
-func test_adept_has_fire_1() -> void:
-	var cls := _pipeline.get_job_class("adept")
-	assert_true("fire_1" in cls.granted_abilities,
-		"Adept class should grant fire_1")
-
-
-func test_thief_has_backstab() -> void:
-	var cls := _pipeline.get_job_class("thief")
-	assert_true("backstab" in cls.granted_abilities,
-		"Thief class should grant backstab")
+	assert_true("backstab" in cls.jp_costs,
+		"Soldier should teach backstab via JP")
 
 
 func test_smoke_bomb_granted_by_item() -> void:
@@ -198,9 +203,9 @@ func test_all_characters_have_wp() -> void:
 
 
 func test_fighter_wp_with_vagabond() -> void:
-	# human_fighter: base wp=12, human +0, vagabond +0 = 12
+	# human_fighter derived WP under the redesigned balance (incl. vagabond wp mod).
 	var fs := _pipeline.get_final_stats("human_fighter")
-	assert_eq(fs.effective("wp"), 12, "Fighter WP should be 12 base + 0 race + 0 class")
+	assert_eq(fs.effective("wp"), 13, "Fighter WP under new balance")
 
 
 # --- Race Base Stats ---

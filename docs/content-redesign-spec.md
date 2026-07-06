@@ -111,7 +111,11 @@ and grant a random JP pool to the starting class in `Recruiter.recruit()` /
 version and reset incompatible saves on load. Add tests for both. Exit: clean boot + a fresh recruit
 has starting JP and zero learned skills.
 
-**Phase 2 — Test reconciliation (~148 failures).** Rewrite against the new design, not to silence:
+**Phase 2 — Test reconciliation. ✅ COMPLETE.** All legacy tests reconciled to the new design;
+full suite green when run per-directory: ai 39, combat 432, data 201, dev 41, economy 44, hex 89,
+progression 136, run 87, map 86, tools 67 = **1222/1222, 0 failures**. Details below.
+
+Rewrite against the new design, not to silence:
 - `tests/core/data/test_full_library.gd` (128): `test_every_class_has_granted_abilities` →
   assert each class provides an ability path (`granted_abilities` **or** `jp_costs`) + refs resolve.
 - `tests/core/data/test_roster.gd` (14): update signature-ability checks from `granted_abilities`

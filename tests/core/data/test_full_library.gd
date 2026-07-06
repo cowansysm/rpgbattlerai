@@ -22,13 +22,16 @@ func test_full_library_boots_clean() -> void:
 		"expected >= 17 terrain types, got %d" % pipeline.terrains.size())
 
 
-func test_every_class_has_granted_abilities() -> void:
+func test_every_class_provides_ability_access() -> void:
+	# Every class must expose an ability path: innate granted_abilities (monster/authored
+	# kits) or a learnable jp_costs catalog (player learn-via-JP). Core actions
+	# (attack/move/defend/wait) are intrinsic, so an empty granted set is still functional.
 	var pipeline := DataPipeline.new()
 	var errors := pipeline.run("res://data")
 	assert_eq(errors.size(), 0, "pipeline should boot clean")
 	for cls in pipeline.classes.all():
-		assert_true(cls.granted_abilities.size() > 0,
-			"class '%s' should have at least one granted ability" % cls.id)
+		assert_true(cls.granted_abilities.size() > 0 or cls.jp_costs.size() > 0,
+			"class '%s' should grant or teach at least one ability" % cls.id)
 		for ab_id in cls.granted_abilities:
 			assert_true(pipeline.abilities.has(ab_id),
 				"class '%s' grants unknown ability '%s'" % [cls.id, ab_id])

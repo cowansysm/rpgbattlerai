@@ -29,47 +29,67 @@ func _make_unit(char_id: String) -> BattleUnit:
 	return BattleUnit.from_character(c, fs)
 
 
+## Builds a throwaway unit with an explicit loadout/equipment/classes, without
+## mutating shared pipeline CharacterData. Learn-via-JP means player skills reach
+## combat through the slotted loadout (character.abilities).
+func _unit_with(abilities: Array, equipment: Array = [], classes: Array = ["vagabond"]) -> BattleUnit:
+	var c := CharacterData.new()
+	c.id = "test_unit"
+	c.display_name = "Test Unit"
+	c.race = "human"
+	var t_classes: Array[String] = []
+	for x in classes:
+		t_classes.append(str(x))
+	var t_equip: Array[String] = []
+	for x in equipment:
+		t_equip.append(str(x))
+	var t_ab: Array[String] = []
+	for x in abilities:
+		t_ab.append(str(x))
+	c.classes = t_classes
+	c.equipment = t_equip
+	c.abilities = t_ab
+	var sb := StatBlock.new()
+	sb.set_base("hp", 10)
+	sb.set_base("spd", 3)
+	sb.set_base("atk", 3)
+	sb.set_base("rng", 1)
+	sb.set_base("def", 1)
+	return BattleUnit.from_character(c, sb)
+
+
 # --- Tests ---
 
-func test_all_abilities_includes_class_granted() -> void:
-	# Elf Black Mage starts as vagabond which grants basic_strike
-	var unit := _make_unit("elf_black_mage")
-	assert_not_null(unit, "elf_black_mage should exist")
-
+func test_all_abilities_includes_loadout() -> void:
+	# Learn-via-JP: a player unit's skills come from its slotted loadout (character.abilities).
+	var unit := _unit_with(["basic_strike", "fire_1"])
 	var abilities := _resolver.all_abilities(unit)
-	assert_gt(abilities.size(), 0, "vagabond should have abilities")
-
-	# Check that basic_strike is in the list (granted by vagabond class)
+	assert_gt(abilities.size(), 0, "unit with a loadout should have abilities")
 	var ids: Array = []
 	for a in abilities:
 		ids.append(a.id)
-	assert_true("basic_strike" in ids, "should include class-granted basic_strike")
+	assert_true("basic_strike" in ids, "should include slotted basic_strike")
+	assert_true("fire_1" in ids, "should include slotted fire_1")
 
 
 func test_all_abilities_includes_equipment_granted() -> void:
-	# Human Rogue starts as vagabond which grants basic_strike
-	var unit := _make_unit("human_rogue")
-	assert_not_null(unit, "human_rogue should exist")
-
+	# Equipment that grants abilities surfaces them (smoke_bomb_pouch -> smoke_bomb).
+	var unit := _unit_with([], ["smoke_bomb_pouch"])
 	var abilities := _resolver.all_abilities(unit)
 	var ids: Array = []
 	for a in abilities:
 		ids.append(a.id)
-
-	# Vagabond class grants basic_strike
-	assert_true("basic_strike" in ids, "should include class-granted basic_strike")
+	assert_true("smoke_bomb" in ids, "should include equipment-granted smoke_bomb")
 
 
 func test_all_abilities_for_fighter() -> void:
-	# Human Fighter — vagabond class grants basic_strike
-	var unit := _make_unit("human_fighter")
-	assert_not_null(unit, "human_fighter should exist")
-
+	# A slotted physical skill surfaces for a fighter-style loadout.
+	var unit := _unit_with(["power_strike"])
 	var abilities := _resolver.all_abilities(unit)
 	var ids: Array = []
 	for a in abilities:
 		ids.append(a.id)
-	assert_true("basic_strike" in ids, "should include class-granted basic_strike")
+	assert_true("power_strike" in ids, "should include slotted power_strike")
 
 
 func test_all_abilities_deduplicates() -> void:
@@ -105,13 +125,15 @@ func test_all_abilities_empty_for_no_abilities_unit() -> void:
 	assert_eq(abilities.size(), 0, "unit with no abilities should return empty")
 
 
-func test_all_abilities_multiclass_unit() -> void:
-	# Elf Red Mage has red_mage class which should grant both offensive and healing
-	var unit := _make_unit("elf_red_mage")
-	assert_not_null(unit, "elf_red_mage should exist")
-
+func test_all_abilities_aggregates_loadout_and_equipment() -> void:
+	# all_abilities() aggregates across sources: slotted skills + equipment-granted.
+	var unit := _unit_with(["fire_1", "cure_1"], ["smoke_bomb_pouch"])
 	var abilities := _resolver.all_abilities(unit)
-	assert_gt(abilities.size(), 0, "red mage should have abilities")
+	var ids: Array = []
+	for a in abilities:
+		ids.append(a.id)
+	assert_true("fire_1" in ids and "cure_1" in ids and "smoke_bomb" in ids,
+		"should aggregate loadout + equipment abilities")
 
 
 func test_resolve_and_all_abilities_consistent() -> void:
