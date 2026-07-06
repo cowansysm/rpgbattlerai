@@ -133,8 +133,12 @@ low/mid/high encounters resolve within the round cap, AI uses abilities, all 4 A
 restored elements resolve, and a passive-hygiene bug was fixed (passives were enumerable/usable as
 actions — now filtered in `AbilityResolver` + `AIPlanner`). Balance-metrics sweep deferred to Phase 6.
 
-**Phase 4 — Economy / encounter / meta wiring.** Reconcile shop pools, loot tables, encounter
-compositions, and meta-unlock references to the new class/character/item IDs; add/adjust tests.
+**Phase 4 — Economy / encounter / meta wiring. ✅ COMPLETE.** Encounter/meta refs were already
+clean (Phase 0). Wired the 82 previously-unreachable items into shop pools by price tier
+(<150 → run_common+base_shop, 150–499 → run_premium+base_shop, ≥500 → run_artifact; consumables →
+base_shop); run loot pulls from these pools, so items are now buyable and lootable. Added
+`tests/core/economy/test_shop_coverage.gd` (every item in a pool, all pool/loot refs resolve).
+Economy 47/47, run 87/87, boot clean.
 
 **Phase 5 — Documentation overhaul.** Rewrite the CLAUDE.md job-tree section (4-tier → 10-tier,
 remove Thief/Soldier/Adept@3 language), refresh all content counts, update README + roadmap, and
