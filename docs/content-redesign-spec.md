@@ -1,7 +1,7 @@
 # Content Redesign — Adopt the Expanded 10-Tier Library (Design Project)
 
 **Date:** 2026-07-06
-**Status:** SCOPED — approved as a deliberate design initiative (not an import fix). Multi-session.
+**Status:** PHASE 0 COMPLETE — design signed off (2026-07-06). Ready for Phase 1 implementation. Multi-session.
 **Depends on:** the import-enabler work already merged (`docs/content-import-followup.md`,
 `Affinity.ELEMENTS` extension).
 
@@ -45,29 +45,61 @@ when a unit has no learned skills. So a player class with empty `granted_abiliti
 combat-functional** — there is no baseline-attack regression and nothing to grant. Skills/spells
 layer on via `jp_costs` → learn → loadout, which already works for progressed characters.
 
-## Design decisions requiring sign-off (review gates)
+## Design review — SIGNED OFF (Phase 0, 2026-07-06)
 
-Resolve these before implementation; each shapes tests and docs:
+All five gates resolved. Outcomes below are the canonical design of record.
 
-1. **Progression model.** Confirm level-gated class unlocks (reach level N in a prereq class) as
-   the canonical rule, replacing the documented "unlock Thief/Soldier/Adept at level 3." Confirm
-   whether fresh recruits get any default learned loadout or start skill-less (learn-via-JP).
-2. **Balance intent.** Confirm the rebalanced class `stats`/`growth` are intended and internally
-   consistent (spot-check caster/tank/dps archetypes across tiers). This is the riskiest unknown.
-3. **Roster identity.** The 20 playable templates still map to `vagabond`; confirm the intended
-   tier-1→elite paths per template (`recommended_path`) under the new tree.
-4. **Economy fit.** 128 items vs. current shop pools / loot tables (`shop_pools.json`,
-   `loot_tables.json`, `encounters.json`) — confirm price coverage and drop wiring for new items.
-5. **Meta / encounters.** 140 monster classes + 160 characters vs. `encounters.json` (73) and
-   `meta_unlocks.json` — confirm references resolve and scaling still holds.
+1. **Progression model — CONFIRMED.** Level-gated class-unlock chain is canonical
+   (`prerequisites: {"classes": [["<prereq>", <level>]]}`; reach the required level in a prereq
+   class to unlock the next). Single root `vagabond` (t0) → 8 tier-1 classes at vagabond L3 →
+   chains through 10 tiers; valid DAG (multi-parent merges allowed, e.g. `oracle` from `cleric`
+   or `seer`). Replaces the old "unlock Thief/Soldier/Adept at level 3."
+   - **Recruit start (DECISION):** **skill-less** — recruits carry only intrinsic actions and
+     learn every skill via JP. To avoid a dead first turn, `Recruiter.recruit()`/
+     `CharacterInstance.generate()` grants a **small random starting JP pool** to the starting
+     class. Proposed tunables in `constants.json`: `RECRUIT_STARTING_JP_MIN = 20`,
+     `RECRUIT_STARTING_JP_MAX = 50` (context: `JP_PER_BATTLE = 20`; vagabond abilities cost
+     20–50, so a recruit can immediately buy 1–2 baseline skills). Final numbers are a Phase 6 tuning knob.
+2. **Balance intent — CONFIRMED (user).** The rebalanced class `stats`/`growth` and the expanded
+   library are intended and adopted as the current product. Balance is still unplaytested → Phase 3/6.
+3. **Roster identity — CONFIRMED.** 20 playable templates, all `vagabond`-rooted; `recommended_path`
+   is an **archetype label** (`physical`/`magical`/`control`/`support`), each richly covered in the
+   tree (physical→physical_attack/defense 55, magical→magical_attack/defense 38, control 16,
+   support 19). No dangling paths.
+4. **Economy fit — CLEAN.** `shop_pools.json` (46 items) and `loot_tables.json` resolve fully against
+   the 128-item set (0 dangling). **Follow-up (Phase 4, non-blocking):** 82 new items are not yet in
+   any shop pool or loot table — wire the desirable ones in.
+5. **Meta / encounters — CLEAN.** All 73 encounters (121 distinct enemy templates) resolve against the
+   160 characters; `meta_unlocks.json` rules grant only meta flags (no template/class refs). 0 dangling.
+
+**Save compatibility (DECISION):** **clean-slate** — bump the save version in `SaveManager` and
+discard/reset incompatible saves on load (acceptable for in-dev alpha). No ID-migration table.
+
+### Canonical tier-1 branches (from `vagabond` at L3)
+
+| Tier-1 class | Archetype | Leads toward |
+|---|---|---|
+| `squire` | physical_attack | soldier/warrior/monk/knight_errant → berserker, dragoon, gladiator, warlord, swordmaster |
+| `footman` | physical_defense | defender/guardian/knight/man_at_arms → paladin, sentinel, shieldmaster, vanguard, ironclad |
+| `slinger` | physical_attack (ranged) | archer/gunner → hunter, marksman, crossbowman, pistoleer, rifleman |
+| `apprentice` | magical_attack | mage/cultist/scholar → black_mage, elementalist, necromancer, chronomancer, sage |
+| `acolyte` | magical_defense | cleric/seer/white_mage/templar/medic → bishop, oracle, paladin, field_surgeon |
+| `cutpurse` | control | thief/scout/duelist/bard → rogue, trickster, saboteur, ranger, swordmaster |
+| `page` | support | herald/tactician/medic/bard/white_mage → strategist, beastmaster, crusader |
+| `tinker` | support (gadget) | chemist/artificer/gunner/ironclad → alchemist, bombardier, artillerist, dreadnought |
 
 ## Work breakdown
 
-**Phase 0 — Design review.** Resolve the five decisions above; capture the canonical job-tree
-diagram and balance targets. Exit: signed-off design.
+**Phase 0 — Design review. ✅ COMPLETE (2026-07-06).** Five gates resolved (see "Design review —
+SIGNED OFF" above); canonical job tree captured. Ready for Phase 1.
 
-**Phase 1 — Import + boot.** On a feature branch: rebuild `abilities.csv` (live 91 + 699 historical),
-`import all`, confirm 0 errors and clean boot. Exit: `790 / 268 / 128 / 160` loads green in the pipeline.
+**Phase 1 — Import + boot + start-state wiring.** On a feature branch: rebuild `abilities.csv`
+(live 91 + 699 historical), `import all`, confirm 0 errors and clean boot (`790 / 268 / 128 / 160`).
+Then land the two Phase-0 decisions: (a) add `RECRUIT_STARTING_JP_MIN`/`_MAX` to `constants.json`
+and grant a random JP pool to the starting class in `Recruiter.recruit()` /
+`CharacterInstance.generate()` (skill-less start, seeded JP); (b) bump the `SaveManager` save
+version and reset incompatible saves on load. Add tests for both. Exit: clean boot + a fresh recruit
+has starting JP and zero learned skills.
 
 **Phase 2 — Test reconciliation (~148 failures).** Rewrite against the new design, not to silence:
 - `tests/core/data/test_full_library.gd` (128): `test_every_class_has_granted_abilities` →
@@ -98,8 +130,8 @@ retire the now-historical `class-tree-engine-changes.md` / `content-pipeline-pen
 
 - **Balance is unvalidated.** The rebalanced stats/growth have never been playtested; Phase 3 may
   surface broken archetypes requiring content rework (feeds Phase 6).
-- **Save compatibility.** Existing saves reference current class IDs (`adept`, etc.); adopting the new
-  tree needs a `SaveManager` migration or a clean-save assumption — decide in Phase 0.
+- **Save compatibility.** RESOLVED (Phase 0): clean-slate via save-version bump; no migration table.
+  Existing dev saves referencing removed IDs (`adept`, etc.) are reset on load.
 - **Doc/design drift.** CLAUDE.md is heavily invested in the 4-tier tree; Phase 5 is non-trivial.
 
 ## Rollback
