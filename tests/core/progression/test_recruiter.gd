@@ -98,3 +98,20 @@ func test_average_band_level() -> void:
 	band.add_instance(ci1, 12)
 	band.add_instance(ci2, 12)
 	assert_eq(Recruiter.average_band_level(band), 5)
+
+
+func test_recruit_grants_starting_jp_and_no_skills() -> void:
+	# Content-redesign (Phase 1): recruits start skill-less but arrive with a small
+	# random starting-JP pool in their starting class.
+	var band := BattleBand.create("Test")
+	band.gold = 100
+	var rng := RandomNumberGenerator.new()
+	rng.seed = 12345
+	var result := Recruiter.recruit(band, _template, _name_gen, 50, 12, [], rng)
+	var ci: CharacterInstance = result["instance"]
+	assert_not_null(ci)
+	var lo: int = int(Constants.get_value("RECRUIT_STARTING_JP_MIN", 20))
+	var hi: int = int(Constants.get_value("RECRUIT_STARTING_JP_MAX", 50))
+	var jp_amt: int = int(ci.jp.get(ci.active_class, 0))
+	assert_between(jp_amt, lo, hi, "starting JP should be within the tunable range")
+	assert_eq(ci.learned_abilities.size(), 0, "recruit should start with zero learned abilities")

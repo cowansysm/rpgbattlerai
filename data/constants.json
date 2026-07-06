@@ -59,6 +59,8 @@
   "ROSTER_CAP": 12,
   "RECRUIT_COST": 50,
   "RECRUIT_STARTING_GOLD": 200,
+  "RECRUIT_STARTING_JP_MIN": 20,
+  "RECRUIT_STARTING_JP_MAX": 50,
   "STARTING_INVENTORY": ["sword", "daggers", "staff", "sling", "light_armor", "light_armor"],
   "SELL_RATIO": 0.5,
   "LOOT_DEPTH_SCALE": 0.1,

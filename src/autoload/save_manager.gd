@@ -4,7 +4,7 @@ extends Node
 ## Spec reference: alpha-phaseA5-spec.md §4
 
 const SAVE_PATH: String = "user://saves/save.json"
-const CURRENT_SAVE_VERSION: int = 2
+const CURRENT_SAVE_VERSION: int = 3
 
 var bands: Array[BattleBand] = []
 var profile: Profile = Profile.new()  ## Account-level meta-progression (A10)
@@ -127,15 +127,12 @@ func _migrate(doc: Dictionary) -> Dictionary:
 		# Pre-versioned or corrupted — return minimal valid structure
 		Log.warn("SaveManager", "Unknown save version %d; treating as empty" % version)
 		return {"save_version": CURRENT_SAVE_VERSION, "profile": {}, "bands": [], "active_run": null}
-	if version < 2:
-		doc = _migrate_v1_to_v2(doc)
-	return doc
-
-
-func _migrate_v1_to_v2(doc: Dictionary) -> Dictionary:
-	if not doc.has("active_run"):
-		doc["active_run"] = null
-	doc["save_version"] = 2
+	if version < 3:
+		# v3 is the content redesign: the job tree and class IDs changed wholesale
+		# (e.g. `adept` removed, new 10-tier classes), so pre-v3 saves are structurally
+		# incompatible. Clean-slate reset rather than an ID-migration table (design decision).
+		Log.warn("SaveManager", "Save version %d predates the content redesign (v3); resetting to empty" % version)
+		return {"save_version": CURRENT_SAVE_VERSION, "profile": {}, "bands": [], "active_run": null}
 	return doc
 
 

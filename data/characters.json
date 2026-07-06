@@ -1,143 +1,4740 @@
 [
-  {"id": "human_fighter", "name": "Human Fighter", "race": "human", "classes": ["vagabond"], "level": 3, "bp": 18, "recommended_path": "physical", "stats": {"spd": 10, "atk": 10, "rng": 1, "def": 10, "hp": 50, "jump": 2, "wp": 12, "mag": 0, "res": 0}, "equipment": ["sword", "medium_armor", "shield"], "abilities": []},
-  {"id": "human_archer", "name": "Human Archer", "race": "human", "classes": ["vagabond"], "level": 2, "bp": 13, "recommended_path": "physical", "stats": {"spd": 10, "atk": 10, "rng": 2, "def": 9, "hp": 42, "jump": 2, "wp": 10, "mag": 0, "res": 0}, "equipment": ["sling", "light_armor"], "abilities": []},
-  {"id": "human_rogue", "name": "Human Rogue", "race": "human", "classes": ["vagabond"], "level": 3, "bp": 16, "recommended_path": "control", "stats": {"spd": 10, "atk": 8, "rng": 1, "def": 9, "hp": 40, "jump": 2, "wp": 10, "mag": 0, "res": 0}, "equipment": ["daggers", "light_armor"], "abilities": []},
-  {"id": "human_bard", "name": "Human Bard", "race": "human", "classes": ["vagabond"], "level": 3, "bp": 17, "recommended_path": "support", "stats": {"spd": 10, "atk": 8, "rng": 2, "def": 9, "hp": 45, "jump": 2, "wp": 12, "mag": 0, "res": 0}, "equipment": ["sling", "light_armor"], "abilities": []},
-  {"id": "dwarf_barbarian", "name": "Dwarf Barbarian", "race": "dwarf", "classes": ["vagabond"], "level": 3, "bp": 20, "recommended_path": "physical", "stats": {"spd": 10, "atk": 10, "rng": 1, "def": 9, "hp": 55, "jump": 2, "wp": 12, "mag": 0, "res": 0}, "equipment": ["sword", "light_armor"], "abilities": []},
-  {"id": "elf_black_mage", "name": "Elf Black Mage", "race": "elf", "classes": ["vagabond"], "level": 5, "bp": 30, "recommended_path": "magical", "stats": {"spd": 10, "atk": 7, "rng": 1, "def": 8, "hp": 40, "jump": 2, "wp": 12, "mag": 0, "res": 0}, "equipment": ["staff"], "abilities": []},
-  {"id": "elf_red_mage", "name": "Elf Red Mage", "race": "elf", "classes": ["vagabond"], "level": 4, "bp": 26, "recommended_path": "magical", "stats": {"spd": 10, "atk": 9, "rng": 1, "def": 9, "hp": 45, "jump": 2, "wp": 12, "mag": 0, "res": 0}, "equipment": ["staff", "light_armor"], "abilities": []},
-  {"id": "halfling_white_mage", "name": "Halfling White Mage", "race": "halfling", "classes": ["vagabond"], "level": 4, "bp": 24, "recommended_path": "magical", "stats": {"spd": 10, "atk": 7, "rng": 1, "def": 9, "hp": 47, "jump": 2, "wp": 12, "mag": 0, "res": 0}, "equipment": ["staff"], "abilities": []},
-  {"id": "dwarf_guardian", "name": "Dwarf Guardian", "race": "dwarf", "classes": ["vagabond"], "level": 3, "bp": 18, "recommended_path": "physical", "stats": {"spd": 8, "atk": 9, "rng": 1, "def": 12, "hp": 55, "jump": 2, "wp": 8, "mag": 0, "res": 5}, "equipment": ["sword", "medium_armor", "shield"], "abilities": []},
-  {"id": "dwarf_cleric", "name": "Dwarf Cleric", "race": "dwarf", "classes": ["vagabond"], "level": 3, "bp": 14, "recommended_path": "magical", "stats": {"spd": 8, "atk": 7, "rng": 1, "def": 10, "hp": 48, "jump": 2, "wp": 10, "mag": 3, "res": 6}, "equipment": ["staff", "light_armor"], "abilities": []},
-  {"id": "elf_ranger", "name": "Elf Ranger", "race": "elf", "classes": ["vagabond"], "level": 3, "bp": 14, "recommended_path": "physical", "stats": {"spd": 12, "atk": 8, "rng": 2, "def": 7, "hp": 38, "jump": 2, "wp": 10, "mag": 2, "res": 3}, "equipment": ["sling", "light_armor"], "abilities": []},
-  {"id": "elf_enchanter", "name": "Elf Enchanter", "race": "elf", "classes": ["vagabond"], "level": 3, "bp": 12, "recommended_path": "support", "stats": {"spd": 11, "atk": 6, "rng": 1, "def": 7, "hp": 35, "jump": 2, "wp": 14, "mag": 6, "res": 4}, "equipment": ["staff"], "abilities": []},
-  {"id": "halfling_scout", "name": "Halfling Scout", "race": "halfling", "classes": ["vagabond"], "level": 3, "bp": 14, "recommended_path": "control", "stats": {"spd": 12, "atk": 8, "rng": 1, "def": 7, "hp": 36, "jump": 3, "wp": 10, "mag": 2, "res": 3}, "equipment": ["daggers", "light_armor"], "abilities": []},
-  {"id": "halfling_herbalist", "name": "Halfling Herbalist", "race": "halfling", "classes": ["vagabond"], "level": 3, "bp": 12, "recommended_path": "support", "stats": {"spd": 11, "atk": 6, "rng": 1, "def": 7, "hp": 35, "jump": 2, "wp": 12, "mag": 5, "res": 4}, "equipment": ["staff"], "abilities": []},
-  {"id": "human_knight", "name": "Human Knight", "race": "human", "classes": ["vagabond"], "level": 4, "bp": 22, "recommended_path": "physical", "stats": {"spd": 9, "atk": 11, "rng": 1, "def": 11, "hp": 55, "jump": 2, "wp": 10, "mag": 0, "res": 2}, "equipment": ["sword", "medium_armor", "shield"], "abilities": []},
-  {"id": "human_mage", "name": "Human Mage", "race": "human", "classes": ["vagabond"], "level": 3, "bp": 12, "recommended_path": "magical", "stats": {"spd": 9, "atk": 6, "rng": 1, "def": 7, "hp": 38, "jump": 2, "wp": 12, "mag": 5, "res": 3}, "equipment": ["staff"], "abilities": []},
-  {"id": "human_healer", "name": "Human Healer", "race": "human", "classes": ["vagabond"], "level": 3, "bp": 14, "recommended_path": "magical", "stats": {"spd": 9, "atk": 6, "rng": 1, "def": 8, "hp": 40, "jump": 2, "wp": 12, "mag": 4, "res": 4}, "equipment": ["staff", "light_armor"], "abilities": []},
-  {"id": "elf_assassin", "name": "Elf Assassin", "race": "elf", "classes": ["vagabond"], "level": 4, "bp": 18, "recommended_path": "control", "stats": {"spd": 13, "atk": 9, "rng": 1, "def": 7, "hp": 35, "jump": 3, "wp": 10, "mag": 3, "res": 3}, "equipment": ["daggers", "light_armor"], "abilities": []},
-  {"id": "dwarf_berserker", "name": "Dwarf Berserker", "race": "dwarf", "classes": ["vagabond"], "level": 4, "bp": 20, "recommended_path": "physical", "stats": {"spd": 8, "atk": 12, "rng": 1, "def": 9, "hp": 58, "jump": 2, "wp": 8, "mag": 0, "res": 4}, "equipment": ["greataxe", "light_armor"], "abilities": []},
-  {"id": "halfling_trickster", "name": "Halfling Trickster", "race": "halfling", "classes": ["vagabond"], "level": 3, "bp": 14, "recommended_path": "control", "stats": {"spd": 12, "atk": 7, "rng": 1, "def": 7, "hp": 34, "jump": 3, "wp": 12, "mag": 4, "res": 3}, "equipment": ["daggers", "light_armor"], "abilities": []},
-  {"id": "bat_echocaster", "name": "Bat Echocaster", "race": "bat", "classes": ["bat_echocaster"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 7, "atk": 3, "rng": 1, "def": 2, "hp": 18, "jump": 3, "wp": 2, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "bat_nightstalker", "name": "Bat Nightstalker", "race": "bat", "classes": ["bat_nightstalker"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 7, "atk": 3, "rng": 1, "def": 2, "hp": 18, "jump": 3, "wp": 2, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "bat_screecher", "name": "Bat Screecher", "race": "bat", "classes": ["bat_screecher"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 7, "atk": 3, "rng": 1, "def": 2, "hp": 18, "jump": 3, "wp": 2, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "bat_swarm", "name": "Bat Swarm", "race": "bat", "classes": ["bat_swarm"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 7, "atk": 3, "rng": 1, "def": 2, "hp": 18, "jump": 3, "wp": 2, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "imp_firebrand", "name": "Imp Firebrand", "race": "imp", "classes": ["imp_firebrand"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 3, "rng": 1, "def": 2, "hp": 20, "jump": 2, "wp": 5, "mag": 4, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "imp_flameling", "name": "Imp Flameling", "race": "imp", "classes": ["imp_flameling"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 3, "rng": 1, "def": 2, "hp": 20, "jump": 2, "wp": 5, "mag": 4, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "imp_tormentor", "name": "Imp Tormentor", "race": "imp", "classes": ["imp_tormentor"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 3, "rng": 1, "def": 2, "hp": 20, "jump": 2, "wp": 5, "mag": 4, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "imp_warden", "name": "Imp Warden", "race": "imp", "classes": ["imp_warden"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 3, "rng": 1, "def": 2, "hp": 20, "jump": 2, "wp": 5, "mag": 4, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "kobold_firebrand", "name": "Kobold Firebrand", "race": "kobold", "classes": ["kobold_firebrand"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 3, "rng": 1, "def": 3, "hp": 20, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "kobold_skirmisher", "name": "Kobold Skirmisher", "race": "kobold", "classes": ["kobold_skirmisher"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 3, "rng": 1, "def": 3, "hp": 20, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "kobold_trapsmith", "name": "Kobold Trapsmith", "race": "kobold", "classes": ["kobold_trapsmith"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 3, "rng": 1, "def": 3, "hp": 20, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "kobold_tunneler", "name": "Kobold Tunneler", "race": "kobold", "classes": ["kobold_tunneler"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 3, "rng": 1, "def": 3, "hp": 20, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "slime_acidic", "name": "Slime Acidic", "race": "slime", "classes": ["slime_acidic"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 2, "rng": 1, "def": 4, "hp": 22, "jump": 1, "wp": 1, "mag": 2, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "slime_corrosive", "name": "Slime Corrosive", "race": "slime", "classes": ["slime_corrosive"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 2, "rng": 1, "def": 4, "hp": 22, "jump": 1, "wp": 1, "mag": 2, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "slime_engulfer", "name": "Slime Engulfer", "race": "slime", "classes": ["slime_engulfer"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 2, "rng": 1, "def": 4, "hp": 22, "jump": 1, "wp": 1, "mag": 2, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "slime_splitter", "name": "Slime Splitter", "race": "slime", "classes": ["slime_splitter"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 2, "rng": 1, "def": 4, "hp": 22, "jump": 1, "wp": 1, "mag": 2, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "insectoid_carapace", "name": "Insectoid Carapace", "race": "insectoid", "classes": ["insectoid_carapace"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 20, "jump": 2, "wp": 1, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "insectoid_drone", "name": "Insectoid Drone", "race": "insectoid", "classes": ["insectoid_drone"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 20, "jump": 2, "wp": 1, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "insectoid_stinger", "name": "Insectoid Stinger", "race": "insectoid", "classes": ["insectoid_stinger"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 20, "jump": 2, "wp": 1, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "insectoid_swarmer", "name": "Insectoid Swarmer", "race": "insectoid", "classes": ["insectoid_swarmer"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 20, "jump": 2, "wp": 1, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "goblin_shaman", "name": "Goblin Shaman", "race": "goblin", "classes": ["goblin_shaman"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 4, "rng": 1, "def": 3, "hp": 25, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "goblin_skirmisher", "name": "Goblin Skirmisher", "race": "goblin", "classes": ["goblin_skirmisher"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 4, "rng": 1, "def": 3, "hp": 25, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "goblin_soldier", "name": "Goblin Soldier", "race": "goblin", "classes": ["goblin_soldier"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 4, "rng": 1, "def": 3, "hp": 25, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "goblin_trapper", "name": "Goblin Trapper", "race": "goblin", "classes": ["goblin_trapper"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 4, "rng": 1, "def": 3, "hp": 25, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "wolf_howler", "name": "Wolf Howler", "race": "wolf", "classes": ["wolf_howler"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 7, "atk": 5, "rng": 1, "def": 3, "hp": 26, "jump": 2, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "wolf_hunter", "name": "Wolf Hunter", "race": "wolf", "classes": ["wolf_hunter"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 7, "atk": 5, "rng": 1, "def": 3, "hp": 26, "jump": 2, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "wolf_packleader", "name": "Wolf Packleader", "race": "wolf", "classes": ["wolf_packleader"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 7, "atk": 5, "rng": 1, "def": 3, "hp": 26, "jump": 2, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "wolf_savage", "name": "Wolf Savage", "race": "wolf", "classes": ["wolf_savage"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 7, "atk": 5, "rng": 1, "def": 3, "hp": 26, "jump": 2, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "wolf_stalker", "name": "Wolf Stalker", "race": "wolf", "classes": ["wolf_stalker"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 7, "atk": 5, "rng": 1, "def": 3, "hp": 26, "jump": 2, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "spider_ambusher", "name": "Spider Ambusher", "race": "spider", "classes": ["spider_ambusher"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 3, "hp": 25, "jump": 2, "wp": 2, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "spider_spinner", "name": "Spider Spinner", "race": "spider", "classes": ["spider_spinner"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 3, "hp": 25, "jump": 2, "wp": 2, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "spider_venomfang", "name": "Spider Venomfang", "race": "spider", "classes": ["spider_venomfang"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 3, "hp": 25, "jump": 2, "wp": 2, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "spider_weaver", "name": "Spider Weaver", "race": "spider", "classes": ["spider_weaver"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 3, "hp": 25, "jump": 2, "wp": 2, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "zombie_bloated", "name": "Zombie Bloated", "race": "zombie", "classes": ["zombie_bloated"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 5, "rng": 1, "def": 4, "hp": 30, "jump": 1, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "zombie_devourer", "name": "Zombie Devourer", "race": "zombie", "classes": ["zombie_devourer"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 5, "rng": 1, "def": 4, "hp": 30, "jump": 1, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "zombie_plaguebearer", "name": "Zombie Plaguebearer", "race": "zombie", "classes": ["zombie_plaguebearer"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 5, "rng": 1, "def": 4, "hp": 30, "jump": 1, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "zombie_shambler", "name": "Zombie Shambler", "race": "zombie", "classes": ["zombie_shambler"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 5, "rng": 1, "def": 4, "hp": 30, "jump": 1, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "orc_berserker", "name": "Orc Berserker", "race": "orc", "classes": ["orc_berserker"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 6, "rng": 1, "def": 4, "hp": 32, "jump": 2, "wp": 2, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "orc_hunter", "name": "Orc Hunter", "race": "orc", "classes": ["orc_hunter"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 6, "rng": 1, "def": 4, "hp": 32, "jump": 2, "wp": 2, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "orc_raider", "name": "Orc Raider", "race": "orc", "classes": ["orc_raider"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 6, "rng": 1, "def": 4, "hp": 32, "jump": 2, "wp": 2, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "orc_spiritcaller", "name": "Orc Spiritcaller", "race": "orc", "classes": ["orc_spiritcaller"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 6, "rng": 1, "def": 4, "hp": 32, "jump": 2, "wp": 2, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "gnoll_demoncaller", "name": "Gnoll Demoncaller", "race": "gnoll", "classes": ["gnoll_demoncaller"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 5, "rng": 1, "def": 4, "hp": 30, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "gnoll_hunter", "name": "Gnoll Hunter", "race": "gnoll", "classes": ["gnoll_hunter"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 5, "rng": 1, "def": 4, "hp": 30, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "gnoll_painbringer", "name": "Gnoll Painbringer", "race": "gnoll", "classes": ["gnoll_painbringer"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 5, "rng": 1, "def": 4, "hp": 30, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "gnoll_reaver", "name": "Gnoll Reaver", "race": "gnoll", "classes": ["gnoll_reaver"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 5, "rng": 1, "def": 4, "hp": 30, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "hobgoblin_captain", "name": "Hobgoblin Captain", "race": "hobgoblin", "classes": ["hobgoblin_captain"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 5, "rng": 1, "def": 5, "hp": 32, "jump": 2, "wp": 3, "mag": 2, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "hobgoblin_crossbowman", "name": "Hobgoblin Crossbowman", "race": "hobgoblin", "classes": ["hobgoblin_crossbowman"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 5, "rng": 1, "def": 5, "hp": 32, "jump": 2, "wp": 3, "mag": 2, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "hobgoblin_drillmaster", "name": "Hobgoblin Drillmaster", "race": "hobgoblin", "classes": ["hobgoblin_drillmaster"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 5, "rng": 1, "def": 5, "hp": 32, "jump": 2, "wp": 3, "mag": 2, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "hobgoblin_legionnaire", "name": "Hobgoblin Legionnaire", "race": "hobgoblin", "classes": ["hobgoblin_legionnaire"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 5, "rng": 1, "def": 5, "hp": 32, "jump": 2, "wp": 3, "mag": 2, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "hobgoblin_warcaster", "name": "Hobgoblin Warcaster", "race": "hobgoblin", "classes": ["hobgoblin_warcaster"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 5, "rng": 1, "def": 5, "hp": 32, "jump": 2, "wp": 3, "mag": 2, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "lizardfolk_spearfisher", "name": "Lizardfolk Spearfisher", "race": "lizardfolk", "classes": ["lizardfolk_spearfisher"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 5, "hp": 33, "jump": 2, "wp": 3, "mag": 2, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "lizardfolk_stalker", "name": "Lizardfolk Stalker", "race": "lizardfolk", "classes": ["lizardfolk_stalker"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 5, "hp": 33, "jump": 2, "wp": 3, "mag": 2, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "lizardfolk_swampcaller", "name": "Lizardfolk Swampcaller", "race": "lizardfolk", "classes": ["lizardfolk_swampcaller"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 5, "hp": 33, "jump": 2, "wp": 3, "mag": 2, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "lizardfolk_warrior", "name": "Lizardfolk Warrior", "race": "lizardfolk", "classes": ["lizardfolk_warrior"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 5, "hp": 33, "jump": 2, "wp": 3, "mag": 2, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "skeleton_archer", "name": "Skeleton Archer", "race": "skeleton", "classes": ["skeleton_archer"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 4, "hp": 28, "jump": 2, "wp": 2, "mag": 3, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "skeleton_bonecaster", "name": "Skeleton Bonecaster", "race": "skeleton", "classes": ["skeleton_bonecaster"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 4, "hp": 28, "jump": 2, "wp": 2, "mag": 3, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "skeleton_knight", "name": "Skeleton Knight", "race": "skeleton", "classes": ["skeleton_knight"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 4, "hp": 28, "jump": 2, "wp": 2, "mag": 3, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "skeleton_reaper", "name": "Skeleton Reaper", "race": "skeleton", "classes": ["skeleton_reaper"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 4, "hp": 28, "jump": 2, "wp": 2, "mag": 3, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "skeleton_soldier", "name": "Skeleton Soldier", "race": "skeleton", "classes": ["skeleton_soldier"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 4, "hp": 28, "jump": 2, "wp": 2, "mag": 3, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "ogre_boulder_hurler", "name": "Ogre Boulder Hurler", "race": "ogre", "classes": ["ogre_boulder_hurler"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 7, "rng": 1, "def": 5, "hp": 40, "jump": 1, "wp": 1, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "ogre_bruiser", "name": "Ogre Bruiser", "race": "ogre", "classes": ["ogre_bruiser"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 7, "rng": 1, "def": 5, "hp": 40, "jump": 1, "wp": 1, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "ogre_maneater", "name": "Ogre Maneater", "race": "ogre", "classes": ["ogre_maneater"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 7, "rng": 1, "def": 5, "hp": 40, "jump": 1, "wp": 1, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "ogre_smasher", "name": "Ogre Smasher", "race": "ogre", "classes": ["ogre_smasher"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 7, "rng": 1, "def": 5, "hp": 40, "jump": 1, "wp": 1, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "minotaur_berserker", "name": "Minotaur Berserker", "race": "minotaur", "classes": ["minotaur_berserker"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 7, "rng": 1, "def": 5, "hp": 38, "jump": 2, "wp": 2, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "minotaur_charger", "name": "Minotaur Charger", "race": "minotaur", "classes": ["minotaur_charger"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 7, "rng": 1, "def": 5, "hp": 38, "jump": 2, "wp": 2, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "minotaur_guardian", "name": "Minotaur Guardian", "race": "minotaur", "classes": ["minotaur_guardian"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 7, "rng": 1, "def": 5, "hp": 38, "jump": 2, "wp": 2, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "minotaur_labyrinth_stalker", "name": "Minotaur Labyrinth Stalker", "race": "minotaur", "classes": ["minotaur_labyrinth_stalker"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 7, "rng": 1, "def": 5, "hp": 38, "jump": 2, "wp": 2, "mag": 1, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "troll_bog_shaman", "name": "Troll Bog Shaman", "race": "troll", "classes": ["troll_bog_shaman"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 6, "rng": 1, "def": 4, "hp": 42, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "troll_boulderhurl", "name": "Troll Boulderhurl", "race": "troll", "classes": ["troll_boulderhurl"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 6, "rng": 1, "def": 4, "hp": 42, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "troll_feral", "name": "Troll Feral", "race": "troll", "classes": ["troll_feral"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 6, "rng": 1, "def": 4, "hp": 42, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "troll_regenerator", "name": "Troll Regenerator", "race": "troll", "classes": ["troll_regenerator"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 6, "rng": 1, "def": 4, "hp": 42, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "troll_render", "name": "Troll Render", "race": "troll", "classes": ["troll_render"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 6, "rng": 1, "def": 4, "hp": 42, "jump": 2, "wp": 3, "mag": 2, "res": 2}, "equipment": [], "abilities": []},
-  {"id": "golem_bulwark", "name": "Golem Bulwark", "race": "golem", "classes": ["golem_bulwark"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 6, "rng": 1, "def": 7, "hp": 45, "jump": 1, "wp": 1, "mag": 1, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "golem_colossus", "name": "Golem Colossus", "race": "golem", "classes": ["golem_colossus"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 6, "rng": 1, "def": 7, "hp": 45, "jump": 1, "wp": 1, "mag": 1, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "golem_crusher", "name": "Golem Crusher", "race": "golem", "classes": ["golem_crusher"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 6, "rng": 1, "def": 7, "hp": 45, "jump": 1, "wp": 1, "mag": 1, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "golem_runeguard", "name": "Golem Runeguard", "race": "golem", "classes": ["golem_runeguard"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 6, "rng": 1, "def": 7, "hp": 45, "jump": 1, "wp": 1, "mag": 1, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "golem_sentinel", "name": "Golem Sentinel", "race": "golem", "classes": ["golem_sentinel"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 6, "rng": 1, "def": 7, "hp": 45, "jump": 1, "wp": 1, "mag": 1, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "treant_elder", "name": "Treant Elder", "race": "treant", "classes": ["treant_elder"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 5, "rng": 1, "def": 6, "hp": 42, "jump": 1, "wp": 4, "mag": 3, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "treant_grovekeeper", "name": "Treant Grovekeeper", "race": "treant", "classes": ["treant_grovekeeper"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 5, "rng": 1, "def": 6, "hp": 42, "jump": 1, "wp": 4, "mag": 3, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "treant_thorncaster", "name": "Treant Thorncaster", "race": "treant", "classes": ["treant_thorncaster"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 5, "rng": 1, "def": 6, "hp": 42, "jump": 1, "wp": 4, "mag": 3, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "treant_warden", "name": "Treant Warden", "race": "treant", "classes": ["treant_warden"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 3, "atk": 5, "rng": 1, "def": 6, "hp": 42, "jump": 1, "wp": 4, "mag": 3, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "gargoyle_sentinel", "name": "Gargoyle Sentinel", "race": "gargoyle", "classes": ["gargoyle_sentinel"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 7, "hp": 38, "jump": 2, "wp": 2, "mag": 2, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "gargoyle_skywatcher", "name": "Gargoyle Skywatcher", "race": "gargoyle", "classes": ["gargoyle_skywatcher"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 7, "hp": 38, "jump": 2, "wp": 2, "mag": 2, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "gargoyle_smasher", "name": "Gargoyle Smasher", "race": "gargoyle", "classes": ["gargoyle_smasher"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 7, "hp": 38, "jump": 2, "wp": 2, "mag": 2, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "gargoyle_stoneguard", "name": "Gargoyle Stoneguard", "race": "gargoyle", "classes": ["gargoyle_stoneguard"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 7, "hp": 38, "jump": 2, "wp": 2, "mag": 2, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "gargoyle_wardstone", "name": "Gargoyle Wardstone", "race": "gargoyle", "classes": ["gargoyle_wardstone"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 5, "rng": 1, "def": 7, "hp": 38, "jump": 2, "wp": 2, "mag": 2, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "dire_beast_bulwark", "name": "Dire Beast Bulwark", "race": "dire_beast", "classes": ["dire_beast_bulwark"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 7, "rng": 1, "def": 4, "hp": 38, "jump": 2, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "dire_beast_maw", "name": "Dire Beast Maw", "race": "dire_beast", "classes": ["dire_beast_maw"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 7, "rng": 1, "def": 4, "hp": 38, "jump": 2, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "dire_beast_pouncer", "name": "Dire Beast Pouncer", "race": "dire_beast", "classes": ["dire_beast_pouncer"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 7, "rng": 1, "def": 4, "hp": 38, "jump": 2, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "dire_beast_ravager", "name": "Dire Beast Ravager", "race": "dire_beast", "classes": ["dire_beast_ravager"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 7, "rng": 1, "def": 4, "hp": 38, "jump": 2, "wp": 1, "mag": 1, "res": 1}, "equipment": [], "abilities": []},
-  {"id": "elemental_coreguard", "name": "Elemental Coreguard", "race": "elemental", "classes": ["elemental_coreguard"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 3, "rng": 1, "def": 5, "hp": 30, "jump": 2, "wp": 6, "mag": 6, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "elemental_frostform", "name": "Elemental Frostform", "race": "elemental", "classes": ["elemental_frostform"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 3, "rng": 1, "def": 5, "hp": 30, "jump": 2, "wp": 6, "mag": 6, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "elemental_pyre", "name": "Elemental Pyre", "race": "elemental", "classes": ["elemental_pyre"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 3, "rng": 1, "def": 5, "hp": 30, "jump": 2, "wp": 6, "mag": 6, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "elemental_stoneheart", "name": "Elemental Stoneheart", "race": "elemental", "classes": ["elemental_stoneheart"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 3, "rng": 1, "def": 5, "hp": 30, "jump": 2, "wp": 6, "mag": 6, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "elemental_tempest", "name": "Elemental Tempest", "race": "elemental", "classes": ["elemental_tempest"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 4, "atk": 3, "rng": 1, "def": 5, "hp": 30, "jump": 2, "wp": 6, "mag": 6, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "wraith_hauntcaller", "name": "Wraith Hauntcaller", "race": "wraith", "classes": ["wraith_hauntcaller"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 3, "rng": 1, "def": 3, "hp": 25, "jump": 2, "wp": 6, "mag": 6, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "wraith_soulrender", "name": "Wraith Soulrender", "race": "wraith", "classes": ["wraith_soulrender"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 3, "rng": 1, "def": 3, "hp": 25, "jump": 2, "wp": 6, "mag": 6, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "wraith_specter", "name": "Wraith Specter", "race": "wraith", "classes": ["wraith_specter"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 3, "rng": 1, "def": 3, "hp": 25, "jump": 2, "wp": 6, "mag": 6, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "wraith_veil", "name": "Wraith Veil", "race": "wraith", "classes": ["wraith_veil"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 3, "rng": 1, "def": 3, "hp": 25, "jump": 2, "wp": 6, "mag": 6, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "naga_charmer", "name": "Naga Charmer", "race": "naga", "classes": ["naga_charmer"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 30, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "naga_hydromancer", "name": "Naga Hydromancer", "race": "naga", "classes": ["naga_hydromancer"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 30, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "naga_spellweaver", "name": "Naga Spellweaver", "race": "naga", "classes": ["naga_spellweaver"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 30, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "naga_striker", "name": "Naga Striker", "race": "naga", "classes": ["naga_striker"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 30, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "naga_warden", "name": "Naga Warden", "race": "naga", "classes": ["naga_warden"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 30, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "merfolk_guardian", "name": "Merfolk Guardian", "race": "merfolk", "classes": ["merfolk_guardian"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 28, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "merfolk_siren", "name": "Merfolk Siren", "race": "merfolk", "classes": ["merfolk_siren"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 28, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "merfolk_spearfisher", "name": "Merfolk Spearfisher", "race": "merfolk", "classes": ["merfolk_spearfisher"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 28, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "merfolk_tidewarden", "name": "Merfolk Tidewarden", "race": "merfolk", "classes": ["merfolk_tidewarden"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 28, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "merfolk_wavecaller", "name": "Merfolk Wavecaller", "race": "merfolk", "classes": ["merfolk_wavecaller"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 4, "rng": 1, "def": 4, "hp": 28, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "harpy_diver", "name": "Harpy Diver", "race": "harpy", "classes": ["harpy_diver"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 4, "rng": 1, "def": 3, "hp": 26, "jump": 3, "wp": 4, "mag": 4, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "harpy_screecher", "name": "Harpy Screecher", "race": "harpy", "classes": ["harpy_screecher"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 4, "rng": 1, "def": 3, "hp": 26, "jump": 3, "wp": 4, "mag": 4, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "harpy_talon", "name": "Harpy Talon", "race": "harpy", "classes": ["harpy_talon"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 4, "rng": 1, "def": 3, "hp": 26, "jump": 3, "wp": 4, "mag": 4, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "harpy_windcaller", "name": "Harpy Windcaller", "race": "harpy", "classes": ["harpy_windcaller"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 6, "atk": 4, "rng": 1, "def": 3, "hp": 26, "jump": 3, "wp": 4, "mag": 4, "res": 3}, "equipment": [], "abilities": []},
-  {"id": "demon_brute", "name": "Demon Brute", "race": "demon", "classes": ["demon_brute"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 6, "rng": 1, "def": 5, "hp": 38, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "demon_corruptor", "name": "Demon Corruptor", "race": "demon", "classes": ["demon_corruptor"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 6, "rng": 1, "def": 5, "hp": 38, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "demon_dreadlord", "name": "Demon Dreadlord", "race": "demon", "classes": ["demon_dreadlord"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 6, "rng": 1, "def": 5, "hp": 38, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "demon_hellfire", "name": "Demon Hellfire", "race": "demon", "classes": ["demon_hellfire"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 6, "rng": 1, "def": 5, "hp": 38, "jump": 2, "wp": 5, "mag": 5, "res": 4}, "equipment": [], "abilities": []},
-  {"id": "drake_firebreather", "name": "Drake Firebreather", "race": "drake", "classes": ["drake_firebreather"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 6, "rng": 1, "def": 6, "hp": 40, "jump": 2, "wp": 4, "mag": 4, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "drake_maw", "name": "Drake Maw", "race": "drake", "classes": ["drake_maw"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 6, "rng": 1, "def": 6, "hp": 40, "jump": 2, "wp": 4, "mag": 4, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "drake_scalelord", "name": "Drake Scalelord", "race": "drake", "classes": ["drake_scalelord"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 6, "rng": 1, "def": 6, "hp": 40, "jump": 2, "wp": 4, "mag": 4, "res": 5}, "equipment": [], "abilities": []},
-  {"id": "drake_skyhunter", "name": "Drake Skyhunter", "race": "drake", "classes": ["drake_skyhunter"], "level": 1, "bp": 3, "recommended_path": "", "stats": {"spd": 5, "atk": 6, "rng": 1, "def": 6, "hp": 40, "jump": 2, "wp": 4, "mag": 4, "res": 5}, "equipment": [], "abilities": []}
+  {
+    "abilities": [],
+    "bp": 18,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "sword",
+      "medium_armor",
+      "shield"
+    ],
+    "id": "human_fighter",
+    "level": 3,
+    "name": "Human Fighter",
+    "race": "human",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 10,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 0,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 13,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "sling",
+      "light_armor"
+    ],
+    "id": "human_archer",
+    "level": 2,
+    "name": "Human Archer",
+    "race": "human",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 9,
+      "hp": 42,
+      "jump": 2,
+      "mag": 0,
+      "res": 0,
+      "rng": 2,
+      "spd": 10,
+      "wp": 10
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 16,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "daggers",
+      "light_armor"
+    ],
+    "id": "human_rogue",
+    "level": 3,
+    "name": "Human Rogue",
+    "race": "human",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 8,
+      "def": 9,
+      "hp": 40,
+      "jump": 2,
+      "mag": 0,
+      "res": 0,
+      "rng": 1,
+      "spd": 10,
+      "wp": 10
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 17,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "sling",
+      "light_armor"
+    ],
+    "id": "human_bard",
+    "level": 3,
+    "name": "Human Bard",
+    "race": "human",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 8,
+      "def": 9,
+      "hp": 45,
+      "jump": 2,
+      "mag": 0,
+      "res": 0,
+      "rng": 2,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 20,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "sword",
+      "light_armor"
+    ],
+    "id": "dwarf_barbarian",
+    "level": 3,
+    "name": "Dwarf Barbarian",
+    "race": "dwarf",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 9,
+      "hp": 55,
+      "jump": 2,
+      "mag": 0,
+      "res": 0,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 30,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "staff"
+    ],
+    "id": "elf_black_mage",
+    "level": 5,
+    "name": "Elf Black Mage",
+    "race": "elf",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 7,
+      "def": 8,
+      "hp": 40,
+      "jump": 2,
+      "mag": 0,
+      "res": 0,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 26,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "staff",
+      "light_armor"
+    ],
+    "id": "elf_red_mage",
+    "level": 4,
+    "name": "Elf Red Mage",
+    "race": "elf",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 9,
+      "def": 9,
+      "hp": 45,
+      "jump": 2,
+      "mag": 0,
+      "res": 0,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 24,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "staff"
+    ],
+    "id": "halfling_white_mage",
+    "level": 4,
+    "name": "Halfling White Mage",
+    "race": "halfling",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 7,
+      "def": 9,
+      "hp": 47,
+      "jump": 2,
+      "mag": 0,
+      "res": 0,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 18,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "sword",
+      "medium_armor",
+      "shield"
+    ],
+    "id": "dwarf_guardian",
+    "level": 3,
+    "name": "Dwarf Guardian",
+    "race": "dwarf",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 9,
+      "def": 12,
+      "hp": 55,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 8
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 14,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "staff",
+      "light_armor"
+    ],
+    "id": "dwarf_cleric",
+    "level": 3,
+    "name": "Dwarf Cleric",
+    "race": "dwarf",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 7,
+      "def": 10,
+      "hp": 48,
+      "jump": 2,
+      "mag": 3,
+      "res": 6,
+      "rng": 1,
+      "spd": 8,
+      "wp": 10
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 14,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "sling",
+      "light_armor"
+    ],
+    "id": "elf_ranger",
+    "level": 3,
+    "name": "Elf Ranger",
+    "race": "elf",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 8,
+      "def": 7,
+      "hp": 38,
+      "jump": 2,
+      "mag": 2,
+      "res": 3,
+      "rng": 2,
+      "spd": 12,
+      "wp": 10
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 12,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "staff"
+    ],
+    "id": "elf_enchanter",
+    "level": 3,
+    "name": "Elf Enchanter",
+    "race": "elf",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 7,
+      "hp": 35,
+      "jump": 2,
+      "mag": 6,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 14
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 14,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "daggers",
+      "light_armor"
+    ],
+    "id": "halfling_scout",
+    "level": 3,
+    "name": "Halfling Scout",
+    "race": "halfling",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 8,
+      "def": 7,
+      "hp": 36,
+      "jump": 3,
+      "mag": 2,
+      "res": 3,
+      "rng": 1,
+      "spd": 12,
+      "wp": 10
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 12,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "staff"
+    ],
+    "id": "halfling_herbalist",
+    "level": 3,
+    "name": "Halfling Herbalist",
+    "race": "halfling",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 7,
+      "hp": 35,
+      "jump": 2,
+      "mag": 5,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 22,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "sword",
+      "medium_armor",
+      "shield"
+    ],
+    "id": "human_knight",
+    "level": 4,
+    "name": "Human Knight",
+    "race": "human",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 11,
+      "hp": 55,
+      "jump": 2,
+      "mag": 0,
+      "res": 2,
+      "rng": 1,
+      "spd": 9,
+      "wp": 10
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 12,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "staff"
+    ],
+    "id": "human_mage",
+    "level": 3,
+    "name": "Human Mage",
+    "race": "human",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 6,
+      "def": 7,
+      "hp": 38,
+      "jump": 2,
+      "mag": 5,
+      "res": 3,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 14,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "staff",
+      "light_armor"
+    ],
+    "id": "human_healer",
+    "level": 3,
+    "name": "Human Healer",
+    "race": "human",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 40,
+      "jump": 2,
+      "mag": 4,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 18,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "daggers",
+      "light_armor"
+    ],
+    "id": "elf_assassin",
+    "level": 4,
+    "name": "Elf Assassin",
+    "race": "elf",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 35,
+      "jump": 3,
+      "mag": 3,
+      "res": 3,
+      "rng": 1,
+      "spd": 13,
+      "wp": 10
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 20,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "greataxe",
+      "light_armor"
+    ],
+    "id": "dwarf_berserker",
+    "level": 4,
+    "name": "Dwarf Berserker",
+    "race": "dwarf",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 12,
+      "def": 9,
+      "hp": 58,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 8,
+      "wp": 8
+    }
+  },
+  {
+    "abilities": [],
+    "bp": 14,
+    "classes": [
+      "vagabond"
+    ],
+    "equipment": [
+      "daggers",
+      "light_armor"
+    ],
+    "id": "halfling_trickster",
+    "level": 3,
+    "name": "Halfling Trickster",
+    "race": "halfling",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 7,
+      "def": 7,
+      "hp": 34,
+      "jump": 3,
+      "mag": 4,
+      "res": 3,
+      "rng": 1,
+      "spd": 12,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "whirling_blades",
+      "overhead_smash",
+      "grapple_throw",
+      "siege_blow",
+      "prophecy"
+    ],
+    "bp": 25,
+    "classes": [
+      "goblin_soldier"
+    ],
+    "equipment": [],
+    "id": "goblin_soldier",
+    "level": 4,
+    "name": "Goblin Soldier",
+    "race": "goblin",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "ice_arrow",
+      "flare_arrow",
+      "multi_shot",
+      "fire_arrow",
+      "discord"
+    ],
+    "bp": 21,
+    "classes": [
+      "goblin_skirmisher"
+    ],
+    "equipment": [],
+    "id": "goblin_skirmisher",
+    "level": 3,
+    "name": "Goblin Skirmisher",
+    "race": "goblin",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "firaga",
+      "fire_2",
+      "flamethrower",
+      "fire_wall",
+      "elegy"
+    ],
+    "bp": 17,
+    "classes": [
+      "goblin_shaman"
+    ],
+    "equipment": [],
+    "id": "goblin_shaman",
+    "level": 2,
+    "name": "Goblin Shaman",
+    "race": "goblin",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 38,
+      "jump": 2,
+      "mag": 10,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "curse_of_frailty",
+      "befuddle",
+      "disease",
+      "speed_break",
+      "vanguard_strike"
+    ],
+    "bp": 24,
+    "classes": [
+      "goblin_trapper"
+    ],
+    "equipment": [],
+    "id": "goblin_trapper",
+    "level": 4,
+    "name": "Goblin Trapper",
+    "race": "goblin",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "healing_chord",
+      "war_song",
+      "field_medic",
+      "evasion",
+      "sanctify"
+    ],
+    "bp": 23,
+    "classes": [
+      "goblin_warchief"
+    ],
+    "equipment": [],
+    "id": "goblin_warchief",
+    "level": 4,
+    "name": "Goblin Warchief",
+    "race": "goblin",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "bash",
+      "riposte",
+      "piercing_thrust",
+      "decapitate",
+      "rage"
+    ],
+    "bp": 21,
+    "classes": [
+      "hobgoblin_captain"
+    ],
+    "equipment": [],
+    "id": "hobgoblin_captain",
+    "level": 3,
+    "name": "Hobgoblin Captain",
+    "race": "hobgoblin",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "divine_grace",
+      "aegis",
+      "steal",
+      "uppercut",
+      "regenga"
+    ],
+    "bp": 21,
+    "classes": [
+      "hobgoblin_legionnaire"
+    ],
+    "equipment": [],
+    "id": "hobgoblin_legionnaire",
+    "level": 3,
+    "name": "Hobgoblin Legionnaire",
+    "race": "hobgoblin",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 56,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "holy_explosion",
+      "pinning_volley",
+      "power_shot",
+      "aether_shot",
+      "zombie"
+    ],
+    "bp": 21,
+    "classes": [
+      "hobgoblin_crossbowman"
+    ],
+    "equipment": [],
+    "id": "hobgoblin_crossbowman",
+    "level": 3,
+    "name": "Hobgoblin Crossbowman",
+    "race": "hobgoblin",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "fire_maelstrom",
+      "fire_shot",
+      "fire_2",
+      "fire_3",
+      "disease"
+    ],
+    "bp": 28,
+    "classes": [
+      "hobgoblin_warcaster"
+    ],
+    "equipment": [],
+    "id": "hobgoblin_warcaster",
+    "level": 5,
+    "name": "Hobgoblin Warcaster",
+    "race": "hobgoblin",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 50,
+      "jump": 2,
+      "mag": 11,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "rally",
+      "battle_hymn",
+      "salvation",
+      "war_banner",
+      "phalanx"
+    ],
+    "bp": 23,
+    "classes": [
+      "hobgoblin_drillmaster"
+    ],
+    "equipment": [],
+    "id": "hobgoblin_drillmaster",
+    "level": 4,
+    "name": "Hobgoblin Drillmaster",
+    "race": "hobgoblin",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "wide_swing",
+      "reckless_swing",
+      "thrust",
+      "assassinate",
+      "focus_magic"
+    ],
+    "bp": 33,
+    "classes": [
+      "orc_berserker"
+    ],
+    "equipment": [],
+    "id": "orc_berserker",
+    "level": 6,
+    "name": "Orc Berserker",
+    "race": "orc",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 12,
+      "def": 8,
+      "hp": 58,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "dispel",
+      "curse_of_frailty",
+      "blind_strike",
+      "spell_shatter",
+      "slash"
+    ],
+    "bp": 28,
+    "classes": [
+      "orc_raider"
+    ],
+    "equipment": [],
+    "id": "orc_raider",
+    "level": 5,
+    "name": "Orc Raider",
+    "race": "orc",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "will_o_wisp",
+      "fire_shot",
+      "called_shot",
+      "sonic_shot",
+      "condemnation"
+    ],
+    "bp": 33,
+    "classes": [
+      "orc_hunter"
+    ],
+    "equipment": [],
+    "id": "orc_hunter",
+    "level": 6,
+    "name": "Orc Hunter",
+    "race": "orc",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 12,
+      "def": 8,
+      "hp": 58,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "phalanx",
+      "guard_up",
+      "bulwark_bash",
+      "wide_swing",
+      "taunt"
+    ],
+    "bp": 28,
+    "classes": [
+      "orc_warlord"
+    ],
+    "equipment": [],
+    "id": "orc_warlord",
+    "level": 5,
+    "name": "Orc Warlord",
+    "race": "orc",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 64,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "dark_pulse",
+      "dark_maelstrom",
+      "dark_1",
+      "shadow_flare",
+      "distracting_flourish"
+    ],
+    "bp": 28,
+    "classes": [
+      "orc_spiritcaller"
+    ],
+    "equipment": [],
+    "id": "orc_spiritcaller",
+    "level": 5,
+    "name": "Orc Spiritcaller",
+    "race": "orc",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 50,
+      "jump": 2,
+      "mag": 11,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "assassinate",
+      "grapple_throw",
+      "spin_slash",
+      "thrust",
+      "pincer_orders"
+    ],
+    "bp": 33,
+    "classes": [
+      "ogre_bruiser"
+    ],
+    "equipment": [],
+    "id": "ogre_bruiser",
+    "level": 6,
+    "name": "Ogre Bruiser",
+    "race": "ogre",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 12,
+      "def": 8,
+      "hp": 58,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "wiznaibus",
+      "mortal_strike",
+      "wide_swing",
+      "banner_charge",
+      "rallying_cry"
+    ],
+    "bp": 33,
+    "classes": [
+      "ogre_smasher"
+    ],
+    "equipment": [],
+    "id": "ogre_smasher",
+    "level": 6,
+    "name": "Ogre Smasher",
+    "race": "ogre",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 12,
+      "def": 8,
+      "hp": 58,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "rapid_fire",
+      "earth_shot",
+      "wind_shot",
+      "head_shot",
+      "float"
+    ],
+    "bp": 33,
+    "classes": [
+      "ogre_boulder_hurler"
+    ],
+    "equipment": [],
+    "id": "ogre_boulder_hurler",
+    "level": 6,
+    "name": "Ogre Boulder Hurler",
+    "race": "ogre",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 12,
+      "def": 8,
+      "hp": 58,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "shellga",
+      "sanctify",
+      "vengeance",
+      "vanguard_strike",
+      "shackle"
+    ],
+    "bp": 28,
+    "classes": [
+      "ogre_juggernaut"
+    ],
+    "equipment": [],
+    "id": "ogre_juggernaut",
+    "level": 5,
+    "name": "Ogre Juggernaut",
+    "race": "ogre",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 64,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "hex_cloud",
+      "blight",
+      "berserk_spell",
+      "focus_fire",
+      "lunge"
+    ],
+    "bp": 32,
+    "classes": [
+      "ogre_maneater"
+    ],
+    "equipment": [],
+    "id": "ogre_maneater",
+    "level": 6,
+    "name": "Ogre Maneater",
+    "race": "ogre",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 10,
+      "def": 7,
+      "hp": 58,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "shield_charge",
+      "wide_swing",
+      "rampage",
+      "bash",
+      "bless"
+    ],
+    "bp": 36,
+    "classes": [
+      "minotaur_berserker"
+    ],
+    "equipment": [],
+    "id": "minotaur_berserker",
+    "level": 7,
+    "name": "Minotaur Berserker",
+    "race": "minotaur",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 12,
+      "def": 8,
+      "hp": 62,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "leaping_strike",
+      "gut_punch",
+      "crushing_heel",
+      "lightning_stab",
+      "empower"
+    ],
+    "bp": 40,
+    "classes": [
+      "minotaur_charger"
+    ],
+    "equipment": [],
+    "id": "minotaur_charger",
+    "level": 8,
+    "name": "Minotaur Charger",
+    "race": "minotaur",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 13,
+      "def": 8,
+      "hp": 66,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "blessing_of_ward",
+      "bulwark",
+      "spin_slash",
+      "earthshaker",
+      "addle"
+    ],
+    "bp": 39,
+    "classes": [
+      "minotaur_guardian"
+    ],
+    "equipment": [],
+    "id": "minotaur_guardian",
+    "level": 8,
+    "name": "Minotaur Guardian",
+    "race": "minotaur",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 76,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "charm",
+      "condemnation",
+      "petrify",
+      "witch_hunt",
+      "spin_slash"
+    ],
+    "bp": 35,
+    "classes": [
+      "minotaur_labyrinth_stalker"
+    ],
+    "equipment": [],
+    "id": "minotaur_labyrinth_stalker",
+    "level": 7,
+    "name": "Minotaur Labyrinth Stalker",
+    "race": "minotaur",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 10,
+      "def": 7,
+      "hp": 62,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "hero_ballad",
+      "inspire",
+      "cure_2",
+      "enrage",
+      "command_defend"
+    ],
+    "bp": 34,
+    "classes": [
+      "minotaur_bellower"
+    ],
+    "equipment": [],
+    "id": "minotaur_bellower",
+    "level": 7,
+    "name": "Minotaur Bellower",
+    "race": "minotaur",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 62,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "seismic_strike",
+      "blade_flurry",
+      "war_stomp",
+      "double_slash",
+      "war_banner"
+    ],
+    "bp": 40,
+    "classes": [
+      "troll_render"
+    ],
+    "equipment": [],
+    "id": "troll_render",
+    "level": 8,
+    "name": "Troll Render",
+    "race": "troll",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 13,
+      "def": 8,
+      "hp": 66,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "blessing_of_ward",
+      "divine_grace",
+      "cross_slash",
+      "crushing_blow",
+      "leg_shot"
+    ],
+    "bp": 35,
+    "classes": [
+      "troll_regenerator"
+    ],
+    "equipment": [],
+    "id": "troll_regenerator",
+    "level": 7,
+    "name": "Troll Regenerator",
+    "race": "troll",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 72,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "quick_shot",
+      "power_shot",
+      "dark_shot",
+      "water_shot",
+      "slowga"
+    ],
+    "bp": 40,
+    "classes": [
+      "troll_boulderhurl"
+    ],
+    "equipment": [],
+    "id": "troll_boulderhurl",
+    "level": 8,
+    "name": "Troll Boulderhurl",
+    "race": "troll",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 13,
+      "def": 8,
+      "hp": 66,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "bio_1",
+      "poison_dart",
+      "miasma",
+      "poison_spear",
+      "sap"
+    ],
+    "bp": 40,
+    "classes": [
+      "troll_bog_shaman"
+    ],
+    "equipment": [],
+    "id": "troll_bog_shaman",
+    "level": 8,
+    "name": "Troll Bog Shaman",
+    "race": "troll",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 62,
+      "jump": 2,
+      "mag": 13,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "silence",
+      "persuade",
+      "corrode",
+      "hobble",
+      "decapitate"
+    ],
+    "bp": 35,
+    "classes": [
+      "troll_feral"
+    ],
+    "equipment": [],
+    "id": "troll_feral",
+    "level": 7,
+    "name": "Troll Feral",
+    "race": "troll",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 10,
+      "def": 7,
+      "hp": 62,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "explosive_shot",
+      "multi_shot",
+      "lightning_shot",
+      "suppressing_fire",
+      "dirge"
+    ],
+    "bp": 21,
+    "classes": [
+      "kobold_skirmisher"
+    ],
+    "equipment": [],
+    "id": "kobold_skirmisher",
+    "level": 3,
+    "name": "Kobold Skirmisher",
+    "race": "kobold",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "ignite",
+      "poison_arrow",
+      "corrode",
+      "magic_break",
+      "steal"
+    ],
+    "bp": 24,
+    "classes": [
+      "kobold_trapsmith"
+    ],
+    "equipment": [],
+    "id": "kobold_trapsmith",
+    "level": 4,
+    "name": "Kobold Trapsmith",
+    "race": "kobold",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "reckless_swing",
+      "earthshaker",
+      "blade_flurry",
+      "lunge",
+      "faith"
+    ],
+    "bp": 25,
+    "classes": [
+      "kobold_tunneler"
+    ],
+    "equipment": [],
+    "id": "kobold_tunneler",
+    "level": 4,
+    "name": "Kobold Tunneler",
+    "race": "kobold",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "explosive_shot",
+      "fire_dart",
+      "flamethrower",
+      "will_o_wisp",
+      "poison_strike"
+    ],
+    "bp": 17,
+    "classes": [
+      "kobold_firebrand"
+    ],
+    "equipment": [],
+    "id": "kobold_firebrand",
+    "level": 2,
+    "name": "Kobold Firebrand",
+    "race": "kobold",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 38,
+      "jump": 2,
+      "mag": 10,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "song_of_speed",
+      "lament",
+      "salvation",
+      "mage_circle",
+      "warding"
+    ],
+    "bp": 23,
+    "classes": [
+      "kobold_packleader"
+    ],
+    "equipment": [],
+    "id": "kobold_packleader",
+    "level": 4,
+    "name": "Kobold Packleader",
+    "race": "kobold",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "spin_slash",
+      "wide_swing",
+      "vanguard_strike",
+      "dragon_dive",
+      "haste"
+    ],
+    "bp": 29,
+    "classes": [
+      "gnoll_reaver"
+    ],
+    "equipment": [],
+    "id": "gnoll_reaver",
+    "level": 5,
+    "name": "Gnoll Reaver",
+    "race": "gnoll",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "alchemical_shot",
+      "double_shot",
+      "suppressing_fire",
+      "triple_shot",
+      "ignite"
+    ],
+    "bp": 25,
+    "classes": [
+      "gnoll_hunter"
+    ],
+    "equipment": [],
+    "id": "gnoll_hunter",
+    "level": 4,
+    "name": "Gnoll Hunter",
+    "race": "gnoll",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "earthshaker",
+      "charge",
+      "shield_slam",
+      "executioner",
+      "longshot"
+    ],
+    "bp": 29,
+    "classes": [
+      "gnoll_flesheater"
+    ],
+    "equipment": [],
+    "id": "gnoll_flesheater",
+    "level": 5,
+    "name": "Gnoll Flesheater",
+    "race": "gnoll",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "petrify",
+      "crippling_shot",
+      "demoralizing_shout",
+      "curse",
+      "mortal_strike"
+    ],
+    "bp": 24,
+    "classes": [
+      "gnoll_painbringer"
+    ],
+    "equipment": [],
+    "id": "gnoll_painbringer",
+    "level": 4,
+    "name": "Gnoll Painbringer",
+    "race": "gnoll",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "dark_nova",
+      "dark_spear",
+      "dark_2",
+      "shadow_flare",
+      "wither"
+    ],
+    "bp": 28,
+    "classes": [
+      "gnoll_demoncaller"
+    ],
+    "equipment": [],
+    "id": "gnoll_demoncaller",
+    "level": 5,
+    "name": "Gnoll Demoncaller",
+    "race": "gnoll",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 50,
+      "jump": 2,
+      "mag": 11,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "decapitate",
+      "vanguard_strike",
+      "shield_slam",
+      "dragon_dive",
+      "evasion"
+    ],
+    "bp": 33,
+    "classes": [
+      "lizardfolk_warrior"
+    ],
+    "equipment": [],
+    "id": "lizardfolk_warrior",
+    "level": 6,
+    "name": "Lizardfolk Warrior",
+    "race": "lizardfolk",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 12,
+      "def": 8,
+      "hp": 58,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "poison_shot",
+      "fire_arrow",
+      "wind_shot",
+      "lightning_arrow",
+      "disease"
+    ],
+    "bp": 25,
+    "classes": [
+      "lizardfolk_spearfisher"
+    ],
+    "equipment": [],
+    "id": "lizardfolk_spearfisher",
+    "level": 4,
+    "name": "Lizardfolk Spearfisher",
+    "race": "lizardfolk",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "barrier",
+      "defensive_stance",
+      "double_cut",
+      "decapitate",
+      "persuade"
+    ],
+    "bp": 24,
+    "classes": [
+      "lizardfolk_scaleguard"
+    ],
+    "equipment": [],
+    "id": "lizardfolk_scaleguard",
+    "level": 4,
+    "name": "Lizardfolk Scaleguard",
+    "race": "lizardfolk",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 60,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "water_shard",
+      "tsunami",
+      "water_nova",
+      "rune_water",
+      "electrify"
+    ],
+    "bp": 32,
+    "classes": [
+      "lizardfolk_swampcaller"
+    ],
+    "equipment": [],
+    "id": "lizardfolk_swampcaller",
+    "level": 6,
+    "name": "Lizardfolk Swampcaller",
+    "race": "lizardfolk",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 54,
+      "jump": 2,
+      "mag": 12,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "regen",
+      "sandstorm",
+      "ignite",
+      "focus_fire",
+      "basic_strike"
+    ],
+    "bp": 28,
+    "classes": [
+      "lizardfolk_stalker"
+    ],
+    "equipment": [],
+    "id": "lizardfolk_stalker",
+    "level": 5,
+    "name": "Lizardfolk Stalker",
+    "race": "lizardfolk",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "uppercut",
+      "wiznaibus",
+      "rend",
+      "siege_blow",
+      "aggressive_stance"
+    ],
+    "bp": 36,
+    "classes": [
+      "naga_striker"
+    ],
+    "equipment": [],
+    "id": "naga_striker",
+    "level": 7,
+    "name": "Naga Striker",
+    "race": "naga",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 12,
+      "def": 8,
+      "hp": 62,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "water_2",
+      "water_nova",
+      "rune_water",
+      "tsunami",
+      "immobilize"
+    ],
+    "bp": 32,
+    "classes": [
+      "naga_spellweaver"
+    ],
+    "equipment": [],
+    "id": "naga_spellweaver",
+    "level": 6,
+    "name": "Naga Spellweaver",
+    "race": "naga",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 54,
+      "jump": 2,
+      "mag": 12,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "water_dart",
+      "water_1",
+      "water_maelstrom",
+      "water_spear",
+      "snare_trap"
+    ],
+    "bp": 36,
+    "classes": [
+      "naga_hydromancer"
+    ],
+    "equipment": [],
+    "id": "naga_hydromancer",
+    "level": 7,
+    "name": "Naga Hydromancer",
+    "race": "naga",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 58,
+      "jump": 2,
+      "mag": 12,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "iron_stance",
+      "sanctuary",
+      "nature_salve",
+      "leg_shot",
+      "water_dart"
+    ],
+    "bp": 27,
+    "classes": [
+      "naga_warden"
+    ],
+    "equipment": [],
+    "id": "naga_warden",
+    "level": 5,
+    "name": "Naga Warden",
+    "race": "naga",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 5,
+      "def": 8,
+      "hp": 54,
+      "jump": 2,
+      "mag": 8,
+      "res": 10,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "use_antidote",
+      "dirge",
+      "addle",
+      "insult",
+      "executioner"
+    ],
+    "bp": 32,
+    "classes": [
+      "naga_charmer"
+    ],
+    "equipment": [],
+    "id": "naga_charmer",
+    "level": 6,
+    "name": "Naga Charmer",
+    "race": "naga",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 10,
+      "def": 7,
+      "hp": 58,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "fortitude_spell",
+      "shellga",
+      "mend",
+      "dispel",
+      "water_2"
+    ],
+    "bp": 31,
+    "classes": [
+      "merfolk_tidewarden"
+    ],
+    "equipment": [],
+    "id": "merfolk_tidewarden",
+    "level": 6,
+    "name": "Merfolk Tidewarden",
+    "race": "merfolk",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 5,
+      "def": 8,
+      "hp": 58,
+      "jump": 2,
+      "mag": 8,
+      "res": 10,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "pinning_volley",
+      "will_o_wisp",
+      "alchemical_shot",
+      "flare_arrow",
+      "condemnation"
+    ],
+    "bp": 33,
+    "classes": [
+      "merfolk_spearfisher"
+    ],
+    "equipment": [],
+    "id": "merfolk_spearfisher",
+    "level": 6,
+    "name": "Merfolk Spearfisher",
+    "race": "merfolk",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 12,
+      "def": 8,
+      "hp": 58,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "flood",
+      "water_nova",
+      "torrent",
+      "tsunami",
+      "confuse"
+    ],
+    "bp": 28,
+    "classes": [
+      "merfolk_wavecaller"
+    ],
+    "equipment": [],
+    "id": "merfolk_wavecaller",
+    "level": 5,
+    "name": "Merfolk Wavecaller",
+    "race": "merfolk",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 50,
+      "jump": 2,
+      "mag": 11,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "fortify",
+      "shield_wall",
+      "frenzy",
+      "thrust",
+      "discord"
+    ],
+    "bp": 28,
+    "classes": [
+      "merfolk_guardian"
+    ],
+    "equipment": [],
+    "id": "merfolk_guardian",
+    "level": 5,
+    "name": "Merfolk Guardian",
+    "race": "merfolk",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 64,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "encore",
+      "mystic_chant",
+      "nature_salve",
+      "war_cry",
+      "aegis"
+    ],
+    "bp": 23,
+    "classes": [
+      "merfolk_siren"
+    ],
+    "equipment": [],
+    "id": "merfolk_siren",
+    "level": 4,
+    "name": "Merfolk Siren",
+    "race": "merfolk",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "double_slash",
+      "haymaker",
+      "decapitate",
+      "uppercut",
+      "hastega"
+    ],
+    "bp": 17,
+    "classes": [
+      "bat_swarm"
+    ],
+    "equipment": [],
+    "id": "bat_swarm",
+    "level": 2,
+    "name": "Bat Swarm",
+    "race": "bat",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 42,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "soothe",
+      "rousing_anthem",
+      "cure_2",
+      "blur",
+      "shield_1"
+    ],
+    "bp": 19,
+    "classes": [
+      "bat_screecher"
+    ],
+    "equipment": [],
+    "id": "bat_screecher",
+    "level": 3,
+    "name": "Bat Screecher",
+    "race": "bat",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 46,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "confuse",
+      "smoke_bomb",
+      "immobilize",
+      "mark_target",
+      "gut_punch"
+    ],
+    "bp": 24,
+    "classes": [
+      "bat_bloodfeeder"
+    ],
+    "equipment": [],
+    "id": "bat_bloodfeeder",
+    "level": 4,
+    "name": "Bat Bloodfeeder",
+    "race": "bat",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "charged_shot",
+      "flare_arrow",
+      "arrow_rain",
+      "heart_seeker",
+      "slow"
+    ],
+    "bp": 21,
+    "classes": [
+      "bat_nightstalker"
+    ],
+    "equipment": [],
+    "id": "bat_nightstalker",
+    "level": 3,
+    "name": "Bat Nightstalker",
+    "race": "bat",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "rune_sonic",
+      "sonic_spear",
+      "sonic_dart",
+      "sonic_shard",
+      "ignite_burst"
+    ],
+    "bp": 24,
+    "classes": [
+      "bat_echocaster"
+    ],
+    "equipment": [],
+    "id": "bat_echocaster",
+    "level": 4,
+    "name": "Bat Echocaster",
+    "race": "bat",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 46,
+      "jump": 2,
+      "mag": 11,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "power_strike",
+      "vengeance",
+      "shield_charge",
+      "whirlwind",
+      "eagle_eye"
+    ],
+    "bp": 21,
+    "classes": [
+      "wolf_hunter"
+    ],
+    "equipment": [],
+    "id": "wolf_hunter",
+    "level": 3,
+    "name": "Wolf Hunter",
+    "race": "wolf",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "guardian_hymn",
+      "veil_dance",
+      "benediction",
+      "keen_eye",
+      "fortitude_spell"
+    ],
+    "bp": 27,
+    "classes": [
+      "wolf_packleader"
+    ],
+    "equipment": [],
+    "id": "wolf_packleader",
+    "level": 5,
+    "name": "Wolf Packleader",
+    "race": "wolf",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 54,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "slow_dance",
+      "snare_trap",
+      "sandstorm",
+      "curse",
+      "piercing_thrust"
+    ],
+    "bp": 20,
+    "classes": [
+      "wolf_stalker"
+    ],
+    "equipment": [],
+    "id": "wolf_stalker",
+    "level": 3,
+    "name": "Wolf Stalker",
+    "race": "wolf",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "guardian_hymn",
+      "lament",
+      "benediction",
+      "enrage",
+      "shield_1"
+    ],
+    "bp": 23,
+    "classes": [
+      "wolf_howler"
+    ],
+    "equipment": [],
+    "id": "wolf_howler",
+    "level": 4,
+    "name": "Wolf Howler",
+    "race": "wolf",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "lunge",
+      "dragon_dive",
+      "bash",
+      "earthshaker",
+      "inner_fire"
+    ],
+    "bp": 29,
+    "classes": [
+      "wolf_savage"
+    ],
+    "equipment": [],
+    "id": "wolf_savage",
+    "level": 5,
+    "name": "Wolf Savage",
+    "race": "wolf",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "grapple_throw",
+      "banner_charge",
+      "wide_swing",
+      "blade_flurry",
+      "pincer_orders"
+    ],
+    "bp": 36,
+    "classes": [
+      "dire_beast_maw"
+    ],
+    "equipment": [],
+    "id": "dire_beast_maw",
+    "level": 7,
+    "name": "Dire Beast Maw",
+    "race": "dire_beast",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 12,
+      "def": 8,
+      "hp": 62,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "triple_cut",
+      "bash",
+      "split_punch",
+      "whirling_blades",
+      "bravery"
+    ],
+    "bp": 40,
+    "classes": [
+      "dire_beast_pouncer"
+    ],
+    "equipment": [],
+    "id": "dire_beast_pouncer",
+    "level": 8,
+    "name": "Dire Beast Pouncer",
+    "race": "dire_beast",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 13,
+      "def": 8,
+      "hp": 66,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "charm",
+      "toad",
+      "disease",
+      "mark_target",
+      "rampage"
+    ],
+    "bp": 32,
+    "classes": [
+      "dire_beast_ravager"
+    ],
+    "equipment": [],
+    "id": "dire_beast_ravager",
+    "level": 6,
+    "name": "Dire Beast Ravager",
+    "race": "dire_beast",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 10,
+      "def": 7,
+      "hp": 58,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "ward_circle",
+      "last_stand",
+      "charge",
+      "lunge",
+      "sleepga"
+    ],
+    "bp": 35,
+    "classes": [
+      "dire_beast_bulwark"
+    ],
+    "equipment": [],
+    "id": "dire_beast_bulwark",
+    "level": 7,
+    "name": "Dire Beast Bulwark",
+    "race": "dire_beast",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 72,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "soothe",
+      "tempo_shift",
+      "raise_dead",
+      "haste",
+      "aegis"
+    ],
+    "bp": 30,
+    "classes": [
+      "dire_beast_primal"
+    ],
+    "equipment": [],
+    "id": "dire_beast_primal",
+    "level": 6,
+    "name": "Dire Beast Primal",
+    "race": "dire_beast",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 58,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "corrode",
+      "demoralizing_shout",
+      "threaten",
+      "mark_target",
+      "split_punch"
+    ],
+    "bp": 28,
+    "classes": [
+      "spider_venomfang"
+    ],
+    "equipment": [],
+    "id": "spider_venomfang",
+    "level": 5,
+    "name": "Spider Venomfang",
+    "race": "spider",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "shield_bash",
+      "confuse",
+      "daze",
+      "focus_fire",
+      "cleave"
+    ],
+    "bp": 20,
+    "classes": [
+      "spider_weaver"
+    ],
+    "equipment": [],
+    "id": "spider_weaver",
+    "level": 3,
+    "name": "Spider Weaver",
+    "race": "spider",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "whirling_blades",
+      "lightning_stab",
+      "whirlwind",
+      "piercing_thrust",
+      "blessing_of_might"
+    ],
+    "bp": 25,
+    "classes": [
+      "spider_ambusher"
+    ],
+    "equipment": [],
+    "id": "spider_ambusher",
+    "level": 4,
+    "name": "Spider Ambusher",
+    "race": "spider",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "double_shot",
+      "called_shot",
+      "aether_shot",
+      "water_shot",
+      "cripple"
+    ],
+    "bp": 21,
+    "classes": [
+      "spider_spinner"
+    ],
+    "equipment": [],
+    "id": "spider_spinner",
+    "level": 3,
+    "name": "Spider Spinner",
+    "race": "spider",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "battle_dance",
+      "war_song",
+      "revivify",
+      "arcane_might",
+      "sanctify"
+    ],
+    "bp": 27,
+    "classes": [
+      "spider_broodmother"
+    ],
+    "equipment": [],
+    "id": "spider_broodmother",
+    "level": 5,
+    "name": "Spider Broodmother",
+    "race": "spider",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 54,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "assassinate",
+      "thrust",
+      "wyvern_strike",
+      "basic_strike",
+      "counter_stance"
+    ],
+    "bp": 17,
+    "classes": [
+      "insectoid_drone"
+    ],
+    "equipment": [],
+    "id": "insectoid_drone",
+    "level": 2,
+    "name": "Insectoid Drone",
+    "race": "insectoid",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 42,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "demoralize",
+      "petrify",
+      "poison_strike",
+      "armor_break",
+      "thrust"
+    ],
+    "bp": 16,
+    "classes": [
+      "insectoid_stinger"
+    ],
+    "equipment": [],
+    "id": "insectoid_stinger",
+    "level": 2,
+    "name": "Insectoid Stinger",
+    "race": "insectoid",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 8,
+      "def": 7,
+      "hp": 42,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "snipe",
+      "double_shot",
+      "dark_shot",
+      "will_o_wisp",
+      "wither"
+    ],
+    "bp": 25,
+    "classes": [
+      "insectoid_swarmer"
+    ],
+    "equipment": [],
+    "id": "insectoid_swarmer",
+    "level": 4,
+    "name": "Insectoid Swarmer",
+    "race": "insectoid",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "iron_will",
+      "protectga",
+      "crush_punch",
+      "vengeance",
+      "slowga"
+    ],
+    "bp": 21,
+    "classes": [
+      "insectoid_carapace"
+    ],
+    "equipment": [],
+    "id": "insectoid_carapace",
+    "level": 3,
+    "name": "Insectoid Carapace",
+    "race": "insectoid",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 56,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "rally",
+      "lament",
+      "raise_dead",
+      "take_aim",
+      "magic_barrier"
+    ],
+    "bp": 16,
+    "classes": [
+      "insectoid_hivecaller"
+    ],
+    "equipment": [],
+    "id": "insectoid_hivecaller",
+    "level": 2,
+    "name": "Insectoid Hivecaller",
+    "race": "insectoid",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 42,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "blade_flurry",
+      "parry_strike",
+      "backstab",
+      "vanguard_strike",
+      "overdrive"
+    ],
+    "bp": 25,
+    "classes": [
+      "slime_engulfer"
+    ],
+    "equipment": [],
+    "id": "slime_engulfer",
+    "level": 4,
+    "name": "Slime Engulfer",
+    "race": "slime",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "demoralizing_shout",
+      "turn_undead",
+      "siren_song",
+      "disarm",
+      "bulwark_bash"
+    ],
+    "bp": 28,
+    "classes": [
+      "slime_acidic"
+    ],
+    "equipment": [],
+    "id": "slime_acidic",
+    "level": 5,
+    "name": "Slime Acidic",
+    "race": "slime",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "guardian_chant",
+      "inspire",
+      "full_cure",
+      "steady_aim",
+      "divine_grace"
+    ],
+    "bp": 27,
+    "classes": [
+      "slime_splitter"
+    ],
+    "equipment": [],
+    "id": "slime_splitter",
+    "level": 5,
+    "name": "Slime Splitter",
+    "race": "slime",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 54,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "alchemical_shard",
+      "alchemical_dart",
+      "rune_alchemical",
+      "alchemical_spear",
+      "shackle"
+    ],
+    "bp": 24,
+    "classes": [
+      "slime_corrosive"
+    ],
+    "equipment": [],
+    "id": "slime_corrosive",
+    "level": 4,
+    "name": "Slime Corrosive",
+    "race": "slime",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 46,
+      "jump": 2,
+      "mag": 11,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "protect",
+      "command_defend",
+      "backstab",
+      "riposte",
+      "sap"
+    ],
+    "bp": 21,
+    "classes": [
+      "slime_resilient"
+    ],
+    "equipment": [],
+    "id": "slime_resilient",
+    "level": 3,
+    "name": "Slime Resilient",
+    "race": "slime",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 56,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "charge",
+      "grapple_throw",
+      "cross_slash",
+      "whirlwind",
+      "mage_circle"
+    ],
+    "bp": 29,
+    "classes": [
+      "skeleton_soldier"
+    ],
+    "equipment": [],
+    "id": "skeleton_soldier",
+    "level": 5,
+    "name": "Skeleton Soldier",
+    "race": "skeleton",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "head_shot",
+      "sonic_shot",
+      "requiem",
+      "ricochet",
+      "esuna"
+    ],
+    "bp": 21,
+    "classes": [
+      "skeleton_archer"
+    ],
+    "equipment": [],
+    "id": "skeleton_archer",
+    "level": 3,
+    "name": "Skeleton Archer",
+    "race": "skeleton",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "shellga",
+      "divine_shield",
+      "riposte",
+      "rend",
+      "silence"
+    ],
+    "bp": 24,
+    "classes": [
+      "skeleton_knight"
+    ],
+    "equipment": [],
+    "id": "skeleton_knight",
+    "level": 4,
+    "name": "Skeleton Knight",
+    "race": "skeleton",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 60,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "dark_2",
+      "rune_dark",
+      "drain",
+      "dark_dart",
+      "drench"
+    ],
+    "bp": 24,
+    "classes": [
+      "skeleton_bonecaster"
+    ],
+    "equipment": [],
+    "id": "skeleton_bonecaster",
+    "level": 4,
+    "name": "Skeleton Bonecaster",
+    "race": "skeleton",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 46,
+      "jump": 2,
+      "mag": 11,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "lullaby",
+      "esunaga",
+      "cripple",
+      "spell_shatter",
+      "basic_strike"
+    ],
+    "bp": 24,
+    "classes": [
+      "skeleton_reaper"
+    ],
+    "equipment": [],
+    "id": "skeleton_reaper",
+    "level": 4,
+    "name": "Skeleton Reaper",
+    "race": "skeleton",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 50,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "siege_blow",
+      "thrust",
+      "blade_flurry",
+      "parry_strike",
+      "blessing_of_might"
+    ],
+    "bp": 21,
+    "classes": [
+      "zombie_shambler"
+    ],
+    "equipment": [],
+    "id": "zombie_shambler",
+    "level": 3,
+    "name": "Zombie Shambler",
+    "race": "zombie",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "regen",
+      "sleep_spell",
+      "toxic_dart",
+      "hunters_mark",
+      "stasis_sword"
+    ],
+    "bp": 20,
+    "classes": [
+      "zombie_plaguebearer"
+    ],
+    "equipment": [],
+    "id": "zombie_plaguebearer",
+    "level": 3,
+    "name": "Zombie Plaguebearer",
+    "race": "zombie",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "shell",
+      "barrier",
+      "mortal_strike",
+      "backstab",
+      "darkness"
+    ],
+    "bp": 28,
+    "classes": [
+      "zombie_bloated"
+    ],
+    "equipment": [],
+    "id": "zombie_bloated",
+    "level": 5,
+    "name": "Zombie Bloated",
+    "race": "zombie",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 64,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "bash",
+      "wiznaibus",
+      "basic_strike",
+      "piercing_thrust",
+      "enrage"
+    ],
+    "bp": 21,
+    "classes": [
+      "zombie_devourer"
+    ],
+    "equipment": [],
+    "id": "zombie_devourer",
+    "level": 3,
+    "name": "Zombie Devourer",
+    "race": "zombie",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "magic_ballad",
+      "rally",
+      "use_hi_potion",
+      "counter_stance",
+      "sanctuary"
+    ],
+    "bp": 27,
+    "classes": [
+      "zombie_risen"
+    ],
+    "equipment": [],
+    "id": "zombie_risen",
+    "level": 5,
+    "name": "Zombie Risen",
+    "race": "zombie",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 54,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "dark_pulse",
+      "drain",
+      "death_grip",
+      "dark_dart",
+      "dispel"
+    ],
+    "bp": 36,
+    "classes": [
+      "wraith_specter"
+    ],
+    "equipment": [],
+    "id": "wraith_specter",
+    "level": 7,
+    "name": "Wraith Specter",
+    "race": "wraith",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 58,
+      "jump": 2,
+      "mag": 12,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "arcane_seal",
+      "smoke_arrow",
+      "slow",
+      "insult",
+      "cross_slash"
+    ],
+    "bp": 35,
+    "classes": [
+      "wraith_soulrender"
+    ],
+    "equipment": [],
+    "id": "wraith_soulrender",
+    "level": 7,
+    "name": "Wraith Soulrender",
+    "race": "wraith",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 10,
+      "def": 7,
+      "hp": 62,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "darkaga",
+      "dark_1",
+      "drain",
+      "dark_maelstrom",
+      "berserk_spell"
+    ],
+    "bp": 32,
+    "classes": [
+      "wraith_hauntcaller"
+    ],
+    "equipment": [],
+    "id": "wraith_hauntcaller",
+    "level": 6,
+    "name": "Wraith Hauntcaller",
+    "race": "wraith",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 54,
+      "jump": 2,
+      "mag": 12,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "iron_will",
+      "shell",
+      "first_aid",
+      "distracting_flourish",
+      "death_grip"
+    ],
+    "bp": 27,
+    "classes": [
+      "wraith_veil"
+    ],
+    "equipment": [],
+    "id": "wraith_veil",
+    "level": 5,
+    "name": "Wraith Veil",
+    "race": "wraith",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 5,
+      "def": 8,
+      "hp": 54,
+      "jump": 2,
+      "mag": 8,
+      "res": 10,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "renew",
+      "regen",
+      "mimic_daravon",
+      "expose_weakness",
+      "charge"
+    ],
+    "bp": 28,
+    "classes": [
+      "wraith_dreadbringer"
+    ],
+    "equipment": [],
+    "id": "wraith_dreadbringer",
+    "level": 5,
+    "name": "Wraith Dreadbringer",
+    "race": "wraith",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "fire_dart",
+      "fire_maelstrom",
+      "meteor_storm",
+      "fire_shard",
+      "esuna"
+    ],
+    "bp": 24,
+    "classes": [
+      "imp_firebrand"
+    ],
+    "equipment": [],
+    "id": "imp_firebrand",
+    "level": 4,
+    "name": "Imp Firebrand",
+    "race": "imp",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 46,
+      "jump": 2,
+      "mag": 11,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "hex_spell",
+      "regenga",
+      "lullaby",
+      "mana_burn",
+      "wide_swing"
+    ],
+    "bp": 28,
+    "classes": [
+      "imp_tormentor"
+    ],
+    "equipment": [],
+    "id": "imp_tormentor",
+    "level": 5,
+    "name": "Imp Tormentor",
+    "race": "imp",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "sleep_spell",
+      "curse_of_frailty",
+      "taunting_jig",
+      "witch_hunt",
+      "assassinate"
+    ],
+    "bp": 28,
+    "classes": [
+      "imp_trickster"
+    ],
+    "equipment": [],
+    "id": "imp_trickster",
+    "level": 5,
+    "name": "Imp Trickster",
+    "race": "imp",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "fire_spear",
+      "fire_3",
+      "fire_2",
+      "fire_shard",
+      "zombie"
+    ],
+    "bp": 32,
+    "classes": [
+      "imp_flameling"
+    ],
+    "equipment": [],
+    "id": "imp_flameling",
+    "level": 6,
+    "name": "Imp Flameling",
+    "race": "imp",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 54,
+      "jump": 2,
+      "mag": 12,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "warding",
+      "shield_formation",
+      "revive",
+      "dispel",
+      "fire_wall"
+    ],
+    "bp": 24,
+    "classes": [
+      "imp_warden"
+    ],
+    "equipment": [],
+    "id": "imp_warden",
+    "level": 4,
+    "name": "Imp Warden",
+    "race": "imp",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 5,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 8,
+      "res": 10,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "will_o_wisp",
+      "fire_3",
+      "fire_shot",
+      "firaga",
+      "sleeping_melody"
+    ],
+    "bp": 48,
+    "classes": [
+      "demon_hellfire"
+    ],
+    "equipment": [],
+    "id": "demon_hellfire",
+    "level": 10,
+    "name": "Demon Hellfire",
+    "race": "demon",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 70,
+      "jump": 2,
+      "mag": 14,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "ring_of_fire",
+      "fire_2",
+      "fire_maelstrom",
+      "rune_fire",
+      "disable"
+    ],
+    "bp": 48,
+    "classes": [
+      "demon_dreadlord"
+    ],
+    "equipment": [],
+    "id": "demon_dreadlord",
+    "level": 10,
+    "name": "Demon Dreadlord",
+    "race": "demon",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 70,
+      "jump": 2,
+      "mag": 14,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "bash",
+      "triple_cut",
+      "lunge",
+      "uppercut",
+      "pincer_orders"
+    ],
+    "bp": 48,
+    "classes": [
+      "demon_brute"
+    ],
+    "equipment": [],
+    "id": "demon_brute",
+    "level": 10,
+    "name": "Demon Brute",
+    "race": "demon",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 14,
+      "def": 8,
+      "hp": 74,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "immobilize",
+      "smoke_bomb",
+      "smoke_arrow",
+      "witch_hunt",
+      "parry_strike"
+    ],
+    "bp": 47,
+    "classes": [
+      "demon_corruptor"
+    ],
+    "equipment": [],
+    "id": "demon_corruptor",
+    "level": 10,
+    "name": "Demon Corruptor",
+    "race": "demon",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 11,
+      "def": 7,
+      "hp": 74,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "defensive_stance",
+      "shield_wall",
+      "spin_slash",
+      "wyvern_strike",
+      "toad"
+    ],
+    "bp": 42,
+    "classes": [
+      "demon_infernal_warden"
+    ],
+    "equipment": [],
+    "id": "demon_infernal_warden",
+    "level": 9,
+    "name": "Demon Infernal Warden",
+    "race": "demon",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 80,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "iron_will",
+      "bulwark",
+      "slash",
+      "basic_strike",
+      "float"
+    ],
+    "bp": 32,
+    "classes": [
+      "gargoyle_sentinel"
+    ],
+    "equipment": [],
+    "id": "gargoyle_sentinel",
+    "level": 6,
+    "name": "Gargoyle Sentinel",
+    "race": "gargoyle",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 68,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "mana_shield",
+      "consecrate",
+      "whirlwind",
+      "split_punch",
+      "shackle"
+    ],
+    "bp": 28,
+    "classes": [
+      "gargoyle_stoneguard"
+    ],
+    "equipment": [],
+    "id": "gargoyle_stoneguard",
+    "level": 5,
+    "name": "Gargoyle Stoneguard",
+    "race": "gargoyle",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 64,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "haymaker",
+      "shield_charge",
+      "power_strike",
+      "whirling_blades",
+      "overdrive"
+    ],
+    "bp": 33,
+    "classes": [
+      "gargoyle_smasher"
+    ],
+    "equipment": [],
+    "id": "gargoyle_smasher",
+    "level": 6,
+    "name": "Gargoyle Smasher",
+    "race": "gargoyle",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 12,
+      "def": 8,
+      "hp": 58,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "lightning_shot",
+      "arrow_rain",
+      "holy_explosion",
+      "will_o_wisp",
+      "electrify"
+    ],
+    "bp": 29,
+    "classes": [
+      "gargoyle_skywatcher"
+    ],
+    "equipment": [],
+    "id": "gargoyle_skywatcher",
+    "level": 5,
+    "name": "Gargoyle Skywatcher",
+    "race": "gargoyle",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "divine_grace",
+      "iron_stance",
+      "curaja",
+      "terrify",
+      "earth_dart"
+    ],
+    "bp": 31,
+    "classes": [
+      "gargoyle_wardstone"
+    ],
+    "equipment": [],
+    "id": "gargoyle_wardstone",
+    "level": 6,
+    "name": "Gargoyle Wardstone",
+    "race": "gargoyle",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 5,
+      "def": 8,
+      "hp": 58,
+      "jump": 2,
+      "mag": 8,
+      "res": 10,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "guard_up",
+      "shield_wall",
+      "vengeance",
+      "earthshaker",
+      "poison_arrow"
+    ],
+    "bp": 35,
+    "classes": [
+      "golem_colossus"
+    ],
+    "equipment": [],
+    "id": "golem_colossus",
+    "level": 7,
+    "name": "Golem Colossus",
+    "race": "golem",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 72,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "reckless_swing",
+      "bash",
+      "executioner",
+      "basic_strike",
+      "field_orders"
+    ],
+    "bp": 44,
+    "classes": [
+      "golem_crusher"
+    ],
+    "equipment": [],
+    "id": "golem_crusher",
+    "level": 9,
+    "name": "Golem Crusher",
+    "race": "golem",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 13,
+      "def": 8,
+      "hp": 70,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "barrier",
+      "sanctify",
+      "use_bomb",
+      "uppercut",
+      "curse_of_frailty"
+    ],
+    "bp": 39,
+    "classes": [
+      "golem_bulwark"
+    ],
+    "equipment": [],
+    "id": "golem_bulwark",
+    "level": 8,
+    "name": "Golem Bulwark",
+    "race": "golem",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 76,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "guard_up",
+      "last_stand",
+      "wide_swing",
+      "piercing_thrust",
+      "reflect"
+    ],
+    "bp": 42,
+    "classes": [
+      "golem_sentinel"
+    ],
+    "equipment": [],
+    "id": "golem_sentinel",
+    "level": 9,
+    "name": "Golem Sentinel",
+    "race": "golem",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 80,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "protect",
+      "shellga",
+      "cura",
+      "slumber",
+      "rune_earth"
+    ],
+    "bp": 38,
+    "classes": [
+      "golem_runeguard"
+    ],
+    "equipment": [],
+    "id": "golem_runeguard",
+    "level": 8,
+    "name": "Golem Runeguard",
+    "race": "golem",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 5,
+      "def": 8,
+      "hp": 66,
+      "jump": 2,
+      "mag": 8,
+      "res": 10,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "alchemical_shot",
+      "arcane_shot",
+      "will_o_wisp",
+      "holy_shot",
+      "crippling_shot"
+    ],
+    "bp": 29,
+    "classes": [
+      "harpy_diver"
+    ],
+    "equipment": [],
+    "id": "harpy_diver",
+    "level": 5,
+    "name": "Harpy Diver",
+    "race": "harpy",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 11,
+      "def": 8,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "battle_hymn",
+      "rousing_anthem",
+      "greater_heal",
+      "march",
+      "guard_up"
+    ],
+    "bp": 23,
+    "classes": [
+      "harpy_screecher"
+    ],
+    "equipment": [],
+    "id": "harpy_screecher",
+    "level": 4,
+    "name": "Harpy Screecher",
+    "race": "harpy",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 50,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "triple_cut",
+      "wiznaibus",
+      "mortal_strike",
+      "war_stomp",
+      "focus_magic"
+    ],
+    "bp": 21,
+    "classes": [
+      "harpy_talon"
+    ],
+    "equipment": [],
+    "id": "harpy_talon",
+    "level": 3,
+    "name": "Harpy Talon",
+    "race": "harpy",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 10,
+      "def": 8,
+      "hp": 46,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "aero_1",
+      "wind_shot",
+      "wind_shard",
+      "tornado",
+      "confusion_cloud"
+    ],
+    "bp": 20,
+    "classes": [
+      "harpy_windcaller"
+    ],
+    "equipment": [],
+    "id": "harpy_windcaller",
+    "level": 3,
+    "name": "Harpy Windcaller",
+    "race": "harpy",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 42,
+      "jump": 2,
+      "mag": 10,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "esuna",
+      "silence",
+      "disarming_strike",
+      "hunters_mark",
+      "assassinate"
+    ],
+    "bp": 28,
+    "classes": [
+      "harpy_snatcher"
+    ],
+    "equipment": [],
+    "id": "harpy_snatcher",
+    "level": 5,
+    "name": "Harpy Snatcher",
+    "race": "harpy",
+    "recommended_path": "control",
+    "stats": {
+      "atk": 9,
+      "def": 7,
+      "hp": 54,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "camouflage",
+      "sanctify",
+      "split_punch",
+      "riposte",
+      "taunt"
+    ],
+    "bp": 35,
+    "classes": [
+      "treant_warden"
+    ],
+    "equipment": [],
+    "id": "treant_warden",
+    "level": 7,
+    "name": "Treant Warden",
+    "race": "treant",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 72,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "lament",
+      "encore",
+      "soothing_mist",
+      "focus_magic",
+      "sanctify"
+    ],
+    "bp": 30,
+    "classes": [
+      "treant_grovekeeper"
+    ],
+    "equipment": [],
+    "id": "treant_grovekeeper",
+    "level": 6,
+    "name": "Treant Grovekeeper",
+    "race": "treant",
+    "recommended_path": "support",
+    "stats": {
+      "atk": 6,
+      "def": 8,
+      "hp": 58,
+      "jump": 2,
+      "mag": 7,
+      "res": 5,
+      "rng": 1,
+      "spd": 10,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "earth_dart",
+      "earth_shot",
+      "earthshaker",
+      "earth_nova",
+      "persuade"
+    ],
+    "bp": 40,
+    "classes": [
+      "treant_thorncaster"
+    ],
+    "equipment": [],
+    "id": "treant_thorncaster",
+    "level": 8,
+    "name": "Treant Thorncaster",
+    "race": "treant",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 62,
+      "jump": 2,
+      "mag": 13,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "fortitude_spell",
+      "ward_circle",
+      "earthshaker",
+      "slash",
+      "dirge"
+    ],
+    "bp": 32,
+    "classes": [
+      "treant_bulwark"
+    ],
+    "equipment": [],
+    "id": "treant_bulwark",
+    "level": 6,
+    "name": "Treant Bulwark",
+    "race": "treant",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 68,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "sanctuary",
+      "guard_up",
+      "raise_dead",
+      "death_sentence",
+      "earth_nova"
+    ],
+    "bp": 34,
+    "classes": [
+      "treant_elder"
+    ],
+    "equipment": [],
+    "id": "treant_elder",
+    "level": 7,
+    "name": "Treant Elder",
+    "race": "treant",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 5,
+      "def": 8,
+      "hp": 62,
+      "jump": 2,
+      "mag": 8,
+      "res": 10,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "fire_nova",
+      "rune_fire",
+      "meteor",
+      "fire_wall",
+      "daze"
+    ],
+    "bp": 36,
+    "classes": [
+      "elemental_pyre"
+    ],
+    "equipment": [],
+    "id": "elemental_pyre",
+    "level": 7,
+    "name": "Elemental Pyre",
+    "race": "elemental",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 58,
+      "jump": 2,
+      "mag": 12,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "ice_shot",
+      "ice_dart",
+      "frost_breath",
+      "ice_arrow",
+      "siren_song"
+    ],
+    "bp": 36,
+    "classes": [
+      "elemental_frostform"
+    ],
+    "equipment": [],
+    "id": "elemental_frostform",
+    "level": 7,
+    "name": "Elemental Frostform",
+    "race": "elemental",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 58,
+      "jump": 2,
+      "mag": 12,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "lightning_nova",
+      "lightning_stab",
+      "lightning_arrow",
+      "rune_lightning",
+      "reraise"
+    ],
+    "bp": 40,
+    "classes": [
+      "elemental_tempest"
+    ],
+    "equipment": [],
+    "id": "elemental_tempest",
+    "level": 8,
+    "name": "Elemental Tempest",
+    "race": "elemental",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 62,
+      "jump": 2,
+      "mag": 13,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "bulwark",
+      "consecrate",
+      "crush_punch",
+      "power_strike",
+      "disable"
+    ],
+    "bp": 39,
+    "classes": [
+      "elemental_stoneheart"
+    ],
+    "equipment": [],
+    "id": "elemental_stoneheart",
+    "level": 8,
+    "name": "Elemental Stoneheart",
+    "race": "elemental",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 76,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "shield_1",
+      "phalanx",
+      "cure_2",
+      "blind_strike",
+      "arcane_dart"
+    ],
+    "bp": 38,
+    "classes": [
+      "elemental_coreguard"
+    ],
+    "equipment": [],
+    "id": "elemental_coreguard",
+    "level": 8,
+    "name": "Elemental Coreguard",
+    "race": "elemental",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 5,
+      "def": 8,
+      "hp": 66,
+      "jump": 2,
+      "mag": 8,
+      "res": 10,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "jump",
+      "cross_slash",
+      "spin_slash",
+      "earthshaker",
+      "war_banner"
+    ],
+    "bp": 40,
+    "classes": [
+      "drake_maw"
+    ],
+    "equipment": [],
+    "id": "drake_maw",
+    "level": 8,
+    "name": "Drake Maw",
+    "race": "drake",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 13,
+      "def": 8,
+      "hp": 66,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 1,
+      "spd": 9,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "ring_of_fire",
+      "firaga",
+      "flamethrower",
+      "rune_fire",
+      "taunt"
+    ],
+    "bp": 40,
+    "classes": [
+      "drake_firebreather"
+    ],
+    "equipment": [],
+    "id": "drake_firebreather",
+    "level": 8,
+    "name": "Drake Firebreather",
+    "race": "drake",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 62,
+      "jump": 2,
+      "mag": 13,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  },
+  {
+    "abilities": [
+      "aether_shot",
+      "arrow_rain",
+      "sonic_shot",
+      "double_shot",
+      "crippling_shot"
+    ],
+    "bp": 48,
+    "classes": [
+      "drake_skyhunter"
+    ],
+    "equipment": [],
+    "id": "drake_skyhunter",
+    "level": 10,
+    "name": "Drake Skyhunter",
+    "race": "drake",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 14,
+      "def": 8,
+      "hp": 74,
+      "jump": 2,
+      "mag": 0,
+      "res": 4,
+      "rng": 2,
+      "spd": 11,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "shell",
+      "shield_1",
+      "body_slam",
+      "stasis_sword",
+      "esuna"
+    ],
+    "bp": 42,
+    "classes": [
+      "drake_scalelord"
+    ],
+    "equipment": [],
+    "id": "drake_scalelord",
+    "level": 9,
+    "name": "Drake Scalelord",
+    "race": "drake",
+    "recommended_path": "physical",
+    "stats": {
+      "atk": 7,
+      "def": 11,
+      "hp": 80,
+      "jump": 2,
+      "mag": 0,
+      "res": 5,
+      "rng": 1,
+      "spd": 8,
+      "wp": 9
+    }
+  },
+  {
+    "abilities": [
+      "ring_of_fire",
+      "firaga",
+      "rune_fire",
+      "fire_arrow",
+      "corrode"
+    ],
+    "bp": 40,
+    "classes": [
+      "drake_wyrmcaller"
+    ],
+    "equipment": [],
+    "id": "drake_wyrmcaller",
+    "level": 8,
+    "name": "Drake Wyrmcaller",
+    "race": "drake",
+    "recommended_path": "magical",
+    "stats": {
+      "atk": 4,
+      "def": 6,
+      "hp": 62,
+      "jump": 2,
+      "mag": 13,
+      "res": 5,
+      "rng": 1,
+      "spd": 9,
+      "wp": 12
+    }
+  }
 ]
