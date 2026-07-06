@@ -3,8 +3,8 @@ extends Node3D
 ## FFT-style camera: fixed pitch, four 90° snap views, zoom, and pan.
 
 @export var pitch_deg: float = 40.0
-@export var zoom_val: float = 10.0
-@export var zoom_min: float = 4.0
+@export var zoom_val: float = 5.0
+@export var zoom_min: float = 2.0
 @export var zoom_max: float = 20.0
 @export var pan_speed: float = 8.0
 @export var zoom_step: float = 1.0
