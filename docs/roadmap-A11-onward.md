@@ -6,6 +6,11 @@
 **Format:** High-level phased milestones (mirrors `alpha-implementation-plan.md`)
 **Date:** 2026-06-30
 
+> **UPDATE (2026-07-06):** This roadmap is now historical. Phases **A11–A20 are all
+> implemented, tested, and merged** (A13 was dropped, not implemented). The only remaining
+> Alpha gap is A9 content — maps are still below target (6). Phases **A21+** below remain
+> proposed/deferred backlog. See `CLAUDE.md` "Phase Progress" for the authoritative status.
+
 This roadmap picks up where `alpha-implementation-plan.md` stops (A10). Phases **A11–A14**
 already have detailed specs and implementation plans (currently *Draft*, not yet built);
 they are sequenced here with their dependencies and exit criteria. Phases **A15+** are

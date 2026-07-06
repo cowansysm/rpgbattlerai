@@ -11,7 +11,7 @@ res://
 ├── addons/gut/              # GUT v9.6.0 test framework (vendored)
 ├── assets/icons/            # Status effect and ability icons
 ├── data/
-│   ├── abilities.json       # 82 abilities (39 skills, 36 spells, 7 item-bound)
+│   ├── abilities.json       # 91 abilities (39 skills, 36 spells, 7 item-bound, 9 passive)
 │   ├── characters.json      # 141 character templates (playable roster + monster/NPC templates for encounters)
 │   ├── classes.json         # 146 class/job definitions (Vagabond root → tier-1 → advanced → elite + monster classes)
 │   ├── items.json           # 46 items (40 equipment + 6 consumables)
@@ -242,7 +242,7 @@ Each entity type is a single JSON file containing an array of objects:
 
 - **`ChargeTimeTurnSystem`** (`src/core/combat/charge_time_turn_system.gd`) — continuous clock: units accrue `ct += effective_SPD` per tick and act at threshold; acting resets CT with a surcharge (full action costs more than Wait); faster units act more often; seeded tie-break
 - **`TurnScheduler`** (`src/core/combat/turn_scheduler.gd`) — per-unit CT bookkeeping, next-actor query, timeline
-- Slowed/Haste statuses shift CT frequency; **skirmish container** (`scenes/skirmish/`, `src/ui/skirmish_setup.gd`) provides squad-size selection with vs-AI and local hot-seat play (no networking); telegraph is forced off in skirmish
+- Slowed/Haste statuses shift CT frequency; **skirmish container** (`scenes/skirmish/`, `src/ui/skirmish_scene.gd`) provides squad-size selection with vs-AI and local hot-seat play (no networking); telegraph is forced off in skirmish
 
 ## Reaction / Support / Movement Passives (A18)
 
@@ -309,7 +309,7 @@ Main scene: `res://scenes/draft/draft_scene.tscn` (party draft → deploy → co
 
 ## Alpha (in progress)
 
-The Alpha extends the MVP into a single-player game and, via A20, a local multiplayer/skirmish mode. All sub-phases except the obsolete A13 are **implemented and tested**; A13 (coin flip & opening initiative) is **dropped, not to be implemented**. Content has grown well past the original `alpha-specs.md` §12.2 targets: **82 abilities, 146 classes, 46 items, 141 character templates (incl. monster/NPC), 32 races (incl. monster races), 17 terrains, 73 encounters**; maps remain at 6.
+The Alpha extends the MVP into a single-player game and, via A20, a local multiplayer/skirmish mode. All sub-phases except the obsolete A13 are **implemented and tested**; A13 (coin flip & opening initiative) is **dropped, not to be implemented**. Content has grown well past the original `alpha-specs.md` §12.2 targets: **91 abilities, 146 classes, 46 items, 141 character templates (incl. monster/NPC), 32 races (incl. monster races), 17 terrains, 73 encounters**; maps remain at 6.
 
 Sub-phases (critical path A0→A3→A4→A5→A6→A8→A10; A1/A2 tooling and A9 content are parallel; A7 AI joins at A8; A11+ are post-A10 extensions):
 

@@ -3,7 +3,7 @@
   "COVER_DEF": 1,
   "ROUT_THRESHOLD": 0.25,
   "tiers": {
-    "skirmish": { "bp_cap": 100, "min": 3, "max": 5 },
+    "skirmish": { "bp_cap": 100, "min": 2, "max": 5 },
     "standard": { "bp_cap": 150, "min": 4, "max": 8 },
     "large": { "bp_cap": 250, "min": 6, "max": 12 }
   },

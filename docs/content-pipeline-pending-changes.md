@@ -1,8 +1,8 @@
 # Content Pipeline — Pending Schema Change (abilities)
 
-**Status:** required before the next `import abilities` run, if `line`/`cone` AOE sizes are to be preserved.
+**Status:** ✅ OBSOLETE (2026-07-06). The AoE model was redesigned to `area.shape` + `area.radius` (both present in `entity_schema.gd`); the current `abilities.json`/`abilities.csv` use only `burst` shapes, so the proposed `area.length`/`area.depth` columns block nothing. Retained for historical context only.
 **Owner:** needs a code change in `src/tools/entity_schema.gd` (planner cannot edit code).
-**Date:** 2026-06-24
+**Date:** 2026-06-24 (superseded 2026-07-06)
 
 ## Why
 

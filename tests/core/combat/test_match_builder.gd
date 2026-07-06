@@ -31,7 +31,7 @@ func test_get_tier_config_skirmish() -> void:
 	var config := _builder.get_tier_config("skirmish")
 	assert_false(config.is_empty())
 	assert_eq(int(config["bp_cap"]), 100)
-	assert_eq(int(config["min"]), 3)
+	assert_eq(int(config["min"]), 2)
 	assert_eq(int(config["max"]), 5)
 
 
@@ -100,7 +100,7 @@ func test_create_draft_returns_valid_draft() -> void:
 	var draft := _builder.create_draft("skirmish")
 	assert_not_null(draft)
 	assert_eq(draft.bp_cap(), 100)
-	assert_eq(draft.min_characters(), 3)
+	assert_eq(draft.min_characters(), 2)
 	assert_eq(draft.max_characters(), 5)
 	assert_eq(draft.state(), PartyDraft.State.EMPTY)
 

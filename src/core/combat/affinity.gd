@@ -16,6 +16,9 @@ const TIER_NAMES: Array[String] = ["absorb", "immune", "resist", "neutral", "wea
 ## Known element tags (validated in Validator).
 const ELEMENTS: Array[String] = [
 	"fire", "ice", "lightning", "dark", "holy", "earth", "wind", "water",
+	# Extended element set used by the full authored ability library (A9 content).
+	# Nothing declares affinity for these yet, so they resolve NEUTRAL (x1.0).
+	"poison", "arcane", "steam", "alchemical", "aether", "sonic",
 ]
 
 ## Weight assigned to each authored tier name for additive stacking.
