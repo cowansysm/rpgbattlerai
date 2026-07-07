@@ -22,11 +22,11 @@ res://
 ├── addons/gut/              # GUT test framework (vendored, v9.6.0)
 ├── assets/icons/            # status effect and ability icons
 ├── data/                    # authored JSON content (consolidated arrays)
-│   ├── characters.json      # 20 character templates (7 human, 5 elf, 4 dwarf, 4 halfling)
-│   ├── classes.json         # 25 class/job definitions (1 starting, 3 tier-1, 12 advanced, 9 elite)
-│   ├── races.json           # 4 race definitions (with base_stats)
-│   ├── abilities.json       # 82 abilities (39 skills, 36 spells, 7 item-bound)
-│   ├── items.json           # 46 items (40 equipment + 6 consumables)
+│   ├── characters.json      # 160 character templates (20 playable + monster/NPC)
+│   ├── classes.json         # 268 class/job definitions (128 player + 140 monster; 10-tier vagabond-rooted DAG)
+│   ├── races.json           # 32 race definitions (with base_stats)
+│   ├── abilities.json       # 790 abilities (learned via JP)
+│   ├── items.json           # 128 items (equipment + consumables)
 │   ├── constants.json       # game balance tuning (incl. AI presets, economy tunables)
 │   ├── terrain.json         # 17 terrain type definitions
 │   ├── loot_tables.json     # 2 loot tables (standard_battle, boss_battle)
@@ -198,12 +198,12 @@ The current milestone, **Alpha**, extends the MVP into a single-player game and,
 - [x] A1 — Map editor (dev tool)
 - [x] A2 — CSV ↔ JSON content pipeline
 - [x] A3 — `MAG`/`RES` stats & magical resolution
-- [x] A4 — Character instances, classes & the Vagabond-rooted job tree
+- [x] A4 — Character instances, classes & the vagabond-rooted job tree (redesigned to a 10-tier, level-gated tree — see `docs/content-redesign-spec.md`)
 - [x] A5 — Battle Bands & save system (`user://`)
 - [x] A6 — Economy: gold, shops & loot
 - [x] A7 — AI opponent (`AIController` over `TurnActions`)
 - [x] A8 — Roguelike run (branching node graph, down-limit death)
-- [~] A9 — Content expansion: libraries well beyond target (91 abilities, 146 classes, 46 items, 141 characters, 32 races, 17 terrains, 73 encounters); **maps (6) still below target**
+- [~] A9 — Content expansion: libraries well beyond target (790 abilities, 268 classes, 128 items, 160 characters, 32 races, 17 terrains, 73 encounters — adopted via the content redesign, Phases 0–3); **maps (6) still below target**
 - [x] A10 — Polish & meta-progression (Profile, MetaUnlockEngine, recruitment gating, run shop)
 - [x] A11 — Encounters, level scaling & economy refinement
 - [x] A12 — Interactive deployment zones
@@ -218,7 +218,7 @@ The current milestone, **Alpha**, extends the MVP into a single-player game and,
 
 Only A9's maps remain below target; everything else on the Alpha path is shipped and green under the GUT suite. Each sub-phase has a spec (and, through A15, an implementation plan) in `docs/`.
 
-> **Note on staged CSV content:** `data/csv/` holds a larger draft library (268 classes, 160 characters, 128 items). It is **not adopted yet**: it references a 787-ability set that was reduced to 91 during A18. A spike confirmed the surplus imports and boots clean once that ability library is restored (+6 elements re-added), but the content uses a learn-via-JP model that would leave fresh characters with no baseline attack and breaks 148 tests. Adoption is deferred pending a gameplay-model decision — see `docs/content-import-followup.md`.
+> **Content redesign (adopted, Phases 0–3):** the expanded library in `data/csv/` is now the canonical content — **790 abilities, 268 classes (128 player + 140 monster), 160 characters, 128 items** — replacing the old 4-tier / 91-ability / 146-class design. Progression is a **10-tier, level-gated** vagabond-rooted class DAG (the old Thief/Soldier/Adept-at-level-3 model is gone; `adept` is removed, `soldier`/`thief` are tier 2). Abilities are learned via JP (empty `granted_abilities`); recruits start skill-less with a starting-JP pool; core combat actions are intrinsic, so a skill-less unit is fully functional. Saves are **version 3** (clean-slate reset of incompatible pre-v3 saves). See `docs/content-redesign-spec.md` and `docs/content-redesign-phase3-plan.md`.
 
 ### Deferred (beyond Alpha)
 
