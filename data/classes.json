@@ -48,10 +48,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "vagabond",
     "jp_costs": {
@@ -155,10 +155,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "squire",
     "jp_costs": {
@@ -247,10 +247,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "footman",
     "jp_costs": {
@@ -320,10 +320,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "apprentice",
     "jp_costs": {
@@ -401,10 +401,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "acolyte",
     "jp_costs": {
@@ -485,10 +485,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "page",
     "jp_costs": {
@@ -565,9 +565,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "cutpurse",
     "jp_costs": {
@@ -641,10 +641,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "tinker",
     "jp_costs": {
@@ -719,10 +719,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.5,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.3
+      "atk": 1.25,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.75
     },
     "id": "slinger",
     "jp_costs": {
@@ -831,10 +831,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "soldier",
     "jp_costs": {
@@ -942,10 +942,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "warrior",
     "jp_costs": {
@@ -1053,10 +1053,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "knight_errant",
     "jp_costs": {
@@ -1164,10 +1164,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "myrmidon",
     "jp_costs": {
@@ -1275,10 +1275,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "berserker",
     "jp_costs": {
@@ -1386,10 +1386,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "gladiator",
     "jp_costs": {
@@ -1497,10 +1497,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "dragoon",
     "jp_costs": {
@@ -1608,10 +1608,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "lancer",
     "jp_costs": {
@@ -1719,10 +1719,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "monk",
     "jp_costs": {
@@ -1830,10 +1830,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "master_monk",
     "jp_costs": {
@@ -1941,10 +1941,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "duelist",
     "jp_costs": {
@@ -2056,10 +2056,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "fencer",
     "jp_costs": {
@@ -2167,10 +2167,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "swordmaster",
     "jp_costs": {
@@ -2282,10 +2282,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "blademaster",
     "jp_costs": {
@@ -2393,10 +2393,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "ronin",
     "jp_costs": {
@@ -2504,10 +2504,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "samurai",
     "jp_costs": {
@@ -2615,10 +2615,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "kensei",
     "jp_costs": {
@@ -2730,10 +2730,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "ravager",
     "jp_costs": {
@@ -2841,10 +2841,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "warlord",
     "jp_costs": {
@@ -2956,10 +2956,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "def": 0.3,
-      "hp": 1.6,
-      "spd": 0.2
+      "atk": 1.5,
+      "def": 0.75,
+      "hp": 4.0,
+      "spd": 0.5
     },
     "id": "weapon_master",
     "jp_costs": {
@@ -3037,10 +3037,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.5,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.3
+      "atk": 1.25,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.75
     },
     "id": "archer",
     "jp_costs": {
@@ -3115,10 +3115,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.5,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.3
+      "atk": 1.25,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.75
     },
     "id": "hunter",
     "jp_costs": {
@@ -3193,10 +3193,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.5,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.3
+      "atk": 1.25,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.75
     },
     "id": "marksman",
     "jp_costs": {
@@ -3271,10 +3271,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.5,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.3
+      "atk": 1.25,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.75
     },
     "id": "sharpshooter",
     "jp_costs": {
@@ -3349,10 +3349,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.5,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.3
+      "atk": 1.25,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.75
     },
     "id": "sniper",
     "jp_costs": {
@@ -3427,10 +3427,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.5,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.3
+      "atk": 1.25,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.75
     },
     "id": "crossbowman",
     "jp_costs": {
@@ -3505,10 +3505,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.5,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.3
+      "atk": 1.25,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.75
     },
     "id": "arbalist",
     "jp_costs": {
@@ -3583,10 +3583,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.5,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.3
+      "atk": 1.25,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.75
     },
     "id": "ranger",
     "jp_costs": {
@@ -3662,10 +3662,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.2
+      "atk": 1.5,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.5
     },
     "id": "gunner",
     "jp_costs": {
@@ -3741,10 +3741,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.2
+      "atk": 1.5,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.5
     },
     "id": "pistoleer",
     "jp_costs": {
@@ -3816,10 +3816,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.2
+      "atk": 1.5,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.5
     },
     "id": "rifleman",
     "jp_costs": {
@@ -3891,10 +3891,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.2
+      "atk": 1.5,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.5
     },
     "id": "musketeer",
     "jp_costs": {
@@ -3966,10 +3966,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.2
+      "atk": 1.5,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.5
     },
     "id": "gunslinger",
     "jp_costs": {
@@ -4045,10 +4045,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.2
+      "atk": 1.5,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.5
     },
     "id": "artillerist",
     "jp_costs": {
@@ -4124,10 +4124,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.2
+      "atk": 1.5,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.5
     },
     "id": "bombardier",
     "jp_costs": {
@@ -4199,10 +4199,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.6,
-      "hp": 1.2,
-      "rng": 0.2,
-      "spd": 0.2
+      "atk": 1.5,
+      "hp": 3.0,
+      "rng": 0.5,
+      "spd": 0.5
     },
     "id": "grenadier",
     "jp_costs": {
@@ -4296,10 +4296,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "guardian",
     "jp_costs": {
@@ -4389,10 +4389,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "knight",
     "jp_costs": {
@@ -4486,10 +4486,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "sentinel",
     "jp_costs": {
@@ -4579,10 +4579,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "defender",
     "jp_costs": {
@@ -4672,10 +4672,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "shieldmaster",
     "jp_costs": {
@@ -4769,10 +4769,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "paladin",
     "jp_costs": {
@@ -4866,10 +4866,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "crusader",
     "jp_costs": {
@@ -4959,10 +4959,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "templar",
     "jp_costs": {
@@ -5056,10 +5056,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "warden",
     "jp_costs": {
@@ -5149,10 +5149,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "bulwark",
     "jp_costs": {
@@ -5242,10 +5242,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "vanguard",
     "jp_costs": {
@@ -5335,10 +5335,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "bastion",
     "jp_costs": {
@@ -5432,10 +5432,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "man_at_arms",
     "jp_costs": {
@@ -5525,10 +5525,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "ironclad",
     "jp_costs": {
@@ -5622,10 +5622,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "dreadnought",
     "jp_costs": {
@@ -5719,10 +5719,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.3,
-      "def": 0.6,
-      "hp": 2.0,
-      "res": 0.2
+      "atk": 0.75,
+      "def": 1.5,
+      "hp": 5.0,
+      "res": 0.5
     },
     "id": "aegis_knight",
     "jp_costs": {
@@ -5796,10 +5796,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "mage",
     "jp_costs": {
@@ -5867,10 +5867,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "black_mage",
     "jp_costs": {
@@ -5938,10 +5938,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "elementalist",
     "jp_costs": {
@@ -6009,10 +6009,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "pyromancer",
     "jp_costs": {
@@ -6080,10 +6080,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "cryomancer",
     "jp_costs": {
@@ -6151,10 +6151,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "electromancer",
     "jp_costs": {
@@ -6222,10 +6222,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "aeromancer",
     "jp_costs": {
@@ -6293,10 +6293,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "geomancer",
     "jp_costs": {
@@ -6368,10 +6368,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "sorcerer",
     "jp_costs": {
@@ -6439,10 +6439,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "sage",
     "jp_costs": {
@@ -6514,10 +6514,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "archmage",
     "jp_costs": {
@@ -6589,10 +6589,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "spellblade",
     "jp_costs": {
@@ -6664,10 +6664,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "rune_knight",
     "jp_costs": {
@@ -6739,10 +6739,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "magus",
     "jp_costs": {
@@ -6814,10 +6814,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "stormcaller",
     "jp_costs": {
@@ -6889,10 +6889,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "aethermancer",
     "jp_costs": {
@@ -6970,10 +6970,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "cultist",
     "jp_costs": {
@@ -7048,10 +7048,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "occultist",
     "jp_costs": {
@@ -7126,10 +7126,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "warlock",
     "jp_costs": {
@@ -7208,10 +7208,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "necromancer",
     "jp_costs": {
@@ -7290,10 +7290,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "shadowmage",
     "jp_costs": {
@@ -7372,10 +7372,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 0.8,
-      "mag": 0.7,
-      "res": 0.3,
-      "wp": 0.4
+      "hp": 2.0,
+      "mag": 1.75,
+      "res": 0.75,
+      "wp": 1.0
     },
     "id": "hexer",
     "jp_costs": {
@@ -7458,10 +7458,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "cleric",
     "jp_costs": {
@@ -7541,10 +7541,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "white_mage",
     "jp_costs": {
@@ -7613,10 +7613,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "abjurer",
     "jp_costs": {
@@ -7681,10 +7681,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "warder",
     "jp_costs": {
@@ -7749,10 +7749,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "spellward",
     "jp_costs": {
@@ -7836,10 +7836,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "runepriest",
     "jp_costs": {
@@ -7923,10 +7923,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "exorcist",
     "jp_costs": {
@@ -8006,10 +8006,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "inquisitor",
     "jp_costs": {
@@ -8093,10 +8093,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "oracle",
     "jp_costs": {
@@ -8180,10 +8180,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "hierophant",
     "jp_costs": {
@@ -8252,10 +8252,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "aegis_mage",
     "jp_costs": {
@@ -8324,10 +8324,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "nullifier",
     "jp_costs": {
@@ -8411,10 +8411,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "seer",
     "jp_costs": {
@@ -8498,10 +8498,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "res": 0.6,
-      "wp": 0.4
+      "hp": 2.5,
+      "mag": 1.0,
+      "res": 1.5,
+      "wp": 1.0
     },
     "id": "bishop",
     "jp_costs": {
@@ -8582,10 +8582,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "herald",
     "jp_costs": {
@@ -8666,10 +8666,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "bard",
     "jp_costs": {
@@ -8754,10 +8754,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "minstrel",
     "jp_costs": {
@@ -8838,10 +8838,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "dancer",
     "jp_costs": {
@@ -8922,10 +8922,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "skald",
     "jp_costs": {
@@ -8997,10 +8997,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "scholar",
     "jp_costs": {
@@ -9078,10 +9078,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "chemist",
     "jp_costs": {
@@ -9159,10 +9159,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "alchemist",
     "jp_costs": {
@@ -9240,10 +9240,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "apothecary",
     "jp_costs": {
@@ -9315,10 +9315,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "medic",
     "jp_costs": {
@@ -9400,10 +9400,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "field_surgeon",
     "jp_costs": {
@@ -9479,10 +9479,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "tactician",
     "jp_costs": {
@@ -9558,10 +9558,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "strategist",
     "jp_costs": {
@@ -9636,10 +9636,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "conductor",
     "jp_costs": {
@@ -9718,10 +9718,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "artificer",
     "jp_costs": {
@@ -9796,10 +9796,10 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "hp": 1.0,
-      "mag": 0.4,
-      "spd": 0.2,
-      "wp": 0.5
+      "hp": 2.5,
+      "mag": 1.0,
+      "spd": 0.5,
+      "wp": 1.25
     },
     "id": "beastmaster",
     "jp_costs": {
@@ -9880,9 +9880,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "thief",
     "jp_costs": {
@@ -9958,9 +9958,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "rogue",
     "jp_costs": {
@@ -10036,9 +10036,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "trickster",
     "jp_costs": {
@@ -10114,9 +10114,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "assassin",
     "jp_costs": {
@@ -10192,9 +10192,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "nightblade",
     "jp_costs": {
@@ -10274,9 +10274,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "shadowdancer",
     "jp_costs": {
@@ -10356,9 +10356,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "saboteur",
     "jp_costs": {
@@ -10438,9 +10438,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "ninja",
     "jp_costs": {
@@ -10523,9 +10523,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "mesmer",
     "jp_costs": {
@@ -10608,9 +10608,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "enchanter",
     "jp_costs": {
@@ -10689,9 +10689,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "beguiler",
     "jp_costs": {
@@ -10770,9 +10770,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "plaguebringer",
     "jp_costs": {
@@ -10855,9 +10855,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "venomancer",
     "jp_costs": {
@@ -10940,9 +10940,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "chronomancer",
     "jp_costs": {
@@ -11022,9 +11022,9 @@
     ],
     "granted_abilities": [],
     "growth": {
-      "atk": 0.4,
-      "hp": 1.0,
-      "spd": 0.5
+      "atk": 1.0,
+      "hp": 2.5,
+      "spd": 1.25
     },
     "id": "scout",
     "jp_costs": {
