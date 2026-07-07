@@ -20,23 +20,26 @@ func _init(
 
 
 func resolve(unit: BattleUnit, ability_id: String) -> AbilityData:
-	## Returns the AbilityData if the unit has access, or null.
-	# Direct character abilities
-	if ability_id in unit.character.abilities:
-		return _ability_getter.call(ability_id)
+	## Returns the AbilityData if the unit has access AND it is an active ability
+	## (passive_kind == ""), or null. Passives are equipped into slots, not used
+	## as actions, so they are never resolvable as an activatable ability.
+	var ab: AbilityData = _ability_getter.call(ability_id)
+	if ab == null or ab.passive_kind != "":
+		return null
 
+	# Direct character abilities (loadout)
+	if ability_id in unit.character.abilities:
+		return ab
 	# Class-granted abilities
 	for cls_id in unit.character.classes:
 		var cls: ClassData = _class_getter.call(cls_id)
 		if cls and ability_id in cls.granted_abilities:
-			return _ability_getter.call(ability_id)
-
+			return ab
 	# Equipment-granted abilities
 	for eq_id in unit.character.equipment:
 		var item: ItemData = _item_getter.call(eq_id)
 		if item and ability_id in item.granted_abilities:
-			return _ability_getter.call(ability_id)
-
+			return ab
 	return null
 
 
@@ -50,7 +53,7 @@ func all_abilities(unit: BattleUnit) -> Array:
 	for ability_id in unit.character.abilities:
 		if not seen.has(ability_id):
 			var a: AbilityData = _ability_getter.call(ability_id)
-			if a:
+			if a and a.passive_kind == "":
 				result.append(a)
 				seen[ability_id] = true
 

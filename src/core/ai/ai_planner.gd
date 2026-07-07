@@ -264,7 +264,7 @@ static func _get_unit_abilities(_state: MatchState, unit: BattleUnit) -> Array:
 	for ability_id in unit.character.abilities:
 		if not seen.has(ability_id):
 			var a: AbilityData = GameData.get_ability(ability_id)
-			if a:
+			if a and a.passive_kind == "":
 				all.append(a)
 				seen[ability_id] = true
 	# Class-granted abilities
@@ -274,7 +274,7 @@ static func _get_unit_abilities(_state: MatchState, unit: BattleUnit) -> Array:
 			for ability_id in cls.granted_abilities:
 				if not seen.has(ability_id):
 					var a: AbilityData = GameData.get_ability(ability_id)
-					if a:
+					if a and a.passive_kind == "":
 						all.append(a)
 						seen[ability_id] = true
 	# Equipment-granted abilities
@@ -284,7 +284,7 @@ static func _get_unit_abilities(_state: MatchState, unit: BattleUnit) -> Array:
 			for ability_id in item.granted_abilities:
 				if not seen.has(ability_id):
 					var a: AbilityData = GameData.get_ability(ability_id)
-					if a:
+					if a and a.passive_kind == "":
 						all.append(a)
 						seen[ability_id] = true
 	return all
