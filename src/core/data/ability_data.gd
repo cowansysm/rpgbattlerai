@@ -30,3 +30,11 @@ extends Resource
 ## Keys: kind (String), stat (String), value (int/float), etc.
 ## Populated only when passive_kind in ["support", "movement"].
 @export var modifier: Dictionary = {}
+
+
+## True only for abilities usable as an activatable action. Excludes A18 slotted
+## passives (passive_kind set) AND legacy passives authored with type == "passive"
+## (many carry passive_kind == "" yet are self-buff/innate traits with ap 0 / no
+## effect — they would otherwise be enumerated and "used" as no-op actions).
+func is_active() -> bool:
+	return passive_kind == "" and type != "passive"
